@@ -14,6 +14,7 @@ import { DownType } from "./components/setup/downType/CycleDetailsList";
 import { WorkType } from "./components/setup/workType/CycleDetailsList";
 import { LocationTable } from "./components/setup/location/CycleDetailsList";
 import { Custodian } from "./components/setup/custodian/CycleDetailsList";
+import { Calendar } from "./components/calendar/Calendar";
 
 const accountBreadCrumbs: Array<PageLink> = [
   // {
@@ -54,7 +55,8 @@ const ProductionPage: React.FC = () => {
             <>
               <PageTitle breadcrumbs={accountBreadCrumbs}>Equipment Schedule</PageTitle>
               {/*<Overview />*/}
-              <EquipmentDetail />
+              {/*<EquipmentDetail />*/}
+              <Calendar />
             </>
           }
         />

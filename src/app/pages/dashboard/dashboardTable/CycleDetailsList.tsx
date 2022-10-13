@@ -1,21 +1,25 @@
 import {ListViewProvider, useListView} from './core/ListViewProvider'
 import {QueryRequestProvider} from './core/QueryRequestProvider'
 import {QueryResponseProvider} from './core/QueryResponseProvider'
-import { KTCard } from '../../../../../../_metronic/helpers'
-import { Calendar } from "../../calendar/Calendar";
+import {DetailsListHeader} from './components/header/UsersListHeader'
+import {DetailsTable} from './table/DetailsTable'
+import {UserEditModal} from './user-edit-modal/UserEditModal'
+import { KTCard } from '../../../../_metronic/helpers'
 
 const CycleDetailsList = () => {
   const {itemIdForUpdate} = useListView()
   return (
     <>
       <KTCard>
-        <Calendar />
+        <DetailsListHeader />
+        <DetailsTable />
       </KTCard>
+      {itemIdForUpdate !== undefined && <UserEditModal />}
     </>
   )
 }
 
-const EquipmentDetail = () => (
+const DashboardTable = () => (
   <QueryRequestProvider>
     <QueryResponseProvider>
       <ListViewProvider>
@@ -25,4 +29,4 @@ const EquipmentDetail = () => (
   </QueryRequestProvider>
 )
 
-export {EquipmentDetail}
+export {DashboardTable}
