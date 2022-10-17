@@ -6,7 +6,7 @@ type Props = {
   id: ID
 }
 
-const UserSelectionCell: FC<Props> = ({id}) => {
+const faultSelectionCell: FC<Props> = ({id}) => {
   const {selected, onSelect} = useListView()
   const isSelected = useMemo(() => selected.includes(id), [id, selected])
   return (
@@ -15,7 +15,7 @@ const UserSelectionCell: FC<Props> = ({id}) => {
         className='form-check-input'
         type='checkbox'
         data-kt-check={isSelected}
-        data-kt-check-target='#kt_table_users .form-check-input'
+        data-kt-check-target='#kt_table_faults .form-check-input'
         checked={isSelected}
         onChange={() => onSelect(id)}
       />
@@ -23,4 +23,4 @@ const UserSelectionCell: FC<Props> = ({id}) => {
   )
 }
 
-export {UserSelectionCell}
+export {faultSelectionCell}

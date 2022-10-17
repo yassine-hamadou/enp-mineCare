@@ -15,7 +15,7 @@ const mappedLabel = (label: string): string => {
   return label
 }
 
-const UsersListPagination = () => {
+const FaultsListPagination = () => {
   const pagination = useQueryResponsePagination()
   const isLoading = useQueryResponseLoading()
   const {updateState} = useQueryRequest()
@@ -31,7 +31,7 @@ const UsersListPagination = () => {
     <div className='row'>
       <div className='col-sm-12 col-md-5 d-flex align-items-center justify-content-center justify-content-md-start'></div>
       <div className='col-sm-12 col-md-7 d-flex align-items-center justify-content-center justify-content-md-end'>
-        <div id='kt_table_users_paginate'>
+        <div id='kt_table_faults_paginate'>
           <ul className='pagination'>
             {pagination.links
               ?.map((link) => {
@@ -66,4 +66,4 @@ const UsersListPagination = () => {
   )
 }
 
-export {UsersListPagination}
+export {FaultsListPagination}

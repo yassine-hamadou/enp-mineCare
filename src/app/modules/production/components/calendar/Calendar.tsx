@@ -10,9 +10,10 @@ import "@syncfusion/ej2-splitbuttons/styles/material.css";
 import "@syncfusion/ej2-react-schedule/styles/material.css";
 import "@syncfusion/ej2-buttons/styles/material.css";
 
+
 const Calendar = () => {
   return (
-    <ScheduleComponent>
+    <ScheduleComponent currentView='Month'>
       <Inject services={[Day, Week, WorkWeek, Month, Agenda]} />
     </ScheduleComponent>
   );

@@ -3,14 +3,14 @@ import {FC, PropsWithChildren, useMemo} from 'react'
 import {HeaderProps} from 'react-table'
 import {initialQueryState} from '../../../../../../../../_metronic/helpers'
 import {useQueryRequest} from '../../core/QueryRequestProvider'
-import {User} from '../../core/_models'
+import {Fault} from '../../core/_models'
 
 type Props = {
   className?: string
   title?: string
-  tableProps: PropsWithChildren<HeaderProps<User>>
+  tableProps: PropsWithChildren<HeaderProps<Fault>>
 }
-const UserCustomHeader: FC<Props> = ({className, title, tableProps}) => {
+const FaultsCustomHeader: FC<Props> = ({className, title, tableProps}) => {
   const id = tableProps.column.id
   const {state, updateState} = useQueryRequest()
 
@@ -58,4 +58,4 @@ const UserCustomHeader: FC<Props> = ({className, title, tableProps}) => {
   )
 }
 
-export {UserCustomHeader}
+export {FaultsCustomHeader}

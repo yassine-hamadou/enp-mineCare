@@ -1,10 +1,10 @@
 import {useEffect, useState} from 'react'
 import {useQueryRequest} from '../../core/QueryRequestProvider'
 import {useQueryResponse} from '../../core/QueryResponseProvider'
-import {MenuComponent} from "../../../../../../../../_metronic/assets/ts/components";
-import {initialQueryState, KTSVG} from "../../../../../../../../_metronic/helpers";
+import {MenuComponent} from '../../../../../../../../_metronic/assets/ts/components'
+import {initialQueryState, KTSVG} from '../../../../../../../../_metronic/helpers'
 
-const UsersListFilter = () => {
+const FaultsListFilter = () => {
   const {updateState} = useQueryRequest()
   const {isLoading} = useQueryResponse()
   const [role, setRole] = useState<string | undefined>()
@@ -52,7 +52,7 @@ const UsersListFilter = () => {
         {/* end::Separator */}
 
         {/* begin::Content */}
-        <div className='px-7 py-5' data-kt-user-table-filter='form'>
+        <div className='px-7 py-5' data-kt-fault-table-filter='form'>
           {/* begin::Input group */}
           <div className='mb-10'>
             <label className='form-label fs-6 fw-bold'>Role:</label>
@@ -61,7 +61,7 @@ const UsersListFilter = () => {
               data-kt-select2='true'
               data-placeholder='Select option'
               data-allow-clear='true'
-              data-kt-user-table-filter='role'
+              data-kt-fault-table-filter='role'
               data-hide-search='true'
               onChange={(e) => setRole(e.target.value)}
               value={role}
@@ -84,7 +84,7 @@ const UsersListFilter = () => {
               data-kt-select2='true'
               data-placeholder='Select option'
               data-allow-clear='true'
-              data-kt-user-table-filter='two-step'
+              data-kt-fault-table-filter='two-step'
               data-hide-search='true'
               onChange={(e) => setLastLogin(e.target.value)}
               value={lastLogin}
@@ -106,7 +106,7 @@ const UsersListFilter = () => {
               onClick={filterData}
               className='btn btn-light btn-active-light-primary fw-bold me-2 px-6'
               data-kt-menu-dismiss='true'
-              data-kt-user-table-filter='reset'
+              data-kt-fault-table-filter='reset'
             >
               Reset
             </button>
@@ -116,7 +116,7 @@ const UsersListFilter = () => {
               onClick={resetData}
               className='btn btn-primary fw-bold px-6'
               data-kt-menu-dismiss='true'
-              data-kt-user-table-filter='filter'
+              data-kt-fault-table-filter='filter'
             >
               Apply
             </button>
@@ -130,4 +130,4 @@ const UsersListFilter = () => {
   )
 }
 
-export {UsersListFilter}
+export {FaultsListFilter}

@@ -1,8 +1,8 @@
 import {useEffect} from 'react'
-import {UserEditModalHeader} from './UserEditModalHeader'
-import {UserEditModalFormWrapper} from './UserEditModalFormWrapper'
+import {FaultEditModalHeader} from './FaultEditModalHeader'
+import {FaultEditModalFormWrapper} from './FaultEditModalFormWrapper'
 
-const UserEditModal = () => {
+const FaultEditModal = () => {
   useEffect(() => {
     document.body.classList.add('modal-open')
     return () => {
@@ -14,7 +14,7 @@ const UserEditModal = () => {
     <>
       <div
         className='modal fade show d-block'
-        id='kt_modal_add_user'
+        id='kt_modal_add_fault'
         role='dialog'
         tabIndex={-1}
         aria-modal='true'
@@ -23,10 +23,10 @@ const UserEditModal = () => {
         <div className='modal-dialog modal-dialog-centered mw-650px'>
           {/* begin::Modal content */}
           <div className='modal-content'>
-            <UserEditModalHeader />
+            <FaultEditModalHeader />
             {/* begin::Modal body */}
             <div className='modal-body scroll-y mx-5 mx-xl-15 my-7'>
-              {/*<UserEditModalFormWrapper />*/}
+              <FaultEditModalFormWrapper />
             </div>
             {/* end::Modal body */}
           </div>
@@ -41,4 +41,4 @@ const UserEditModal = () => {
   )
 }
 
-export {UserEditModal}
+export {FaultEditModal}

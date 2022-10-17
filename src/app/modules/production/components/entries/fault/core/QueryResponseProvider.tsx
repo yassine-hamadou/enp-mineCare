@@ -10,11 +10,11 @@ import {
   stringifyRequestQuery,
   WithChildren,
 } from '../../../../../../../_metronic/helpers'
-import {getUsers} from './_requests'
-import {User} from './_models'
+import {getFaults} from './_requests'
+import {Fault} from './_models'
 import {useQueryRequest} from './QueryRequestProvider'
 
-const QueryResponseContext = createResponseContext<User>(initialQueryResponse)
+const QueryResponseContext = createResponseContext<Fault>(initialQueryResponse)
 const QueryResponseProvider: FC<WithChildren> = ({children}) => {
   const {state} = useQueryRequest()
   const [query, setQuery] = useState<string>(stringifyRequestQuery(state))
@@ -31,9 +31,9 @@ const QueryResponseProvider: FC<WithChildren> = ({children}) => {
     refetch,
     data: response,
   } = useQuery(
-    `${QUERIES.USERS_LIST}-${query}`,
+    'get-faults',
     () => {
-      return getUsers(query)
+      return getFaults()
     },
     {cacheTime: 0, keepPreviousData: true, refetchOnWindowFocus: false}
   )

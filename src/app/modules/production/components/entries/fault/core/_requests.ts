@@ -1,45 +1,46 @@
 import axios, {AxiosResponse} from 'axios'
 import {ID, Response} from '../../../../../../../_metronic/helpers'
-import {User, UsersQueryResponse} from './_models'
+import {Fault, FaultsQueryResponse} from './_models'
 
 const API_URL = process.env.REACT_APP_THEME_API_URL
-const USER_URL = `${API_URL}/user`
-const GET_USERS_URL = `${API_URL}/users/query`
+const Fault_URL = `${API_URL}/Fault`
+const GET_Faults_URL = `${API_URL}/Faults/query`
 
-const getUsers = (query: string): Promise<UsersQueryResponse> => {
+const getFaults = async (): Promise<FaultsQueryResponse> => {
+  
+  const res = await axios.get('http://208.117.44.15/SmWebApi/api/VmfaltsApi')
+  console.log(res.data)
+  return res.data
+}
+
+const getFaultById = (id: ID): Promise<Fault | undefined> => {
   return axios
-    .get(`${GET_USERS_URL}?${query}`)
-    .then((d: AxiosResponse<UsersQueryResponse>) => d.data)
+    .get(`${Fault_URL}/${id}`)
+    .then((response: AxiosResponse<Response<Fault>>) => response.data)
+    .then((response: Response<Fault>) => response.data)
 }
 
-const getUserById = (id: ID): Promise<User | undefined> => {
+const createFault = (Fault: Fault): Promise<Fault | undefined> => {
   return axios
-    .get(`${USER_URL}/${id}`)
-    .then((response: AxiosResponse<Response<User>>) => response.data)
-    .then((response: Response<User>) => response.data)
+    .put(Fault_URL, Fault)
+    .then((response: AxiosResponse<Response<Fault>>) => response.data)
+    .then((response: Response<Fault>) => response.data)
 }
 
-const createUser = (user: User): Promise<User | undefined> => {
+const updateFault = (Fault: Fault): Promise<Fault | undefined> => {
   return axios
-    .put(USER_URL, user)
-    .then((response: AxiosResponse<Response<User>>) => response.data)
-    .then((response: Response<User>) => response.data)
+    .post(`${Fault_URL}/${Fault.txfault}`, Fault)
+    .then((response: AxiosResponse<Response<Fault>>) => response.data)
+    .then((response: Response<Fault>) => response.data)
 }
 
-const updateUser = (user: User): Promise<User | undefined> => {
-  return axios
-    .post(`${USER_URL}/${user.id}`, user)
-    .then((response: AxiosResponse<Response<User>>) => response.data)
-    .then((response: Response<User>) => response.data)
+const deleteFault = (FaultId: ID): Promise<void> => {
+  return axios.delete(`${Fault_URL}/${FaultId}`).then(() => {})
 }
 
-const deleteUser = (userId: ID): Promise<void> => {
-  return axios.delete(`${USER_URL}/${userId}`).then(() => {})
-}
-
-const deleteSelectedUsers = (userIds: Array<ID>): Promise<void> => {
-  const requests = userIds.map((id) => axios.delete(`${USER_URL}/${id}`))
+const deleteSelectedFaults = (FaultIds: Array<ID>): Promise<void> => {
+  const requests = FaultIds.map((id) => axios.delete(`${Fault_URL}/${id}`))
   return axios.all(requests).then(() => {})
 }
 
-export {getUsers, deleteUser, deleteSelectedUsers, getUserById, createUser, updateUser}
+export {getFaults, deleteFault, deleteSelectedFaults, getFaultById, createFault, updateFault}

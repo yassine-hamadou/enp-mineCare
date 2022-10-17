@@ -1,7 +1,7 @@
 import {useListView} from '../core/ListViewProvider'
-import {KTSVG} from "../../../../../../../_metronic/helpers";
+import {KTSVG} from '../../../../../../../_metronic/helpers'
 
-const UserEditModalHeader = () => {
+const FaultEditModalHeader = () => {
   const {setItemIdForUpdate} = useListView()
 
   return (
@@ -13,7 +13,7 @@ const UserEditModalHeader = () => {
       {/* begin::Close */}
       <div
         className='btn btn-icon btn-sm btn-active-icon-primary'
-        data-kt-users-modal-action='close'
+        data-kt-faults-modal-action='close'
         onClick={() => setItemIdForUpdate(undefined)}
         style={{cursor: 'pointer'}}
       >
@@ -24,4 +24,4 @@ const UserEditModalHeader = () => {
   )
 }
 
-export {UserEditModalHeader}
+export {FaultEditModalHeader}

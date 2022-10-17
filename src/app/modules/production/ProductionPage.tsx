@@ -1,21 +1,21 @@
 import React from 'react'
 import {Navigate, Route, Routes, Outlet} from 'react-router-dom'
 import {PageLink, PageTitle} from '../../../_metronic/layout/core'
-import { Fault } from "./components/entries/fault/CycleDetailsList";
-import {ProductionReportTable} from "./components/report/production_table/CycleDetailsList";
-import {FuelReportTable} from "./components/report/fuel/CycleDetailsList";
-import {EquipmentTable} from "./components/report/equipment/CycleDetailsList";
-import {StatisticsTable} from "./components/report/activity/CycleDetailsList";
-import { Fleet } from "./components/setup/fleet/CycleDetailsList";
-import { EquipmentDetail } from "./components/entries/equipment/CycleDetailsList";
-import { Resolution } from "./components/entries/resolution/CycleDetailsList";
-import { Hours } from "./components/entries/hours/CycleDetailsList";
-import { DownType } from "./components/setup/downType/CycleDetailsList";
-import { WorkType } from "./components/setup/workType/CycleDetailsList";
-import { LocationTable } from "./components/setup/location/CycleDetailsList";
-import { Custodian } from "./components/setup/custodian/CycleDetailsList";
-import { Calendar } from "./components/calendar/Calendar";
-
+// import {Fault} from './components/entries/fault/CycleDetailsList'
+import {ProductionReportTable} from './components/report/production_table/CycleDetailsList'
+import {FuelReportTable} from './components/report/fuel/CycleDetailsList'
+import {EquipmentTable} from './components/report/equipment/CycleDetailsList'
+import {StatisticsTable} from './components/report/activity/CycleDetailsList'
+import {Fleet} from './components/setup/fleet/CycleDetailsList'
+import {EquipmentDetail} from './components/entries/equipment/CycleDetailsList'
+import {Resolution} from './components/entries/resolution/CycleDetailsList'
+import {Hours} from './components/entries/hours/CycleDetailsList'
+import {DownType} from './components/setup/downType/CycleDetailsList'
+import {WorkType} from './components/setup/workType/CycleDetailsList'
+import {LocationTable} from './components/setup/location/CycleDetailsList'
+import {Custodian} from './components/setup/custodian/CycleDetailsList'
+import {Fault} from './components/entries/fault/CycleDetailsList'
+// import {AddFautForm} from './components/entries/fault/addFault/AddFaultForm'
 const accountBreadCrumbs: Array<PageLink> = [
   // {
   //   title: 'Cycle Details',
@@ -55,8 +55,7 @@ const ProductionPage: React.FC = () => {
             <>
               <PageTitle breadcrumbs={accountBreadCrumbs}>Equipment Schedule</PageTitle>
               {/*<Overview />*/}
-              {/*<EquipmentDetail />*/}
-              <Calendar />
+              <EquipmentDetail />
             </>
           }
         />
@@ -66,6 +65,15 @@ const ProductionPage: React.FC = () => {
             <>
               <PageTitle breadcrumbs={accountBreadCrumbs}>Fault</PageTitle>
               <Fault />
+            </>
+          }
+        />
+        <Route
+          path='fault/add'
+          element={
+            <>
+              <PageTitle breadcrumbs={accountBreadCrumbs}>Add</PageTitle>
+              {/* <AddFautForm isUserLoading={false} user={{}} /> */}
             </>
           }
         />
@@ -201,5 +209,4 @@ const ProductionPage: React.FC = () => {
     </Routes>
   )
 }
-
 export default ProductionPage

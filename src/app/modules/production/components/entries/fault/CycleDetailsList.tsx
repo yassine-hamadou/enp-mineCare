@@ -1,10 +1,10 @@
 import {ListViewProvider, useListView} from './core/ListViewProvider'
 import {QueryRequestProvider} from './core/QueryRequestProvider'
 import {QueryResponseProvider} from './core/QueryResponseProvider'
-import {DetailsListHeader} from './components/header/UsersListHeader'
+import {DetailsListHeader} from './components/header/FaultsListHeader'
 import {DetailsTable} from './table/DetailsTable'
-import {UserEditModal} from './user-edit-modal/UserEditModal'
-import { KTCard } from '../../../../../../_metronic/helpers'
+import {FaultEditModal} from './fault-edit-modal/FaultEditModal'
+import {KTCard} from '../../../../../../_metronic/helpers'
 
 const CycleDetailsList = () => {
   const {itemIdForUpdate} = useListView()
@@ -14,7 +14,7 @@ const CycleDetailsList = () => {
         <DetailsListHeader />
         <DetailsTable />
       </KTCard>
-      {itemIdForUpdate !== undefined && <UserEditModal />}
+      {itemIdForUpdate !== undefined && <FaultEditModal />}
     </>
   )
 }

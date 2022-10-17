@@ -1,10 +1,10 @@
 // @ts-nocheck
 import {FC} from 'react'
 import {ColumnInstance} from 'react-table'
-import {User} from '../../core/_models'
+import {Fault} from '../../core/_models'
 
 type Props = {
-  column: ColumnInstance<User>
+  column: ColumnInstance<Fault>
 }
 
 const CustomHeaderColumn: FC<Props> = ({column}) => (
