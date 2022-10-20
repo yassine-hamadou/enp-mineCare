@@ -44,12 +44,12 @@ const MixedWidget11: React.FC<Props> = ({className, chartColor, chartHeight}) =>
         {/* begin::Hidden */}
         <div className='d-flex flex-stack flex-wrap flex-grow-1 px-9 pt-9 pb-3'>
           <div className='me-2'>
-            <span className='fw-bold text-gray-800 d-block fs-3'>Downtime</span>
+            <span className='fw-bold text-gray-800 d-block fs-3'>Downtime by fault type</span>
 
             <span className='text-gray-400 fw-semibold'>Oct 8 - Oct 26 2021</span>
           </div>
 
-          <div className={`fw-bold fs-3 text-${chartColor}`}>80 Hours</div>
+          <div className={`fw-bold fs-3 text-${chartColor}`}>150</div>
         </div>
         {/* end::Hidden */}
 
@@ -105,7 +105,7 @@ const chartOptions = (chartColor: string, chartHeight: string): ApexOptions => {
       colors: ['transparent'],
     },
     xaxis: {
-      categories: ['Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep'],
+      categories: ['AIRSYSTEM', 'CHASIS', 'COOLING', 'DAMAGE', 'ELECTRICAL', 'ENGINE', 'ENGINEBUILD', 'FIRESYSTEM'],
       axisBorder: {
         show: false,
       },

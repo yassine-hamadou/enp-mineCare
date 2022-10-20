@@ -16,7 +16,6 @@ const BarChart: React.FC<Props> = ({className, chartColor, chartHeight}) => {
     if (!chartRef.current) {
       return
     }
-
     const chart = new ApexCharts(chartRef.current, chartOptions(chartColor, chartHeight))
     if (chart) {
       chart.render()
@@ -45,10 +44,10 @@ const BarChart: React.FC<Props> = ({className, chartColor, chartHeight}) => {
           <div className='me-2'>
             <span className='fw-bold text-gray-800 d-block fs-3'>Monthly Downtime</span>
 
-            <span className='text-gray-400 fw-semibold'>Feb 8 2021 - Sep 26 2022</span>
+            <span className='text-gray-400 fw-semibold'>Aug 26 2022 - Sep 26 2022</span>
           </div>
 
-          <div className={`fw-bold fs-3 text-${chartColor}`}>15 Hours</div>
+          <div className={`fw-bold fs-3 text-${chartColor}`}>80 Hours</div>
         </div>
         {/* end::Hidden */}
 
