@@ -2,7 +2,7 @@ import {Button, Popconfirm, Table, Modal} from 'antd'
 import 'antd/dist/antd.min.css'
 import axios from 'axios'
 import {useEffect, useState} from 'react'
-import { AddFaultForm } from "./AddFaultForm";
+import {AddFaultForm} from './AddFaultForm'
 
 const FaultTable = () => {
   const [gridData, setGridData] = useState([])
@@ -35,9 +35,9 @@ const FaultTable = () => {
   }
 
   useEffect(() => {
-    loadData();
-    console.log('Inside use-effect',gridData);
-  }, []);
+    loadData()
+    console.log('Inside use-effect', gridData)
+  }, [])
 
   function handleDelete(element: any) {
     const dataSource = [...gridData]
@@ -60,6 +60,9 @@ const FaultTable = () => {
     },
     {
       title: 'Down Time',
+    },
+    {
+      title: 'Down Type',
     },
     {
       title: 'Custodian',
@@ -86,8 +89,8 @@ const FaultTable = () => {
       <Button type='primary' onClick={showModal} className='mb-3'>
         Add
       </Button>
-      <Table columns={columns} dataSource={gridData} rowKey='txequp' bordered loading={loading}/>
-      <Modal title='Basic Modal' open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
+      <Table columns={columns} dataSource={gridData} rowKey='txequp' bordered loading={loading} />
+      <Modal title='Add Fault' open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
         <AddFaultForm />
       </Modal>
     </div>

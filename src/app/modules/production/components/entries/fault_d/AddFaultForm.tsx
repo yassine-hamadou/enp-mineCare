@@ -1,13 +1,8 @@
-import {
-  Form,
-  Input,
-  Select,
-  TimePicker,
-} from "antd";
-import {useEffect, useRef, useState} from "react";
-import axios from "axios";
-import { DatePicker } from "antd/es";
-const { Option } = Select;
+import {Form, Input, Select, TimePicker} from 'antd'
+import {useEffect, useRef, useState} from 'react'
+import axios from 'axios'
+import {DatePicker} from 'antd/es'
+const {Option} = Select
 
 const AddFaultForm = () => {
   const [dataSource, setDataSource] = useState([
@@ -4218,7 +4213,7 @@ const AddFaultForm = () => {
     const response = await axios.get(
       'https://cors-anywhere.herokuapp.com/https://app.sipconsult.net/SmWebApi/api/VmequpsApi'
     )
-    console.log('api REponse from form', response.data)
+    console.log('Api Response from form', response.data)
     setDataSource(response.data)
     // setLoading(true)
   }
@@ -4228,8 +4223,8 @@ const AddFaultForm = () => {
   //   console.log('Inside use-effect',gridData);
   // }, []);
 
-  const [fleet, setFleet] = useState({});
-  const [fleetToEdit, setFleetToEdit] = useState(null);
+  const [fleet, setFleet] = useState({})
+  const [fleetToEdit, setFleetToEdit] = useState(null)
 
   const getEqupId = (id: any) => {
     console.log('Equipment ID', id)
@@ -4248,15 +4243,14 @@ const AddFaultForm = () => {
     setFleetToEdit({...fleet})
   }, [fleet])
 
-
   return (
     <Form
-      labelCol={{ span: 4 }}
-      wrapperCol={{ span: 14 }}
-      layout="horizontal"
-
+      labelCol={{span: 4}}
+      wrapperCol={{span: 14}}
+      layout='horizontal'
+      title='Equipment Details'
     >
-      <Form.Item label="FleetID">
+      <Form.Item label='FleetID'>
         <Select onSelect={(e: any) => getEqupId(e)}>
           {dataSource.map((item, index) => (
             <Select.Option value={item.txequp}>
@@ -4265,43 +4259,42 @@ const AddFaultForm = () => {
           ))}
         </Select>
       </Form.Item>
-      <Form.Item label="Model">
+      <Form.Item label='Model'>
         <Input
-            // @ts-ignore
-            value={fleetToEdit?.modlName}
-            contentEditable={false}
-            disabled={true}
+          // @ts-ignore
+          value={fleetToEdit?.modlName}
+          contentEditable={false}
+          disabled={true}
         />
       </Form.Item>
-      <Form.Item label="Description">
-
+      <Form.Item label='Description'>
         <Input
-            // @ts-ignore
-            value={fleetToEdit?.modlClass}
-            contentEditable={false}
-            disabled={true}
+          // @ts-ignore
+          value={fleetToEdit?.modlClass}
+          contentEditable={false}
+          disabled={true}
         />
       </Form.Item>
-      <Form.Item label="Down Date">
+      <Form.Item label='Down Date'>
         <DatePicker />
       </Form.Item>
-      <Form.Item label="Down Time">
+      <Form.Item label='Down Time'>
         <TimePicker />
       </Form.Item>
 
-      <Form.Item label="Custodian">
+      <Form.Item label='Custodian'>
         <Select>
-          <Select.Option value="demo">David</Select.Option>
+          <Select.Option value='demo'>David</Select.Option>
         </Select>
       </Form.Item>
 
-      <Form.Item label="Location">
+      <Form.Item label='Location'>
         <Select>
-          <Select.Option value="demo">Dansoman</Select.Option>
+          <Select.Option value='demo'>Dansoman</Select.Option>
         </Select>
       </Form.Item>
     </Form>
-  );
-};
+  )
+}
 
-export { AddFaultForm };
+export {AddFaultForm}
