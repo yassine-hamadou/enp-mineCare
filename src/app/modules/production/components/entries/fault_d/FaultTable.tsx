@@ -86,7 +86,7 @@ const FaultTable = () => {
       <Button type='primary' onClick={showModal} className='mb-3'>
         Add
       </Button>
-      <Table columns={columns} dataSource={gridData} rowKey='txequp' bordered />
+      <Table columns={columns} dataSource={gridData} rowKey='txequp' bordered loading={loading}/>
       <Modal title='Basic Modal' open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
         <AddFaultForm />
       </Modal>
