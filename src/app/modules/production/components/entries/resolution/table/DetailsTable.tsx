@@ -7,7 +7,7 @@ import {usersColumns} from './columns/_columns'
 import {User} from '../core/_models'
 import {UsersListLoading} from '../components/loading/UsersListLoading'
 import {UsersListPagination} from '../components/pagination/UsersListPagination'
-import {KTCardBody} from "../../../../../../../_metronic/helpers";
+import {KTCardBody} from '../../../../../../../_metronic/helpers'
 
 const DetailsTable = () => {
   const users = useQueryResponseData()
@@ -28,14 +28,14 @@ const DetailsTable = () => {
           {...getTableProps()}
         >
           <thead>
-          <tr className='text-start fw-bold fs-7'>
-            {headers.map((column: ColumnInstance<User>) => (
-              <CustomHeaderColumn key={column.id} column={column} />
-            ))}
-          </tr>
+            <tr className='text-start fw-bold fs-7'>
+              {headers.map((column: ColumnInstance<User>) => (
+                <CustomHeaderColumn key={column.id} column={column} />
+              ))}
+            </tr>
           </thead>
           <tbody className='text-black' {...getTableBodyProps()}>
-          {rows.length === 0 ? ( // TODO: change to < 0
+            {/* {rows.length > 0 ? ( // TODO: change to < 0
             rows.map((row: Row<User>, i) => {
               prepareRow(row)
               return <CustomRow row={row} key={`row-${i}-${row.id}`} />
@@ -48,7 +48,14 @@ const DetailsTable = () => {
                 </div>
               </td>
             </tr>
-          )}
+          )} */}
+            <tr>
+              <td colSpan={7}>
+                <div className='d-flex text-center w-100 align-content-center justify-content-center'>
+                  No matching records found
+                </div>
+              </td>
+            </tr>
           </tbody>
         </table>
       </div>

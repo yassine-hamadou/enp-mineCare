@@ -12,7 +12,7 @@ import {User} from '../../core/_models'
 const usersColumns: ReadonlyArray<Column<User>> = [
   {
     Header: (props) => <UserSelectionHeader tableProps={props} />,
-    id: 'selection',
+    id: 'selWorkection',
     Cell: ({...props}) => <UserSelectionCell id={props.data[props.row.index].id} />,
   },
   {

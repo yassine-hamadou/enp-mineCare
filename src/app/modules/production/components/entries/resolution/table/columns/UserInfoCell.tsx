@@ -2,7 +2,7 @@
 import clsx from 'clsx'
 import {FC} from 'react'
 import {User} from '../../core/_models'
-import {toAbsoluteUrl} from "../../../../../../../../_metronic/helpers";
+import {toAbsoluteUrl} from '../../../../../../../../_metronic/helpers'
 
 type Props = {
   user: User
@@ -13,28 +13,29 @@ const UserInfoCell: FC<Props> = ({user}) => (
     {/* begin:: Avatar */}
     <div className='symbol symbol-circle symbol-50px overflow-hidden me-3'>
       <a href='#'>
-        {user.avatar ? (
+        {user.title ? (
           <div className='symbol-label'>
-            <img src={toAbsoluteUrl(`/media/${user.avatar}`)} alt={user.name} className='w-100' />
+            dfdf
+            {/* <img src={toAbsoluteUrl(`/media/${user.title}`)} alt={user.title} className='w-100' /> */}
           </div>
         ) : (
           <div
             className={clsx(
               'symbol-label fs-3',
-              `bg-light-${user.initials?.state}`,
-              `text-${user.initials?.state}`
+              `bg-light-${user.title}`,
+              `text-${user.title}`
             )}
           >
-            {user.initials?.label}
+            {user.title}
           </div>
         )}
       </a>
     </div>
     <div className='d-flex flex-column'>
       <a href='#' className='text-gray-800 text-hover-primary mb-1'>
-        {user.name}
+        {user.title}
       </a>
-      <span>{user.email}</span>
+      <span>{user.title}</span>
     </div>
   </div>
 )

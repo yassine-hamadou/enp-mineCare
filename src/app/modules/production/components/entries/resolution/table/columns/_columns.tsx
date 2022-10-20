@@ -11,34 +11,21 @@ import {User} from '../../core/_models'
 
 const usersColumns: ReadonlyArray<Column<User>> = [
   {
-    Header: (props) => <UserCustomHeader tableProps={props} title='FleetID' className='border-end min-w-125px' />,
+    Header: (props) => <UserCustomHeader tableProps={props} title='userID' className='border-end min-w-125px' />,
+    accessor: 'userId',
+  },
+  {
+    Header: (props) => <UserCustomHeader tableProps={props} title='id' className='border-end min-w-125px' />,
     accessor: 'id',
   },
   {
-    Header: (props) => <UserCustomHeader tableProps={props} title='Model' className='border-end min-w-125px' />,
-    accessor: 'name',
+    Header: (props) => <UserCustomHeader tableProps={props} title='post title' className='border-end min-w-125px' />,
+    accessor: 'title',
   },
   {
-    Header: (props) => <UserCustomHeader tableProps={props} title='Description' className='border-end min-w-125px' />,
-    accessor: 'email',
+    Header: (props) => <UserCustomHeader tableProps={props} title='post body' className='border-end min-w-125px' />,
+    accessor: 'body',
   },
-  {
-    Header: (props) => <UserCustomHeader tableProps={props} title='Work Type' className='border-end min-w-125px' />,
-    accessor: 'last_login',
-  },
-  {
-    Header: (props) => <UserCustomHeader tableProps={props} title='Comment' className='border-end min-w-125px' />,
-    accessor: 'position',
-  },
-  {
-    Header: (props) => <UserCustomHeader tableProps={props} title='Start Time' className='border-end min-w-125px' />,
-    accessor: 'initials.label',
-  },
-  {
-    Header: (props) => <UserCustomHeader tableProps={props} title='Time End' className='border-end min-w-125px' />,
-    accessor: 'joined_day',
-  },
-
 ]
 
 export {usersColumns}

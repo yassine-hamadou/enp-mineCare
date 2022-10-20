@@ -14,8 +14,9 @@ import {DownType} from './components/setup/downType/CycleDetailsList'
 import {WorkType} from './components/setup/workType/CycleDetailsList'
 import {LocationTable} from './components/setup/location/CycleDetailsList'
 import {Custodian} from './components/setup/custodian/CycleDetailsList'
-import {Fault} from './components/entries/fault/CycleDetailsList'
-// import {AddFautForm} from './components/entries/fault/addFault/AddFaultForm'
+import {FaultTable} from './components/entries/fault_d/FaultTable'
+import {AddFaultForm} from './components/entries/fault_d/AddFaultForm'
+// import {Fault} from './components/entries/fault/CycleDetailsList'
 const accountBreadCrumbs: Array<PageLink> = [
   // {
   //   title: 'Cycle Details',
@@ -64,7 +65,7 @@ const ProductionPage: React.FC = () => {
           element={
             <>
               <PageTitle breadcrumbs={accountBreadCrumbs}>Fault</PageTitle>
-              <Fault />
+              <FaultTable />
             </>
           }
         />
@@ -73,7 +74,7 @@ const ProductionPage: React.FC = () => {
           element={
             <>
               <PageTitle breadcrumbs={accountBreadCrumbs}>Add</PageTitle>
-              {/* <AddFautForm isUserLoading={false} user={{}} /> */}
+              <AddFaultForm />
             </>
           }
         />

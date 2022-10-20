@@ -25,18 +25,32 @@ const QueryResponseProvider: FC<WithChildren> = ({children}) => {
       setQuery(updatedQuery)
     }
   }, [updatedQuery])
-
+  // if (!itemIdForUpdate) {
+  //   return
+  //   (
+  //     <FaultEditModalForm
+  //       isFaultLoading={isLoading}
+  //       fault={{}}
+  //     />
+  //   )
+  // } // if (!itemIdForUpdate) {
+  //   return
+  //   (
+  //     <FaultEditModalForm
+  //       isFaultLoading={isLoading}
+  //       fault={{}}
+  //     />
+  //   )
+  // }
   const {
     isFetching,
     refetch,
     data: response,
-  } = useQuery(
-    `${QUERIES.USERS_LIST}-${query}`,
-    () => {
-      return getUsers(query)
-    },
-    {cacheTime: 0, keepPreviousData: true, refetchOnWindowFocus: false}
-  )
+  } = useQuery('posts', () => getUsers(), {
+    cacheTime: 0,
+    keepPreviousData: true,
+    refetchOnWindowFocus: false,
+  })
 
   return (
     <QueryResponseContext.Provider value={{isLoading: isFetching, refetch, response, query}}>
