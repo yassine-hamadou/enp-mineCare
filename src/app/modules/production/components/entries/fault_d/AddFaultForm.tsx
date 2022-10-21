@@ -4213,7 +4213,7 @@ const AddFaultForm = () => {
   const loadData = async () => {
     // setLoading(true)
     const response = await axios.get(
-      'https://cors-anywhere.herokuapp.com/https://app.sipconsult.net/SmWebApi/api/VmequpsApi'
+      'http://208.117.44.15/SmWebApi/api/VmequpsApi'
     )
     console.log('Api Response from form', response.data)
     setDataSource(response.data)
