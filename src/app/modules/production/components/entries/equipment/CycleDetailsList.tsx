@@ -20,7 +20,7 @@ const EquipmentDetail = () => {
 
   useEffect(() => {
     loadData()
-  })
+  }, [])
 
   return (
     <>
