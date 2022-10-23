@@ -5,10 +5,9 @@ import TopBarProgress from 'react-topbar-progress-indicator'
 import {DashboardWrapper} from '../pages/dashboard/DashboardWrapper'
 import {getCSSVariableValue} from '../../_metronic/assets/ts/_utils'
 import {WithChildren} from '../../_metronic/helpers'
-import ProductionPage from "../modules/production/ProductionPage";
+import ProductionPage from '../modules/production/ProductionPage'
 
 const PrivateRoutes = () => {
-
   return (
     <Routes>
       <Route element={<MasterLayout />}>
