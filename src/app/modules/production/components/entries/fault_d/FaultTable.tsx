@@ -26,14 +26,7 @@ const FaultTable = () => {
 
   const loadData = async () => {
     setLoading(true)
-    const response = await axios.get(
-<<<<<<< HEAD
-        'http://208.117.44.15/SmWebApi/api/VmequpsApi'
-=======
-      'https://cors-anywhere.herokuapp.com/http://208.117.44.15/SmWebApi/api/VmequpsApi'
->>>>>>> master
-    )
-    console.log('api REponse', response.data)
+    const response = await axios.get('http://208.117.44.15/SmWebApi/api/VmequpsApi')
     setGridData(response.data)
     setLoading(false)
   }
