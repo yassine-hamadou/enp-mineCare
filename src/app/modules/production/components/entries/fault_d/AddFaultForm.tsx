@@ -8,30 +8,14 @@ const AddFaultForm = () => {
   const [faultType, setFaultType] = useState([])
   const [location, setLocation] = useState([])
   const [custodian, setCustodian] = useState([])
-
-<<<<<<< HEAD
-  const loadData = async () => {
-    // setLoading(true)
-    const response = await axios.get(
-      'http://208.117.44.15/SmWebApi/api/VmequpsApi'
-    )
-    console.log('Api Response from form', response.data)
-    setDataSource(response.data)
-    // setLoading(true)
-  }
-=======
   const [loading, setLoading] = useState(false)
->>>>>>> master
-
   const [fleet, setFleet] = useState({})
   const [fleetToAdd, setFleetToAdd] = useState(null)
 
   const loadData = async () => {
     setLoading(true)
     try {
-      const response = await axios.get(
-        'https://cors-anywhere.herokuapp.com/http://208.117.44.15/SmWebApi/api/VmequpsApi'
-      )
+      const response = await axios.get('http://208.117.44.15/SmWebApi/api/VmequpsApi')
       setDataSource(response.data)
       setLoading(false)
     } catch (error: any) {
