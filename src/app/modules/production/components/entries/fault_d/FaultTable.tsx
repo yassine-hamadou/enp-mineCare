@@ -27,28 +27,33 @@ const FaultTable = () => {
   const loadData = async () => {
     setLoading(true)
     const response = await axios.get(
+<<<<<<< HEAD
         'http://208.117.44.15/SmWebApi/api/VmequpsApi'
+=======
+      'https://cors-anywhere.herokuapp.com/http://208.117.44.15/SmWebApi/api/VmequpsApi'
+>>>>>>> master
     )
     console.log('api REponse', response.data)
     setGridData(response.data)
     setLoading(false)
   }
 
-  useEffect(() => {
-    loadData()
-    console.log('Inside use-effect', gridData)
-  }, [])
+  // useEffect(() => {
+  //   loadData()
+  //   console.log('Inside use-effect', gridData)
+  // }, [])
 
   function handleDelete(element: any) {
     const dataSource = [...gridData]
-    const filteredData = dataSource.filter((item: any) => item.txequp !== element.txequp)
+    const filteredData = dataSource.filter((item: any) => item.fleetID !== element.fleetID)
     setGridData(filteredData)
   }
 
   const columns = [
     {
       title: 'FleetId',
-      dataIndex: 'txequp',
+      dataIndex: 'fleetID',
+      key: 'fleetID',
     },
     {
       title: 'Model',
@@ -59,10 +64,10 @@ const FaultTable = () => {
       dataIndex: 'modlClass',
     },
     {
-      title: 'Down Time',
+      title: 'Down Type',
     },
     {
-      title: 'Down Type',
+      title: 'Down Time',
     },
     {
       title: 'Custodian',
@@ -71,15 +76,25 @@ const FaultTable = () => {
       title: 'Location',
     },
     {
+      title: 'Duration',
+    },
+    {
       title: 'Action',
       dataIndex: 'action',
       render: (_: any, record: any) =>
         gridData.length >= 1 ? (
-          <Popconfirm title='Sure to delete?' onConfirm={() => handleDelete(record)}>
-            <Button danger type='primary'>
-              Delete
-            </Button>
-          </Popconfirm>
+          <>
+            <Popconfirm title='Sure to solve'>
+              <Button type='primary' className='mx-3 mb-3'>
+                Solve
+              </Button>
+            </Popconfirm>
+            <Popconfirm title='Sure to delete?' onConfirm={() => handleDelete(record)}>
+              <Button danger type='primary'>
+                Delete
+              </Button>
+            </Popconfirm>
+          </>
         ) : null,
     },
   ]
@@ -89,7 +104,7 @@ const FaultTable = () => {
       <Button type='primary' onClick={showModal} className='mb-3'>
         Add
       </Button>
-      <Table columns={columns} dataSource={gridData} rowKey='txequp' bordered loading={loading} />
+      <Table columns={columns} dataSource={gridData} bordered loading={loading} />
       <Modal title='Add Fault' open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
         <AddFaultForm />
       </Modal>

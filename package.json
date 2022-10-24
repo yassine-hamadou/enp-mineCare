@@ -42,6 +42,7 @@
         "react-topbar-progress-indicator": "4.1.1",
         "sass": "1.50.1",
         "socicon": "3.0.5",
+        "uuid": "^9.0.0",
         "yup": "0.32.11"
     },
     "devDependencies": {
@@ -58,6 +59,7 @@
         "@types/react-copy-to-clipboard": "5.0.2",
         "@types/react-dom": "18.0.2",
         "@types/react-table": "^7.7.9",
+        "@types/uuid": "^8.3.4",
         "prettier": "2.6.2",
         "typescript": "4.6.3"
     },

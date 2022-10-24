@@ -70,13 +70,13 @@ const chartOptions = (chartColor: string, chartHeight: string): ApexOptions => {
   return {
     series: [
       {
-        name: 'Net Profit',
+        name: 'Total Faults',
         data: [50, 60, 70, 80, 60, 50, 70, 60],
       },
-      {
-        name: 'Revenue',
-        data: [50, 60, 70, 80, 60, 50, 70, 60],
-      },
+      // {
+      //   name: 'Revenue',
+      //   data: [50, 60, 70, 80, 60, 50, 70, 60],
+      // },
     ],
     chart: {
       fontFamily: 'inherit',
@@ -105,7 +105,16 @@ const chartOptions = (chartColor: string, chartHeight: string): ApexOptions => {
       colors: ['transparent'],
     },
     xaxis: {
-      categories: ['AIRSYSTEM', 'CHASIS', 'COOLING', 'DAMAGE', 'ELECTRICAL', 'ENGINE', 'ENGINEBUILD', 'FIRESYSTEM'],
+      categories: [
+        'AIRSYSTEM',
+        'CHASIS',
+        'COOLING',
+        'DAMAGE',
+        'ELECTRICAL',
+        'ENGINE',
+        'ENGINEBUILD',
+        'FIRESYSTEM',
+      ],
       axisBorder: {
         show: false,
       },
@@ -157,7 +166,7 @@ const chartOptions = (chartColor: string, chartHeight: string): ApexOptions => {
       },
       y: {
         formatter: function (val) {
-          return '$' + val + ' revenue'
+          return val + ' Faults'
         },
       },
     },
