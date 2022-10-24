@@ -3,28 +3,28 @@ import {v4 as uuidv4} from 'uuid'
 import {useState, useEffect} from 'react'
 import axios from 'axios'
 
-const columns = [
-  {
-    title: 'Vehicle Type',
-    dataIndex: 'classCode',
-    key: uuidv4(),
-  },
-  {
-    title: 'Number of Vehicles',
-    dataIndex: `${Math.floor(Math.random() * 20) + 1}`,
-    key: uuidv4(),
-  },
-  {
-    title: 'Down Time',
-    dataIndex: '',
-    key: uuidv4(),
-  },
-  {
-    title: 'Number of Hours',
-    dataIndex: `${Math.floor(Math.random() * 20) + 1}`,
-    key: uuidv4(),
-  },
-]
+// const columns = [
+//   {
+//     title: 'Vehicle Type',
+//     dataIndex: 'classCode',
+//     key: uuidv4(),
+//   },
+//   {
+//     title: 'Number of Vehicles',
+//     dataIndex: `${Math.floor(Math.random() * 20) + 1}`,
+//     key: uuidv4(),
+//   },
+//   {
+//     title: 'Down Time',
+//     dataIndex: '',
+//     key: uuidv4(),
+//   },
+//   {
+//     title: 'Number of Hours',
+//     dataIndex: `${Math.floor(Math.random() * 20) + 1}`,
+//     key: uuidv4(),
+//   },
+// ]
 
 const DashboardTable = () => {
   const [gridData, setGridData] = useState([])
@@ -48,7 +48,7 @@ const DashboardTable = () => {
       dataIndex: 'vehicleNum',
     },
     {
-      title: 'Down Time',
+      title: 'Number of Down Time',
       dataIndex: 'downTime',
     },
     {
@@ -77,7 +77,7 @@ const DashboardTable = () => {
   const dataWithVehicleNum = gridData.map((item: any, index) => ({
     ...item,
     vehicleNum: Math.floor(Math.random() * 20) + 1,
-    downTime: `${Math.floor(Math.random() * 23) + 1}h${Math.floor(Math.random() * 59)}mn`,
+    downTime: `${Math.floor(Math.random() * 100) + 1}`,
     NumOfHrs: `${Math.floor(Math.random() * 20) + 1} Hours`,
     key: index,
   }))

@@ -12,7 +12,7 @@ const EquipmentDetail = () => {
   const loadData = async () => {
     setLoading(true)
     const response = await axios.get(
-      'https://cors-anywhere.herokuapp.com/https://app.sipconsult.net/SmWebApi/api/VmequpsApi'
+      'https://cors-anywhere.herokuapp.com/http://208.117.44.15/SmWebApi/api/VmequpsApi'
     )
     setVehicle(response.data)
     setLoading(false)
@@ -26,14 +26,14 @@ const EquipmentDetail = () => {
     <>
       <div>
         <DropdownButton
-          title='Vehicles'
+          title='Equipment Type'
           id='dropdown-menu-align-right'
           className='btn bg-white px-3 mb-2'
         >
           {vehicle.map((item: any) => {
             return (
-              <Dropdown.Item eventKey={item.txequp}>
-                {item.txequp} - {item.modlName}
+              <Dropdown.Item eventKey={item.fleetID}>
+                {item.fleetID} - {item.modlName} - {item.modlClass}
               </Dropdown.Item>
             )
           })}

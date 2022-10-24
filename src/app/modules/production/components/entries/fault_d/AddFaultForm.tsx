@@ -5,34 +5,68 @@ import {DatePicker} from 'antd/es'
 
 const AddFaultForm = () => {
   const [dataSource, setDataSource] = useState([])
+  const [faultType, setFaultType] = useState([])
+  const [location, setLocation] = useState([])
+  const [custodian, setCustodian] = useState([])
+
   const [loading, setLoading] = useState(false)
+
+  const [fleet, setFleet] = useState({})
+  const [fleetToAdd, setFleetToAdd] = useState(null)
 
   const loadData = async () => {
     setLoading(true)
     try {
       const response = await axios.get(
-        'https://cors-anywhere.herokuapp.com/https://app.sipconsult.net/SmWebApi/api/VmequpsApi'
+        'https://cors-anywhere.herokuapp.com/http://208.117.44.15/SmWebApi/api/VmequpsApi'
       )
-      console.log('Api Response from form', response.data)
       setDataSource(response.data)
       setLoading(false)
     } catch (error: any) {
-        setLoading(false)
+      setLoading(false)
       return error.statusText
     }
   }
 
-  const [fleet, setFleet] = useState({})
-  const [fleetToAdd, setFleetToAdd] = useState(null)
+  const loadFaultType = async () => {
+    try {
+      const response = await axios.get(
+        'https://cors-anywhere.herokuapp.com/http://208.117.44.15/SmWebApi/api/vmfaltsapi'
+      )
+      setFaultType(response.data)
+    } catch (error: any) {
+      return error.statusText
+    }
+  }
+
+  const loadLocation = async () => {
+    try {
+      const response = await axios.get(
+        'https://cors-anywhere.herokuapp.com/http://208.117.44.15/SmWebApi/api/IclocsApi'
+      )
+      setLocation(response.data)
+    } catch (error: any) {
+      return error.statusText
+    }
+  }
+
+  const loadCustodian = async () => {
+    const response = await axios.get(
+      'https://cors-anywhere.herokuapp.com/http://208.117.44.15/SmWebApi/api/VmemplsApi'
+    )
+    setCustodian(response.data)
+  }
 
   const getEqupId = (id: any) => {
-      // get the item to add in the form inputs after dropdown selection is made
-    dataSource.map((item: any) => (item.txequp === id ? setFleet(item) : null))
+    // get the item to add in the form remaning inputs after dropdown selection is made
+    dataSource.map((item: any) => (item.fleetID === id ? setFleet(item) : null))
   }
 
   useEffect(() => {
     loadData()
-    console.log('Inside use-effect', dataSource)
+    loadFaultType()
+    loadLocation()
+    loadCustodian()
   }, [])
 
   useEffect(() => {
@@ -48,9 +82,9 @@ const AddFaultForm = () => {
           {dataSource.map((item: any) => (
             <Select.Option
               // @ts-ignore
-              value={item.txequp}
+              value={item.fleetID}
             >
-              {item.txequp} - {item.modlName} - {item.modlClass}
+              {item.fleetID} - {item.modlName} - {item.modlClass}
             </Select.Option>
           ))}
         </Select>
@@ -71,6 +105,18 @@ const AddFaultForm = () => {
           disabled={true}
         />
       </Form.Item>
+      <Form.Item label='Down Type'>
+        <Select>
+          {faultType.map((item: any) => (
+            <Select.Option
+              // @ts-ignore
+              value={item.faultDesc}
+            >
+              {item.faultDesc}
+            </Select.Option>
+          ))}
+        </Select>
+      </Form.Item>
       <Form.Item label='Down Date'>
         <DatePicker />
       </Form.Item>
@@ -80,13 +126,27 @@ const AddFaultForm = () => {
 
       <Form.Item label='Custodian'>
         <Select>
-          <Select.Option value='demo'>David</Select.Option>
+          {custodian.map((item: any) => (
+            <Select.Option
+              // @ts-ignore
+              value={item.emplCode}
+            >
+              {item.emplCode} - {item.emplName}
+            </Select.Option>
+          ))}
         </Select>
       </Form.Item>
 
       <Form.Item label='Location'>
         <Select>
-          <Select.Option value='demo'>Dansoman</Select.Option>
+          {location.map((item: any) => (
+            <Select.Option
+              // @ts-ignore
+              value={item.locationCode}
+            >
+              {item.locationCode} - {item.locationDesc}
+            </Select.Option>
+          ))}
         </Select>
       </Form.Item>
     </Form>
