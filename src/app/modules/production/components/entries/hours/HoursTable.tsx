@@ -60,19 +60,19 @@ const HoursTable = () => {
       dataIndex: 'modlClass',
     },
     {
-      title: 'Down Type',
+      title: 'Previous Reading',
     },
     {
-      title: 'Down Time',
+      title: 'Date',
     },
     {
-      title: 'Custodian',
+      title: 'Daily Hours Worked',
     },
     {
-      title: 'Location',
+      title: 'New Reading',
     },
     {
-      title: 'Duration',
+      title: 'Comment',
     },
     {
       title: 'Action',
@@ -80,14 +80,9 @@ const HoursTable = () => {
       render: (_: any, record: any) =>
         gridData.length >= 1 ? (
           <>
-            <Popconfirm title='Sure to solve'>
+            <Popconfirm title='Sure to adjust'>
               <Button type='primary' className='mx-3 mb-3'>
-                Solve
-              </Button>
-            </Popconfirm>
-            <Popconfirm title='Sure to delete?' onConfirm={() => handleDelete(record)}>
-              <Button danger type='primary'>
-                Delete
+                Adjust Hours
               </Button>
             </Popconfirm>
           </>
@@ -97,9 +92,17 @@ const HoursTable = () => {
 
   return (
     <div>
-      <Button type='primary' onClick={showModal} className='mb-3'>
-        Add
-      </Button>
+      <div className='d-flex'>
+        <Button type='primary' onClick={showModal} className='mb-3'>
+          Add
+        </Button>
+        <Button type='primary' className='mb-3'>
+          Export
+        </Button>
+        <Button type='primary' onClick={showModal} className='mb-3'>
+          Upload
+        </Button>
+      </div>
       <Table columns={columns} dataSource={gridData} bordered loading={loading} />
       <Modal title='Add Fault' open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
         <AddFaultForm />
