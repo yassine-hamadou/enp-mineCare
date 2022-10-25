@@ -63,6 +63,9 @@ const FaultTable = () => {
       title: 'Down Type',
     },
     {
+      title: 'Down Date',
+    },
+    {
       title: 'Down Time',
     },
     {

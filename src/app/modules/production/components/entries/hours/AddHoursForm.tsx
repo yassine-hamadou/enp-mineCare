@@ -1,4 +1,4 @@
-import {Form, Input, Select, TimePicker} from 'antd'
+import {Form, Input, InputNumber, Select, TimePicker} from 'antd'
 import {useEffect, useRef, useState} from 'react'
 import axios from 'axios'
 import {DatePicker} from 'antd/es'
@@ -76,7 +76,7 @@ const AddFaultForm = () => {
   }, [fleet])
 
   return (
-    <Form labelCol={{span: 4}} wrapperCol={{span: 14}} layout='horizontal' title='Add Fault'>
+    <Form labelCol={{span: 7}} wrapperCol={{span: 14}} layout='horizontal' title='Add Fault'>
       <Form.Item label='FleetID'>
         <Select onSelect={(e: any) => getEqupId(e)}>
           {dataSource.map((item: any) => (
@@ -93,7 +93,6 @@ const AddFaultForm = () => {
         <Input
           // @ts-ignore
           value={fleetToAdd?.modlName}
-          contentEditable={false}
           disabled={true}
         />
       </Form.Item>
@@ -105,49 +104,21 @@ const AddFaultForm = () => {
           disabled={true}
         />
       </Form.Item>
-      <Form.Item label='Down Type'>
-        <Select>
-          {faultType.map((item: any) => (
-            <Select.Option
-              // @ts-ignore
-              value={item.faultDesc}
-            >
-              {item.faultDesc}
-            </Select.Option>
-          ))}
-        </Select>
+      <Form.Item label='Previous Reading'>
+        <Input />
       </Form.Item>
-      <Form.Item label='Down Date'>
+      <Form.Item label='Date'>
         <DatePicker />
       </Form.Item>
-      <Form.Item label='Down Time'>
-        <TimePicker />
+      <Form.Item label='Daily Hours Worked'>
+        <InputNumber />
       </Form.Item>
 
-      <Form.Item label='Custodian'>
-        <Select>
-          {custodian.map((item: any) => (
-            <Select.Option
-              // @ts-ignore
-              value={item.emplCode}
-            >
-              {item.emplCode} - {item.emplName}
-            </Select.Option>
-          ))}
-        </Select>
+      <Form.Item label='New Reading'>
+        <InputNumber />
       </Form.Item>
-
-      <Form.Item label='Location'>
-        <Select>
-          {location.map((item: any) => (
-            <Select.Option
-              // @ts-ignore
-              value={item.locationCode}
-            >
-              {item.locationCode} - {item.locationDesc}
-            </Select.Option>
-          ))}
-        </Select>
+      <Form.Item label='Comment'>
+        <Input />
       </Form.Item>
     </Form>
   )

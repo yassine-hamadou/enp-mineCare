@@ -2,7 +2,7 @@ import {Button, Popconfirm, Table, Modal} from 'antd'
 import 'antd/dist/antd.min.css'
 import axios from 'axios'
 import {useEffect, useState} from 'react'
-import {AddFaultForm} from './AddFaultForm'
+import {AddFaultForm} from './AddHoursForm'
 
 const HoursTable = () => {
   const [gridData, setGridData] = useState([])
@@ -92,16 +92,14 @@ const HoursTable = () => {
 
   return (
     <div>
-      <div className='d-flex'>
-        <Button type='primary' onClick={showModal} className='mb-3'>
+      <div className='d-flex my-2'>
+        <Button type='primary' onClick={showModal}>
           Add
         </Button>
-        <Button type='primary' className='mb-3'>
+        <Button type='primary' className='mx-3'>
           Export
         </Button>
-        <Button type='primary' onClick={showModal} className='mb-3'>
-          Upload
-        </Button>
+        <Button type='primary'>Upload</Button>
       </div>
       <Table columns={columns} dataSource={gridData} bordered loading={loading} />
       <Modal title='Add Fault' open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
