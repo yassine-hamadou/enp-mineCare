@@ -1,22 +1,19 @@
 import React from 'react'
 import {Navigate, Route, Routes, Outlet} from 'react-router-dom'
 import {PageLink, PageTitle} from '../../../_metronic/layout/core'
-// import {Fault} from './components/entries/fault/CycleDetailsList'
 import {ProductionReportTable} from './components/report/production_table/CycleDetailsList'
 import {FuelReportTable} from './components/report/fuel/CycleDetailsList'
 import {EquipmentTable} from './components/report/equipment/CycleDetailsList'
 import {StatisticsTable} from './components/report/activity/CycleDetailsList'
 import {Fleet} from './components/setup/fleet/CycleDetailsList'
 import {EquipmentDetail} from './components/entries/equipment/CycleDetailsList'
-import {Resolution} from './components/entries/resolution/CycleDetailsList'
-import {Hours} from './components/entries/hours/CycleDetailsList'
+import {ResolutionTable} from './components/entries/resolution/ResolutionTable'
 import {DownType} from './components/setup/downType/CycleDetailsList'
 import {WorkType} from './components/setup/workType/CycleDetailsList'
 import {LocationTable} from './components/setup/location/CycleDetailsList'
 import {Custodian} from './components/setup/custodian/CycleDetailsList'
 import {FaultTable} from './components/entries/fault_d/FaultTable'
-import {AddFaultForm} from './components/entries/fault_d/AddFaultForm'
-// import {Fault} from './components/entries/fault/CycleDetailsList'
+import {HoursTable} from './components/entries/hours/HoursTable'
 const accountBreadCrumbs: Array<PageLink> = [
   // {
   //   title: 'Cycle Details',
@@ -69,7 +66,7 @@ const ProductionPage: React.FC = () => {
             </>
           }
         />
-        <Route
+        {/* <Route
           path='fault/add'
           element={
             <>
@@ -77,13 +74,13 @@ const ProductionPage: React.FC = () => {
               <AddFaultForm />
             </>
           }
-        />
+        /> */}
         <Route
           path='resolution'
           element={
             <>
               <PageTitle breadcrumbs={accountBreadCrumbs}>Resolution</PageTitle>
-              <Resolution />
+              <ResolutionTable />
             </>
           }
         />
@@ -92,7 +89,7 @@ const ProductionPage: React.FC = () => {
           element={
             <>
               <PageTitle breadcrumbs={accountBreadCrumbs}>Hours</PageTitle>
-              <Hours />
+              <HoursTable />
             </>
           }
         />

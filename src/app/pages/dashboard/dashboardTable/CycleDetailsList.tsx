@@ -3,29 +3,6 @@ import {v4 as uuidv4} from 'uuid'
 import {useState, useEffect} from 'react'
 import axios from 'axios'
 
-// const columns = [
-//   {
-//     title: 'Vehicle Type',
-//     dataIndex: 'classCode',
-//     key: uuidv4(),
-//   },
-//   {
-//     title: 'Number of Vehicles',
-//     dataIndex: `${Math.floor(Math.random() * 20) + 1}`,
-//     key: uuidv4(),
-//   },
-//   {
-//     title: 'Down Time',
-//     dataIndex: '',
-//     key: uuidv4(),
-//   },
-//   {
-//     title: 'Number of Hours',
-//     dataIndex: `${Math.floor(Math.random() * 20) + 1}`,
-//     key: uuidv4(),
-//   },
-// ]
-
 const DashboardTable = () => {
   const [gridData, setGridData] = useState([])
   const [loading, setLoading] = useState(false)
