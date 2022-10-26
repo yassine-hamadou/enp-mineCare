@@ -1,4 +1,4 @@
-import {Form, Input, Select, TimePicker} from 'antd'
+import {Button, Form, Input, Select, TimePicker} from 'antd'
 import {useEffect, useRef, useState} from 'react'
 import axios from 'axios'
 import {DatePicker} from 'antd/es'
@@ -8,6 +8,11 @@ const AddFaultForm = () => {
   const [faultType, setFaultType] = useState([])
   const [location, setLocation] = useState([])
   const [custodian, setCustodian] = useState([])
+
+  // {/* Start Elements to Post */}
+  const [descToPost, setDescToPost] = useState('initial')
+
+  // {/* End Elements to Post */}
 
   const [loading, setLoading] = useState(false)
 
@@ -58,7 +63,7 @@ const AddFaultForm = () => {
   }
 
   const getEqupId = (id: any) => {
-    // get the item to add in the form remaning inputs after dropdown selection is made
+    // get the items to add in the form remaning inputs after dropdown selection is made
     dataSource.map((item: any) => (item.fleetID === id ? setFleet(item) : null))
   }
 
@@ -70,13 +75,23 @@ const AddFaultForm = () => {
   }, [])
 
   useEffect(() => {
-    console.log('Fleet in useefect', fleet)
     // @ts-ignore
     setFleetToAdd({...fleet})
+    console.log('Desc to post', descToPost)
   }, [fleet])
 
+  const onFinish = (values: any) => {
+    console.log('Success:', values)
+  }
+
   return (
-    <Form labelCol={{span: 4}} wrapperCol={{span: 14}} layout='horizontal' title='Add Fault'>
+    <Form
+      labelCol={{span: 4}}
+      wrapperCol={{span: 14}}
+      layout='horizontal'
+      title='Add Fault'
+      onFinish={onFinish}
+    >
       <Form.Item label='FleetID'>
         <Select onSelect={(e: any) => getEqupId(e)}>
           {dataSource.map((item: any) => (
@@ -93,16 +108,15 @@ const AddFaultForm = () => {
         <Input
           // @ts-ignore
           value={fleetToAdd?.modlName}
-          contentEditable={false}
-          disabled={true}
+          readOnly
         />
       </Form.Item>
       <Form.Item label='Description'>
         <Input
           // @ts-ignore
           value={fleetToAdd?.modlClass}
-          contentEditable={false}
-          disabled={true}
+          // @ts-ignore
+          readOnly
         />
       </Form.Item>
       <Form.Item label='Down Type'>
@@ -149,6 +163,9 @@ const AddFaultForm = () => {
           ))}
         </Select>
       </Form.Item>
+      <Button type='primary' htmlType='submit'>
+        Submit
+      </Button>
     </Form>
   )
 }

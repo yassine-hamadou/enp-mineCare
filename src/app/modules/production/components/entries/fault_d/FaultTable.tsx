@@ -15,10 +15,6 @@ const FaultTable = () => {
     setIsModalOpen(true)
   }
 
-  const handleOk = () => {
-    setIsModalOpen(false)
-  }
-
   const handleCancel = () => {
     setIsModalOpen(false)
   }
@@ -97,6 +93,7 @@ const FaultTable = () => {
         ) : null,
     },
   ]
+  const handleOk = () => {}
 
   return (
     <div>
@@ -104,7 +101,7 @@ const FaultTable = () => {
         Add
       </Button>
       <Table columns={columns} dataSource={gridData} bordered loading={loading} />
-      <Modal title='Add Fault' open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
+      <Modal title='Add Fault' open={isModalOpen}>
         <AddFaultForm />
       </Modal>
     </div>
