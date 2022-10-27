@@ -172,7 +172,7 @@ const AddFaultForm = () => {
           ))}
         </Select>
       </Form.Item>
-      <Button key='submit' type='primary' htmlType='submit' loading={submitLoading} on>
+      <Button key='submit' type='primary' htmlType='submit' loading={submitLoading}>
         Submit
       </Button>
     </Form>
