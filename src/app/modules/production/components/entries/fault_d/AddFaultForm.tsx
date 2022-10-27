@@ -26,9 +26,10 @@ const AddFaultForm = () => {
       locationId: values.locationCode,
       custodian: values.custodian,
     }
+    const dataWithId = {...data, entryId: uuidv4()}
 
     try {
-      const response = await axios.post(url, data)
+      const response = await axios.post(url, dataWithId)
       setSubmitLoading(false)
       console.log('response', response.data)
     } catch (error: any) {
