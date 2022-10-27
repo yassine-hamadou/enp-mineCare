@@ -1,7 +1,5 @@
 /* eslint-disable react/jsx-no-target-blank */
-import React from 'react'
 import {useIntl} from 'react-intl'
-import {KTSVG} from '../../../helpers'
 import {AsideMenuItemWithSub} from './AsideMenuItemWithSub'
 import {AsideMenuItem} from './AsideMenuItem'
 
@@ -23,22 +21,10 @@ export function AsideMenuMain() {
         fontIcon='bi-archive'
         icon='/media/icons/duotune/general/gen022.svg'
       >
-        <AsideMenuItem
-          to='entries/schedule'
-          hasBullet={true}
-          title='Equipment Schedule'
-        />
+        <AsideMenuItem to='entries/schedule' hasBullet={true} title='Equipment Schedule' />
         <AsideMenuItem to='entries/fault' hasBullet={true} title='Fault' />
-        <AsideMenuItem
-          to='entries/resolution'
-          hasBullet={true}
-          title='Resolution'
-        />
-        <AsideMenuItem
-          to='entries/hours'
-          hasBullet={true}
-          title='Hours'
-        />
+        <AsideMenuItem to='entries/resolution' hasBullet={true} title='Resolution' />
+        <AsideMenuItem to='entries/hours' hasBullet={true} title='Hours' />
       </AsideMenuItemWithSub>
 
       <AsideMenuItemWithSub
@@ -47,17 +33,9 @@ export function AsideMenuMain() {
         fontIcon='bi-archive'
         icon='/media/icons/duotune/general/gen028.svg'
       >
-        <AsideMenuItem
-          to='report/downtime'
-          title='Down Time'
-          hasBullet={true}
-        />
+        <AsideMenuItem to='report/downtime' title='Down Time' hasBullet={true} />
         <AsideMenuItem to='report/daily-kpi' title='Daily KPI' hasBullet={true} />
-        <AsideMenuItem
-          to='report/weekly-schedule'
-          title='Weekly Schedule'
-          hasBullet={true}
-        />
+        <AsideMenuItem to='report/weekly-schedule' title='Weekly Schedule' hasBullet={true} />
       </AsideMenuItemWithSub>
 
       <AsideMenuItemWithSub
@@ -72,16 +50,12 @@ export function AsideMenuMain() {
         <AsideMenuItem to='/setup/location' title='Location' hasBullet={true} />
         <AsideMenuItem to='/setup/work-type' title='Work Type' hasBullet={true} />
       </AsideMenuItemWithSub>
-      <div className="menu-item">
-        <div className="menu-content">
-          <div className="separator mx-1 my-4"></div>
+      <div className='menu-item'>
+        <div className='menu-content'>
+          <div className='separator mx-1 my-4'></div>
         </div>
       </div>
-      <AsideMenuItem
-        to='#'
-        title='Configuration'
-        icon='/media/icons/duotune/general/gen055.svg'
-      />
+      <AsideMenuItem to='#' title='Configuration' icon='/media/icons/duotune/general/gen055.svg' />
     </>
   )
 }

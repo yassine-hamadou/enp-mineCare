@@ -16,21 +16,24 @@ const AddFaultForm = () => {
   // {/* Start Elements to Post */}
   const url = 'http://208.117.44.15/SmWebApi/api/FaultEntriesApi'
   const onFinish = async (values: any) => {
+    setSubmitLoading(true)
     const data = {
       fleetId: values.fleetId,
       vmModel: values.model,
       vmClass: values.desc,
       downType: values.dType,
-      downtime: '2021-08-10T00:00:00',
+      downtime: values.dDate.toISOString(),
       locationId: values.locationCode,
+      custodian: values.custodian,
     }
-    console.log('Success:', values)
 
     try {
       const response = await axios.post(url, data)
+      setSubmitLoading(false)
       console.log('response', response.data)
     } catch (error: any) {
-      console.log(error.response)
+      setSubmitLoading(false)
+      console.log("POst",error)
     }
   }
 
@@ -114,6 +117,7 @@ const AddFaultForm = () => {
       title='Add Fault'
       onFinish={onFinish}
     >
+      {}
       <Form.Item name='fleetId' label='fleetID' rules={[{required: true}]}>
         <Select placeholder='Select a fleetID' onChange={onFleetIdChange}>
           {dataSource.map((item: any) => (
@@ -138,12 +142,8 @@ const AddFaultForm = () => {
           ))}
         </Select>
       </Form.Item>
-      <Form.Item name='dDate' label='Down Date' rules={[{required: true}]}>
-        <DatePicker />
-      </Form.Item>
-
-      <Form.Item name='dTime' label='Down Time' rules={[{required: true}]}>
-        <TimePicker />
+      <Form.Item name='dDate' label='Down Date and Time' rules={[{required: true}]}>
+        <DatePicker format='YYYY-MM-DD HH:mm' showTime/>
       </Form.Item>
 
       <Form.Item label='Custodian' name='custodian' rules={[{required: true}]}>
@@ -172,7 +172,7 @@ const AddFaultForm = () => {
           ))}
         </Select>
       </Form.Item>
-      <Button key='submit' type='primary' htmlType='submit' loading={submitLoading}>
+      <Button key='submit' type='primary' htmlType='submit' loading={submitLoading} on>
         Submit
       </Button>
     </Form>
