@@ -1,11 +1,10 @@
 import {Button, Popconfirm, Table, Modal} from 'antd'
 import 'antd/dist/antd.min.css'
 import axios from 'axios'
-import {validateYupSchema} from 'formik'
 import {useEffect, useState} from 'react'
-import {AddFaultForm} from './AddFaultForm'
+import {AddFaultForm} from './AddHoursForm'
 
-const FaultTable = () => {
+const HoursTable = () => {
   const [gridData, setGridData] = useState([])
   const [loading, setLoading] = useState(false)
 
@@ -15,11 +14,22 @@ const FaultTable = () => {
   const showModal = () => {
     setIsModalOpen(true)
   }
+
+  const handleOk = () => {
+    setIsModalOpen(false)
+  }
+
+  const handleCancel = () => {
+    setIsModalOpen(false)
+  }
   // Modal functions end
 
   const loadData = async () => {
     setLoading(true)
-    const response = await axios.get('http://208.117.44.15/SmWebApi/api/VmequpsApi')
+    const response = await axios.get(
+      'https://cors-anywhere.herokuapp.com/http://208.117.44.15/SmWebApi/api/VmequpsApi'
+    )
+    console.log('api REponse', response.data)
     setGridData(response.data)
     setLoading(false)
   }
@@ -50,22 +60,19 @@ const FaultTable = () => {
       dataIndex: 'modlClass',
     },
     {
-      title: 'Down Type',
+      title: 'Previous Reading',
     },
     {
-      title: 'Down Date',
+      title: 'Date',
     },
     {
-      title: 'Down Time',
+      title: 'Daily Hours Worked',
     },
     {
-      title: 'Custodian',
+      title: 'New Reading',
     },
     {
-      title: 'Location',
-    },
-    {
-      title: 'Duration',
+      title: 'Comment',
     },
     {
       title: 'Action',
@@ -73,14 +80,9 @@ const FaultTable = () => {
       render: (_: any, record: any) =>
         gridData.length >= 1 ? (
           <>
-            <Popconfirm title='Sure to solve'>
+            <Popconfirm title='Sure to adjust'>
               <Button type='primary' className='mx-3 mb-3'>
-                Solve
-              </Button>
-            </Popconfirm>
-            <Popconfirm title='Sure to delete?' onConfirm={() => handleDelete(record)}>
-              <Button danger type='primary'>
-                Delete
+                Adjust Hours
               </Button>
             </Popconfirm>
           </>
@@ -88,33 +90,23 @@ const FaultTable = () => {
     },
   ]
 
-  function handleCancel() {
-    setIsModalOpen(false)
-  }
-
-  function handleOk() {
-    setIsModalOpen(false)
-  }
-  const onFinish = (values: any) => {
-    console.log('Success:', values)
-  }
   return (
     <div>
-      <Button type='primary' onClick={showModal} className='mb-3'>
-        Add
-      </Button>
+      <div className='d-flex my-2'>
+        <Button type='primary' onClick={showModal}>
+          Add
+        </Button>
+        <Button type='primary' className='mx-3'>
+          Export
+        </Button>
+        <Button type='primary'>Upload</Button>
+      </div>
       <Table columns={columns} dataSource={gridData} bordered loading={loading} />
-      <Modal
-        title='Add Fault'
-        open={isModalOpen}
-        onCancel={handleCancel}
-        closable={true}
-        footer={null}
-      >
+      <Modal title='Add Fault' open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
         <AddFaultForm />
       </Modal>
     </div>
   )
 }
 
-export {FaultTable}
+export {HoursTable}

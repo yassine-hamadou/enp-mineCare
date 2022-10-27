@@ -12,6 +12,8 @@
         "@fullcalendar/interaction": "^5.11.3",
         "@fullcalendar/react": "^5.11.2",
         "@popperjs/core": "2.11.5",
+        "@syncfusion/ej2-react-calendars": "^20.3.50",
+        "@syncfusion/ej2-react-dropdowns": "^20.3.50",
         "@syncfusion/ej2-react-schedule": "^20.3.49",
         "animate.css": "4.1.1",
         "antd": "^4.23.6",
