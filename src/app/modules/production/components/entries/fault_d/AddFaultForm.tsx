@@ -23,7 +23,7 @@ const AddFaultForm = () => {
       vmClass: values.desc,
       downType: values.dType,
       downtime: values.dDate.toISOString(),
-      locationId: values.locationCode,
+      locationId: values.location,
       custodian: values.custodian,
     }
     const dataWithId = {...data, entryId: uuidv4()}
