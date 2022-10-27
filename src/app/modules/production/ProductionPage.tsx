@@ -14,26 +14,8 @@ import {LocationTable} from './components/setup/location/CycleDetailsList'
 import {Custodian} from './components/setup/custodian/CycleDetailsList'
 import {FaultTable} from './components/entries/fault_d/FaultTable'
 import {HoursTable} from './components/entries/hours/HoursTable'
-const accountBreadCrumbs: Array<PageLink> = [
-  // {
-  //   title: 'Cycle Details',
-  //   path: '/cycle_details/cycle-details',
-  //   isSeparator: false,
-  //   isActive: false,
-  // },
-  // {
-  //   title: 'Cycle Grade',
-  //   path: '/cycle_details/cycle-grade',
-  //   isSeparator: true,
-  //   isActive: false,
-  // },
-  // {
-  //   title: 'Planned Output',
-  //   path: '/cycle_details/planned-output',
-  //   isSeparator: true,
-  //   isActive: false,
-  // },
-]
+import {AddFaultForm} from './components/entries/fault_d/AddFaultForm'
+const accountBreadCrumbs: Array<PageLink> = []
 
 const ProductionPage: React.FC = () => {
   return (
@@ -42,7 +24,6 @@ const ProductionPage: React.FC = () => {
         path='/entries/*'
         element={
           <>
-            {/*<ProductionHeader />*/}
             <Outlet />
           </>
         }
@@ -58,23 +39,24 @@ const ProductionPage: React.FC = () => {
           }
         />
         <Route
-          path='fault'
+          path='fault/*'
           element={
             <>
-              <PageTitle breadcrumbs={accountBreadCrumbs}>Fault</PageTitle>
-              <FaultTable />
+              <Outlet />
             </>
           }
-        />
-        {/* <Route
-          path='fault/add'
-          element={
-            <>
-              <PageTitle breadcrumbs={accountBreadCrumbs}>Add</PageTitle>
-              <AddFaultForm />
-            </>
-          }
-        /> */}
+        >
+          <Route path='' element={<FaultTable />} />
+          <Route
+            path='add'
+            element={
+              <>
+                <PageTitle breadcrumbs={accountBreadCrumbs}>Add Fault</PageTitle>
+                <AddFaultForm />
+              </>
+            }
+          />
+        </Route>
         <Route
           path='resolution'
           element={

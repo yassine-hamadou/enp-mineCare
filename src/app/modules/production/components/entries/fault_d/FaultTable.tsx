@@ -1,6 +1,7 @@
 import {Button, Popconfirm, Table, Modal} from 'antd'
 import 'antd/dist/antd.min.css'
 import axios from 'axios'
+import {validateYupSchema} from 'formik'
 import {useEffect, useState} from 'react'
 import {AddFaultForm} from './AddFaultForm'
 
@@ -13,10 +14,6 @@ const FaultTable = () => {
 
   const showModal = () => {
     setIsModalOpen(true)
-  }
-
-  const handleCancel = () => {
-    setIsModalOpen(false)
   }
   // Modal functions end
 
@@ -93,15 +90,30 @@ const FaultTable = () => {
         ) : null,
     },
   ]
-  const handleOk = () => {}
 
+  function handleCancel() {
+    setIsModalOpen(false)
+  }
+
+  function handleOk() {
+    setIsModalOpen(false)
+  }
+  const onFinish = (values: any) => {
+    console.log('Success:', values)
+  }
   return (
     <div>
       <Button type='primary' onClick={showModal} className='mb-3'>
         Add
       </Button>
       <Table columns={columns} dataSource={gridData} bordered loading={loading} />
-      <Modal title='Add Fault' open={isModalOpen}>
+      <Modal
+        title='Add Fault'
+        open={isModalOpen}
+        onCancel={handleCancel}
+        closable={true}
+        footer={null}
+      >
         <AddFaultForm />
       </Modal>
     </div>

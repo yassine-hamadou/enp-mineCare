@@ -2,6 +2,7 @@ import {Button, Form, Input, Select, TimePicker} from 'antd'
 import {useEffect, useRef, useState} from 'react'
 import axios from 'axios'
 import {DatePicker} from 'antd/es'
+import {v4 as uuidv4} from 'uuid'
 
 const AddFaultForm = () => {
   const [dataSource, setDataSource] = useState([])
@@ -9,17 +10,36 @@ const AddFaultForm = () => {
   const [location, setLocation] = useState([])
   const [custodian, setCustodian] = useState([])
 
+  const {Option} = Select
+  const [form] = Form.useForm()
+
   // {/* Start Elements to Post */}
-  const [descToPost, setDescToPost] = useState('initial')
+  const url = 'http://208.117.44.15/SmWebApi/api/FaultEntriesApi'
+  const onFinish = async (values: any) => {
+    const data = {
+      fleetId: values.fleetId,
+      vmModel: values.model,
+      vmClass: values.desc,
+      downType: values.dType,
+      downtime: '2021-08-10T00:00:00',
+      locationId: values.locationCode,
+    }
+    console.log('Success:', values)
+
+    try {
+      const response = await axios.post(url, data)
+      console.log('response', response.data)
+    } catch (error: any) {
+      console.log(error.response)
+    }
+  }
 
   // {/* End Elements to Post */}
 
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(true)
+  const [submitLoading, setSubmitLoading] = useState(false)
 
-  const [fleet, setFleet] = useState({})
-  const [fleetToAdd, setFleetToAdd] = useState(null)
-
-  const loadData = async () => {
+  const loadEqupData = async () => {
     setLoading(true)
     try {
       const response = await axios.get(
@@ -62,108 +82,97 @@ const AddFaultForm = () => {
     setCustodian(response.data)
   }
 
-  const getEqupId = (id: any) => {
-    // get the items to add in the form remaning inputs after dropdown selection is made
-    dataSource.map((item: any) => (item.fleetID === id ? setFleet(item) : null))
-  }
-
   useEffect(() => {
-    loadData()
+    loadEqupData()
     loadFaultType()
     loadLocation()
     loadCustodian()
   }, [])
 
-  useEffect(() => {
-    // @ts-ignore
-    setFleetToAdd({...fleet})
-    console.log('Desc to post', descToPost)
-  }, [fleet])
-
-  const onFinish = (values: any) => {
-    console.log('Success:', values)
+  /* 
+    Function that gets called whenever a fleetID is selected from the dropdown;
+    this function search for the fleetID in the dataSource and returns the fleet object, 
+    then set the model and description of the fleet in the form  
+  */
+  const onFleetIdChange = (fleetChosen: any) => {
+    dataSource.map((item: any) =>
+      item.fleetID === fleetChosen
+        ? form.setFieldsValue({
+            model: item.modlName,
+            desc: item.modlClass,
+          })
+        : null
+    )
   }
 
   return (
     <Form
-      labelCol={{span: 4}}
+      form={form}
+      name='control-hooks'
+      labelCol={{span: 5}}
       wrapperCol={{span: 14}}
-      layout='horizontal'
       title='Add Fault'
       onFinish={onFinish}
     >
-      <Form.Item label='FleetID'>
-        <Select onSelect={(e: any) => getEqupId(e)}>
+      <Form.Item name='fleetId' label='fleetID' rules={[{required: true}]}>
+        <Select placeholder='Select a fleetID' onChange={onFleetIdChange}>
           {dataSource.map((item: any) => (
-            <Select.Option
-              // @ts-ignore
-              value={item.fleetID}
-            >
+            <Option key={item.fleetID} value={item.fleetID}>
               {item.fleetID} - {item.modlName} - {item.modlClass}
-            </Select.Option>
+            </Option>
           ))}
         </Select>
       </Form.Item>
-      <Form.Item label='Model'>
-        <Input
-          // @ts-ignore
-          value={fleetToAdd?.modlName}
-          readOnly
-        />
+      <Form.Item name='model' label='Model' rules={[{required: true}]}>
+        <Input readOnly />
       </Form.Item>
-      <Form.Item label='Description'>
-        <Input
-          // @ts-ignore
-          value={fleetToAdd?.modlClass}
-          // @ts-ignore
-          readOnly
-        />
+      <Form.Item name='desc' label='Description' rules={[{required: true}]}>
+        <Input readOnly />
       </Form.Item>
-      <Form.Item label='Down Type'>
-        <Select>
+      <Form.Item name='dType' label='Down Type' rules={[{required: true}]}>
+        <Select placeholder='Select Down Type'>
           {faultType.map((item: any) => (
-            <Select.Option
-              // @ts-ignore
-              value={item.faultDesc}
-            >
+            <Option key={uuidv4()} value={item.faultDesc}>
               {item.faultDesc}
-            </Select.Option>
+            </Option>
           ))}
         </Select>
       </Form.Item>
-      <Form.Item label='Down Date'>
+      <Form.Item name='dDate' label='Down Date' rules={[{required: true}]}>
         <DatePicker />
       </Form.Item>
-      <Form.Item label='Down Time'>
+
+      <Form.Item name='dTime' label='Down Time' rules={[{required: true}]}>
         <TimePicker />
       </Form.Item>
 
-      <Form.Item label='Custodian'>
+      <Form.Item label='Custodian' name='custodian' rules={[{required: true}]}>
         <Select>
           {custodian.map((item: any) => (
-            <Select.Option
+            <Option
               // @ts-ignore
               value={item.emplCode}
+              key={uuidv4()}
             >
               {item.emplCode} - {item.emplName}
-            </Select.Option>
+            </Option>
           ))}
         </Select>
       </Form.Item>
-
-      <Form.Item label='Location'>
+      <Form.Item label='Location' name='location' rules={[{required: true}]}>
         <Select>
           {location.map((item: any) => (
-            <Select.Option
+            <Option
               // @ts-ignore
               value={item.locationCode}
+              key={uuidv4()}
             >
               {item.locationCode} - {item.locationDesc}
-            </Select.Option>
+            </Option>
           ))}
         </Select>
       </Form.Item>
-      <Button type='primary' htmlType='submit'>
+      <Button key='submit' type='primary' htmlType='submit' loading={submitLoading}>
         Submit
       </Button>
     </Form>
