@@ -9,7 +9,6 @@ import {
   Inject,
   Resize,
   DragAndDrop,
-  Agenda,
 } from '@syncfusion/ej2-react-schedule'
 import {DateTimePickerComponent} from '@syncfusion/ej2-react-calendars'
 import {DropDownListComponent} from '@syncfusion/ej2-react-dropdowns'
