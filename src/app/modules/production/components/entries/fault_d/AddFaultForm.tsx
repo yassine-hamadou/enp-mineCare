@@ -146,7 +146,24 @@ const AddFaultForm = () => {
       <Form.Item name='dDate' label='Down Date and Time' rules={[{required: true}]}>
         <DatePicker format='YYYY-MM-DD HH:mm' showTime/>
       </Form.Item>
+      <Form.Item name='fleetId' label='Maintenance Type' rules={[{required: true}]}>
+        <Select placeholder='Maintenance Type' onChange={onFleetIdChange}>
 
+              <Option value={'mai'}>
+                Scheduled
+              </Option>
+          <Option value={'maai'}>
+            Unscheduled
+          </Option>
+          <Option value={'mdai'}>
+            Operational
+          </Option>
+          <Option value={'mai'}>
+            Damages
+          </Option>
+
+        </Select>
+      </Form.Item>
       <Form.Item label='Custodian' name='custodian' rules={[{required: true}]}>
         <Select>
           {custodian.map((item: any) => (
