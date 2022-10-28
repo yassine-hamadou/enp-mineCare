@@ -20,7 +20,7 @@ const FaultTable = () => {
     setLoading(true)
     try {
       const response = await axios.get(
-        'https://cors-anywhere.herokuapp.com/http://208.117.44.15/SmWebApi/api/FaultEntriesApi'
+        'http://208.117.44.15/SmWebApi/api/FaultEntriesApi'
       )
       setGridData(response.data)
       setLoading(false)
@@ -161,7 +161,7 @@ const FaultTable = () => {
     setLoading(true)
     try {
       const response = await axios.get(
-        'https://cors-anywhere.herokuapp.com/http://208.117.44.15/SmWebApi/api/VmequpsApi'
+        'http://208.117.44.15/SmWebApi/api/VmequpsApi'
       )
       setDataSource(response.data)
       setLoading(false)
@@ -174,7 +174,7 @@ const FaultTable = () => {
   const loadFaultType = async () => {
     try {
       const response = await axios.get(
-        'https://cors-anywhere.herokuapp.com/http://208.117.44.15/SmWebApi/api/vmfaltsapi'
+        'http://208.117.44.15/SmWebApi/api/vmfaltsapi'
       )
       setFaultType(response.data)
     } catch (error: any) {
@@ -185,7 +185,7 @@ const FaultTable = () => {
   const loadLocation = async () => {
     try {
       const response = await axios.get(
-        'https://cors-anywhere.herokuapp.com/http://208.117.44.15/SmWebApi/api/IclocsApi'
+        'http://208.117.44.15/SmWebApi/api/IclocsApi'
       )
       setLocation(response.data)
     } catch (error: any) {
@@ -195,7 +195,7 @@ const FaultTable = () => {
 
   const loadCustodian = async () => {
     const response = await axios.get(
-      'https://cors-anywhere.herokuapp.com/http://208.117.44.15/SmWebApi/api/VmemplsApi'
+      'http://208.117.44.15/SmWebApi/api/VmemplsApi'
     )
     setCustodian(response.data)
   }
