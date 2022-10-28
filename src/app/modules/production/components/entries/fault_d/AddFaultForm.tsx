@@ -34,7 +34,7 @@ const AddFaultForm = () => {
       console.log('response', response.data)
     } catch (error: any) {
       setSubmitLoading(false)
-      console.log("POst",error)
+      console.log('POst', error)
     }
   }
 
@@ -105,7 +105,7 @@ const AddFaultForm = () => {
     <Form
       form={form}
       name='control-hooks'
-      labelCol={{span: 5}}
+      labelCol={{span: 8}}
       wrapperCol={{span: 14}}
       title='Add Fault'
       onFinish={onFinish}
@@ -136,24 +136,14 @@ const AddFaultForm = () => {
         </Select>
       </Form.Item>
       <Form.Item name='dDate' label='Down Date and Time' rules={[{required: true}]}>
-        <DatePicker format='YYYY-MM-DD HH:mm' showTime/>
+        <DatePicker format='YYYY-MM-DD HH:mm' showTime />
       </Form.Item>
-      <Form.Item name='fleetId' label='Maintenance Type' rules={[{required: true}]}>
-        <Select placeholder='Maintenance Type' onChange={onFleetIdChange}>
-
-              <Option value={'mai'}>
-                Scheduled
-              </Option>
-          <Option value={'maai'}>
-            Unscheduled
-          </Option>
-          <Option value={'mdai'}>
-            Operational
-          </Option>
-          <Option value={'mai'}>
-            Damages
-          </Option>
-
+      <Form.Item name='mType' label='Maintenance Type' rules={[{required: true}]}>
+        <Select placeholder='Maintenance Type'>
+          <Option value={'Scheduled'}>Scheduled</Option>
+          <Option value={'Unscheduled'}>Unscheduled</Option>
+          <Option value={'Operational'}>Operational</Option>
+          <Option value={'Damages'}>Damages</Option>
         </Select>
       </Form.Item>
       <Form.Item label='Custodian' name='custodian' rules={[{required: true}]}>

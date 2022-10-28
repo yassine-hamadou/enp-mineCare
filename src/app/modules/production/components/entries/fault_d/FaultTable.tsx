@@ -1,13 +1,12 @@
-import {Button, Popconfirm, Table, Modal} from 'antd'
+import {Button, Popconfirm, Table, Modal, Form, Select, Input} from 'antd'
 import 'antd/dist/antd.min.css'
 import axios from 'axios'
-import {validateYupSchema} from 'formik'
 import {useEffect, useState} from 'react'
-import {AddFaultForm} from './AddFaultForm'
+import {DatePicker} from 'antd/es'
+import {v4 as uuidv4} from 'uuid'
 
 const FaultTable = () => {
   const [gridData, setGridData] = useState([])
-  const [loading, setLoading] = useState(false)
 
   // Modal functions
   const [isModalOpen, setIsModalOpen] = useState(false)
@@ -19,50 +18,78 @@ const FaultTable = () => {
 
   const loadData = async () => {
     setLoading(true)
-    const response = await axios.get('http://208.117.44.15/SmWebApi/api/VmequpsApi')
-    setGridData(response.data)
-    setLoading(false)
+    try {
+      const response = await axios.get(
+        'https://cors-anywhere.herokuapp.com/http://208.117.44.15/SmWebApi/api/FaultEntriesApi'
+      )
+      setGridData(response.data)
+      setLoading(false)
+    } catch (error: any) {
+      setLoading(false)
+      return error.statusText
+    }
   }
 
+  useEffect(() => {
+    loadData()
+  }, [])
+
+  //refreshing the grid when a data is deleted
   // useEffect(() => {
   //   loadData()
-  //   console.log('Inside use-effect', gridData)
-  // }, [])
+  // }, [gridData])
+
+  const deleteData = async (element: any) => {
+    // const dataSource = [...gridData]
+    try {
+      const response = await axios.delete(
+        `http://208.117.44.15/SmWebApi/api/FaultEntriesApi/${element.entryId}`
+      )
+      console.log(' delete response', response)
+
+      // update the local state so that react can refecth and re-render the table with the new data
+      // const filteredData = dataSource.filter((item: any) => item.entryId !== element.entryId)
+      // setGridData(filteredData)
+      loadData()
+      return response
+    } catch (e) {
+      console.log('error', e)
+    }
+  }
 
   function handleDelete(element: any) {
-    const dataSource = [...gridData]
-    const filteredData = dataSource.filter((item: any) => item.fleetID !== element.fleetID)
-    setGridData(filteredData)
+    deleteData(element)
   }
 
   const columns = [
     {
       title: 'FleetId',
-      dataIndex: 'fleetID',
-      key: 'fleetID',
+      dataIndex: 'fleetId',
+      key: 'entryId',
     },
     {
       title: 'Model',
-      dataIndex: 'modlName',
+      dataIndex: 'vmModel',
     },
     {
       title: 'Description',
-      dataIndex: 'modlClass',
+      dataIndex: 'vmClass',
     },
     {
       title: 'Down Type',
+      dataIndex: 'downType',
     },
     {
-      title: 'Down Date',
-    },
-    {
-      title: 'Down Time',
+      title: 'Down Date and Time',
+      dataIndex: 'downtime',
     },
     {
       title: 'Custodian',
+      dataIndex: 'custodian',
     },
     {
       title: 'Location',
+      dataIndex: 'locationId',
     },
     {
       title: 'Duration',
@@ -92,12 +119,110 @@ const FaultTable = () => {
     setIsModalOpen(false)
   }
 
-  function handleOk() {
-    setIsModalOpen(false)
+  const [dataSource, setDataSource] = useState([])
+  const [faultType, setFaultType] = useState([])
+  const [location, setLocation] = useState([])
+  const [custodian, setCustodian] = useState([])
+
+  const {Option} = Select
+  const [form] = Form.useForm()
+
+  // {/* Start Elements to Post */}
+  const url = 'http://208.117.44.15/SmWebApi/api/FaultEntriesApi'
+  const onFinish = async (values: any) => {
+    setSubmitLoading(true)
+    const data = {
+      fleetId: values.fleetId,
+      vmModel: values.model,
+      vmClass: values.desc,
+      downType: values.dType,
+      downtime: values.dDate.toISOString(),
+      locationId: values.location,
+      custodian: values.custodian,
+    }
+    const dataWithId = {...data, entryId: uuidv4()}
+
+    try {
+      const response = await axios.post(url, dataWithId)
+      setSubmitLoading(false)
+      console.log('response', response.data)
+    } catch (error: any) {
+      setSubmitLoading(false)
+      console.log('POst', error)
+    }
   }
-  const onFinish = (values: any) => {
-    console.log('Success:', values)
+
+  // {/* End Elements to Post */}
+
+  const [loading, setLoading] = useState(true)
+  const [submitLoading, setSubmitLoading] = useState(false)
+
+  const loadEqupData = async () => {
+    setLoading(true)
+    try {
+      const response = await axios.get(
+        'https://cors-anywhere.herokuapp.com/http://208.117.44.15/SmWebApi/api/VmequpsApi'
+      )
+      setDataSource(response.data)
+      setLoading(false)
+    } catch (error: any) {
+      setLoading(false)
+      return error.statusText
+    }
   }
+
+  const loadFaultType = async () => {
+    try {
+      const response = await axios.get(
+        'https://cors-anywhere.herokuapp.com/http://208.117.44.15/SmWebApi/api/vmfaltsapi'
+      )
+      setFaultType(response.data)
+    } catch (error: any) {
+      return error.statusText
+    }
+  }
+
+  const loadLocation = async () => {
+    try {
+      const response = await axios.get(
+        'https://cors-anywhere.herokuapp.com/http://208.117.44.15/SmWebApi/api/IclocsApi'
+      )
+      setLocation(response.data)
+    } catch (error: any) {
+      return error.statusText
+    }
+  }
+
+  const loadCustodian = async () => {
+    const response = await axios.get(
+      'https://cors-anywhere.herokuapp.com/http://208.117.44.15/SmWebApi/api/VmemplsApi'
+    )
+    setCustodian(response.data)
+  }
+
+  useEffect(() => {
+    loadEqupData()
+    loadFaultType()
+    loadLocation()
+    loadCustodian()
+  }, [])
+
+  /* 
+    Function that gets called whenever a fleetID is selected from the dropdown;
+    this function search for the fleetID in the dataSource and returns the fleet object, 
+    then set the model and description of the fleet in the form  
+  */
+  const onFleetIdChange = (fleetChosen: any) => {
+    dataSource.map((item: any) =>
+      item.fleetID === fleetChosen
+        ? form.setFieldsValue({
+            model: item.modlName,
+            desc: item.modlClass,
+          })
+        : null
+    )
+  }
+
   return (
     <div>
       <Button type='primary' onClick={showModal} className='mb-3'>
@@ -109,9 +234,94 @@ const FaultTable = () => {
         open={isModalOpen}
         onCancel={handleCancel}
         closable={true}
-        footer={null}
+        footer={[
+          <Button key='back' onClick={handleCancel}>
+            Return
+          </Button>,
+          <Button
+            key='submit'
+            type='primary'
+            htmlType='submit'
+            loading={submitLoading}
+            onClick={() => {
+              // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+              form.submit()
+            }}
+          >
+            Submit
+          </Button>,
+        ]}
       >
-        <AddFaultForm />
+        <Form
+          form={form}
+          name='control-hooks'
+          labelCol={{span: 8}}
+          wrapperCol={{span: 14}}
+          title='Add Fault'
+          onFinish={onFinish}
+        >
+          <Form.Item name='fleetId' label='fleetID' rules={[{required: true}]}>
+            <Select placeholder='Select a fleetID' onChange={onFleetIdChange}>
+              {dataSource.map((item: any) => (
+                <Option key={item.fleetID} value={item.fleetID}>
+                  {item.fleetID} - {item.modlName} - {item.modlClass}
+                </Option>
+              ))}
+            </Select>
+          </Form.Item>
+          <Form.Item name='model' label='Model' rules={[{required: true}]}>
+            <Input readOnly />
+          </Form.Item>
+          <Form.Item name='desc' label='Description' rules={[{required: true}]}>
+            <Input readOnly />
+          </Form.Item>
+          <Form.Item name='dType' label='Down Type' rules={[{required: true}]}>
+            <Select placeholder='Select Down Type'>
+              {faultType.map((item: any) => (
+                <Option key={uuidv4()} value={item.faultDesc}>
+                  {item.faultDesc}
+                </Option>
+              ))}
+            </Select>
+          </Form.Item>
+          <Form.Item name='dDate' label='Down Date and Time' rules={[{required: true}]}>
+            <DatePicker format='YYYY-MM-DD HH:mm' showTime />
+          </Form.Item>
+          <Form.Item name='mType' label='Maintenance Type' rules={[{required: true}]}>
+            <Select placeholder='Maintenance Type'>
+              <Option value={'Scheduled'}>Scheduled</Option>
+              <Option value={'Unscheduled'}>Unscheduled</Option>
+              <Option value={'Operational'}>Operational</Option>
+              <Option value={'Damages'}>Damages</Option>
+            </Select>
+          </Form.Item>
+          <Form.Item label='Custodian' name='custodian' rules={[{required: true}]}>
+            <Select>
+              {custodian.map((item: any) => (
+                <Option
+                  // @ts-ignore
+                  value={item.emplCode}
+                  key={uuidv4()}
+                >
+                  {item.emplCode} - {item.emplName}
+                </Option>
+              ))}
+            </Select>
+          </Form.Item>
+          <Form.Item label='Location' name='location' rules={[{required: true}]}>
+            <Select>
+              {location.map((item: any) => (
+                <Option
+                  // @ts-ignore
+                  value={item.locationCode}
+                  key={uuidv4()}
+                >
+                  {item.locationCode} - {item.locationDesc}
+                </Option>
+              ))}
+            </Select>
+          </Form.Item>
+        </Form>
       </Modal>
     </div>
   )
