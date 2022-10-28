@@ -44,7 +44,6 @@ const AsideDefault: FC = () => {
             {/*  src={toAbsoluteUrl('/media/logos/prod.png')}*/}
             {/*/>*/}
             <h1 className='text-primary'>Mine Care</h1>
-
           </Link>
         )}
         {aside.theme === 'light' && (
