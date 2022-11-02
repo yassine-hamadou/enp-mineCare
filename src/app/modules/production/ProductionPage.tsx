@@ -147,16 +147,7 @@ const ProductionPage: React.FC = () => {
           </>
         }
       >
-        <Route
-          path='production-report'
-          element={
-            <>
-              <PageTitle breadcrumbs={accountBreadCrumbs}>Production Report</PageTitle>
-              {/*<Overview />*/}
-              <ProductionReportTable />
-            </>
-          }
-        />
+       
         <Route
           path='fuel-report'
           element={
