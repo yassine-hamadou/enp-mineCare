@@ -2,7 +2,7 @@ import {Button, Popconfirm, Table, Modal, Form, Select, Input} from 'antd'
 import 'antd/dist/antd.min.css'
 import axios from 'axios'
 import {useEffect, useState} from 'react'
-import {DatePicker} from 'antd/es'
+// import {DatePicker} from 'antd/es'
 import {v4 as uuidv4} from 'uuid'
 
 const FaultTable = () => {
@@ -29,10 +29,6 @@ const FaultTable = () => {
       return error.statusText
     }
   }
-
-  useEffect(() => {
-    loadData()
-  }, [])
 
   //refreshing the grid when a data is deleted
   // useEffect(() => {
@@ -136,18 +132,22 @@ const FaultTable = () => {
       vmModel: values.model,
       vmClass: values.desc,
       downType: values.dType,
-      downtime: values.dDate.toISOString(),
+      downtime: new Date().toISOString(),
       locationId: values.location,
       custodian: values.custodian,
     }
     const dataWithId = {...data, entryId: uuidv4()}
-
+console.log(dataWithId)
     try {
       const response = await axios.post(url, dataWithId)
       setSubmitLoading(false)
-      console.log('response', response.data)
+      form.resetFields()
+      setIsModalOpen(false)
+      loadData()
+      return response.data
     } catch (error: any) {
       setSubmitLoading(false)
+      // setIsModalOpen(false)
       console.log('POst', error)
     }
   }
@@ -201,6 +201,7 @@ const FaultTable = () => {
   }
 
   useEffect(() => {
+    loadData()
     loadEqupData()
     loadFaultType()
     loadLocation()
@@ -236,7 +237,7 @@ const FaultTable = () => {
         closable={true}
         footer={[
           <Button key='back' onClick={handleCancel}>
-            Return
+            Cancel
           </Button>,
           <Button
             key='submit'
@@ -284,9 +285,9 @@ const FaultTable = () => {
               ))}
             </Select>
           </Form.Item>
-          <Form.Item name='dDate' label='Down Date and Time' rules={[{required: true}]}>
-            <DatePicker format='YYYY-MM-DD HH:mm' showTime />
-          </Form.Item>
+          {/*<Form.Item name='dDate' label='Down Date and Time' rules={[{required: true}]}>*/}
+          {/*  <DatePicker format='YYYY-MM-DD HH:mm' showTime />*/}
+          {/*</Form.Item>*/}
           <Form.Item name='mType' label='Maintenance Type' rules={[{required: true}]}>
             <Select placeholder='Maintenance Type'>
               <Option value={'Scheduled'}>Scheduled</Option>
