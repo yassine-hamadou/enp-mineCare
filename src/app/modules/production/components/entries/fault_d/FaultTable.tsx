@@ -269,10 +269,10 @@ const FaultTable = () => {
               ))}
             </Select>
           </Form.Item>
-          <Form.Item name='model' label='Model' rules={[{required: true}]}>
+          <Form.Item name='model' label='Model'>
             <Input readOnly />
           </Form.Item>
-          <Form.Item name='desc' label='Description' rules={[{required: true}]}>
+          <Form.Item name='desc' label='Description'>
             <Input readOnly />
           </Form.Item>
           <Form.Item name='dType' label='Down Type' rules={[{required: true}]}>
