@@ -33,9 +33,9 @@ export function AsideMenuMain() {
         fontIcon='bi-archive'
         icon='/media/icons/duotune/general/gen028.svg'
       >
-        <AsideMenuItem to='report/downtime' title='Down Time' hasBullet={true} />
-        <AsideMenuItem to='report/daily-kpi' title='Daily KPI' hasBullet={true} />
-        <AsideMenuItem to='report/weekly-schedule' title='Weekly Schedule' hasBullet={true} />
+        <AsideMenuItem to='app/production/components/report/daily' title='Daily KPI' hasBullet={true} />
+        <AsideMenuItem to='app/production/components/report/downtime' title='Down Time' hasBullet={true} />
+        <AsideMenuItem to='app/production/components/report/weekly' title='Weekly Schedule' hasBullet={true} />
       </AsideMenuItemWithSub>
 
       <AsideMenuItemWithSub
