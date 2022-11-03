@@ -24,23 +24,11 @@ const FaultTable = () => {
       //Formatting date to the received data
       const dataReceivedfromAPI = {
         get withFormatDate() {
-
           return response.data.map((item: any) => ({
           ...item,
             //Calculating duration: Present Time - Time fault was reported
             duration: `${Math.floor((new Date().getTime() - new Date(item.downtime).getTime()) / (1000 * 3600 * 24))} Day(s)`,
-            // duration: () => {
-            //   const dateDifference = new Date().getTime() - new Date(item.downtime).getTime();
-            //   return `${Math.floor(dateDifference / (1000 * 3600 * 24))} Day(s)`;
-            // },
             formattedDate: new Date(item.downtime).toLocaleString(),
-
-            // const date = new Date(item.timeStart)
-            // const dateFormatted = date.toLocaleDateString('en-GB')
-            // return {
-            //   ...item,
-            //   timeStart: dateFormatted,
-            // }
           }))
         }
       }
@@ -91,6 +79,15 @@ const FaultTable = () => {
     {
       title: 'Model',
       dataIndex: 'vmModel',
+      sorter: (a: any, b: any) => {
+        if (a.vmModel > b.vmModel) {
+          return 1
+        }
+        if (b.vmModel > a.vmModel) {
+          return -1
+        }
+        return 0
+      },
     },
     {
       title: 'Description',
