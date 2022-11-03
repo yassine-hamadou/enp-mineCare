@@ -1,6 +1,8 @@
 import {Button, Input, Space, Table} from 'antd'
 import {useState, useEffect} from 'react'
 import axios from 'axios'
+import { SortOrder } from "antd/lib/table/interface";
+import { SortAscendingOutlined } from "@ant-design/icons";
 
 const DashboardTable = () => {
   const [gridData, setGridData] = useState([])
@@ -8,11 +10,13 @@ const DashboardTable = () => {
   const [searchText, setSearchText] = useState('')
   let [filteredData] = useState([])
 
-  const columns = [
+  const columns: any = [
     {
       title: 'ID',
       dataIndex: 'key',
+      defaultSortOrder: 'descend',
       sorter: (a: any, b: any) => a.key - b.key,
+
     },
     {
       title: 'Vehicle Type',
