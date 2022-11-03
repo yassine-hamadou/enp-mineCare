@@ -27,6 +27,7 @@
         "devexpress-reporting": "^22.1.6",
         "devextreme": "^22.1.6",
         "formik": "2.2.9",
+        "json-server": "^0.17.0",
         "line-awesome": "1.3.0",
         "nouislider": "15.5.1",
         "prism-react-renderer": "1.3.1",

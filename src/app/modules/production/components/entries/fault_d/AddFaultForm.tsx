@@ -22,7 +22,7 @@ const AddFaultForm = () => {
       vmModel: values.model,
       vmClass: values.desc,
       downType: values.dType,
-      downtime: values.dDate.toISOString(),
+      downtime: new Date().toISOString(),
       locationId: values.location,
       custodian: values.custodian,
     }
@@ -37,7 +37,6 @@ const AddFaultForm = () => {
       console.log('POst', error)
     }
   }
-
   // {/* End Elements to Post */}
 
   const [loading, setLoading] = useState(true)
@@ -135,9 +134,9 @@ const AddFaultForm = () => {
           ))}
         </Select>
       </Form.Item>
-      <Form.Item name='dDate' label='Down Date and Time' rules={[{required: true}]}>
-        <DatePicker format='YYYY-MM-DD HH:mm' showTime />
-      </Form.Item>
+      {/*<Form.Item name='dDate' label='Down Date and Time' rules={[{required: true}]}>*/}
+      {/*  <DatePicker format='YYYY-MM-DD HH:mm' showTime />*/}
+      {/*</Form.Item>*/}
       <Form.Item name='mType' label='Maintenance Type' rules={[{required: true}]}>
         <Select placeholder='Maintenance Type'>
           <Option value={'Scheduled'}>Scheduled</Option>
