@@ -1,16 +1,14 @@
-import {Button, Popconfirm, Table, Modal, Form, Select, Input} from 'antd'
-import 'antd/dist/antd.min.css'
-import axios from 'axios'
-import {useEffect, useState} from 'react'
-import {DatePicker} from 'antd/es'
-import {v4 as uuidv4} from 'uuid'
+import { Button, Form, Input, Modal, Popconfirm, Select, Table } from "antd";
+import "antd/dist/antd.min.css";
+import axios from "axios";
+import { useEffect, useState } from "react";
+import { v4 as uuidv4 } from "uuid";
 
 const FaultTable = () => {
   const [gridData, setGridData] = useState([])
 
   // Modal functions
   const [isModalOpen, setIsModalOpen] = useState(false)
-
   const showModal = () => {
     setIsModalOpen(true)
   }
@@ -22,17 +20,39 @@ const FaultTable = () => {
       const response = await axios.get(
         'https://cors-anywhere.herokuapp.com/http://208.117.44.15/SmWebApi/api/FaultEntriesApi'
       )
-      setGridData(response.data)
+
+      //Formatting date to the received data
+      const dataReceivedfromAPI = {
+        get withFormatDate() {
+
+          return response.data.map((item: any) => ({
+          ...item,
+            //Calculating duration: Present Time - Time fault was reported
+            duration: `${Math.floor((new Date().getTime() - new Date(item.downtime).getTime()) / (1000 * 3600 * 24))} Day(s)`,
+            // duration: () => {
+            //   const dateDifference = new Date().getTime() - new Date(item.downtime).getTime();
+            //   return `${Math.floor(dateDifference / (1000 * 3600 * 24))} Day(s)`;
+            // },
+            formattedDate: new Date(item.downtime).toLocaleString(),
+
+            // const date = new Date(item.timeStart)
+            // const dateFormatted = date.toLocaleDateString('en-GB')
+            // return {
+            //   ...item,
+            //   timeStart: dateFormatted,
+            // }
+          }))
+        }
+      }
+      console.log("Datafrom apt", dataReceivedfromAPI.withFormatDate)
+      setGridData(dataReceivedfromAPI.withFormatDate)
       setLoading(false)
-    } catch (error: any) {
+    } catch (error: any) { 
       setLoading(false)
       return error.statusText
     }
   }
 
-  useEffect(() => {
-    loadData()
-  }, [])
 
   //refreshing the grid when a data is deleted
   // useEffect(() => {
@@ -66,6 +86,7 @@ const FaultTable = () => {
       title: 'FleetId',
       dataIndex: 'fleetId',
       key: 'entryId',
+      // sorter: (a: any, b: any) => a.key - b.key
     },
     {
       title: 'Model',
@@ -81,7 +102,7 @@ const FaultTable = () => {
     },
     {
       title: 'Down Date and Time',
-      dataIndex: 'downtime',
+      dataIndex: 'formattedDate',
     },
     {
       title: 'Custodian',
@@ -93,6 +114,7 @@ const FaultTable = () => {
     },
     {
       title: 'Duration',
+      dataIndex: 'duration'
     },
     {
       title: 'Action',
@@ -116,6 +138,7 @@ const FaultTable = () => {
   ]
 
   function handleCancel() {
+    form.resetFields()
     setIsModalOpen(false)
   }
 
@@ -123,7 +146,6 @@ const FaultTable = () => {
   const [faultType, setFaultType] = useState([])
   const [location, setLocation] = useState([])
   const [custodian, setCustodian] = useState([])
-
   const {Option} = Select
   const [form] = Form.useForm()
 
@@ -136,7 +158,7 @@ const FaultTable = () => {
       vmModel: values.model,
       vmClass: values.desc,
       downType: values.dType,
-      downtime: values.dDate.toISOString(),
+      downtime: new Date().toISOString(),
       locationId: values.location,
       custodian: values.custodian,
     }
@@ -145,13 +167,16 @@ const FaultTable = () => {
     try {
       const response = await axios.post(url, dataWithId)
       setSubmitLoading(false)
-      console.log('response', response.data)
+      form.resetFields()
+      setIsModalOpen(false)
+      loadData()
+      return response.statusText
     } catch (error: any) {
       setSubmitLoading(false)
+      return error
       console.log('POst', error)
     }
   }
-
   // {/* End Elements to Post */}
 
   const [loading, setLoading] = useState(true)
@@ -201,6 +226,7 @@ const FaultTable = () => {
   }
 
   useEffect(() => {
+    loadData()
     loadEqupData()
     loadFaultType()
     loadLocation()
@@ -236,7 +262,7 @@ const FaultTable = () => {
         closable={true}
         footer={[
           <Button key='back' onClick={handleCancel}>
-            Return
+            Cancel
           </Button>,
           <Button
             key='submit'
@@ -284,9 +310,9 @@ const FaultTable = () => {
               ))}
             </Select>
           </Form.Item>
-          <Form.Item name='dDate' label='Down Date and Time' rules={[{required: true}]}>
-            <DatePicker format='YYYY-MM-DD HH:mm' showTime />
-          </Form.Item>
+          {/*<Form.Item name='dDate' label='Down Date and Time' rules={[{required: true}]}>*/}
+          {/*  <DatePicker format='YYYY-MM-DD HH:mm' showTime />*/}
+          {/*</Form.Item>*/}
           <Form.Item name='mType' label='Maintenance Type' rules={[{required: true}]}>
             <Select placeholder='Maintenance Type'>
               <Option value={'Scheduled'}>Scheduled</Option>

@@ -16,7 +16,6 @@ const DashboardTable = () => {
       dataIndex: 'key',
       defaultSortOrder: 'descend',
       sorter: (a: any, b: any) => a.key - b.key,
-
     },
     {
       title: 'Vehicle Type',

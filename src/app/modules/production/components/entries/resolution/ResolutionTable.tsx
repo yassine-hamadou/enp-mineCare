@@ -9,15 +9,15 @@ const ResolutionTable = () => {
 
   const loadData = async () => {
     setLoading(true)
-    const response = await axios.get('http://208.117.44.15/SmWebApi/api/VmequpsApi')
+    const response = await axios.get('https://cors-anywhere.herokuapp.com/http://208.117.44.15/SmWebApi/api/FaultEntriesApi')
     setGridData(response.data)
     setLoading(false)
   }
 
-  // useEffect(() => {
-  //   loadData()
-  //   console.log('Inside use-effect', gridData)
-  // }, [])
+  useEffect(() => {
+    loadData()
+    console.log('Inside use-effect', gridData)
+  }, [])
 
   const columns = [
     {
