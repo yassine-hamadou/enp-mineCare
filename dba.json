@@ -1,34 +1,24 @@
 {
   "FaultEntriesApi": [
     {
-      "entryId": "3fa85f64-5717-4562-b3fc-2c963b66afa6",
-      "fleetId": "valufesfleexgcvtId",
-      "vmModel": "valuesmogdel",
-      "vmClass": "valuesgdesc",
-      "custodian": null,
-      "downType": "valuesdTgype",
-      "downtime": "2021-08-10T00:00:00",
-      "locationId": "valugeslocationCode"
-    },
-    {
-      "entryId": "3fa85f64-5717-4562-b3fc-2c963f76afa6",
-      "fleetId": "valufesfleexgcvtId",
-      "vmModel": "valuesmogdel",
-      "vmClass": "valuesgdesc",
-      "custodian": null,
-      "downType": "valuesdTgype",
-      "downtime": "2021-08-10T00:00:00",
-      "locationId": "valugeslocationCode"
+      "fleetId": "AD063       ",
+      "vmModel": "A40F                          ",
+      "vmClass": "Articulated Dump Truck                                      ",
+      "downType": "2000 HOUR SERVICE                                           ",
+      "downtime": "2022-11-08T15:01:37.989Z",
+      "locationId": "DRILL ",
+      "custodian": "ACKON       ",
+      "entryId": "7756a2aa-4b40-4b20-a5d7-dedcf5302209"
     },
     {
       "fleetId": "AD066       ",
       "vmModel": "A40F                          ",
       "vmClass": "Articulated Dump Truck                                      ",
-      "downType": "BRAKES                                                      ",
-      "downtime": "2022-11-08T14:40:12.921Z",
+      "downType": "250 HOUR SERVICE                                            ",
+      "downtime": "2022-11-08T15:13:09.394Z",
       "locationId": "DRILL ",
-      "custodian": "ASIEDU      ",
-      "entryId": "de865fd1-f71c-4c24-be6e-db42ca05b49c"
+      "custodian": "ALEXANDER   ",
+      "entryId": "11cbf911-abf6-46d6-a0f5-fe7fbe03778d"
     }
   ],
   "FleetSchedulesApi": [

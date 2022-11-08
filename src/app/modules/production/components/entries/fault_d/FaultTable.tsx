@@ -43,25 +43,17 @@ const FaultTable = () => {
     }
   }
 
-
-  // useEffect(() => {
-  //   loadData()
-  // }, [gridData])
-
   const deleteData = async (element: any) => {
     try {
       const response = await axios.delete(
         `http://localhost:3001/FaultEntriesApi/${element.entryId}`
       )
-      console.log(' delete response', response)
-
       // update the local state so that react can refecth and re-render the table with the new data
-      // const filteredData = dataSource.filter((item: any) => item.entryId !== element.entryId)
-      // setGridData(filteredData)
-      loadData()
-      return response
+      const newData = gridData.filter((item: any) => item.entryId !== element.entryId)
+      setGridData(newData)
+      return response.status
     } catch (e) {
-      console.log('error', e)
+      return e
     }
   }
   function handleDelete(element: any) {
@@ -175,8 +167,7 @@ const FaultTable = () => {
       return response.statusText
     } catch (error: any) {
       setSubmitLoading(false)
-      return error
-      console.log('POst', error)
+      return error.statusText
     }
   }
   // {/* End Elements to Post */}
