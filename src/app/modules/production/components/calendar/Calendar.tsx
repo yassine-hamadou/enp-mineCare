@@ -36,7 +36,7 @@ const Calendar = () => {
   // const [scheduleData, setScheduleData] = useState([]);
   // const loadSchedule = async () => {
   //     try {
-  //         const response = await axios.get('http://208.117.44.15/SmWebApi/api/FleetSchedulesApi')
+  //         const response = await axios.get('http://localhost:3001/FleetSchedulesApi')
   //         setScheduleData(response.data)
   //     } catch (error) {
   //         console.log('LoadSchedule', error)
@@ -47,7 +47,7 @@ const Calendar = () => {
   const [dropDownFleet, setDropdownFleet] = useState([])
   const loadEquipments = async () => {
     try {
-      const response = await axios.get('http://208.117.44.15/SmWebApi/api/vmequpsapi')
+      const response = await axios.get('http://localhost:3001/vmequpsapi')
       setEquipments(response.data)
     } catch (error) {
       console.log('LoadEquipments', error)

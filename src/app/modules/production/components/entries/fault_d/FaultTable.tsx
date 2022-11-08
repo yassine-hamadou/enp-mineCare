@@ -18,7 +18,7 @@ const FaultTable = () => {
     setLoading(true)
     try {
       const response = await axios.get(
-        'http://208.117.44.15/SmWebApi/api/FaultEntriesApi'
+        'http://localhost:3001/FaultEntriesApi'
       )
 
       //Formatting date to the received data
@@ -51,7 +51,7 @@ const FaultTable = () => {
   const deleteData = async (element: any) => {
     try {
       const response = await axios.delete(
-        `http://208.117.44.15/SmWebApi/api/FaultEntriesApi/${element.entryId}`
+        `http://localhost:3001/FaultEntriesApi/${element.entryId}`
       )
       console.log(' delete response', response)
 
@@ -153,7 +153,7 @@ const FaultTable = () => {
   const [form] = Form.useForm()
 
   // {/* Start Elements to Post */}
-  const url = 'http://208.117.44.15/SmWebApi/api/FaultEntriesApi'
+  const url = 'http://localhost:3001/FaultEntriesApi'
   const onFinish = async (values: any) => {
     setSubmitLoading(true)
     const data = {
@@ -188,7 +188,7 @@ const FaultTable = () => {
     setLoading(true)
     try {
       const response = await axios.get(
-        'http://208.117.44.15/SmWebApi/api/VmequpsApi'
+        'http://localhost:3001/VmequpsApi'
       )
       setDataSource(response.data)
       setLoading(false)
@@ -201,7 +201,7 @@ const FaultTable = () => {
   const loadFaultType = async () => {
     try {
       const response = await axios.get(
-        'http://208.117.44.15/SmWebApi/api/vmfaltsapi'
+        'http://localhost:3001/vmfaltsapi'
       )
       setFaultType(response.data)
     } catch (error: any) {
@@ -212,7 +212,7 @@ const FaultTable = () => {
   const loadLocation = async () => {
     try {
       const response = await axios.get(
-        'http://208.117.44.15/SmWebApi/api/IclocsApi'
+        'http://localhost:3001/IclocsApi'
       )
       setLocation(response.data)
     } catch (error: any) {
@@ -222,7 +222,7 @@ const FaultTable = () => {
 
   const loadCustodian = async () => {
     const response = await axios.get(
-      'http://208.117.44.15/SmWebApi/api/VmemplsApi'
+      'http://localhost:3001/VmemplsApi'
     )
     setCustodian(response.data)
   }

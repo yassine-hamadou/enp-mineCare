@@ -10,7 +10,7 @@ const ResolutionTable = () => {
   const loadData = async () => {
     setLoading(true)
     try {
-      const response = await axios.get('http://208.117.44.15/SmWebApi/api/FaultEntriesApi')
+      const response = await axios.get('http://localhost:3001/FaultEntriesApi')
 
       //Formatting date to the received data
       const dataReceivedfromAPI = {

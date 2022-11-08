@@ -1,14 +1,34 @@
 {
   "FaultEntriesApi": [
     {
-      "entryId": 0,
-      "fleetId": "string",
-      "vmModel": "string",
-      "vmClass": "string",
-      "locationId": "string",
-      "description": "string",
-      "timeStart": "2022-11-08T02:12:37.160Z",
-      "timeEnd": "2022-11-08T02:12:37.160Z"
+      "entryId": "3fa85f64-5717-4562-b3fc-2c963b66afa6",
+      "fleetId": "valufesfleexgcvtId",
+      "vmModel": "valuesmogdel",
+      "vmClass": "valuesgdesc",
+      "custodian": null,
+      "downType": "valuesdTgype",
+      "downtime": "2021-08-10T00:00:00",
+      "locationId": "valugeslocationCode"
+    },
+    {
+      "entryId": "3fa85f64-5717-4562-b3fc-2c963f76afa6",
+      "fleetId": "valufesfleexgcvtId",
+      "vmModel": "valuesmogdel",
+      "vmClass": "valuesgdesc",
+      "custodian": null,
+      "downType": "valuesdTgype",
+      "downtime": "2021-08-10T00:00:00",
+      "locationId": "valugeslocationCode"
+    },
+    {
+      "fleetId": "AD066       ",
+      "vmModel": "A40F                          ",
+      "vmClass": "Articulated Dump Truck                                      ",
+      "downType": "BRAKES                                                      ",
+      "downtime": "2022-11-08T14:40:12.921Z",
+      "locationId": "DRILL ",
+      "custodian": "ASIEDU      ",
+      "entryId": "de865fd1-f71c-4c24-be6e-db42ca05b49c"
     }
   ],
   "FleetSchedulesApi": [

@@ -17,7 +17,7 @@ const AddFaultForm = () => {
   const loadData = async () => {
     setLoading(true)
     try {
-      const response = await axios.get('http://208.117.44.15/SmWebApi/api/VmequpsApi')
+      const response = await axios.get('http://localhost:3001/VmequpsApi')
       setDataSource(response.data)
       setLoading(false)
     } catch (error: any) {
@@ -28,7 +28,7 @@ const AddFaultForm = () => {
 
   const loadFaultType = async () => {
     try {
-      const response = await axios.get('http://208.117.44.15/SmWebApi/api/vmfaltsapi')
+      const response = await axios.get('http://localhost:3001/vmfaltsapi')
       setFaultType(response.data)
     } catch (error: any) {
       return error.statusText
@@ -37,7 +37,7 @@ const AddFaultForm = () => {
 
   const loadLocation = async () => {
     try {
-      const response = await axios.get('http://208.117.44.15/SmWebApi/api/IclocsApi')
+      const response = await axios.get('http://localhost:3001/IclocsApi')
       setLocation(response.data)
     } catch (error: any) {
       return error.statusText
@@ -45,7 +45,7 @@ const AddFaultForm = () => {
   }
 
   const loadCustodian = async () => {
-    const response = await axios.get('http://208.117.44.15/SmWebApi/api/VmemplsApi')
+    const response = await axios.get('http://localhost:3001/VmemplsApi')
     setCustodian(response.data)
   }
 
