@@ -11,7 +11,7 @@ const EquipmentDetail = () => {
 
   const loadData = async () => {
     setLoading(true)
-    const response = await axios.get('http://localhost:3001/VmequpsApi')
+    const response = await axios.get('http://208.117.44.15/SmWebApi/api/VmequpsApi')
     setVehicle(response.data)
     setLoading(false)
   }

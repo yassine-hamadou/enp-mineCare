@@ -18,7 +18,7 @@ const FaultTable = () => {
     setLoading(true)
     try {
       const response = await axios.get(
-        'http://localhost:3001/FaultEntriesApi'
+        'http://208.117.44.15/SmWebApi/api/FaultEntriesApi'
       )
 
       //Formatting date to the received data
@@ -46,7 +46,7 @@ const FaultTable = () => {
   const deleteData = async (element: any) => {
     try {
       const response = await axios.delete(
-        `http://localhost:3001/FaultEntriesApi/${element.entryId}`
+        `http://208.117.44.15/SmWebApi/api/FaultEntriesApi/${element.entryId}`
       )
       // update the local state so that react can refecth and re-render the table with the new data
       const newData = gridData.filter((item: any) => item.entryId !== element.entryId)
@@ -145,7 +145,7 @@ const FaultTable = () => {
   const [form] = Form.useForm()
 
   // {/* Start Elements to Post */}
-  const url = 'http://localhost:3001/FaultEntriesApi'
+  const url = 'http://208.117.44.15/SmWebApi/api/FaultEntriesApi'
   const onFinish = async (values: any) => {
     setSubmitLoading(true)
     const data = {
@@ -179,7 +179,7 @@ const FaultTable = () => {
     setLoading(true)
     try {
       const response = await axios.get(
-        'http://localhost:3001/VmequpsApi'
+        'http://208.117.44.15/SmWebApi/api/VmequpsApi'
       )
       setDataSource(response.data)
       setLoading(false)
@@ -192,7 +192,7 @@ const FaultTable = () => {
   const loadFaultType = async () => {
     try {
       const response = await axios.get(
-        'http://localhost:3001/vmfaltsapi'
+        'http://208.117.44.15/SmWebApi/api/vmfaltsapi'
       )
       setFaultType(response.data)
     } catch (error: any) {
@@ -203,7 +203,7 @@ const FaultTable = () => {
   const loadLocation = async () => {
     try {
       const response = await axios.get(
-        'http://localhost:3001/IclocsApi'
+        'http://208.117.44.15/SmWebApi/api/IclocsApi'
       )
       setLocation(response.data)
     } catch (error: any) {
@@ -213,7 +213,7 @@ const FaultTable = () => {
 
   const loadCustodian = async () => {
     const response = await axios.get(
-      'http://localhost:3001/VmemplsApi'
+      'http://208.117.44.15/SmWebApi/api/VmemplsApi'
     )
     setCustodian(response.data)
   }
