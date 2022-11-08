@@ -10,22 +10,22 @@ const ResolutionTable = () => {
   const loadData = async () => {
     setLoading(true)
     try {
-      const response = await axios.get(
-        'https://cors-anywhere.herokuapp.com/http://208.117.44.15/SmWebApi/api/FaultEntriesApi'
-      )
+      const response = await axios.get('http://208.117.44.15/SmWebApi/api/FaultEntriesApi')
 
       //Formatting date to the received data
       const dataReceivedfromAPI = {
         get withFormatDate() {
-          return response.data.map((item: any) => ({
+          return response.data.map((item: any, index: number) => ({
             ...item,
+            key: index,
             //Calculating duration: Present Time - Time fault was reported
-            duration: `${Math.floor((new Date().getTime() - new Date(item.downtime).getTime()) / (1000 * 3600 * 24))} Day(s)`,
+            duration: `${Math.floor(
+              (new Date().getTime() - new Date(item.downtime).getTime()) / (1000 * 3600 * 24)
+            )} Day(s)`,
             formattedDate: new Date(item.downtime).toLocaleString(),
           }))
-        }
+        },
       }
-      console.log("Datafrom apt", dataReceivedfromAPI.withFormatDate)
       setGridData(dataReceivedfromAPI.withFormatDate)
       setLoading(false)
     } catch (error: any) {
@@ -34,17 +34,25 @@ const ResolutionTable = () => {
     }
   }
 
-
   useEffect(() => {
     loadData()
     console.log('Inside use-effect', gridData)
   }, [])
 
-  const columns = [
+  const columns: any = [
     {
       title: 'FleetID',
       dataIndex: 'fleetId',
-      key: 'entryId',
+      key: 'key',
+      sorter: (a: any, b: any) => {
+        if (a.fleetId > b.fleetId) {
+          return 1
+        }
+        if (b.fleetId > a.fleetId) {
+          return -1
+        }
+        return 0
+      },
     },
     {
       title: 'Model',
@@ -63,6 +71,8 @@ const ResolutionTable = () => {
     {
       title: 'Time Start',
       dataIndex: 'formattedDate',
+      defaultSortOrder: 'descend',
+      sorter: (a: any, b: any) => new Date(a.downtime).getTime() - new Date(b.downtime).getTime(),
     },
     {
       title: 'Time End',
@@ -72,7 +82,6 @@ const ResolutionTable = () => {
       dataIndex: 'duration',
     },
   ]
-
 
   return (
     <div>

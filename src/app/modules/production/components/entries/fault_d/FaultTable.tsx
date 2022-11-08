@@ -1,11 +1,12 @@
 import { Button, Form, Input, Modal, Popconfirm, Select, Table } from "antd";
 import "antd/dist/antd.min.css";
 import axios from "axios";
+import moment from "moment";
 import { useEffect, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 
 const FaultTable = () => {
-  const [gridData, setGridData] = useState([])
+  const [gridData, setGridData] = useState([]);
 
   // Modal functions
   const [isModalOpen, setIsModalOpen] = useState(false)
@@ -13,7 +14,6 @@ const FaultTable = () => {
     setIsModalOpen(true)
   }
   // Modal functions end
-
   const loadData = async () => {
     setLoading(true)
     try {
@@ -24,9 +24,11 @@ const FaultTable = () => {
       //Formatting date to the received data
       const dataReceivedfromAPI = {
         get withFormatDate() {
-          return response.data.map((item: any) => ({
+          return response.data.map((item: any, index: number) => ({
           ...item,
-            //Calculating duration: Present Time - Time fault was reported
+            key: index,
+
+            //Calculating duration: Present Time MINUS Time the fault was reported
             duration: `${Math.floor((new Date().getTime() - new Date(item.downtime).getTime()) / (1000 * 3600 * 24))} Day(s)`,
             formattedDate: new Date(item.downtime).toLocaleString(),
           }))
@@ -42,13 +44,11 @@ const FaultTable = () => {
   }
 
 
-  //refreshing the grid when a data is deleted
   // useEffect(() => {
   //   loadData()
   // }, [gridData])
 
   const deleteData = async (element: any) => {
-    // const dataSource = [...gridData]
     try {
       const response = await axios.delete(
         `http://208.117.44.15/SmWebApi/api/FaultEntriesApi/${element.entryId}`
@@ -64,17 +64,21 @@ const FaultTable = () => {
       console.log('error', e)
     }
   }
-
   function handleDelete(element: any) {
     deleteData(element)
   }
 
-  const columns = [
+  // @ts-ignore
+  const columns: any = [
     {
       title: 'FleetId',
       dataIndex: 'fleetId',
-      key: 'entryId',
-      // sorter: (a: any, b: any) => a.key - b.key
+      key: 'key',
+      sorter: (a: any, b: any) => {
+        if (a.fleetId < b.fleetId) return -1;
+        if (a.fleetId > b.fleetId) return 1;
+        return 0;
+      }
     },
     {
       title: 'Model',
@@ -100,6 +104,8 @@ const FaultTable = () => {
     {
       title: 'Down Date and Time',
       dataIndex: 'formattedDate',
+      defaultSortOrder: 'descend',
+      sorter: (a:any, b:any) => new Date(a.downtime).getTime() - new Date(b.downtime).getTime()
     },
     {
       title: 'Custodian',
@@ -160,7 +166,6 @@ const FaultTable = () => {
       custodian: values.custodian,
     }
     const dataWithId = {...data, entryId: uuidv4()}
-console.log(dataWithId)
     try {
       const response = await axios.post(url, dataWithId)
       setSubmitLoading(false)

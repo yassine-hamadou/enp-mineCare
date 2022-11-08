@@ -68,8 +68,8 @@ const chartOptions = (chartColor: string, chartHeight: string): ApexOptions => {
   return {
     series: [
       {
-        name: 'Net Profit',
-        data: [50, 60, 70, 80, 60, 50, 70, 60],
+        name: 'Total',
+        data: [50, 60, 70, 80, 60, 50, 70, 60, 50, 24, 43, 20],
       },
     ],
     chart: {
@@ -99,7 +99,7 @@ const chartOptions = (chartColor: string, chartHeight: string): ApexOptions => {
       colors: ['transparent'],
     },
     xaxis: {
-      categories: ['Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep'],
+      categories: ['Dec', 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov'],
       axisBorder: {
         show: false,
       },
@@ -151,7 +151,7 @@ const chartOptions = (chartColor: string, chartHeight: string): ApexOptions => {
       },
       y: {
         formatter: function (val) {
-          return '$' + val + ' revenue'
+          return '$' + val
         },
       },
     },
