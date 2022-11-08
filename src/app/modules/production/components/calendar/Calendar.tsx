@@ -11,7 +11,7 @@ import {
   Inject,
   Resize,
   DragAndDrop,
-  Agenda, dataBound,
+  Agenda,
 } from '@syncfusion/ej2-react-schedule'
 import {createElement, extend} from '@syncfusion/ej2-base'
 import {DateTimePickerComponent} from '@syncfusion/ej2-react-calendars'
@@ -47,7 +47,7 @@ const Calendar = () => {
   const [dropDownFleet, setDropdownFleet] = useState([])
   const loadEquipments = async () => {
     try {
-      const response = await axios.get('https://cors-anywhere.herokuapp.com/http://208.117.44.15/SmWebApi/api/vmequpsapi')
+      const response = await axios.get('http://208.117.44.15/SmWebApi/api/vmequpsapi')
       setEquipments(response.data)
     } catch (error) {
       console.log('LoadEquipments', error)

@@ -3,6 +3,8 @@ import clsx from 'clsx'
 import {useLocation} from 'react-router'
 import {checkIsActive, KTSVG, WithChildren} from '../../../helpers'
 import {useLayout} from '../../core'
+import './menuMargin.css'
+
 
 type Props = {
   to: string
@@ -30,7 +32,7 @@ const AsideMenuItemWithSub: React.FC<Props & WithChildren> = ({
       className={clsx('menu-item', {'here show': isActive}, 'menu-accordion')}
       data-kt-menu-trigger='click'
     >
-      <span className='menu-link'>
+      <span className='menu-link ml0'>
         {hasBullet && (
           <span className='menu-bullet'>
             <span className='bullet bullet-dot'></span>

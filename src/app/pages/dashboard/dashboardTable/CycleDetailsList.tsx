@@ -1,8 +1,6 @@
 import {Button, Input, Space, Table} from 'antd'
 import {useState, useEffect} from 'react'
 import axios from 'axios'
-import { SortOrder } from "antd/lib/table/interface";
-import { SortAscendingOutlined } from "@ant-design/icons";
 
 const DashboardTable = () => {
   const [gridData, setGridData] = useState([])
@@ -63,9 +61,7 @@ const DashboardTable = () => {
   const loadData = async () => {
     setLoading(true)
     try {
-      const response = await axios.get(
-        'https://cors-anywhere.herokuapp.com/http://208.117.44.15/SmWebApi/api/VmclasApi'
-      )
+      const response = await axios.get('http://localhost:3001/VmclasApi')
       setGridData(response.data)
       setLoading(false)
     } catch (error) {

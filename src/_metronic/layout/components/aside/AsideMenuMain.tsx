@@ -2,18 +2,29 @@
 import {useIntl} from 'react-intl'
 import {AsideMenuItemWithSub} from './AsideMenuItemWithSub'
 import {AsideMenuItem} from './AsideMenuItem'
+import {Link} from 'react-router-dom'
+import clsx from 'clsx'
+import {checkIsActive, KTSVG} from '../../../helpers'
+import {useLocation} from 'react-router'
 
 export function AsideMenuMain() {
   const intl = useIntl()
+  const {pathname} = useLocation()
+  const isDashboardActive = checkIsActive(pathname, '/dashboard')
 
   return (
     <>
-      <AsideMenuItem
-        to='/dashboard'
-        icon='/media/icons/duotune/art/art002.svg'
-        title={intl.formatMessage({id: 'MENU.DASHBOARD'})}
-        fontIcon='bi-app-indicator'
-      />
+      <div className='menu-item'>
+        <Link
+          className={clsx('menu-link without-sub ml0', {active: isDashboardActive})}
+          to='/dashboard'
+        >
+          <span className='menu-icon'>
+            <KTSVG path='/media/icons/duotune/art/art002.svg' className='svg-icon-2' />
+          </span>
+          <span className='menu-title'>{intl.formatMessage({id: 'MENU.DASHBOARD'})}</span>
+        </Link>
+      </div>
 
       <AsideMenuItemWithSub
         to='#'
@@ -33,9 +44,21 @@ export function AsideMenuMain() {
         fontIcon='bi-archive'
         icon='/media/icons/duotune/general/gen028.svg'
       >
-        <AsideMenuItem to='report/downtime' title='Down Time' hasBullet={true} />
-        <AsideMenuItem to='report/daily-kpi' title='Daily KPI' hasBullet={true} />
-        <AsideMenuItem to='report/weekly-schedule' title='Weekly Schedule' hasBullet={true} />
+        <AsideMenuItem
+          to='app/production/components/report/daily'
+          title='Daily KPI'
+          hasBullet={true}
+        />
+        <AsideMenuItem
+          to='app/production/components/report/downtime'
+          title='Down Time'
+          hasBullet={true}
+        />
+        <AsideMenuItem
+          to='app/production/components/report/weekly'
+          title='Weekly Schedule'
+          hasBullet={true}
+        />
       </AsideMenuItemWithSub>
 
       <AsideMenuItemWithSub
@@ -55,7 +78,18 @@ export function AsideMenuMain() {
           <div className='separator mx-1 my-4'></div>
         </div>
       </div>
-      <AsideMenuItem to='#' title='Configuration' icon='/media/icons/duotune/general/gen055.svg' />
+
+      <div className='menu-item'>
+        <Link
+          className={clsx('menu-link without-sub ml0', {active: isDashboardActive})}
+          to='/dashboard'
+        >
+          <span className='menu-icon'>
+            <KTSVG path='/media/icons/duotune/general/gen055.svg' className='svg-icon-2' />
+          </span>
+          <span className='menu-title'>Configuration</span>
+        </Link>
+      </div>
     </>
   )
 }
