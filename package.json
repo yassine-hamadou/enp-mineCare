@@ -76,7 +76,7 @@
         "eject": "react-scripts eject",
         "lint": "prettier --check .",
         "format": "prettier --write .",
-        "rtl": "webpack --config webpack-rtl.config.js",
+        "rtl": "webpack --config webpack-rtl.config.js"
     },
     "eslintConfig": {
         "extends": [
