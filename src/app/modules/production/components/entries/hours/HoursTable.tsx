@@ -1,4 +1,4 @@
-import {Button, Popconfirm, Table, Modal} from 'antd'
+import {Button, Popconfirm, Table, Modal, Space, Input} from 'antd'
 import 'antd/dist/antd.min.css'
 import axios from 'axios'
 import {useEffect, useState} from 'react'
@@ -7,6 +7,8 @@ import {AddFaultForm} from './AddHoursForm'
 const HoursTable = () => {
   const [gridData, setGridData] = useState([])
   const [loading, setLoading] = useState(false)
+  const [searchText, setSearchText] = useState('')
+  let [filteredData] = useState([])
 
   // Modal functions
   const [isModalOpen, setIsModalOpen] = useState(false)
@@ -26,20 +28,32 @@ const HoursTable = () => {
 
   const loadData = async () => {
     setLoading(true)
-    const response = await axios.get('http://208.117.44.15/SmWebApi/api/VmequpsApi')
-    console.log('api REponse', response.data)
+    const response = await axios.get('https://cors-anywhere.herokuapp.com/https://app.sipconsult.net/SmWebApi/api/VmequpsApi')
+    console.log('api Response', response.data)
     setGridData(response.data)
     setLoading(false)
   }
 
-  // useEffect(() => {
-  //   loadData()
-  //   console.log('Inside use-effect', gridData)
-  // }, [])
-
   function handleDelete(element: any) {
     const dataSource = [...gridData]
     const filteredData = dataSource.filter((item: any) => item.fleetID !== element.fleetID)
+    setGridData(filteredData)
+  }
+  const handleInputChange = (e: any) => {
+    setSearchText(e.target.value)
+    if (e.target.value === '') {
+      loadData()
+    }
+  }
+
+  const globalSearch = () => {
+    // @ts-ignore
+    filteredData = dataWithVehicleNum.filter((value) => {
+      return (
+        value.classDesc.toLowerCase().includes(searchText.toLowerCase()) ||
+        value.classCode.toLowerCase().includes(searchText.toLowerCase())
+      )
+    })
     setGridData(filteredData)
   }
 
@@ -49,14 +63,14 @@ const HoursTable = () => {
       dataIndex: 'fleetID',
       key: 'fleetID',
     },
-    {
-      title: 'Model',
-      dataIndex: 'modlName',
-    },
-    {
-      title: 'Description',
-      dataIndex: 'modlClass',
-    },
+    // {
+    //   title: 'Model',
+    //   dataIndex: 'modlName',
+    // },
+    // {
+    //   title: 'Description',
+    //   dataIndex: 'modlClass',
+    // },
     {
       title: 'Previous Reading',
     },
@@ -90,14 +104,28 @@ const HoursTable = () => {
 
   return (
     <div>
-      <div className='d-flex my-2'>
-        <Button type='primary' onClick={showModal}>
-          Add
-        </Button>
-        <Button type='primary' className='mx-3'>
-          Export
-        </Button>
-        <Button type='primary'>Upload</Button>
+      <div className='d-flex justify-content-between'>
+        <Space style={{marginBottom: 16}}>
+          <Input
+            placeholder='Enter Search Text'
+            onChange={handleInputChange}
+            type='text'
+            allowClear
+            value={searchText}
+          />
+          <Button type='primary' onClick={globalSearch}>
+            Search
+          </Button>
+        </Space>
+        <Space style={{marginBottom: 16}}>
+          <Button type='primary' onClick={showModal}>
+            Add
+          </Button>
+          <Button type='primary' className='mx-3'>
+            Export
+          </Button>
+          <Button type='primary'>Upload</Button>
+        </Space>
       </div>
       <Table columns={columns} dataSource={gridData} bordered loading={loading} />
       <Modal title='Add Fault' open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>

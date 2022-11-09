@@ -17,7 +17,8 @@ const AddFaultForm = () => {
   const loadData = async () => {
     setLoading(true)
     try {
-      const response = await axios.get('http://208.117.44.15/SmWebApi/api/VmequpsApi')
+      const response = await axios.get('https://cors-anywhere.herokuapp.com/https://app.sipconsult.net/SmWebApi/api/VmequpsApi')
+      // const response = await axios.get('http://208.117.44.15/SmWebApi/api/VmequpsApi')
       setDataSource(response.data)
       setLoading(false)
     } catch (error: any) {
@@ -26,28 +27,28 @@ const AddFaultForm = () => {
     }
   }
 
-  const loadFaultType = async () => {
-    try {
-      const response = await axios.get('http://208.117.44.15/SmWebApi/api/vmfaltsapi')
-      setFaultType(response.data)
-    } catch (error: any) {
-      return error.statusText
-    }
-  }
+  // const loadFaultType = async () => {
+  //   try {
+  //     const response = await axios.get('http://208.117.44.15/SmWebApi/api/vmfaltsapi')
+  //     setFaultType(response.data)
+  //   } catch (error: any) {
+  //     return error.statusText
+  //   }
+  // }
 
-  const loadLocation = async () => {
-    try {
-      const response = await axios.get('http://208.117.44.15/SmWebApi/api/IclocsApi')
-      setLocation(response.data)
-    } catch (error: any) {
-      return error.statusText
-    }
-  }
+  // const loadLocation = async () => {
+  //   try {
+  //     const response = await axios.get('http://208.117.44.15/SmWebApi/api/IclocsApi')
+  //     setLocation(response.data)
+  //   } catch (error: any) {
+  //     return error.statusText
+  //   }
+  // }
 
-  const loadCustodian = async () => {
-    const response = await axios.get('http://208.117.44.15/SmWebApi/api/VmemplsApi')
-    setCustodian(response.data)
-  }
+  // const loadCustodian = async () => {
+  //   const response = await axios.get('http://208.117.44.15/SmWebApi/api/VmemplsApi')
+  //   setCustodian(response.data)
+  // }
 
   const getEqupId = (id: any) => {
     // get the item to add in the form remaning inputs after dropdown selection is made
@@ -56,9 +57,9 @@ const AddFaultForm = () => {
 
   useEffect(() => {
     loadData()
-    loadFaultType()
-    loadLocation()
-    loadCustodian()
+    // loadFaultType()
+    // loadLocation()
+    // loadCustodian()
   }, [])
 
   useEffect(() => {
@@ -68,7 +69,7 @@ const AddFaultForm = () => {
   }, [fleet])
 
   return (
-    <Form labelCol={{span: 7}} wrapperCol={{span: 14}} layout='horizontal' title='Add Fault'>
+    <Form labelCol={{span: 7}} wrapperCol={{span: 14}} layout='horizontal' title='Add Hourly'>
       <Form.Item label='FleetID'>
         <Select onSelect={(e: any) => getEqupId(e)}>
           {dataSource.map((item: any) => (
@@ -81,23 +82,23 @@ const AddFaultForm = () => {
           ))}
         </Select>
       </Form.Item>
-      <Form.Item label='Model'>
+      {/* <Form.Item label='Model'>
         <Input
           // @ts-ignore
           value={fleetToAdd?.modlName}
           disabled={true}
         />
-      </Form.Item>
-      <Form.Item label='Description'>
+      </Form.Item> */}
+      {/* <Form.Item label='Description'>
         <Input
           // @ts-ignore
           value={fleetToAdd?.modlClass}
           contentEditable={false}
           disabled={true}
         />
-      </Form.Item>
+      </Form.Item> */}
       <Form.Item label='Previous Reading'>
-        <Input />
+        <Input disabled={true} contentEditable={false}/>
       </Form.Item>
       <Form.Item label='Date'>
         <DatePicker />
