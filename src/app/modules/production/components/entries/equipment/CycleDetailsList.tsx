@@ -1,10 +1,8 @@
-import {Calendar} from '../../calendar/Calendar'
 import {KTCard, KTCardBody} from '../../../../../../_metronic/helpers'
-import DropdownButton from 'react-bootstrap/DropdownButton'
-import Dropdown from 'react-bootstrap/Dropdown'
 import {useEffect, useState} from 'react'
 import axios from 'axios'
 import {DropDownListComponent} from "@syncfusion/ej2-react-dropdowns";
+import {Calendar} from "../../calendar/Calendar";
 
 const EquipmentDetail = () => {
   const [vehicle, setVehicle] = useState([])
@@ -12,7 +10,7 @@ const EquipmentDetail = () => {
 
   const loadData = async () => {
     setLoading(true)
-    const response = await axios.get('http://localhost:3001/VmclasApi')
+    const response = await axios.get('http://208.117.44.15/SmWebApi/api/VmclasApi')
     setVehicle(response.data)
     setLoading(false)
   }

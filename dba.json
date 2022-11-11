@@ -210,6 +210,13 @@
       "timeStart": "2022-11-10T11:00:00.000Z",
       "timeEnd": "2022-11-10T11:30:00.000Z",
       "entryId": "5b4c09a1-f359-a8af-7a60-ed86f208bf18"
+    },
+    {
+      "fleetId": "AD071       ",
+      "locationId": "DRILL ",
+      "timeStart": "2022-11-06T18:30:00.000Z",
+      "timeEnd": "2022-11-06T19:00:00.000Z",
+      "entryId": "982cfd8c-8b7a-ab39-bb19-7492d40ba220"
     }
   ],
   "HourliesApi": [

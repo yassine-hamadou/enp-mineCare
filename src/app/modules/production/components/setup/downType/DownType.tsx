@@ -42,7 +42,7 @@ const DownTypePage = () => {
   const loadData = async () => {
     // setLoading(true)
     try {
-      const response = await axios.get('http://localhost:3001/VmclasApi')
+      const response = await axios.get('http://208.117.44.15/SmWebApi/api/VmclasApi')
       setGridData(response.data)
       setLoading(false)
     } catch (error) {

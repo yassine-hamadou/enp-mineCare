@@ -2181,7 +2181,7 @@
     "@svgr/plugin-svgo" "^5.5.0"
     loader-utils "^2.0.0"
 
-"@syncfusion/ej2-base@~20.3.56":
+"@syncfusion/ej2-base@^20.3.56", "@syncfusion/ej2-base@~20.3.56":
   version "20.3.56"
   resolved "https://registry.yarnpkg.com/@syncfusion/ej2-base/-/ej2-base-20.3.56.tgz#96ed9028816f4892a3f2a2eb9cb1009a9bcfde31"
   integrity sha512-BeXX3XBOs1kv9/rki9f1kPuLbNJU06kJE8o0jLY62fEd/U5k2KkuG5Z/WbWHJIuQVH5dv57ZM2Adl3rG+vkvjg==
