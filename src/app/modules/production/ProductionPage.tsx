@@ -9,12 +9,17 @@ import {Fleet} from './components/setup/fleet/CycleDetailsList'
 import {EquipmentDetail} from './components/entries/equipment/CycleDetailsList'
 import {ResolutionTable} from './components/entries/resolution/ResolutionTable'
 import {DownType} from './components/setup/downType/CycleDetailsList'
-import {WorkType} from './components/setup/workType/CycleDetailsList'
+// import {WorkType} from './components/setup/workType/CycleDetailsList'
 import {LocationTable} from './components/setup/location/CycleDetailsList'
 import {Custodian} from './components/setup/custodian/CycleDetailsList'
 import {FaultTable} from './components/entries/fault_d/FaultTable'
 import {HoursTable} from './components/entries/hours/HoursTable'
 import {AddFaultForm} from './components/entries/fault_d/AddFaultForm'
+import {WorkTypePage} from './components/setup/workType/WorkType'
+import { DownTypePage } from './components/setup/downType/DownType'
+import { CustodianPage } from './components/setup/custodian/Custodian'
+import { LocationPage } from './components/setup/location/LocationPage'
+import { FleetPage } from './components/setup/fleet/FleetPage'
 const accountBreadCrumbs: Array<PageLink> = []
 
 const ProductionPage: React.FC = () => {
@@ -61,7 +66,7 @@ const ProductionPage: React.FC = () => {
           path='resolution'
           element={
             <>
-              <PageTitle breadcrumbs={accountBreadCrumbs}>Resolution</PageTitle>
+              <PageTitle breadcrumbs={accountBreadCrumbs}>All Resolution</PageTitle>
               <ResolutionTable />
             </>
           }
@@ -70,7 +75,7 @@ const ProductionPage: React.FC = () => {
           path='hours'
           element={
             <>
-              <PageTitle breadcrumbs={accountBreadCrumbs}>Hours</PageTitle>
+              <PageTitle breadcrumbs={accountBreadCrumbs}>All Hours</PageTitle>
               <HoursTable />
             </>
           }
@@ -90,9 +95,9 @@ const ProductionPage: React.FC = () => {
           path='fleet'
           element={
             <>
-              <PageTitle breadcrumbs={accountBreadCrumbs}>Fleet</PageTitle>
+              <PageTitle breadcrumbs={accountBreadCrumbs}>All Fleet</PageTitle>
               {/*<Overview />*/}
-              <Fleet />
+              <FleetPage />
             </>
           }
         />
@@ -100,9 +105,9 @@ const ProductionPage: React.FC = () => {
           path='down-type'
           element={
             <>
-              <PageTitle breadcrumbs={accountBreadCrumbs}>Down Type</PageTitle>
+              <PageTitle breadcrumbs={accountBreadCrumbs}>All Down Type</PageTitle>
               {/*<Overview />*/}
-              <DownType />
+              <DownTypePage />
             </>
           }
         />
@@ -110,9 +115,9 @@ const ProductionPage: React.FC = () => {
           path='custodian'
           element={
             <>
-              <PageTitle breadcrumbs={accountBreadCrumbs}>Custodian</PageTitle>
+              <PageTitle breadcrumbs={accountBreadCrumbs}>All Custodians</PageTitle>
               {/*<Overview />*/}
-              <Custodian />
+              <CustodianPage />
             </>
           }
         />
@@ -120,9 +125,9 @@ const ProductionPage: React.FC = () => {
           path='location'
           element={
             <>
-              <PageTitle breadcrumbs={accountBreadCrumbs}>Location</PageTitle>
+              <PageTitle breadcrumbs={accountBreadCrumbs}>All Locations</PageTitle>
               {/*<Overview />*/}
-              <LocationTable />
+              <LocationPage />
             </>
           }
         />
@@ -130,9 +135,9 @@ const ProductionPage: React.FC = () => {
           path='work-type'
           element={
             <>
-              <PageTitle breadcrumbs={accountBreadCrumbs}>Work Type</PageTitle>
+              <PageTitle breadcrumbs={accountBreadCrumbs}>All Work Types</PageTitle>
               {/*<Overview />*/}
-              <WorkType />
+              <WorkTypePage />
             </>
           }
         />

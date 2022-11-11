@@ -16,7 +16,7 @@ const carData = [
   },
 ]
 
-const WorkType = () => {
+const WorkTypeNew = () => {
   return (
     <>
       <KTCard>
@@ -90,7 +90,7 @@ const WorkType = () => {
     </>
   )
 }
-export {WorkType}
+export {WorkTypeNew}
 
 // import { ListViewProvider, useListView } from './core/ListViewProvider'
 // import {QueryRequestProvider} from './core/QueryRequestProvider'

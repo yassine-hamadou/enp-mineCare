@@ -1,67 +1,50 @@
 import {Button, Input, Space, Table} from 'antd'
 import {useState, useEffect} from 'react'
 import axios from 'axios'
+import { Pagination } from 'antd'
+import type { PaginationProps } from 'antd'
+import { KTCard, KTCardBody } from '../../../../../../_metronic/helpers'
 
-const DashboardTable = () => {
+const LocationPage = () => {
   const [gridData, setGridData] = useState([])
   const [loading, setLoading] = useState(false)
   const [searchText, setSearchText] = useState('')
   let [filteredData] = useState([])
 
   const columns: any = [
+    // {
+    //   title: 'ID',
+    //   dataIndex: 'key',
+    //   defaultSortOrder: 'descend',
+    //   sorter: (a: any, b: any) => a.key - b.key,
+    // },
     {
-      title: 'ID',
-      dataIndex: 'key',
-      defaultSortOrder: 'descend',
-      sorter: (a: any, b: any) => a.key - b.key,
-    },
-    {
-      title: 'Vehicle Type',
-      dataIndex: 'classCode',
+      title: 'Code',
+      dataIndex: 'locationCode',
       sorter: (a: any, b: any) => {
-        if (a.classCode > b.classCode) {
+        if (a.locationCode > b.locationCode) {
           return 1
         }
-        if (b.classCode > a.classCode) {
+        if (b.locationCode > a.locationCode) {
           return -1
         }
         return 0
       },
     },
+    
     {
-      title: 'Description',
-      dataIndex: 'classDesc',
-      sorter: (a: any, b: any) => {
-        if (a.classDesc > b.classDesc) {
-          return 1
-        }
-        if (a.classDesc < b.classDesc) {
-          return -1
-        }
-        return 0
-      },
+      title: 'Name',
+      dataIndex: 'locationDesc',
+      sorter: (a: any, b: any) => a.locationDesc - b.locationDesc,
     },
-    {
-      title: 'Number of Vehicles',
-      dataIndex: 'vehicleNum',
-      sorter: (a: any, b: any) => a.vehicleNum - b.vehicleNum,
-    },
-    {
-      title: 'Number of Down Time',
-      dataIndex: 'downTime',
-      sorter: (a: any, b: any) => a.downTime - b.downTime,
-    },
-    {
-      title: 'Number of Hours',
-      dataIndex: 'numOfHrs',
-      sorter: (a: any, b: any) => a.numOfHrs - b.numOfHrs,
-    },
+    
+    
   ]
 
   const loadData = async () => {
-    setLoading(true)
+    // setLoading(true)
     try {
-      const response = await axios.get('http://208.117.44.15/SmWebApi/api/VmclasApi')
+      const response = await axios.get('https://cors-anywhere.herokuapp.com/https://app.sipconsult.net/SmWebApi/api/IclocsApi')
       setGridData(response.data)
       setLoading(false)
     } catch (error) {
@@ -88,19 +71,34 @@ const DashboardTable = () => {
     }
   }
 
+  const keys =["locationCode","locationDesc"];
   const globalSearch = () => {
     // @ts-ignore
     filteredData = dataWithVehicleNum.filter((value) => {
       return (
-        value.classDesc.toLowerCase().includes(searchText.toLowerCase()) ||
-        value.classCode.toLowerCase().includes(searchText.toLowerCase())
+        keys.some((key)=>value[key].toLowerCase())
+
+        // value.locationCode.toLowerCase().includes(searchText.toLowerCase()) ||
+        // value.locationDesc.toLowerCase().includes(searchText.toLowerCase())
       )
     })
     setGridData(filteredData)
   }
 
+  const itemRender: PaginationProps['itemRender'] = (_, type, originalElement) => {
+    if (type === 'prev') {
+      return <a>Previous</a>;
+    }
+    if (type === 'next') {
+      return <a>Next</a>;
+    }
+    return originalElement;
+  };
+
   return (
-    <div>
+    <KTCard>
+    <KTCardBody className='py-4 '>
+      <div className='table-responsive'>
       <div className='d-flex justify-content-between'>
         <Space style={{marginBottom: 16}}>
           <Input
@@ -118,14 +116,21 @@ const DashboardTable = () => {
           <Button type='primary' className='mb-3'>
             Export
           </Button>
-          <Button type='primary' className='mb-3'>
+          {/* <Button type='primary' className='mb-3'>
             Upload
-          </Button>
+          </Button> */}
         </Space>
       </div>
-      <Table columns={columns} dataSource={dataWithVehicleNum} bordered loading={loading} />
+      <Table columns={columns} dataSource={dataWithVehicleNum} bordered loading={loading}/>
+      {/* <div >
+        <Pagination total={dataWithVehicleNum.length} itemRender={itemRender} />
+      </div> */}
+
     </div>
+    </KTCardBody>
+    </KTCard>
   )
 }
 
-export {DashboardTable}
+export {LocationPage}
+
