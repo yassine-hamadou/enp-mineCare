@@ -1,4 +1,4 @@
-import { Button, Form, Input, Modal, Popconfirm, Select, Table } from "antd";
+import { Button, Form, Input, Modal, Popconfirm, Select, Space, Table } from "antd";
 import "antd/dist/antd.min.css";
 import axios from "axios";
 import moment from "moment";
@@ -7,7 +7,15 @@ import { v4 as uuidv4 } from "uuid";
 
 const FaultTable = () => {
   const [gridData, setGridData] = useState([]);
+  const [searchText, setSearchText] = useState('')
 
+
+  const handleInputChange = (e: any) => {
+    setSearchText(e.target.value)
+    if (e.target.value === '') {
+      loadData()
+    }
+  }
   // Modal functions
   const [isModalOpen, setIsModalOpen] = useState(false)
   const showModal = () => {
@@ -244,9 +252,32 @@ const FaultTable = () => {
 
   return (
     <div>
-      <Button type='primary' onClick={showModal} className='mb-3'>
+      {/* <Button type='primary' onClick={showModal} className='mb-3'>
         Add
-      </Button>
+      </Button> */}
+      <div className='d-flex justify-content-between'>
+        <Space style={{marginBottom: 16}}>
+          <Input
+            placeholder='Enter Search Text'
+            onChange={handleInputChange}
+            type='text'
+            allowClear
+            value={searchText}
+          />
+          <Button type='primary'>
+            Search
+          </Button>
+        </Space>
+        <Space style={{marginBottom: 16}}>
+          <Button type='primary' onClick={showModal}>
+            Add
+          </Button>
+          <Button type='primary' className='mx-3'>
+            Export
+          </Button>
+          <Button type='primary'>Upload</Button>
+        </Space>
+      </div>
       <Table columns={columns} dataSource={gridData} bordered loading={loading} />
       <Modal
         title='Add Fault'
@@ -254,7 +285,7 @@ const FaultTable = () => {
         onCancel={handleCancel}
         closable={true}
         footer={[
-          <Button key='back' onClick={handleCancel}>
+          <Button  key='back' onClick={handleCancel}>
             Cancel
           </Button>,
           <Button

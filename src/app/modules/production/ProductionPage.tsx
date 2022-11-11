@@ -20,6 +20,9 @@ import { DownTypePage } from './components/setup/downType/DownType'
 import { CustodianPage } from './components/setup/custodian/Custodian'
 import { LocationPage } from './components/setup/location/LocationPage'
 import { FleetPage } from './components/setup/fleet/FleetPage'
+import { ServicesPage } from './components/setup/service/ServicePage'
+import { GroupsPage } from './components/setup/groups/GroupsPage'
+import { ItemsPage } from './components/setup/items/ItemPage'
 const accountBreadCrumbs: Array<PageLink> = []
 
 const ProductionPage: React.FC = () => {
@@ -141,6 +144,16 @@ const ProductionPage: React.FC = () => {
             </>
           }
         />
+        <Route
+          path='service'
+          element={
+            <>
+              <PageTitle breadcrumbs={accountBreadCrumbs}>Services</PageTitle>
+              {/*<Overview />*/}
+              <ServicesPage />
+            </>
+          }
+        />
         <Route index element={<Navigate to='/dashboard' />} />
       </Route>
       <Route
@@ -177,6 +190,45 @@ const ProductionPage: React.FC = () => {
             <>
               <PageTitle breadcrumbs={accountBreadCrumbs}>Activity Statistics</PageTitle>
               <StatisticsTable />
+            </>
+          }
+        />
+        <Route index element={<Navigate to='/dashboard' />} />
+      </Route>
+      <Route
+        path='setup/*'
+        element={
+          <>
+            {/*<ProductionHeader />*/}
+            <Outlet />
+          </>
+        }
+      >
+       
+        <Route
+          path='service'
+          element={
+            <>
+              <PageTitle breadcrumbs={accountBreadCrumbs}>Services </PageTitle>
+              <ServicesPage />
+            </>
+          }
+        />
+        <Route
+          path='groups'
+          element={
+            <>
+              <PageTitle breadcrumbs={accountBreadCrumbs}>Groups </PageTitle>
+              <GroupsPage />
+            </>
+          }
+        />
+        <Route
+          path='items'
+          element={
+            <>
+              <PageTitle breadcrumbs={accountBreadCrumbs}>Items </PageTitle>
+              <ItemsPage />
             </>
           }
         />

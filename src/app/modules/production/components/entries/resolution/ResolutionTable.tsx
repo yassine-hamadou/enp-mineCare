@@ -1,4 +1,4 @@
-import {Button, Popconfirm, Table, Modal} from 'antd'
+import {Button, Popconfirm, Table, Modal, Space, Input} from 'antd'
 import 'antd/dist/antd.min.css'
 import axios from 'axios'
 import {useEffect, useState} from 'react'
@@ -85,6 +85,27 @@ const ResolutionTable = () => {
 
   return (
     <div>
+      <div className='d-flex justify-content-between'>
+        <Space style={{marginBottom: 16}}>
+          <Input
+            placeholder='Enter Search Text'
+            // onChange={handleInputChange}
+            type='text'
+            allowClear
+            // value={searchText}
+          />
+          <Button type='primary'>
+            Search
+          </Button>
+        </Space>
+        <Space style={{marginBottom: 16}}>
+          
+          <Button type='primary' className='mx-3'>
+            Export
+          </Button>
+          {/* <Button type='primary'>Upload</Button> */}
+        </Space>
+      </div>
       <Table columns={columns} dataSource={gridData} bordered loading={loading} />
     </div>
   )

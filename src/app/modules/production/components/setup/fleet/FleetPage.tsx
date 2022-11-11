@@ -20,10 +20,10 @@ const FleetPage = () => {
       title: 'FleetID',
       dataIndex: 'fleetID',
       sorter: (a: any, b: any) => {
-        if (a.classCode > b.classCode) {
+        if (a.fleetID > b.fleetID) {
           return 1
         }
-        if (b.classCode > a.classCode) {
+        if (b.fleetID > a.fleetID) {
           return -1
         }
         return 0
@@ -33,7 +33,7 @@ const FleetPage = () => {
     {
       title: 'Model Name',
       dataIndex: 'modlName',
-      sorter: (a: any, b: any) => a.vehicleNum - b.vehicleNum,
+      sorter: (a: any, b: any) => a.modlName - b.modlName,
     },
     {
       title: 'Model Class',
@@ -78,8 +78,9 @@ const FleetPage = () => {
     // @ts-ignore
     filteredData = dataWithVehicleNum.filter((value) => {
       return (
-        value.classDesc.toLowerCase().includes(searchText.toLowerCase()) ||
-        value.classCode.toLowerCase().includes(searchText.toLowerCase())
+        value.fleetID.toLowerCase().includes(searchText.toLowerCase()) ||
+        value.modlName.toLowerCase().includes(searchText.toLowerCase()) ||
+        value.modlClass.toLowerCase().includes(searchText.toLowerCase())
       )
     })
     setGridData(filteredData)
@@ -111,7 +112,7 @@ const FleetPage = () => {
           </Button> */}
         </Space>
       </div>
-      <Table columns={columns} dataSource={dataWithVehicleNum} bordered />
+      <Table columns={columns} dataSource={dataWithVehicleNum} bordered loading={loading}/>
     </div>
     </KTCardBody>
     </KTCard>

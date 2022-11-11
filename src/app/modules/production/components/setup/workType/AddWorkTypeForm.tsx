@@ -3,7 +3,7 @@ import {useEffect, useRef, useState} from 'react'
 import axios from 'axios'
 import {DatePicker} from 'antd/es'
 
-const AddFaultForm = () => {
+const AddWorkTypeForm = () => {
   const [dataSource, setDataSource] = useState([])
   const [faultType, setFaultType] = useState([])
   const [location, setLocation] = useState([])
@@ -42,7 +42,7 @@ const AddFaultForm = () => {
   }, [fleet])
 
   return (
-    <Form labelCol={{span: 7}} wrapperCol={{span: 14}} layout='horizontal' title='Add Hourly'>
+    <Form labelCol={{span: 7}} wrapperCol={{span: 14}} layout='horizontal' title='Add WorkType'>
       <Form.Item label='FleetID'>
         <Select onSelect={(e: any) => getEqupId(e)}>
           {dataSource.map((item: any) => (
@@ -50,7 +50,8 @@ const AddFaultForm = () => {
               // @ts-ignore
               value={item.fleetID}
             >
-              {item.fleetID} - {item.modlName} - {item.modlClass}
+              {item.fleetID }- {item.modlName} - {item.modlClass}
+              
             </Select.Option>
           ))}
         </Select>
@@ -75,4 +76,4 @@ const AddFaultForm = () => {
   )
 }
 
-export {AddFaultForm}
+export {AddWorkTypeForm}

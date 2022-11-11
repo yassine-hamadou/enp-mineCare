@@ -29,7 +29,7 @@ const HoursTable = () => {
   const loadData = async () => {
     setLoading(true)
     const response = await axios.get('https://cors-anywhere.herokuapp.com/https://app.sipconsult.net/SmWebApi/api/VmequpsApi')
-    console.log('api Response', response.data)
+    // console.log('api Response', response.data)
     setGridData(response.data)
     setLoading(false)
   }
@@ -63,14 +63,6 @@ const HoursTable = () => {
       dataIndex: 'fleetID',
       key: 'fleetID',
     },
-    // {
-    //   title: 'Model',
-    //   dataIndex: 'modlName',
-    // },
-    // {
-    //   title: 'Description',
-    //   dataIndex: 'modlClass',
-    // },
     {
       title: 'Previous Reading',
     },
@@ -128,7 +120,7 @@ const HoursTable = () => {
         </Space>
       </div>
       <Table columns={columns} dataSource={gridData} bordered loading={loading} />
-      <Modal title='Add Fault' open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
+      <Modal title='Add Hour' open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
         <AddFaultForm />
       </Modal>
     </div>
