@@ -28,7 +28,8 @@ const HoursTable = () => {
 
   const loadData = async () => {
     setLoading(true)
-    const response = await axios.get('https://cors-anywhere.herokuapp.com/https://app.sipconsult.net/SmWebApi/api/VmequpsApi')
+    // const response = await axios.get('https://cors-anywhere.herokuapp.com/https://app.sipconsult.net/SmWebApi/api/VmequpsApi')
+    const response = await axios.get('http://208.117.44.15/SmWebApi/api/VmequpsApi')
     // console.log('api Response', response.data)
     setGridData(response.data)
     setLoading(false)
