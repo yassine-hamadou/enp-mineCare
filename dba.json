@@ -23,26 +23,6 @@
   ],
   "FleetSchedulesApi": [
     {
-      "entryId": "7756a2aa-4b40-4b20-a5d7-dedcf5302209",
-      "fleetId": "fleetID",
-      "vmModel": "Vmmodel",
-      "vmClass": "class",
-      "locationId": "location",
-      "description": "description",
-      "timeStart": "2022-11-08T20:43:42.733Z",
-      "timeEnd": "2022-11-08T23:43:42.733Z"
-    },
-    {
-      "entryId": "7756c2aa-4b40-4b20-a5d7-dedcf5302209",
-      "fleetId": "fleetID1",
-      "vmModel": "Vmmodel",
-      "vmClass": "class",
-      "locationId": "location",
-      "description": "description",
-      "timeStart": "2022-11-09T20:43:42.733Z",
-      "timeEnd": "2022-11-09T23:43:42.733Z"
-    },
-    {
       "entryId": "775da2aa-4b40-4b20-a5d7-dedcf5302209",
       "fleetId": "fleetID2",
       "vmModel": "Vmmodel",
@@ -101,38 +81,10 @@
     },
     {
       "fleetId": "AD063       ",
-      "locationId": "DRILL ",
-      "timeStart": "2022-11-11T19:00:00.000Z",
-      "timeEnd": "2022-11-11T19:30:00.000Z",
-      "entryId": "1bd8a191-d129-8018-9ab2-d28b35e8985f"
-    },
-    {
-      "fleetId": "AD077       ",
-      "locationId": "CRUSH ",
-      "timeStart": "2022-11-11T17:30:00.000Z",
-      "timeEnd": "2022-11-11T18:00:00.000Z",
-      "entryId": "faddb9a8-c2f9-af99-8a86-8bb63c8a9e40"
-    },
-    {
-      "fleetId": "AD063       ",
       "locationId": "DOZER ",
       "timeStart": "2022-11-08T19:30:00.000Z",
       "timeEnd": "2022-11-08T20:00:00.000Z",
       "entryId": "4b03abaf-02b9-97c7-e8b3-f8900d8a89d5"
-    },
-    {
-      "fleetId": "AD063       ",
-      "locationId": "CRUSH ",
-      "timeStart": "2022-11-06T17:30:00.000Z",
-      "timeEnd": "2022-11-06T18:00:00.000Z",
-      "entryId": "d9407187-256a-a0ed-097b-e4960398a4c8"
-    },
-    {
-      "fleetId": "ANO00       ",
-      "locationId": "DOZER ",
-      "timeStart": "2022-11-08T17:00:00.000Z",
-      "timeEnd": "2022-11-08T17:30:00.000Z",
-      "entryId": "fafe3fa2-623b-a6d1-cb0d-b4b76a49a9e3"
     },
     {
       "fleetId": "AD063       ",
@@ -142,27 +94,6 @@
       "entryId": "c9a66c85-8e88-853e-5aaa-1780de8aa0da"
     },
     {
-      "fleetId": "AD074       ",
-      "locationId": "DOZER ",
-      "timeStart": "2022-11-09T19:00:00.000Z",
-      "timeEnd": "2022-11-09T19:30:00.000Z",
-      "entryId": "38f712ab-6d6b-bb49-190f-4993aa9bbeb6"
-    },
-    {
-      "fleetId": "CP020       ",
-      "locationId": "DRILL ",
-      "timeStart": "2022-11-08T15:00:00.000Z",
-      "timeEnd": "2022-11-08T15:30:00.000Z",
-      "entryId": "69058188-2ef8-b365-1aa1-3a991909b026"
-    },
-    {
-      "fleetId": "AD060       ",
-      "locationId": "DOZER ",
-      "timeStart": "2022-11-10T15:00:00.000Z",
-      "timeEnd": "2022-11-10T15:30:00.000Z",
-      "entryId": "39ff33a7-e26b-b432-b847-46a68609809d"
-    },
-    {
       "fleetId": "AD065       ",
       "locationId": "DOZER ",
       "timeStart": "2022-11-12T16:30:00.000Z",
@@ -170,53 +101,11 @@
       "entryId": "ab3a7ba6-af89-a626-6850-e5b9fb08ac30"
     },
     {
-      "fleetId": "AD065       ",
-      "locationId": "DOZER ",
-      "timeStart": "2022-11-11T15:00:00.000Z",
-      "timeEnd": "2022-11-11T15:30:00.000Z",
-      "entryId": "4a5ce5bb-009a-946b-7b46-6d8c20f89a07"
-    },
-    {
-      "fleetId": "AD066       ",
-      "locationId": "DRILL ",
-      "timeStart": "2022-11-06T14:30:00.000Z",
-      "timeEnd": "2022-11-06T15:00:00.000Z",
-      "entryId": "aa17d688-2049-b081-fbf3-f19efee9a5fe"
-    },
-    {
-      "fleetId": "AD065       ",
-      "locationId": "DOZER ",
-      "timeStart": "2022-11-10T17:00:00.000Z",
-      "timeEnd": "2022-11-10T17:30:00.000Z",
-      "entryId": "4b490489-d24a-ba42-fb28-21bece7a9b21"
-    },
-    {
-      "fleetId": "AD066       ",
+      "fleetId": "AD063       ",
       "locationId": "CRUSH ",
-      "timeStart": "2022-11-10T19:00:00.000Z",
-      "timeEnd": "2022-11-10T19:30:00.000Z",
-      "entryId": "c9ab7897-a3e8-ab77-fabb-1ebb53b8b683"
-    },
-    {
-      "fleetId": "AD065       ",
-      "locationId": "DOZER ",
-      "timeStart": "2022-11-07T16:30:00.000Z",
-      "timeEnd": "2022-11-07T17:00:00.000Z",
-      "entryId": "daa5c1bf-ee19-b662-2843-1a8d94dbb1ca"
-    },
-    {
-      "fleetId": "AD071       ",
-      "locationId": "GOLD  ",
-      "timeStart": "2022-11-10T11:00:00.000Z",
-      "timeEnd": "2022-11-10T11:30:00.000Z",
-      "entryId": "5b4c09a1-f359-a8af-7a60-ed86f208bf18"
-    },
-    {
-      "fleetId": "AD071       ",
-      "locationId": "DRILL ",
-      "timeStart": "2022-11-06T18:30:00.000Z",
-      "timeEnd": "2022-11-06T19:00:00.000Z",
-      "entryId": "982cfd8c-8b7a-ab39-bb19-7492d40ba220"
+      "timeStart": "2022-11-11T19:00:00.000Z",
+      "timeEnd": "2022-11-11T19:30:00.000Z",
+      "entryId": "eb1a6698-7a6b-a81e-d908-7e8bc2389adf"
     }
   ],
   "HourliesApi": [

@@ -204,8 +204,8 @@ const Calendar = () => {
             args.cancel = true;
             axios.delete("http://localhost:3001/FleetSchedulesApi/" + data.entryId)
                 .then(res => {
-                    console.log(res);
-                    console.log(res.data);
+                    loadData()
+                    setUpToDateLocalData(localData(dataFromAPI.filter((schedule) => schedule.entryId !== data.entryId)));
                 })
                 .catch(err => {
                         console.log(err);
