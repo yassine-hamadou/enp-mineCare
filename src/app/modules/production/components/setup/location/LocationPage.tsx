@@ -42,7 +42,7 @@ const LocationPage = () => {
   ]
 
   const loadData = async () => {
-    // setLoading(true)
+    setLoading(true)
     try {
       const response = await axios.get('https://cors-anywhere.herokuapp.com/https://app.sipconsult.net/SmWebApi/api/IclocsApi')
       setGridData(response.data)

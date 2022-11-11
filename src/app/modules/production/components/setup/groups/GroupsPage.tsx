@@ -2,12 +2,13 @@ import {Button, Input, Modal, Space, Table} from 'antd'
 import {useState, useEffect} from 'react'
 import axios from 'axios'
 import { KTCard, KTCardBody } from '../../../../../../_metronic/helpers'
-import { AddWorkTypeForm } from './AddWorkTypeForm'
+
 import { ColumnsType } from 'antd/lib/table'
+import { AddGroupsForm } from './AddGroupForm'
 
 
 
-const WorkTypePage = () => {
+const GroupsPage = () => {
   const [gridData, setGridData] = useState([])
   const [loading, setLoading] = useState(false)
   const [searchText, setSearchText] = useState('')
@@ -75,9 +76,10 @@ const WorkTypePage = () => {
       width: 100,
       render: (_: any, record: any ) => (
         <Space size="middle">
-          <a href="service" className="btn btn-light-info btn-sm">Services</a>
-          <a href="#" className="btn btn-light-warning btn-sm ">Update</a>
+          <a href="items" className="btn btn-light-info btn-sm">Items</a>
+          <a href="#" className="btn btn-light-warning btn-sm">Update</a>
           <a href="#" className="btn btn-light-danger btn-sm">Delete</a>
+          {/* <a>Edit </a> */}
         </Space>
       ),
     },
@@ -129,6 +131,9 @@ const WorkTypePage = () => {
     <KTCard>
       <KTCardBody className='py-4 '>
         <div className='table-responsive'>
+        <a href='service'  className='mb-3 btn btn-outline btn-outline-dashed btn-outline-primary btn-active-light-primary'>
+             Back to Services
+            </a>
         <div className='d-flex justify-content-between'>
           <Space style={{marginBottom: 16}}>
             <Input
@@ -155,8 +160,8 @@ const WorkTypePage = () => {
           </Space>
         </div>
         <Table columns={columns} dataSource={dataWithVehicleNum} loading={loading}/>
-          <Modal title='Add WorkType' open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
-        <AddWorkTypeForm />
+          <Modal title='Add Group' open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
+        <AddGroupsForm />
       </Modal>
       </div>
       </KTCardBody>
@@ -164,5 +169,5 @@ const WorkTypePage = () => {
   )
 }
 
-export {WorkTypePage}
+export {GroupsPage}
 

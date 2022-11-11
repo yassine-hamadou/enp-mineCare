@@ -18,12 +18,12 @@ const DownTypePage = () => {
     // },
     {
       title: 'Code',
-      dataIndex: 'classCode',
+      dataIndex: 'faultCode',
       sorter: (a: any, b: any) => {
-        if (a.classCode > b.classCode) {
+        if (a.faultCode > b.faultCode) {
           return 1
         }
-        if (b.classCode > a.classCode) {
+        if (b.faultCode > a.faultCode) {
           return -1
         }
         return 0
@@ -32,17 +32,17 @@ const DownTypePage = () => {
     
     {
       title: 'Name',
-      dataIndex: 'vehicleNum',
-      sorter: (a: any, b: any) => a.vehicleNum - b.vehicleNum,
+      dataIndex: 'faultDesc',
+      sorter: (a: any, b: any) => a.faultDesc - b.faultDesc,
     },
     
     
   ]
 
   const loadData = async () => {
-    // setLoading(true)
+    setLoading(true)
     try {
-      const response = await axios.get('http://localhost:3001/VmclasApi')
+      const response = await axios.get('https://cors-anywhere.herokuapp.com/http://208.117.44.15/SmWebApi/api/VmfaltsApi')
       setGridData(response.data)
       setLoading(false)
     } catch (error) {
@@ -73,8 +73,8 @@ const DownTypePage = () => {
     // @ts-ignore
     filteredData = dataWithVehicleNum.filter((value) => {
       return (
-        value.classDesc.toLowerCase().includes(searchText.toLowerCase()) ||
-        value.classCode.toLowerCase().includes(searchText.toLowerCase())
+        value.faultCode.toLowerCase().includes(searchText.toLowerCase()) ||
+        value.faultDesc.toLowerCase().includes(searchText.toLowerCase())
       )
     })
     setGridData(filteredData)
@@ -106,7 +106,7 @@ const DownTypePage = () => {
           </Button> */}
         </Space>
       </div>
-      <Table columns={columns} dataSource={dataWithVehicleNum} bordered />
+      <Table columns={columns} dataSource={dataWithVehicleNum} bordered loading={loading} />
     </div>
     </KTCardBody>
     </KTCard>

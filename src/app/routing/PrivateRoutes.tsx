@@ -21,7 +21,7 @@ const PrivateRoutes = () => {
         <Route path='dashboard' element={<DashboardWrapper />} />
         <Route path='/*' element={<ProductionPage />} />
         <Route
-          path='app/production/components/report/activity*'
+          path='app/production/components/report/activity/*'
           element={
             <SuspensedView>
               <WeeklyReport />
@@ -29,7 +29,7 @@ const PrivateRoutes = () => {
           }
         />
         <Route
-          path='app/production/components/report/daily*'
+          path='app/production/components/report/daily/*'
           element={
             <SuspensedView>
               <DailyReport />
@@ -37,7 +37,7 @@ const PrivateRoutes = () => {
           }
         />
         <Route
-          path='app/production/components/report/downtime*'
+          path='app/production/components/report/downtime/*'
           element={
             <SuspensedView>
               <DownTimeReport />
@@ -45,14 +45,14 @@ const PrivateRoutes = () => {
           }
         />
         <Route
-          path='app/production/components/report/weekly*'
+          path='app/production/components/report/weekly/*'
           element={
             <SuspensedView>
               <WeeklyReport />
             </SuspensedView>
           }
         />
-
+      
         {/* Page Not Found */}
         <Route path='*' element={<Navigate to='/error/404' />} />
       </Route>
