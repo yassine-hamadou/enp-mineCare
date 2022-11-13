@@ -2,7 +2,7 @@
     "name": "enpMineCare",
     "version": "8.1.0",
     "private": true,
-    "homepage": "/mine-care/",
+    "homepage": ".",
     "dependencies": {
         "@ant-design/icons": "^4.7.0",
         "@devexpress/analytics-core": "^22.1.6",

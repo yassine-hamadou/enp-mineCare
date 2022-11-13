@@ -45,10 +45,11 @@ const Calendar = () => {
     const [dataFromAPI, setDataFromApi] = useState({});
     const [upToDateLocalData, setUpToDateLocalData] = useState({});
 
+
     // load fleet IDs
     const loadVmequps = async () => {
         try {
-            const VmequpsResponse = await axios.get("http://208.117.44.15/SmWebApi/api/VmequpsApi");
+            const VmequpsResponse = await axios.get("http://localhost:3001/VmequpsApi");
             setVmequps(VmequpsResponse.data);
         } catch (e) {
             console.log(e);
@@ -57,7 +58,7 @@ const Calendar = () => {
 
     const loadLocations = async () => {
         try {
-            const locationsResponse = await axios.get("http://208.117.44.15/SmWebApi/api/IclocsApi");
+            const locationsResponse = await axios.get("http://localhost:3001/IclocsApi");
             setLocations(locationsResponse.data);
         } catch (e) {
             console.log(e);
@@ -67,7 +68,7 @@ const Calendar = () => {
     //Loading schedule data
     const loadData = async () => {
         try {
-            const dataResponse = await axios.get("http://208.117.44.15/SmWebApi/api/FleetSchedulesApi");
+            const dataResponse = await axios.get("http://localhost:3001/FleetSchedulesApi");
             setDataFromApi([...dataResponse.data]);
         } catch (e) {
             console.log(e);
@@ -105,8 +106,8 @@ const Calendar = () => {
 
     function editorTemplate(props) {
         return ((props !== undefined) ?
-            <table className="custom-event-editor" style={{width: '100%'}} cellPadding={5}>
-                <tbody>
+                <table className="custom-event-editor" style={{width: '100%'}} cellPadding={5}>
+                    <tbody>
                     <tr>
                         <td className="e-textlabel">Fleet ID</td>
                         <td colSpan={4}>
@@ -162,10 +163,11 @@ const Calendar = () => {
                                                      className="e-field"></DateTimePickerComponent>
                         </td>
                     </tr>
-                </tbody>
-            </table> : <div></div>
+                    </tbody>
+                </table> : <div></div>
         );
     }
+
     const onActionBegin = (args) => {
         let data = args.data instanceof Array ? args.data[0] : args.data;
         if (args.requestType === 'eventCreate') {
@@ -189,7 +191,7 @@ const Calendar = () => {
 
             //Since format is an array, I need to change it to the format that the API will understand which is an object
             const dataToPost = formattedDataToPost[0];
-            axios.post("http://208.117.44.15/SmWebApi/api/FleetSchedulesApi", dataToPost)
+            axios.post("http://localhost:3001/FleetSchedulesApi", dataToPost)
                 .then(res => {
                     console.log("res", res);
                     console.log("res.data", res.data);
@@ -202,14 +204,14 @@ const Calendar = () => {
         }
         if (args.requestType === 'eventRemove') {
             args.cancel = true;
-            axios.delete("http://208.117.44.15/SmWebApi/api/FleetSchedulesApi/" + data.entryId)
+            axios.delete("http://localhost:3001/FleetSchedulesApi/" + data.entryId)
                 .then(res => {
                     loadData()
                     setUpToDateLocalData(localData(dataFromAPI.filter((schedule) => schedule.entryId !== data.entryId)));
                 })
                 .catch(err => {
-                        console.log(err);
-                    });
+                    console.log(err);
+                });
         }
         if (args.requestType === 'eventChange') {
             args.cancel = true;
@@ -227,7 +229,7 @@ const Calendar = () => {
             });
             console.log("formattedDataToPost", formattedDataToPost);
             const dataToPost = formattedDataToPost[0];
-            axios.put("http://208.117.44.15/SmWebApi/api/FleetSchedulesApi/" + data.entryId, dataToPost)
+            axios.put("http://localhost:3001/FleetSchedulesApi/" + data.entryId, dataToPost)
                 .then(res => {
                     console.log("res", res);
                     console.log("res.data", res.data);

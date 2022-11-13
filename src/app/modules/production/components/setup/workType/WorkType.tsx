@@ -31,33 +31,34 @@ const WorkTypePage = () => {
     //   sorter: (a: any, b: any) => a.key - b.key,
     // },
     {
-      title: 'Code',
-      dataIndex: 'faultCode',
-      defaultSortOrder: 'descend',
+      title: 'Manufacturer',
+      dataIndex: 'txmanf',
+      key:'txmanf',
       sorter: (a: any, b: any) => {
-        if (a.faultCode > b.faultCode) {
+        if (a.txmanf > b.txmanf) {
           return 1
         }
-        if (b.faultCode > a.faultCode) {
+        if (b.txmanf > a.txmanf) {
+          return -1
+        }
+        return 0
+      },
+    },
+    {
+      title: 'Model',
+      dataIndex: 'txmodel',
+      defaultSortOrder: 'descend',
+      sorter: (a: any, b: any) => {
+        if (a.txmodel > b.txmodel) {
+          return 1
+        }
+        if (b.txmodel > a.txmodel) {
           return -1
         }
         return 0
       },
     },
 
-    {
-      title: 'Name',
-      dataIndex: 'faultDesc',
-      sorter: (a: any, b: any) => {
-        if (a.faultDesc > b.faultDesc) {
-          return 1
-        }
-        if (b.faultDesc > a.faultDesc) {
-          return -1
-        }
-        return 0
-      },
-    },
     {
       title: 'Action',
 
@@ -82,7 +83,7 @@ const WorkTypePage = () => {
     setLoading(true)
     try {
 
-      const response = await axios.get('http://208.117.44.15/SmWebApi/api/FaultEntriesApi')
+      const response = await axios.get('https://cors-anywhere.herokuapp.com/http://208.117.44.15/SmWebApi/api/VmmodlsApi')
 
       setGridData(response.data)
       setLoading(false)
@@ -107,8 +108,8 @@ const WorkTypePage = () => {
     // @ts-ignore
     filteredData = dataWithVehicleNum.filter((value) => {
       return (
-          value.faultCode.toLowerCase().includes(searchText.toLowerCase()) ||
-          value.faultDesc.toLowerCase().includes(searchText.toLowerCase())
+          value.txmanf.toLowerCase().includes(searchText.toLowerCase()) ||
+          value.txmodel.toLowerCase().includes(searchText.toLowerCase())
       )
     })
     setGridData(filteredData)
