@@ -147,6 +147,19 @@ const Calendar = () => {
                         </td>
                     </tr>
                     <tr>
+                        <td className="e-textlabel">Service Type</td>
+                        <td colSpan={4}>
+                            <DropDownListComponent
+                                id="ServiceType"
+                                placeholder='Choose Service Type'
+                                data-name='serviceType'
+                                className="e-field"
+                                style={{width: '100%'}}
+                                dataSource={["Service 1", "Service 2", "Service 3"]}
+                            />
+                        </td>
+                    </tr>
+                    <tr>
                         <td className="e-textlabel">From</td>
                         <td colSpan={4}>
                             <DateTimePickerComponent id="StartTime" format='dd/MM/yy hh:mm a' data-name="timeStart"
@@ -182,7 +195,9 @@ const Calendar = () => {
                     locationId: schedule.locationId,
                     timeStart: schedule.StartTime,
                     timeEnd: schedule.EndTime,
-                    entryId: schedule.Id
+                    entryId: schedule.Id,
+                    vmModel: "null",
+                    vmClass: "null"
                 }
             });
             console.log("formattedDataToPost", formattedDataToPost);
@@ -222,7 +237,9 @@ const Calendar = () => {
                     locationId: schedule.locationId,
                     timeStart: schedule.StartTime,
                     timeEnd: schedule.EndTime,
-                    entryId: schedule.Id
+                    entryId: schedule.Id,
+                    vmModel: "null",
+                    vmClass: "null"
                 }
             });
             // console.log("formattedDataToPost", formattedDataToPost);

@@ -106,6 +106,22 @@
       "timeStart": "2022-11-11T19:00:00.000Z",
       "timeEnd": "2022-11-11T19:30:00.000Z",
       "entryId": "eb1a6698-7a6b-a81e-d908-7e8bc2389adf"
+    },
+    {
+      "fleetId": "AD066       ",
+      "locationId": "DRILL ",
+      "timeStart": "2022-11-09T00:00:00.000Z",
+      "timeEnd": "2022-11-10T00:00:00.000Z",
+      "entryId": "680e5b9a-da5b-acf3-fa4f-1889000891ca"
+    },
+    {
+      "fleetId": "AD065       ",
+      "locationId": "GOLD  ",
+      "timeStart": "2022-11-16T00:00:00.000Z",
+      "timeEnd": "2022-11-17T00:00:00.000Z",
+      "entryId": "6856d1b1-f748-b38a-fa95-a8957a0abc10",
+      "vmModel": "null",
+      "vmClass": "null"
     }
   ],
   "HourliesApi": [
