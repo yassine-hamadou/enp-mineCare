@@ -1,11 +1,8 @@
-import {Button, Input, Modal, Space, Table} from 'antd'
+import {Button, Input, Space, Table} from 'antd'
 import {useState, useEffect} from 'react'
 import axios from 'axios'
-import { KTCard, KTCardBody, KTSVG } from '../../../../../../_metronic/helpers'
-import { AddWorkTypeForm } from './AddWorkTypeForm'
-import { ColumnsType } from 'antd/lib/table'
 import { Link } from 'react-router-dom'
-
+import { KTCardBody, KTSVG } from '../../../../../../_metronic/helpers'
 
 
 const WorkTypePage = () => {
@@ -13,41 +10,30 @@ const WorkTypePage = () => {
   const [loading, setLoading] = useState(false)
   const [searchText, setSearchText] = useState('')
   let [filteredData] = useState([])
+  const [isModalOpen, setIsModalOpen] = useState(false)
 
+  const showModal = () => {
+    setIsModalOpen(true)
+  }
 
+  const handleOk = () => {
+    setIsModalOpen(false)
+  }
 
-    // Modal functions
-    const [isModalOpen, setIsModalOpen] = useState(false)
+  const handleCancel = () => {
+    setIsModalOpen(false)
+  }
+  // Modal functions end
 
-    const showModal = () => {
-      setIsModalOpen(true)
-    }
-  
-    const handleOk = () => {
-      setIsModalOpen(false)
-    }
-  
-    const handleCancel = () => {
-      setIsModalOpen(false)
-    }
-    // Modal functions end
-
-    const columns: any =[
-    // {
-    //   title: 'ID',
-    //   dataIndex: 'key',
-    //   defaultSortOrder: 'descend',
-    //   sorter: (a: any, b: any) => a.key - b.key,
-    // },
+  const columns: any = [
     {
-      title: 'Code',
-      dataIndex: 'faultCode',
-      defaultSortOrder: 'descend',
+      title: 'Name',
+      dataIndex: 'classCode',
       sorter: (a: any, b: any) => {
-        if (a.faultCode > b.faultCode) {
+        if (a.classCode > b.classCode) {
           return 1
         }
-        if (b.faultCode > a.faultCode) {
+        if (b.classCode > a.classCode) {
           return -1
         }
         return 0
@@ -55,18 +41,11 @@ const WorkTypePage = () => {
     },
     
     {
-      title: 'Name',
-      dataIndex: 'faultDesc',
-      sorter: (a: any, b: any) => {
-        if (a.faultDesc > b.faultDesc) {
-          return 1
-        }
-        if (b.faultDesc > a.faultDesc) {
-          return -1
-        }
-        return 0
-      },
+      title: 'Number of Vehicles',
+      dataIndex: 'vehicleNum',
+      sorter: (a: any, b: any) => a.vehicleNum - b.vehicleNum,
     },
+
     {
       title: 'Action',
       
@@ -87,17 +66,13 @@ const WorkTypePage = () => {
       ),
     },
     //console
-      
-    
-    
+
   ]
 
   const loadData = async () => {
-    setLoading(true)
+    // setLoading(true)
     try {
-
       const response = await axios.get('http://208.117.44.15/SmWebApi/api/VmclasApi')
-
       setGridData(response.data)
       setLoading(false)
     } catch (error) {
@@ -111,6 +86,9 @@ const WorkTypePage = () => {
 
   const dataWithVehicleNum = gridData.map((item: any, index) => ({
     ...item,
+    vehicleNum: Math.floor(Math.random() * 20) + 1,
+    downTime: `${Math.floor(Math.random() * 100) + 1}`,
+    numOfHrs: Math.floor(Math.random() * 20) + 1,
     key: index,
   }))
 
@@ -125,8 +103,8 @@ const WorkTypePage = () => {
     // @ts-ignore
     filteredData = dataWithVehicleNum.filter((value) => {
       return (
-        value.faultCode.toLowerCase().includes(searchText.toLowerCase()) ||
-        value.faultDesc.toLowerCase().includes(searchText.toLowerCase())
+        value.classDesc.toLowerCase().includes(searchText.toLowerCase()) ||
+        value.classCode.toLowerCase().includes(searchText.toLowerCase())
       )
     })
     setGridData(filteredData)
@@ -150,15 +128,7 @@ const WorkTypePage = () => {
             </Button>
           </Space>
           <Space style={{marginBottom: 16}}>
-            {/* <Button type='primary' className='mb-3' onClick={showModal}>
-              Add
-            </Button>
-            <Button type='primary' className='mb-3'>
-              Export
-            </Button>
-            <Button type='primary' className='mb-3'>
-              Upload
-            </Button> */}
+
             <button type='button' className='btn btn-primary me-3' onClick={showModal}>
               <KTSVG path='/media/icons/duotune/arrows/arr075.svg' className='svg-icon-2' />
               Add
@@ -174,10 +144,7 @@ const WorkTypePage = () => {
             </button>
           </Space>
         </div>
-        <Table columns={columns} dataSource={dataWithVehicleNum} loading={loading}/>
-          <Modal title='Add WorkType' open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
-        <AddWorkTypeForm />
-      </Modal>
+        <Table columns={columns} dataSource={dataWithVehicleNum}  />
       </div>
       </KTCardBody>
     </div>
