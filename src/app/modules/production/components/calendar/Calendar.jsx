@@ -225,7 +225,7 @@ const Calendar = () => {
                     entryId: schedule.Id
                 }
             });
-            console.log("formattedDataToPost", formattedDataToPost);
+            // console.log("formattedDataToPost", formattedDataToPost);
             const dataToPost = formattedDataToPost[0];
             axios.put("http://localhost:3001/FleetSchedulesApi/" + data.entryId, dataToPost)
                 .then(res => {
