@@ -4,6 +4,7 @@ import axios from "axios";
 import moment from "moment";
 import { useEffect, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
+import { KTSVG } from "../../../../../../_metronic/helpers";
 
 const FaultTable = () => {
   const [gridData, setGridData] = useState([]);
@@ -251,10 +252,8 @@ const FaultTable = () => {
   }
 
   return (
-    <div>
-      {/* <Button type='primary' onClick={showModal} className='mb-3'>
-        Add
-      </Button> */}
+    <div style={{backgroundColor:'white', padding:'20px', borderRadius:'5px', boxShadow:'2px 2px 15px rgba(0,0,0,0.08)'}}>
+     
       <div className='d-flex justify-content-between'>
         <Space style={{marginBottom: 16}}>
           <Input
@@ -269,13 +268,19 @@ const FaultTable = () => {
           </Button>
         </Space>
         <Space style={{marginBottom: 16}}>
-          <Button type='primary' onClick={showModal}>
-            Add
-          </Button>
-          <Button type='primary' className='mx-3'>
-            Export
-          </Button>
-          <Button type='primary'>Upload</Button>
+            <button type='button' className='btn btn-primary me-3' onClick={showModal}>
+              <KTSVG path='/media/icons/duotune/arrows/arr075.svg' className='svg-icon-2' />
+              Add
+            </button>
+            <button type='button' className='btn btn-light-primary me-3'>
+              <KTSVG path='/media/icons/duotune/arrows/arr078.svg' className='svg-icon-2' />
+              Upload
+            </button>
+            <button type='button' className='btn btn-light-primary me-3'>
+              <KTSVG path='/media/icons/duotune/arrows/arr078.svg' className='svg-icon-2' />
+              
+              Export
+            </button>
         </Space>
       </div>
       <Table columns={columns} dataSource={gridData} bordered loading={loading} />

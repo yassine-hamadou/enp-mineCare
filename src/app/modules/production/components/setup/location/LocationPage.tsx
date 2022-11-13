@@ -3,7 +3,7 @@ import {useState, useEffect} from 'react'
 import axios from 'axios'
 import { Pagination } from 'antd'
 import type { PaginationProps } from 'antd'
-import { KTCard, KTCardBody } from '../../../../../../_metronic/helpers'
+import { KTCard, KTCardBody, KTSVG } from '../../../../../../_metronic/helpers'
 
 const LocationPage = () => {
   const [gridData, setGridData] = useState([])
@@ -85,18 +85,8 @@ const LocationPage = () => {
     setGridData(filteredData)
   }
 
-  const itemRender: PaginationProps['itemRender'] = (_, type, originalElement) => {
-    if (type === 'prev') {
-      return <a>Previous</a>;
-    }
-    if (type === 'next') {
-      return <a>Next</a>;
-    }
-    return originalElement;
-  };
-
   return (
-    <KTCard>
+    <div style={{backgroundColor:'white', padding:'20px', borderRadius:'5px', boxShadow:'2px 2px 15px rgba(0,0,0,0.08)'}}>
     <KTCardBody className='py-4 '>
       <div className='table-responsive'>
       <div className='d-flex justify-content-between'>
@@ -113,12 +103,10 @@ const LocationPage = () => {
           </Button>
         </Space>
         <Space style={{marginBottom: 16}}>
-          <Button type='primary' className='mb-3'>
+          <button type='button' className='btn btn-primary me-3'>
+            <KTSVG path='/media/icons/duotune/arrows/arr078.svg' className='svg-icon-2' />
             Export
-          </Button>
-          {/* <Button type='primary' className='mb-3'>
-            Upload
-          </Button> */}
+          </button>
         </Space>
       </div>
       <Table columns={columns} dataSource={dataWithVehicleNum} bordered loading={loading}/>
@@ -128,7 +116,7 @@ const LocationPage = () => {
 
     </div>
     </KTCardBody>
-    </KTCard>
+    </div>
   )
 }
 

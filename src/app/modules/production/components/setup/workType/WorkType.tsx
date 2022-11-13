@@ -1,9 +1,10 @@
 import {Button, Input, Modal, Space, Table} from 'antd'
 import {useState, useEffect} from 'react'
 import axios from 'axios'
-import { KTCard, KTCardBody } from '../../../../../../_metronic/helpers'
+import { KTCard, KTCardBody, KTSVG } from '../../../../../../_metronic/helpers'
 import { AddWorkTypeForm } from './AddWorkTypeForm'
 import { ColumnsType } from 'antd/lib/table'
+import { Link } from 'react-router-dom'
 
 
 
@@ -75,7 +76,11 @@ const WorkTypePage = () => {
       width: 100,
       render: (_: any, record: any ) => (
         <Space size="middle">
-          <a href="service" className="btn btn-light-info btn-sm">Services</a>
+          {/* <a href="service" className="btn btn-light-info btn-sm">Services</a> */}
+          <Link to={'/setup/service'}>
+          <span className="btn btn-light-info btn-sm">
+            Service
+            </span></Link>
           <a href="#" className="btn btn-light-warning btn-sm ">Update</a>
           <a href="#" className="btn btn-light-danger btn-sm">Delete</a>
         </Space>
@@ -128,7 +133,7 @@ const WorkTypePage = () => {
   }
 
   return (
-    <KTCard>
+    <div style={{backgroundColor:'white', padding:'20px', borderRadius:'5px', boxShadow:'2px 2px 15px rgba(0,0,0,0.08)'}}>
       <KTCardBody className='py-4 '>
         <div className='table-responsive'>
         <div className='d-flex justify-content-between'>
@@ -145,7 +150,7 @@ const WorkTypePage = () => {
             </Button>
           </Space>
           <Space style={{marginBottom: 16}}>
-            <Button type='primary' className='mb-3' onClick={showModal}>
+            {/* <Button type='primary' className='mb-3' onClick={showModal}>
               Add
             </Button>
             <Button type='primary' className='mb-3'>
@@ -153,7 +158,20 @@ const WorkTypePage = () => {
             </Button>
             <Button type='primary' className='mb-3'>
               Upload
-            </Button>
+            </Button> */}
+            <button type='button' className='btn btn-primary me-3' onClick={showModal}>
+              <KTSVG path='/media/icons/duotune/arrows/arr075.svg' className='svg-icon-2' />
+              Add
+            </button>
+            <button type='button' className='btn btn-light-primary me-3'>
+              <KTSVG path='/media/icons/duotune/arrows/arr078.svg' className='svg-icon-2' />
+              Upload
+            </button>
+            <button type='button' className='btn btn-light-primary me-3'>
+              <KTSVG path='/media/icons/duotune/arrows/arr078.svg' className='svg-icon-2' />
+              
+              Export
+            </button>
           </Space>
         </div>
         <Table columns={columns} dataSource={dataWithVehicleNum} loading={loading}/>
@@ -162,7 +180,7 @@ const WorkTypePage = () => {
       </Modal>
       </div>
       </KTCardBody>
-    </KTCard>
+    </div>
   )
 }
 

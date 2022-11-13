@@ -63,9 +63,7 @@ const AddServiceForm = () => {
       {/* <Form.Item label='Previous Reading'>
         <Input disabled={true} contentEditable={false}/>
       </Form.Item> */}
-       <Form.Item label='Code'>
-        <Input/>
-      </Form.Item>
+       
        <Form.Item label='Name'>
         <Input/>
       </Form.Item>

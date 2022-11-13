@@ -1,10 +1,12 @@
 import {Button, Input, Modal, Space, Table} from 'antd'
 import {useState, useEffect} from 'react'
 import axios from 'axios'
-import { KTCard, KTCardBody } from '../../../../../../_metronic/helpers'
+import { KTCard, KTCardBody, KTSVG } from '../../../../../../_metronic/helpers'
 
 import { ColumnsType } from 'antd/lib/table'
 import { AddGroupsForm } from './AddGroupForm'
+import { Link } from 'react-router-dom'
+import { SectionsPage } from '../sections/Sections'
 
 
 
@@ -31,7 +33,41 @@ const GroupsPage = () => {
       setIsModalOpen(false)
     }
     // Modal functions end
-
+    const dataSource: any = [
+      {
+        section: "Section 1",
+        group: "Engine"
+      },
+      {
+        section: "Section 2",
+        group: "Transmission"
+      },
+      {
+        section: "Section 2",
+        group: "Hydraulic"
+      },
+      {
+        section: "Section 2",
+        group: "Axles"
+      },
+      {
+        section: "Section 3",
+        group: "Body"
+      },
+      {
+        section: "Section 3",
+        group: "Frame"
+      },
+      {
+        section: "PM-A",
+        group: "Cap"
+      },
+      {
+        section: "PM-A",
+        group: "Operation"
+      },
+    
+    ]
     const columns: any =[
     // {
     //   title: 'ID',
@@ -40,14 +76,14 @@ const GroupsPage = () => {
     //   sorter: (a: any, b: any) => a.key - b.key,
     // },
     {
-      title: 'Code',
-      dataIndex: 'faultCode',
-      defaultSortOrder: 'descend',
+      title: 'Section',
+      dataIndex: 'section',
+      // defaultSortOrder: 'descend',
       sorter: (a: any, b: any) => {
-        if (a.faultCode > b.faultCode) {
+        if (a.section > b.section) {
           return 1
         }
-        if (b.faultCode > a.faultCode) {
+        if (b.section > a.section) {
           return -1
         }
         return 0
@@ -55,13 +91,13 @@ const GroupsPage = () => {
     },
     
     {
-      title: 'Name',
-      dataIndex: 'faultDesc',
+      title: 'Group',
+      dataIndex: 'group',
       sorter: (a: any, b: any) => {
-        if (a.faultDesc > b.faultDesc) {
+        if (a.group > b.group) {
           return 1
         }
-        if (b.faultDesc > a.faultDesc) {
+        if (b.group > a.group) {
           return -1
         }
         return 0
@@ -76,7 +112,12 @@ const GroupsPage = () => {
       width: 100,
       render: (_: any, record: any ) => (
         <Space size="middle">
-          <a href="items" className="btn btn-light-info btn-sm">Items</a>
+          {/* <a href="items" className="btn btn-light-info btn-sm">Items</a>
+           */}
+           <Link to={'/setup/items'}>
+          <span className="btn btn-light-info btn-sm">
+          Items
+            </span></Link>
           <a href="#" className="btn btn-light-warning btn-sm">Update</a>
           <a href="#" className="btn btn-light-danger btn-sm">Delete</a>
           {/* <a>Edit </a> */}
@@ -92,8 +133,9 @@ const GroupsPage = () => {
   const loadData = async () => {
     setLoading(true)
     try {
-      const response = await axios.get('https://cors-anywhere.herokuapp.com/http://208.117.44.15/SmWebApi/api/VmfaltsApi')
-      setGridData(response.data)
+      // const response = await axios.get('https://cors-anywhere.herokuapp.com/http://208.117.44.15/SmWebApi/api/VmfaltsApi')
+      // setGridData(response.data)
+      setGridData(dataSource)
       setLoading(false)
     } catch (error) {
       console.log(error)
@@ -121,19 +163,21 @@ const GroupsPage = () => {
     filteredData = dataWithVehicleNum.filter((value) => {
       return (
         value.faultCode.toLowerCase().includes(searchText.toLowerCase()) ||
-        value.faultDesc.toLowerCase().includes(searchText.toLowerCase())
+        value.group.toLowerCase().includes(searchText.toLowerCase())
       )
     })
     setGridData(filteredData)
   }
 
   return (
-    <KTCard>
+    <div style={{backgroundColor:'white', padding:'20px', borderRadius:'5px', boxShadow:'2px 2px 15px rgba(0,0,0,0.08)'}}>
       <KTCardBody className='py-4 '>
         <div className='table-responsive'>
-        <a href='service'  className='mb-3 btn btn-outline btn-outline-dashed btn-outline-primary btn-active-light-primary'>
-             Back to Services
-            </a>
+            <Link to={'/setup/sections'}>
+          <span  className='mb-3 btn btn-outline btn-outline-dashed btn-outline-primary btn-active-light-primary'>
+              Back to Sections
+            </span></Link>
+       
         <div className='d-flex justify-content-between'>
           <Space style={{marginBottom: 16}}>
             <Input
@@ -148,15 +192,18 @@ const GroupsPage = () => {
             </Button>
           </Space>
           <Space style={{marginBottom: 16}}>
-            <Button type='primary' className='mb-3' onClick={showModal}>
+            <button type='button' className='btn btn-primary me-3' onClick={showModal}>
+              <KTSVG path='/media/icons/duotune/arrows/arr075.svg' className='svg-icon-2' />
               Add
-            </Button>
-            <Button type='primary' className='mb-3'>
-              Export
-            </Button>
-            <Button type='primary' className='mb-3'>
+            </button>
+            <button type='button' className='btn btn-light-primary me-3'>
+              <KTSVG path='/media/icons/duotune/arrows/arr078.svg' className='svg-icon-2' />
               Upload
-            </Button>
+            </button>
+            <button type='button' className='btn btn-light-primary me-3'>
+              <KTSVG path='/media/icons/duotune/arrows/arr078.svg' className='svg-icon-2' />
+              Export
+            </button>
           </Space>
         </div>
         <Table columns={columns} dataSource={dataWithVehicleNum} loading={loading}/>
@@ -165,7 +212,7 @@ const GroupsPage = () => {
       </Modal>
       </div>
       </KTCardBody>
-    </KTCard>
+    </div>
   )
 }
 

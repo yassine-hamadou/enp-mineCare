@@ -1,9 +1,10 @@
 import {Button, Input, Modal, Space, Table} from 'antd'
 import {useState, useEffect} from 'react'
 import axios from 'axios'
-import { KTCard, KTCardBody } from '../../../../../../_metronic/helpers'
+import { KTCard, KTCardBody, KTSVG } from '../../../../../../_metronic/helpers'
 import { ColumnsType } from 'antd/lib/table'
 import { AddItemForm } from './AddItemForm'
+import { Link } from 'react-router-dom'
 
 
 
@@ -38,29 +39,29 @@ const ItemsPage = () => {
     //   defaultSortOrder: 'descend',
     //   sorter: (a: any, b: any) => a.key - b.key,
     // },
-    {
-      title: 'Code',
-      dataIndex: 'faultCode',
-      defaultSortOrder: 'descend',
-      sorter: (a: any, b: any) => {
-        if (a.faultCode > b.faultCode) {
-          return 1
-        }
-        if (b.faultCode > a.faultCode) {
-          return -1
-        }
-        return 0
-      },
-    },
+    // {
+    //   title: 'Code',
+    //   dataIndex: 'faultCode',
+    //   defaultSortOrder: 'descend',
+    //   sorter: (a: any, b: any) => {
+    //     if (a.faultCode > b.faultCode) {
+    //       return 1
+    //     }
+    //     if (b.faultCode > a.faultCode) {
+    //       return -1
+    //     }
+    //     return 0
+    //   },
+    // },
     
     {
-      title: 'Name',
-      dataIndex: 'faultDesc',
+      title: 'Group Items',
+      dataIndex: 'itemName',
       sorter: (a: any, b: any) => {
-        if (a.faultDesc > b.faultDesc) {
+        if (a.itemName > b.itemName) {
           return 1
         }
-        if (b.faultDesc > a.faultDesc) {
+        if (b.itemName > a.itemName) {
           return -1
         }
         return 0
@@ -83,12 +84,117 @@ const ItemsPage = () => {
     },
     //console
   ]
+  const dataSource: any = [
+    
+    {
+      service: "PM-A",
+      itemName: "Cut Open Filter (Show to Supervisor) "
+    },
+    {
+      service: "PM-A",
+      itemName: "Clean Primary Fuel filter "
+    },
+    {
+      service: "PM-A",
+      itemName: "Check condition of battery cables "
+    },
+    {
+      service: "PM-A",
+      itemName: "Check condition of engine mounts "
+    },
+    {
+      service: "PM-A",
+      itemName: "Check cooling fan for cracks or damage"
+    },
+    {
+      service: "PM-A",
+      itemName: "Check Cooling system clamps & hoses "
+    },
+    {
+      service: "PM-A",
+      itemName: "Check pulleys for excess bearing noise  "
+    },
+    {
+      service: "PM-A",
+      itemName: "Clean Engine crankcase breather "
+    },
+    {
+      service: "PM-A",
+      itemName: "Condition & tension of all drive belts "
+    },
+    {
+      service: "PM-A",
+      itemName: "Check for cracks on fan belts & tighten Bolts "
+    },
+    {
+      service: "PM-A",
+      itemName: "Drain fuel tank water trap "
+    },
+    {
+      service: "PM-A",
+      itemName: "Inspect radiator core. (Clean if needed) "
+    },
+    {
+      service: "PM-A",
+      itemName: "Jump start receptacle cables if fitted "
+    },
+    {
+      service: "PM-A",
+      itemName: "Lubricate Fan hub & jockey pulley "
+    },
+    {
+      service: "PM-A",
+      itemName: "Test Air con system "
+    },
+    {
+      service: "PM-A",
+      itemName: "Test Charging system "
+    },
+    {
+      service: "PM-A",
+      itemName: "Replace Secondary fuel filter "
+    },
+    {
+      service: "PM-A",
+      itemName: "Replace Primary Fuel filter"
+    },
+    {
+      service: "PM-A",
+      itemName: "Replace Fuel Filter (ORS)"
+    },
+    {
+      service: "PM-A",
+      itemName: "Replace Engine oil filter"
+    },
+    {
+      service: "PM-A",
+      itemName: "Remove & clean starter silenser "
+    },
+    {
+      service: "PM-A",
+      itemName: "Inspect pulleys for cracks & dirt build-up  "
+    },
+    {
+      service: "PM-A",
+      itemName: "Inspect Fuel lines for leaks & damage "
+    },
+    {
+      service: "PM-A",
+      itemName: "Inspect Exhaust manifolds & lines for leaks "
+    },
+    {
+      service: "PM-A",
+      itemName: "Inspect Air induction system clamps & hoses "
+    },
+    
+  ]
 
   const loadData = async () => {
     setLoading(true)
     try {
-      const response = await axios.get('https://cors-anywhere.herokuapp.com/http://208.117.44.15/SmWebApi/api/VmfaltsApi')
-      setGridData(response.data)
+      // const response = await axios.get('https://cors-anywhere.herokuapp.com/http://208.117.44.15/SmWebApi/api/VmfaltsApi')
+      // setGridData(response.data)
+      setGridData(dataSource)
       setLoading(false)
     } catch (error) {
       console.log(error)
@@ -116,7 +222,7 @@ const ItemsPage = () => {
     filteredData = dataWithVehicleNum.filter((value) => {
       return (
         value.faultCode.toLowerCase().includes(searchText.toLowerCase()) ||
-        value.faultDesc.toLowerCase().includes(searchText.toLowerCase())
+        value.itemName.toLowerCase().includes(searchText.toLowerCase())
       )
     })
     setGridData(filteredData)
@@ -126,9 +232,10 @@ const ItemsPage = () => {
     <KTCard>
       <KTCardBody className='py-4 '>
         <div className='table-responsive'>
-        <a href='groups'  className='mb-3 btn btn-outline btn-outline-dashed btn-outline-primary btn-active-light-primary'>
-             Back to Groups
-            </a>
+            <Link to={'/setup/groups'}>
+          <span  className='mb-3 btn btn-outline btn-outline-dashed btn-outline-primary btn-active-light-primary'>
+          Back to Groups
+            </span></Link>
         <div className='d-flex justify-content-between'>
           <Space style={{marginBottom: 16}}>
             <Input
@@ -143,15 +250,20 @@ const ItemsPage = () => {
             </Button>
           </Space>
           <Space style={{marginBottom: 16}}>
-            <Button type='primary' className='mb-3' onClick={showModal}>
+            
+            <button type='button' className='btn btn-primary me-3' onClick={showModal}>
+              <KTSVG path='/media/icons/duotune/arrows/arr075.svg' className='svg-icon-2' />
               Add
-            </Button>
-            <Button type='primary' className='mb-3'>
-              Export
-            </Button>
-            <Button type='primary' className='mb-3'>
+            </button>
+            <button type='button' className='btn btn-light-primary me-3'>
+              <KTSVG path='/media/icons/duotune/arrows/arr078.svg' className='svg-icon-2' />
               Upload
-            </Button>
+            </button>
+            <button type='button' className='btn btn-light-primary me-3'>
+              <KTSVG path='/media/icons/duotune/arrows/arr078.svg' className='svg-icon-2' />
+              
+              Export
+            </button>
           </Space>
         </div>
         <Table columns={columns} dataSource={dataWithVehicleNum} loading={loading}/>

@@ -2,11 +2,13 @@ import {Button, Popconfirm, Table, Modal, Space, Input} from 'antd'
 import 'antd/dist/antd.min.css'
 import axios from 'axios'
 import {useEffect, useState} from 'react'
+import { KTSVG } from '../../../../../../_metronic/helpers'
 
 const ResolutionTable = () => {
   const [gridData, setGridData] = useState([])
   const [loading, setLoading] = useState(false)
-
+  const [searchText, setSearchText] = useState('')
+  let [filteredData] = useState([])
   const loadData = async () => {
     setLoading(true)
     try {
@@ -82,28 +84,46 @@ const ResolutionTable = () => {
       dataIndex: 'duration',
     },
   ]
+  const handleInputChange = (e: any) => {
+    setSearchText(e.target.value)
+    if (e.target.value === '') {
+      loadData()
+    }
+  }
+
+  const globalSearch = () => {
+    // @ts-ignore
+    filteredData = dataWithVehicleNum.filter((value) => {
+      return (
+        value.faultCode.toLowerCase().includes(searchText.toLowerCase()) ||
+        value.faultDesc.toLowerCase().includes(searchText.toLowerCase())
+      )
+    })
+    setGridData(filteredData)
+  }
 
   return (
-    <div>
+    <div style={{backgroundColor:'white', padding:'20px', borderRadius:'5px', boxShadow:'2px 2px 15px rgba(0,0,0,0.08)'}}>
       <div className='d-flex justify-content-between'>
         <Space style={{marginBottom: 16}}>
           <Input
             placeholder='Enter Search Text'
-            // onChange={handleInputChange}
+            onChange={handleInputChange}
             type='text'
             allowClear
-            // value={searchText}
+            value={searchText}
           />
           <Button type='primary'>
             Search
           </Button>
         </Space>
         <Space style={{marginBottom: 16}}>
+            <button type='button' className='btn btn-primary me-3'>
+              <KTSVG path='/media/icons/duotune/arrows/arr078.svg' className='svg-icon-2' />
+              
+              Export
+            </button>
           
-          <Button type='primary' className='mx-3'>
-            Export
-          </Button>
-          {/* <Button type='primary'>Upload</Button> */}
         </Space>
       </div>
       <Table columns={columns} dataSource={gridData} bordered loading={loading} />

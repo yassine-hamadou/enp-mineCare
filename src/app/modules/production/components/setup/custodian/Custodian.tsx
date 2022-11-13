@@ -1,7 +1,7 @@
 import {Button, Input, Space, Table} from 'antd'
 import {useState, useEffect} from 'react'
 import axios from 'axios'
-import { KTCard, KTCardBody } from '../../../../../../_metronic/helpers'
+import { KTCard, KTCardBody, KTSVG } from '../../../../../../_metronic/helpers'
 
 const CustodianPage = () => {
   const [gridData, setGridData] = useState([])
@@ -81,7 +81,7 @@ const CustodianPage = () => {
   }
 
   return (
-    <KTCard>
+    <div style={{backgroundColor:'white', padding:'20px', borderRadius:'5px', boxShadow:'2px 2px 15px rgba(0,0,0,0.08)'}}>
         <KTCardBody className='py-4 '>
             <div className='table-responsive'>
                 <div className='d-flex justify-content-between'>
@@ -98,18 +98,16 @@ const CustodianPage = () => {
                     </Button>
                     </Space>
                     <Space style={{marginBottom: 16}}>
-                    <Button type='primary' className='mb-3'>
+                      <button type='button' className='btn btn-primary me-3'>
+                        <KTSVG path='/media/icons/duotune/arrows/arr078.svg' className='svg-icon-2' />
                         Export
-                    </Button>
-                    {/* <Button type='primary' className='mb-3'>
-                        Upload
-                    </Button> */}
+                      </button>
                     </Space>
                 </div>
             <Table columns={columns} dataSource={dataWithVehicleNum} bordered loading={loading}/>
             </div>
         </KTCardBody>
-    </KTCard>
+    </div>
   )
 }
 
