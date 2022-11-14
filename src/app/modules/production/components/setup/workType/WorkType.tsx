@@ -75,7 +75,7 @@ const WorkTypePage = () => {
     setLoading(true)
     try {
 
-      const response = await axios.get('https://cors-anywhere.herokuapp.com/http://208.117.44.15/SmWebApi/api/VmmodlsApi')
+      const response = await axios.get('http://208.117.44.15/SmWebApi/api/VmmodlsApi')
 
       setGridData(response.data)
       setLoading(false)

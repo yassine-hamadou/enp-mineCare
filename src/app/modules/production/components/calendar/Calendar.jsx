@@ -49,7 +49,7 @@ const Calendar = () => {
     // load fleet IDs
     const loadVmequps = async () => {
         try {
-            const VmequpsResponse = await axios.get("http://localhost:3001/VmequpsApi");
+            const VmequpsResponse = await axios.get("http://208.117.44.15/SmWebApi/api/VmequpsApi");
             setVmequps(VmequpsResponse.data);
         } catch (e) {
             console.log(e);
@@ -58,7 +58,7 @@ const Calendar = () => {
 
     const loadLocations = async () => {
         try {
-            const locationsResponse = await axios.get("http://localhost:3001/IclocsApi");
+            const locationsResponse = await axios.get("http://208.117.44.15/SmWebApi/api/IclocsApi");
             setLocations(locationsResponse.data);
         } catch (e) {
             console.log(e);
@@ -68,7 +68,7 @@ const Calendar = () => {
     //Loading schedule data
     const loadData = async () => {
         try {
-            const dataResponse = await axios.get("http://localhost:3001/FleetSchedulesApi");
+            const dataResponse = await axios.get("http://208.117.44.15/SmWebApi/api/FleetSchedulesApi");
             setDataFromApi([...dataResponse.data]);
         } catch (e) {
             console.log(e);
@@ -206,7 +206,7 @@ const Calendar = () => {
 
             //Since format is an array, I need to change it to the format that the API will understand which is an object
             const dataToPost = formattedDataToPost[0];
-            axios.post("http://localhost:3001/FleetSchedulesApi", dataToPost)
+            axios.post("http://208.117.44.15/SmWebApi/api/FleetSchedulesApi", dataToPost)
                 .then(res => {
                     console.log("res", res);
                     console.log("res.data", res.data);
@@ -219,7 +219,7 @@ const Calendar = () => {
         }
         if (args.requestType === 'eventRemove') {
             args.cancel = true;
-            axios.delete("http://localhost:3001/FleetSchedulesApi/" + data.entryId)
+            axios.delete("http://208.117.44.15/SmWebApi/api/FleetSchedulesApi/" + data.entryId)
                 .then(res => {
                     loadData()
                     setUpToDateLocalData(localData(dataFromAPI.filter((schedule) => schedule.entryId !== data.entryId)));
@@ -246,7 +246,7 @@ const Calendar = () => {
             });
             // console.log("formattedDataToPost", formattedDataToPost);
             const dataToPost = formattedDataToPost[0];
-            axios.put("http://localhost:3001/FleetSchedulesApi/" + data.entryId, dataToPost)
+            axios.put("http://208.117.44.15/SmWebApi/api/FleetSchedulesApi/" + data.entryId, dataToPost)
                 .then(res => {
                     console.log("res", res);
                     console.log("res.data", res.data);

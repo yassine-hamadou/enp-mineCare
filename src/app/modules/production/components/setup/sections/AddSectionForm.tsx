@@ -17,7 +17,7 @@ const AddSectionForm = () => {
   const loadData = async () => {
     setLoading(true)
     try {
-      const response = await axios.get('https://cors-anywhere.herokuapp.com/https://app.sipconsult.net/SmWebApi/api/VmequpsApi')
+      const response = await axios.get('https://app.sipconsult.net/SmWebApi/api/VmequpsApi')
       setDataSource(response.data)
       setLoading(false)
     } catch (error: any) {

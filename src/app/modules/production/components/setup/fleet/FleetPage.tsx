@@ -47,8 +47,8 @@ const FleetPage = () => {
   const loadData = async () => {
     setLoading(true)
     try {
-      // const response = await axios.get('https://cors-anywhere.herokuapp.com/https://app.sipconsult.net/SmWebApi/api/VmequpsApi')
-      const response = await axios.get('https://cors-anywhere.herokuapp.com/http://208.117.44.15/SmWebApi/api/VmequpsApi')
+      // const response = await axios.get('https://app.sipconsult.net/SmWebApi/api/VmequpsApi')
+      const response = await axios.get('http://208.117.44.15/SmWebApi/api/VmequpsApi')
       setGridData(response.data)
       setLoading(false)
     } catch (error) {

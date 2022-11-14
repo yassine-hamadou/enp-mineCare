@@ -37,7 +37,7 @@ const DownTypePage = () => {
     setLoading(true)
     try {
 
-      const response = await axios.get('https://cors-anywhere.herokuapp.com/http://208.117.44.15/SmWebApi/api/VmclasApi')
+      const response = await axios.get('http://208.117.44.15/SmWebApi/api/VmclasApi')
 
       setGridData(response.data)
       setLoading(false)
