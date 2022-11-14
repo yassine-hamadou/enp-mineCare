@@ -45,6 +45,7 @@ const Calendar = () => {
     const [dataFromAPI, setDataFromApi] = useState({});
     const [upToDateLocalData, setUpToDateLocalData] = useState({});
 
+
     // load fleet IDs
     const loadVmequps = async () => {
         try {
@@ -105,8 +106,8 @@ const Calendar = () => {
 
     function editorTemplate(props) {
         return ((props !== undefined) ?
-            <table className="custom-event-editor" style={{width: '100%'}} cellPadding={5}>
-                <tbody>
+                <table className="custom-event-editor" style={{width: '100%'}} cellPadding={5}>
+                    <tbody>
                     <tr>
                         <td className="e-textlabel">Fleet ID</td>
                         <td colSpan={4}>
@@ -175,10 +176,11 @@ const Calendar = () => {
                                                      className="e-field"></DateTimePickerComponent>
                         </td>
                     </tr>
-                </tbody>
-            </table> : <div></div>
+                    </tbody>
+                </table> : <div></div>
         );
     }
+
     const onActionBegin = (args) => {
         let data = args.data instanceof Array ? args.data[0] : args.data;
         if (args.requestType === 'eventCreate') {
@@ -223,8 +225,8 @@ const Calendar = () => {
                     setUpToDateLocalData(localData(dataFromAPI.filter((schedule) => schedule.entryId !== data.entryId)));
                 })
                 .catch(err => {
-                        console.log(err);
-                    });
+                    console.log(err);
+                });
         }
         if (args.requestType === 'eventChange') {
             args.cancel = true;

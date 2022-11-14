@@ -29,7 +29,8 @@ const HoursTable = () => {
 
   const loadData = async () => {
     setLoading(true)
-    const response = await axios.get('https://cors-anywhere.herokuapp.com/https://app.sipconsult.net/SmWebApi/api/VmequpsApi')
+    // const response = await axios.get('https://cors-anywhere.herokuapp.com/https://app.sipconsult.net/SmWebApi/api/VmequpsApi')
+    const response = await axios.get('https://cors-anywhere.herokuapp.com/http://208.117.44.15/SmWebApi/api/HourliesApi')
     // console.log('api Response', response.data)
     setGridData(response.data)
     setLoading(false)
@@ -51,7 +52,7 @@ const HoursTable = () => {
     // @ts-ignore
     filteredData = dataWithVehicleNum.filter((value) => {
       return (
-        value.classDesc.toLowerCase().includes(searchText.toLowerCase()) ||
+        value.entryId.toLowerCase().includes(searchText.toLowerCase()) ||
         value.classCode.toLowerCase().includes(searchText.toLowerCase())
       )
     })
@@ -61,24 +62,41 @@ const HoursTable = () => {
   const columns = [
     {
       title: 'FleetId',
-      dataIndex: 'fleetID',
-      key: 'fleetID',
+      dataIndex: 'fleetId',
+      key: 'fleetId',
     },
     {
       title: 'Previous Reading',
+      dataIndex: 'previousReading',
+
     },
     {
-      title: 'Date',
+      title: 'Reading',
+      dataIndex: 'reading',
+
     },
     {
-      title: 'Daily Hours Worked',
+      title: 'Daily HoursWorked',
+      dataIndex: 'dailyHoursWorked',
+
     },
     {
-      title: 'New Reading',
+      title: 'Reading Date',
+      dataIndex: 'readingDate',
+
     },
-    {
-      title: 'Comment',
-    },
+    // {
+    //   title: 'Date',
+    // },
+    // {
+    //   title: 'Daily Hours Worked',
+    // },
+    // {
+    //   title: 'New Reading',
+    // },
+    // {
+    //   title: 'Comment',
+    // },
     {
       title: 'Action',
       dataIndex: 'action',
@@ -94,6 +112,10 @@ const HoursTable = () => {
         ) : null,
     },
   ]
+  useEffect(() => {
+    loadData()
+
+  }, [])
 
   return (
     <div style={{backgroundColor:'white', padding:'20px', borderRadius:'5px', boxShadow:'2px 2px 15px rgba(0,0,0,0.08)'}}>

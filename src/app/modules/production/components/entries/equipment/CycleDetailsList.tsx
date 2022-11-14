@@ -10,7 +10,7 @@ const EquipmentDetail = () => {
 
   const loadData = async () => {
     setLoading(true)
-    const response = await axios.get('http://localhost:3001/VmclasApi')
+    const response = await axios.get('https://cors-anywhere.herokuapp.com/http://208.117.44.15/SmWebApi/api/VmclasApi')
     setVehicle(response.data)
     setLoading(false)
   }
