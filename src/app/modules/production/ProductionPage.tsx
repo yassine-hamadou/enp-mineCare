@@ -23,6 +23,8 @@ import { FleetPage } from './components/setup/fleet/FleetPage'
 import { ServicesPage } from './components/setup/service/ServicePage'
 import { GroupsPage } from './components/setup/groups/GroupsPage'
 import { ItemsPage } from './components/setup/items/ItemPage'
+import { SectionsPage } from './components/setup/sections/Sections'
+import { CheckListForm } from './components/checkListForm/CheckListForm'
 const accountBreadCrumbs: Array<PageLink> = []
 
 const ProductionPage: React.FC = () => {
@@ -144,16 +146,7 @@ const ProductionPage: React.FC = () => {
             </>
           }
         />
-        <Route
-          path='service'
-          element={
-            <>
-              <PageTitle breadcrumbs={accountBreadCrumbs}>Services</PageTitle>
-              {/*<Overview />*/}
-              <ServicesPage />
-            </>
-          }
-        />
+       
         <Route index element={<Navigate to='/dashboard' />} />
       </Route>
       <Route
@@ -196,6 +189,29 @@ const ProductionPage: React.FC = () => {
         <Route index element={<Navigate to='/dashboard' />} />
       </Route>
       <Route
+        path='/checkListForm/*'
+        element={
+          <>
+            {/*<ProductionHeader />*/}
+            <Outlet />
+          </>
+        }
+      >
+       
+        <Route
+          path='checkList'
+          element={
+            <>
+              <PageTitle breadcrumbs={accountBreadCrumbs}>Check List</PageTitle>
+              <CheckListForm />
+            </>
+          }
+        />
+        
+       
+        <Route index element={<Navigate to='/dashboard' />} />
+      </Route>
+      <Route
         path='setup/*'
         element={
           <>
@@ -211,6 +227,15 @@ const ProductionPage: React.FC = () => {
             <>
               <PageTitle breadcrumbs={accountBreadCrumbs}>Services </PageTitle>
               <ServicesPage />
+            </>
+          }
+        />
+        <Route
+          path='sections'
+          element={
+            <>
+              <PageTitle breadcrumbs={accountBreadCrumbs}>Sections </PageTitle>
+              <SectionsPage />
             </>
           }
         />

@@ -2,8 +2,9 @@ import {Button, Form, Input, Modal, Popconfirm, Select, Space, Table} from "antd
 import "antd/dist/antd.min.css";
 import axios from "axios";
 import moment from "moment";
-import {useEffect, useState} from "react";
-import {v4 as uuidv4} from "uuid";
+import { useEffect, useState } from "react";
+import { v4 as uuidv4 } from "uuid";
+import { KTSVG } from "../../../../../../_metronic/helpers";
 
 const FaultTable = () => {
     const [gridData, setGridData] = useState([]);
@@ -51,46 +52,6 @@ const FaultTable = () => {
             return error.statusText
         }
     }
-
-    // const portionTime = (durationInSeconds: any) => {
-    //
-    //     let days = Math.trunc(durationInSeconds / (3600 * 24));
-    //     let hours = durationInSeconds / 3600;
-    //     let mins = (durationInSeconds % 3600) / 60;
-    //     let secs = (mins * 60) % 60;
-    //
-    //     hours = Math.trunc(hours);
-    //     mins = Math.trunc(mins);
-    //
-    //     if (!days && !hours && !mins && !secs) {
-    //         return "None";
-    //     }
-    //     if (days) {
-    //         if (hours){
-    //             if (mins){
-    //                 return `${days} Day(s) ${hours} Hour(s) ${mins} Minute(s)`
-    //             } else {
-    //                 return `${days} Day(s) ${hours} Hour(s)`
-    //             }
-    //         } else {
-    //             return `${days} Day(s)`
-    //         }
-    //     } else {
-    //         if (hours) {
-    //             if (mins) {
-    //                 return `${hours} Hour(s) ${mins} Min(s)`;
-    //             } else {
-    //                 return `${hours} Hour(s)`;
-    //             }
-    //         } else {
-    //             if (mins) {
-    //                 return `${mins} Min(s)`;
-    //             } else {
-    //                 return secs ? `` : `None`;
-    //             }
-    //         }
-    //     }
-    // };
 
     function dhm(t: any){
         var cd = 24 * 60 * 60 * 1000,
@@ -309,65 +270,112 @@ const FaultTable = () => {
         )
     }
 
-    return (
-        <div>
-            {/* <Button type='primary' onClick={showModal} className='mb-3'>
-        Add
-      </Button> */}
-            <div className='d-flex justify-content-between'>
-                <Space style={{marginBottom: 16}}>
-                    <Input
-                        placeholder='Enter Search Text'
-                        onChange={handleInputChange}
-                        type='text'
-                        allowClear
-                        value={searchText}
-                    />
-                    <Button type='primary'>
-                        Search
-                    </Button>
-                </Space>
-                <Space style={{marginBottom: 16}}>
-                    <Button type='primary' onClick={showModal}>
-                        Add
-                    </Button>
-                    <Button type='primary' className='mx-3'>
-                        Export
-                    </Button>
-                    <Button type='primary'>Upload</Button>
-                </Space>
-            </div>
-            <Table columns={columns} dataSource={gridData} bordered loading={loading}/>
-            <Modal
-                title='Add Fault'
-                open={isModalOpen}
-                onCancel={handleCancel}
-                closable={true}
-                footer={[
-                    <Button key='back' onClick={handleCancel}>
-                        Cancel
-                    </Button>,
-                    <Button
-                        key='submit'
-                        type='primary'
-                        htmlType='submit'
-                        loading={submitLoading}
-                        onClick={() => {
-                            // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-                            form.submit()
-                        }}
-                    >
-                        Submit
-                    </Button>,
-                ]}
-            >
-                <Form
-                    form={form}
-                    name='control-hooks'
-                    labelCol={{span: 8}}
-                    wrapperCol={{span: 14}}
-                    title='Add Fault'
-                    onFinish={onFinish}
+  return (
+    <div style={{backgroundColor:'white', padding:'20px', borderRadius:'5px', boxShadow:'2px 2px 15px rgba(0,0,0,0.08)'}}>
+     
+      <div className='d-flex justify-content-between'>
+        <Space style={{marginBottom: 16}}>
+          <Input
+            placeholder='Enter Search Text'
+            onChange={handleInputChange}
+            type='text'
+            allowClear
+            value={searchText}
+          />
+          <Button type='primary'>
+            Search
+          </Button>
+        </Space>
+        <Space style={{marginBottom: 16}}>
+            <button type='button' className='btn btn-primary me-3' onClick={showModal}>
+              <KTSVG path='/media/icons/duotune/arrows/arr075.svg' className='svg-icon-2' />
+              Add
+            </button>
+            <button type='button' className='btn btn-light-primary me-3'>
+              <KTSVG path='/media/icons/duotune/arrows/arr078.svg' className='svg-icon-2' />
+              Upload
+            </button>
+            <button type='button' className='btn btn-light-primary me-3'>
+              <KTSVG path='/media/icons/duotune/arrows/arr078.svg' className='svg-icon-2' />
+              
+              Export
+            </button>
+        </Space>
+      </div>
+      <Table columns={columns} dataSource={gridData} bordered loading={loading} />
+      <Modal
+        title='Add Fault'
+        open={isModalOpen}
+        onCancel={handleCancel}
+        closable={true}
+        footer={[
+          <Button  key='back' onClick={handleCancel}>
+            Cancel
+          </Button>,
+          <Button
+            key='submit'
+            type='primary'
+            htmlType='submit'
+            loading={submitLoading}
+            onClick={() => {
+              // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+              form.submit()
+            }}
+          >
+            Submit
+          </Button>,
+        ]}
+      >
+        <Form
+          form={form}
+          name='control-hooks'
+          labelCol={{span: 8}}
+          wrapperCol={{span: 14}}
+          title='Add Fault'
+          onFinish={onFinish}
+        >
+          <Form.Item name='fleetId' label='fleetID' rules={[{required: true}]}>
+            <Select placeholder='Select a fleetID' onChange={onFleetIdChange}>
+              {dataSource.map((item: any) => (
+                <Option key={item.fleetID} value={item.fleetID}>
+                  {item.fleetID} - {item.modlName} - {item.modlClass}
+                </Option>
+              ))}
+            </Select>
+          </Form.Item>
+          <Form.Item name='model' label='Model'>
+            <Input readOnly />
+          </Form.Item>
+          <Form.Item name='desc' label='Description'>
+            <Input readOnly />
+          </Form.Item>
+          <Form.Item name='dType' label='Down Type' rules={[{required: true}]}>
+            <Select placeholder='Select Down Type'>
+              {faultType.map((item: any) => (
+                <Option key={uuidv4()} value={item.faultDesc}>
+                  {item.faultDesc}
+                </Option>
+              ))}
+            </Select>
+          </Form.Item>
+          {/*<Form.Item name='dDate' label='Down Date and Time' rules={[{required: true}]}>*/}
+          {/*  <DatePicker format='YYYY-MM-DD HH:mm' showTime />*/}
+          {/*</Form.Item>*/}
+          <Form.Item name='mType' label='Maintenance Type' rules={[{required: true}]}>
+            <Select placeholder='Maintenance Type'>
+              <Option value={'Scheduled'}>Scheduled</Option>
+              <Option value={'Unscheduled'}>Unscheduled</Option>
+              <Option value={'Operational'}>Operational</Option>
+              <Option value={'Damages'}>Damages</Option>
+            </Select>
+          </Form.Item>
+          <Form.Item label='Custodian' name='custodian' rules={[{required: true}]}>
+            <Select>
+              {custodian.map((item: any) => (
+                <Option
+                  // @ts-ignore
+                  value={item.emplCode}
+                  key={uuidv4()}
                 >
                     <Form.Item name='fleetId' label='fleetID' rules={[{required: true}]}>
                         <Select placeholder='Select a fleetID' onChange={onFleetIdChange}>

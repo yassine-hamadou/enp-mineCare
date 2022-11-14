@@ -3,7 +3,7 @@ import {useEffect, useRef, useState} from 'react'
 import axios from 'axios'
 import {DatePicker} from 'antd/es'
 
-const AddGroupsForm = () => {
+const AddSectionForm = () => {
   const [dataSource, setDataSource] = useState([])
   const [faultType, setFaultType] = useState([])
   const [location, setLocation] = useState([])
@@ -17,8 +17,7 @@ const AddGroupsForm = () => {
   const loadData = async () => {
     setLoading(true)
     try {
-      // const response = await axios.get('https://cors-anywhere.herokuapp.com/https://app.sipconsult.net/SmWebApi/api/VmequpsApi')
-      const response = await axios.get('https://cors-anywhere.herokuapp.com/http://208.117.44.15/SmWebApi/api/VmequpsApi')
+      const response = await axios.get('https://cors-anywhere.herokuapp.com/https://app.sipconsult.net/SmWebApi/api/VmequpsApi')
       setDataSource(response.data)
       setLoading(false)
     } catch (error: any) {
@@ -46,10 +45,7 @@ const AddGroupsForm = () => {
   }, [fleet])
 
   return (
-    <Form labelCol={{span: 7}} wrapperCol={{span: 14}} layout='horizontal' title='Add Group'>
-      {/* <Form.Item label='Code'>
-        <Input/>
-      </Form.Item> */}
+    <Form labelCol={{span: 7}} wrapperCol={{span: 14}} layout='horizontal' title='Add Service'>
        <Form.Item label='Name'>
         <Input/>
       </Form.Item>
@@ -57,12 +53,10 @@ const AddGroupsForm = () => {
         <Radio.Group onChange={onChange} value={value}>
           <Radio value={1}>Active</Radio>
           <Radio value={2}>InActive</Radio>
-     
         </Radio.Group>
       </Form.Item>
-      
     </Form>
   )
 }
 
-export {AddGroupsForm}
+export {AddSectionForm}

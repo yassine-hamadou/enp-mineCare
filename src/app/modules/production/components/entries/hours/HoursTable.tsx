@@ -2,6 +2,7 @@ import {Button, Popconfirm, Table, Modal, Space, Input} from 'antd'
 import 'antd/dist/antd.min.css'
 import axios from 'axios'
 import {useEffect, useState} from 'react'
+import { KTSVG } from '../../../../../../_metronic/helpers'
 import {AddFaultForm} from './AddHoursForm'
 
 const HoursTable = () => {
@@ -117,7 +118,7 @@ const HoursTable = () => {
   }, [])
 
   return (
-    <div>
+    <div style={{backgroundColor:'white', padding:'20px', borderRadius:'5px', boxShadow:'2px 2px 15px rgba(0,0,0,0.08)'}}>
       <div className='d-flex justify-content-between'>
         <Space style={{marginBottom: 16}}>
           <Input
@@ -132,13 +133,19 @@ const HoursTable = () => {
           </Button>
         </Space>
         <Space style={{marginBottom: 16}}>
-          <Button type='primary' onClick={showModal}>
-            Add
-          </Button>
-          <Button type='primary' className='mx-3'>
-            Export
-          </Button>
-          <Button type='primary'>Upload</Button>
+            <button type='button' className='btn btn-primary me-3' onClick={showModal}>
+              <KTSVG path='/media/icons/duotune/arrows/arr075.svg' className='svg-icon-2' />
+              Add
+            </button>
+            <button type='button' className='btn btn-light-primary me-3'>
+              <KTSVG path='/media/icons/duotune/arrows/arr078.svg' className='svg-icon-2' />
+              Upload
+            </button>
+            <button type='button' className='btn btn-light-primary me-3'>
+              <KTSVG path='/media/icons/duotune/arrows/arr078.svg' className='svg-icon-2' />
+              
+              Export
+            </button>
         </Space>
       </div>
       <Table columns={columns} dataSource={gridData} bordered loading={loading} />
