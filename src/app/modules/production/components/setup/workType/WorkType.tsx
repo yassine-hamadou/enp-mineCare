@@ -55,30 +55,6 @@ const WorkTypePage = () => {
         return 0
       },
     },
-
-    {
-      title: 'Action',
-      
-      // dataIndex: 'faultDesc',
-      // sorter: (a: any, b: any) => a.faultDesc - b.faultDesc,
-      fixed: 'right',
-      width: 100,
-      render: (_: any, record: any ) => (
-        <Space size="middle">
-          {/* <a href="service" className="btn btn-light-info btn-sm">Services</a> */}
-          <Link to={'/setup/service'}>
-          <span className="btn btn-light-info btn-sm">
-            Service
-            </span></Link>
-          <a href="#" className="btn btn-light-warning btn-sm ">Update</a>
-          <a href="#" className="btn btn-light-danger btn-sm">Delete</a>
-        </Space>
-      ),
-    },
-    //console
-
-  ]
-
     {
       title: 'Action',
 
@@ -94,11 +70,7 @@ const WorkTypePage = () => {
           </Space>
       ),
     },
-    //console
-
-
-
-  ]
+    ]
   const loadData = async () => {
     setLoading(true)
     try {
