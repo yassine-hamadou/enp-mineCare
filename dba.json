@@ -21,6 +21,86 @@
       "entryId": "bc1fee8c-83a3-4f2b-9292-8482fcf7e4f4"
     }
   ],
+  "FleetSchedulesApi": [
+    {
+      "fleetId": "AD067       ",
+      "locationId": "DRILL ",
+      "timeStart": "2022-11-16T01:00:00.000Z",
+      "timeEnd": "2022-11-16T01:30:00.000Z",
+      "entryId": "ulgaeeS",
+      "vmModel": "null",
+      "vmClass": "null"
+    },
+    {
+      "fleetId": "AD096       ",
+      "locationId": "DRILL ",
+      "timeStart": "2022-11-16T01:00:00.000Z",
+      "timeEnd": "2022-11-16T01:30:00.000Z",
+      "entryId": "ulgaeeS",
+      "vmModel": "null",
+      "vmClass": "null"
+    },
+    {
+      "fleetId": "AD066       ",
+      "locationId": "DRILL ",
+      "timeStart": "2022-11-16T01:00:00.000Z",
+      "timeEnd": "2022-11-16T01:30:00.000Z",
+      "entryId": "ulgaeeS",
+      "vmModel": "null",
+      "vmClass": "null"
+    },
+    {
+      "fleetId": "AD066       ",
+      "locationId": "DOZER ",
+      "timeStart": "2022-11-15T11:30:00.000Z",
+      "timeEnd": "2022-11-15T12:00:00.000Z",
+      "entryId": "8dhMYR1",
+      "vmModel": "null",
+      "vmClass": "null"
+    },
+    {
+      "fleetId": "No fleet ID",
+      "entryId": "6yfQHVe",
+      "vmModel": "null",
+      "vmClass": "null"
+    },
+    {
+      "fleetId": "AD065       ",
+      "locationId": "CRUSH ",
+      "timeStart": "2022-11-17T12:30:00.000Z",
+      "timeEnd": "2022-11-17T13:00:00.000Z",
+      "entryId": "4136Ygh",
+      "vmModel": "null",
+      "vmClass": "null"
+    },
+    {
+      "fleetId": null,
+      "locationId": null,
+      "timeStart": "2022-11-17T11:00:00.000Z",
+      "timeEnd": "2022-11-17T11:30:00.000Z",
+      "entryId": "bEbf2Ii",
+      "vmModel": "null",
+      "vmClass": "null"
+    },
+    {
+      "fleetId": "AD063       ",
+      "locationId": "DOZER ",
+      "timeStart": "2022-11-15T18:00:00.000Z",
+      "timeEnd": "2022-11-15T18:30:00.000Z",
+      "entryId": "h7luPz7",
+      "vmModel": "null",
+      "vmClass": "null"
+    },
+    {
+      "fleetId": null,
+      "locationId": null,
+      "timeStart": "2022-11-16T18:00:00.000Z",
+      "timeEnd": "2022-11-16T18:30:00.000Z",
+      "entryId": "GvB1zbt",
+      "vmModel": "null",
+      "vmClass": "null"
+    }
+  ],
   "HourliesApi": [
     {
       "entryId": 0,

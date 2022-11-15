@@ -50,7 +50,7 @@ const Calendar = () => {
     // load fleet IDs
     const loadVmequps = async () => {
         try {
-            const VmequpsResponse = await axios.get("http://208.117.44.15/SmWebApi/api/VmequpsApi");
+            const VmequpsResponse = await axios.get("http://localhost:3001/VmequpsApi");
             setVmequps(VmequpsResponse.data);
         } catch (e) {
             console.log(e);
@@ -58,7 +58,7 @@ const Calendar = () => {
     };
     const loadCustodians = async () => {
         try {
-            const custodianResponse = await axios.get("http://208.117.44.15/SmWebApi/api/VmemplsApi");
+            const custodianResponse = await axios.get("http://localhost:3001/VmemplsApi");
             setCustodian(custodianResponse.data);
         } catch (e) {
             console.log(e);
@@ -66,28 +66,28 @@ const Calendar = () => {
     }
     const loadLocations = async () => {
         try {
-            const locationsResponse = await axios.get("http://208.117.44.15/SmWebApi/api/IclocsApi");
+            const locationsResponse = await axios.get("http://localhost:3001/IclocsApi");
             setLocations(locationsResponse.data);
         } catch (e) {
             console.log(e);
         }
     };
-
     //Loading schedule data
     const loadData = async () => {
         try {
-            const dataResponse = await axios.get("http://208.117.44.15/SmWebApi/api/FleetSchedulesApi");
+            const dataResponse = await axios.get("http://localhost:3001/FleetSchedulesApi");
             setDataFromApi([...dataResponse.data]);
         } catch (e) {
             console.log(e);
         }
     }
+
     const localData = (dataFromApi) => {
         return {
             dataSource: dataFromApi,
             fields: {
                 id: 'entryId',
-                subject: {name: 'fleetId', default: "No fleet ID"},
+                subject: {name: 'fleetId', default: 'No Fleet ID'},
                 location: {name: 'locationId'},
                 startTime: {name: 'timeStart'},
                 endTime: {name: 'timeEnd'}
@@ -215,6 +215,8 @@ const Calendar = () => {
         if (args.requestType === 'eventCreate') {
             args.cancel = true;
             console.log("args.data", data);
+            //validate fields
+
 
             // make data in array so that I can map though it
             const preparedData = [{...data}];
@@ -228,15 +230,15 @@ const Calendar = () => {
                     timeEnd: schedule.EndTime,
                     entryId: 0,
                     vmModel: "null",
-                    vmClass: "null"
+                    vmClass: "null",
                 }
             });
             console.log("formattedDataToPost", formattedDataToPost);
 
             //Since format is an array, I need to change it to the format that the API will understand which is an object
             const dataToPost = formattedDataToPost[0];
-            axios.post("http://208.117.44.15/SmWebApi/api/FleetSchedulesApi", dataToPost)
-            // axios.post("http://208.117.44.15/SmWebApi/api/FleetSchedulesApi", dataToPost)
+            axios.post("http://localhost:3001/FleetSchedulesApi", dataToPost)
+            // axios.post("http://localhost:3001/FleetSchedulesApi", dataToPost)
                 .then(res => {
                     console.log("res", res);
                     console.log("res.data", res.data);
@@ -249,7 +251,7 @@ const Calendar = () => {
         }
         if (args.requestType === 'eventRemove') {
             args.cancel = true;
-            axios.delete("http://208.117.44.15/SmWebApi/api/FleetSchedulesApi/" + data.entryId)
+            axios.delete("http://localhost:3001/FleetSchedulesApi/" + data.entryId)
                 .then(res => {
                     loadData()
                     setUpToDateLocalData(localData(dataFromAPI.filter((schedule) => schedule.entryId !== data.entryId)));
@@ -276,7 +278,7 @@ const Calendar = () => {
             });
             // console.log("formattedDataToPost", formattedDataToPost);
             const dataToPost = formattedDataToPost[0];
-            axios.put("http://208.117.44.15/SmWebApi/api/FleetSchedulesApi/" + data.entryId, dataToPost)
+            axios.put("http://localhost:3001/FleetSchedulesApi/" + data.entryId, dataToPost)
                 .then(res => {
                     console.log("res", res);
                     console.log("res.data", res.data);
@@ -288,6 +290,7 @@ const Calendar = () => {
                 });
         }
     }
+
     // const quickInfoTemplates = {
     //     content: contentTemplate.bind(this),
     // }
