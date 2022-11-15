@@ -1,0 +1,35 @@
+{
+  "groups": [
+    {
+      "id": 1,
+      "name": "json-server",
+      "sectioID": "json-server",
+      "status": "typicode"
+    }
+  ],
+  "items": [
+    {
+      "id": 1,
+      "name": "json-server",
+      "grouID": "json-server",
+      "status": "typicode"
+    }
+  ],
+  
+  "sections": [
+    {
+    "id": 1,
+    "name": "json-server",
+    "serviceID": "json-server",
+    "status": "typicode"
+    }
+  ],
+  "services": [
+    {
+    "id": 1,
+    "name": "test",
+    "modelID": "Test Service",
+    "status": "typicode"
+    }
+  ]
+}

@@ -25,6 +25,10 @@ import { GroupsPage } from './components/setup/groups/GroupsPage'
 import { ItemsPage } from './components/setup/items/ItemPage'
 import { SectionsPage } from './components/setup/sections/Sections'
 import { CheckListForm } from './components/checkListForm/CheckListForm'
+import { CheckListForm2 } from './components/checkListForm/CheckListForm2'
+import { CheckListForm3 } from './components/checkListForm/CheckListForm3'
+import { CheckListForm5 } from './components/checkListForm/CheckListForm5'
+import { TabsTest } from './components/checkListForm/Tabs'
 const accountBreadCrumbs: Array<PageLink> = []
 
 const ProductionPage: React.FC = () => {
@@ -203,7 +207,16 @@ const ProductionPage: React.FC = () => {
           element={
             <>
               <PageTitle breadcrumbs={accountBreadCrumbs}>Check List</PageTitle>
-              <CheckListForm />
+              <CheckListForm3 />
+            </>
+          }
+        />
+        <Route
+          path='tabs'
+          element={
+            <>
+              <PageTitle breadcrumbs={accountBreadCrumbs}>Tabs</PageTitle>
+              <TabsTest />
             </>
           }
         />

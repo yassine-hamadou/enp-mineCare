@@ -13,6 +13,10 @@ const ServicesPage = () => {
   const [loading, setLoading] = useState(false)
   const [searchText, setSearchText] = useState('')
   let [filteredData] = useState([])
+  const [formData, setFormData]= useState({
+    name:"",
+    modelID:"",
+  })
 
 
 
@@ -36,13 +40,26 @@ const ServicesPage = () => {
 
     
     {
-      title: 'Services',
-      dataIndex: 'service',
+      title: 'Model',
+      dataIndex: 'modelID',
       sorter: (a: any, b: any) => {
-        if (a.service > b.service) {
+        if (a.modelID > b.modelID) {
           return 1
         }
-        if (b.service > a.service) {
+        if (b.modelID > a.modelID) {
+          return -1
+        }
+        return 0
+      },
+    },
+    {
+      title: 'Services',
+      dataIndex: 'name',
+      sorter: (a: any, b: any) => {
+        if (a.name > b.name) {
+          return 1
+        }
+        if (b.name > a.name) {
           return -1
         }
         return 0
@@ -102,9 +119,10 @@ const ServicesPage = () => {
   const loadData = async () => {
     setLoading(true)
     try {
-      // const response = await axios.get('http://208.117.44.15/SmWebApi/api/VmfaltsApi')
-      // setGridData(response.data)
-      setGridData(dataSource)
+      // const response = await axios.get('https://cors-anywhere.herokuapp.com/http://208.117.44.15/SmWebApi/api/VmfaltsApi')
+      const response = await axios.get('http://localhost:4192/services')
+      setGridData(response.data)
+      // setGridData(dataSource)
       setLoading(false)
     } catch (error) {
       console.log(error)
@@ -142,13 +160,9 @@ const ServicesPage = () => {
     <div style={{backgroundColor:'white', padding:'20px', borderRadius:'5px', boxShadow:'2px 2px 15px rgba(0,0,0,0.08)'}}>
       <KTCardBody className='py-4 '>
         <div className='table-responsive'>
-            {/*<a href='work-type'  className='mb-3 btn btn-outline btn-outline-dashed btn-outline-primary btn-active-light-primary'>*/}
-            {/* Back to Models*/}
-            {/*</a>*/}
-          <Link to={'/setup/work-type'}>
-          <span  className='mb-3 btn btn-outline btn-outline-dashed btn-outline-primary btn-active-light-primary'>
-              Back to Models
-            </span></Link>
+            <a href='work-type'  className='mb-3 btn btn-outline btn-outline-dashed btn-outline-primary btn-active-light-primary'>
+             Back to Models
+            </a>
         <div className='d-flex justify-content-between'>
           <Space style={{marginBottom: 16}}>
             <Input

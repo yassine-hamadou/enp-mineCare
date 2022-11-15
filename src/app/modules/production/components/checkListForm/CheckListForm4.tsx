@@ -7,28 +7,13 @@ import {Field, useFormik} from 'formik'
 import clsx from 'clsx'
 import * as Yup from 'yup'
 import { Divider } from 'antd';
-// import { Tabs } from 'antd';
-import { CheckListForm2 } from './CheckListForm2'
-import { CheckListForm3 } from './CheckListForm3'
-import { CheckListForm5 } from './CheckListForm5'
-import { CheckListForm4 } from './CheckListForm4'
-import Tabs from '@mui/material/Tabs';
-import Tab from '@mui/material/Tab';
-// import { TabContext } from '@mui/lab';
 
-interface TabPanelProps {
-  children?: React.ReactNode;
-  dir?: string;
-  index: number;
-  value: number;
-}
-
-const CheckListForm = () => {
+const CheckListForm4 = () => {
   const [gridData, setGridData] = useState([])
   const [loading, setLoading] = useState(false)
   const [searchText, setSearchText] = useState('')
   let [filteredData] = useState([])
-  const [value, setValue] = useState(0);
+
   const [agree, setAgree] = useState(false);
   const checkboxHandler = () => {
     // if agree === true, it will be set to false
@@ -45,7 +30,6 @@ const CheckListForm = () => {
   return (
     <>
     <div style={{backgroundColor:'white',  padding:'20px', borderRadius:'5px', boxShadow:'2px 2px 15px rgba(0,0,0,0.08)'}}>
-     
       <form id='kt_modal_add_plan_form' className='form' noValidate>
         {/* begin::Scroll */}
         
@@ -289,64 +273,13 @@ const CheckListForm = () => {
             </div>
           </div>
           {/* end::row */}
-          <div className='row mb-10'>
+          <div className='row mb-10 fw-bolder'>
             <div className='col-4'>
               <label className='required fw-bold fs-6 mb-2'>Inspect Air induction system clamps & hoses</label>
               <select className="form-select form-control form-control-solid mb-3" >
                 <option selected>Select one option</option>
                 <option value="1">Ok</option>
                 <option value="2">Repair</option>
-              </select>
-            </div>
-          </div> 
-          <div>
-            <h3><b>Check  condition of all Cylinders</b></h3>
-            <Divider />
-          </div>
-          {/* end::row */}
-          <div className='row mb-4'>
-            <div className='col-3'>
-              <label className='required fw-bold fs-6 mb-2'>LH Hoist Cylinder & hoses</label>
-              <select className="form-select form-control form-control-solid mb-3" >
-                <option selected>Select one option</option>
-                <option value="1">Ok</option>
-                <option value="2">Chrome Damage</option>
-                <option value="3">Weeping</option>
-                <option value="4">Leaking</option>
-                <option value="4">Leaking & Chrome Damage</option>
-              </select>
-            </div>
-            <div className='col-3'>
-              <label className='required fw-bold fs-6 mb-2'>LH Steering Cylinder & hoses</label>
-              <select className="form-select form-control form-control-solid mb-3" >
-                <option selected>Select one option</option>
-                <option value="1">Ok</option>
-                <option value="2">Chrome Damage</option>
-                <option value="3">Weeping</option>
-                <option value="4">Leaking</option>
-                <option value="4">Leaking & Chrome Damage</option>
-              </select>
-            </div>
-            <div className='col-3'>
-              <label className='required fw-bold fs-6 mb-2'>RH Steering Cylinder & hoses</label>
-              <select className="form-select form-control form-control-solid mb-3" >
-                <option selected>Select one option</option>
-                <option value="1">Ok</option>
-                <option value="2">Chrome Damage</option>
-                <option value="3">Weeping</option>
-                <option value="4">Leaking</option>
-                <option value="4">Leaking & Chrome Damage</option>
-              </select>
-            </div>
-            <div className='col-3'>
-              <label className='required fw-bold fs-6 mb-2'>RH Hoist Cylinder & hoses</label>
-              <select className="form-select form-control form-control-solid mb-3" >
-                <option selected>Select one option</option>
-                <option value="1">Ok</option>
-                <option value="2">Chrome Damage</option>
-                <option value="3">Weeping</option>
-                <option value="4">Leaking</option>
-                <option value="4">Leaking & Chrome Damage</option>
               </select>
             </div>
           </div>
@@ -365,12 +298,15 @@ const CheckListForm = () => {
                 Continue
               </button>
             </div>
+             
+            
           </div>
+      
       </form>
       </div>
     </>
   )
 }
 
-export {CheckListForm}
+export {CheckListForm4}
 
