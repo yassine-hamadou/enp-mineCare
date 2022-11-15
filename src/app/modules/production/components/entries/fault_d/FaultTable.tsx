@@ -1,13 +1,29 @@
-import {Button, Form, Input, Modal, Popconfirm, Select, Space, Table} from "antd";
+import {Button, DatePicker, Form, Input, InputNumber, Modal, Popconfirm, Select, Space, Table} from "antd";
 import "antd/dist/antd.min.css";
 import axios from "axios";
 import {useEffect, useState} from "react";
 import {v4 as uuidv4} from "uuid";
 import {KTSVG} from "../../../../../../_metronic/helpers";
+import TextArea from "antd/lib/input/TextArea";
+import {conditionObj} from "devexpress-reporting/designer/controls/metadata/properties/formattingrules";
+import Link from "antd/lib/typography/Link";
 
 const FaultTable = () => {
     const [gridData, setGridData] = useState([]);
     const [searchText, setSearchText] = useState('')
+    const [isModalOpen, setIsModalOpen] = useState(false)
+    const [isSolveModalOpen, setIsSolveModalOpen] = useState(false)
+    const [dataSource, setDataSource] = useState([])
+    const [faultType, setFaultType] = useState([])
+    const [location, setLocation] = useState([])
+    const [custodian, setCustodian] = useState([])
+    const [form] = Form.useForm()
+    const [formSolve] = Form.useForm()
+    const [selectedRowForSolve, setSelectedRowForSolve] = useState<any>()
+    const [solveFormValues, setSolveFormValues] = useState<any>()
+    const [loading, setLoading] = useState(true)
+    const [submitLoading, setSubmitLoading] = useState(false)
+
 
 
     const handleInputChange = (e: any) => {
@@ -17,17 +33,22 @@ const FaultTable = () => {
         }
     }
     // Modal functions
-    const [isModalOpen, setIsModalOpen] = useState(false)
+
     const showModal = () => {
         setIsModalOpen(true)
+    }
+
+
+    const showModalSolve = () => {
+        setIsSolveModalOpen(true)
     }
     // Modal functions end
     const loadData = async () => {
         setLoading(true)
         try {
             const response = await axios.get(
-                'http://208.117.44.15/SmWebApi/api/FaultEntriesApi'
-                // 'http://208.117.44.15/SmWebApi/api/FaultEntriesApi'
+                'http://localhost:3001/FaultEntriesApi'
+                // 'http://localhost:3001/FaultEntriesApi'
             )
 
             //Formatting date to the received data
@@ -70,11 +91,11 @@ const FaultTable = () => {
             h = 0;
         }
         return `${d} Day(s) ${pad(h)} Hour(s) ${pad(m)} Minute(s)`;
-    };
+    }
     const deleteData = async (element: any) => {
         try {
             const response = await axios.delete(
-                `http://208.117.44.15/SmWebApi/api/FaultEntriesApi/${element.entryId}`
+                `http://localhost:3001/FaultEntriesApi/${element.entryId}`
             )
             // update the local state so that react can refecth and re-render the table with the new data
             const newData = gridData.filter((item: any) => item.entryId !== element.entryId)
@@ -146,19 +167,31 @@ const FaultTable = () => {
             render: (_: any, record: any) =>
                 gridData.length >= 1 ? (
                     <>
-                        <Popconfirm title='Sure to solve'>
-                            <a className='btn btn-light-success btn-sm'>
-                                Solve
-                            </a>
-                        </Popconfirm>
+                        <button
+                            className='btn btn-light-success btn-sm'
+                            onClick={() => {
+                                formSolve.setFieldsValue({
+                                    fleetId: record.fleetId,
+                                    model: record.vmModel,
+                                    desc: record.vmClass,
+                                    dType: record.downType,
+                                    custodian: record.custodian,
+                                    location: record.locationId,
+                                    dtime: record.duration
+                                })
+                                handleSolve(record)
+                            }}
+                        >
+                            Solve
+                        </button>
                         <Popconfirm title='Sure to delete?' onConfirm={() => handleDelete(record)}>
-                            <a className='btn btn-light-danger btn-sm'>
+                            <button className='btn btn-light-danger btn-sm'>
                                 Delete
-                            </a>
+                            </button>
                         </Popconfirm>
                     </>
                 ) : null,
-        },
+        }
     ]
 
     function handleCancel() {
@@ -166,15 +199,23 @@ const FaultTable = () => {
         setIsModalOpen(false)
     }
 
-    const [dataSource, setDataSource] = useState([])
-    const [faultType, setFaultType] = useState([])
-    const [location, setLocation] = useState([])
-    const [custodian, setCustodian] = useState([])
+    function handleSolveCancel() {
+        formSolve.resetFields()
+        setIsSolveModalOpen(false)
+    }
+
     const {Option} = Select
-    const [form] = Form.useForm()
+
+    function handleSolve(record: any) {
+        showModalSolve();
+        setSelectedRowForSolve(record)
+        console.log("record in handle solve", selectedRowForSolve)
+    }
+
 
     // {/* Start Elements to Post */}
-    const url = 'http://208.117.44.15/SmWebApi/api/FaultEntriesApi'
+    // const url = 'http://localhost:3001/FaultEntriesApi'
+    const url = 'http://localhost:3001/FaultEntriesApi'
     const onFinish = async (values: any) => {
         setSubmitLoading(true)
         const data = {
@@ -199,16 +240,42 @@ const FaultTable = () => {
             return error.statusText
         }
     }
+
+    const onSolveFinish = async (values: any) => {
+        setSubmitLoading(true)
+        const data = {
+            fleetId: values.fleetId,
+            vmModel: values.model,
+            vmClass: values.desc,
+            downType: values.dType,
+            downtime: new Date().toISOString(),
+            locationId: values.location,
+            custodian: values.custodian,
+        }
+        const dataWithId = {...data, entryId: uuidv4()}
+        try {
+            const response = await axios.post(url, dataWithId)
+            setSubmitLoading(false)
+            form.resetFields()
+            setIsModalOpen(false)
+            loadData()
+            return response.statusText
+        } catch (error: any) {
+            setSubmitLoading(false)
+            return error.statusText
+        }
+    }
+
     // {/* End Elements to Post */}
 
-    const [loading, setLoading] = useState(true)
-    const [submitLoading, setSubmitLoading] = useState(false)
+
+
 
     const loadEqupData = async () => {
         setLoading(true)
         try {
             const response = await axios.get(
-                'http://208.117.44.15/SmWebApi/api/VmequpsApi'
+                'http://localhost:3001/VmequpsApi'
             )
             setDataSource(response.data)
             setLoading(false)
@@ -221,7 +288,7 @@ const FaultTable = () => {
     const loadFaultType = async () => {
         try {
             const response = await axios.get(
-                'http://208.117.44.15/SmWebApi/api/vmfaltsapi'
+                'http://localhost:3001/vmfaltsapi'
             )
             setFaultType(response.data)
         } catch (error: any) {
@@ -232,7 +299,7 @@ const FaultTable = () => {
     const loadLocation = async () => {
         try {
             const response = await axios.get(
-                'http://208.117.44.15/SmWebApi/api/IclocsApi'
+                'http://localhost:3001/IclocsApi'
             )
             setLocation(response.data)
         } catch (error: any) {
@@ -242,7 +309,7 @@ const FaultTable = () => {
 
     const loadCustodian = async () => {
         const response = await axios.get(
-            'http://208.117.44.15/SmWebApi/api/VmemplsApi'
+            'http://localhost:3001/VmemplsApi'
         )
         setCustodian(response.data)
     }
@@ -254,6 +321,9 @@ const FaultTable = () => {
         loadLocation()
         loadCustodian()
     }, [])
+    useEffect(() => {
+        setSolveFormValues(selectedRowForSolve)
+    }, [selectedRowForSolve])
 
     /*
       Function that gets called whenever a fleetID is selected from the dropdown;
@@ -270,7 +340,7 @@ const FaultTable = () => {
                 : null
         )
     }
-
+console.log("selectedRowForSolve", selectedRowForSolve)
     return (
         <div style={{
             backgroundColor: 'white',
@@ -278,7 +348,6 @@ const FaultTable = () => {
             borderRadius: '5px',
             boxShadow: '2px 2px 15px rgba(0,0,0,0.08)'
         }}>
-
             <div className='d-flex justify-content-between'>
                 <Space style={{marginBottom: 16}}>
                     <Input
@@ -355,6 +424,9 @@ const FaultTable = () => {
                     <Form.Item name='desc' label='Description'>
                         <Input readOnly/>
                     </Form.Item>
+                    <Form.Item name='hours' label='Fleet Hours' rules={[{required: true}]}>
+                        <InputNumber min={1} />
+                    </Form.Item>
                     <Form.Item name='dType' label='Down Type' rules={[{required: true}]}>
                         <Select placeholder='Select Down Type'>
                             {faultType.map((item: any) => (
@@ -364,12 +436,22 @@ const FaultTable = () => {
                             ))}
                         </Select>
                     </Form.Item>
+                    <Form.Item name='DateTime' label='Down Date and Time' rules={[{required: true}]}>
+                        <DatePicker showTime />
+                    </Form.Item>
+                    <Form.Item name='DateTimereported' label='Time Reported' rules={[{required: true}]}>
+                        <DatePicker showTime />
+                    </Form.Item>
+                    <Form.Item name='' label='Fault/Work Done details' >
+                        <TextArea />
+                    </Form.Item>
                     <Form.Item name='mType' label='Maintenance Type' rules={[{required: true}]}>
                         <Select placeholder='Maintenance Type'>
                             <Option value={'Scheduled'}>Scheduled</Option>
                             <Option value={'Unscheduled'}>Unscheduled</Option>
                             <Option value={'Operational'}>Operational</Option>
                             <Option value={'Damages'}>Damages</Option>
+                            <Option value={'Warranty'}>Warranty</Option>
                         </Select>
                     </Form.Item>
                     <Form.Item label='Custodian' name='custodian' rules={[{required: true}]}>
@@ -397,6 +479,83 @@ const FaultTable = () => {
                                 </Option>
                             ))}
                         </Select>
+                    </Form.Item>
+                </Form>
+            </Modal>
+            <Modal
+                title='Solve'
+                open={isSolveModalOpen}
+                onCancel={handleSolveCancel}
+                closable={true}
+                footer={[
+                    <Button>
+                        Defect
+                    </Button>,
+                    <Button key='back' onClick={handleSolveCancel}>
+                        Cancel
+                    </Button>,
+                    <Button
+                        key='submit'
+                        type='primary'
+                        htmlType='submit'
+                        loading={submitLoading}
+                        onClick={() => {
+                            // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+                            formSolve.submit()
+                        }}
+                    >
+                        Solve
+                    </Button>,
+                ]}
+            >
+
+                <Form
+                    form={formSolve}
+                    name='control-hooks'
+                    labelCol={{span: 8}}
+                    wrapperCol={{span: 14}}
+                    title='Solve'
+                    onFinish={onSolveFinish}
+                >
+                    <Form.Item name='fleetId' label='fleetID' rules={[{required: true}]}>
+                        <Input readOnly />
+                    </Form.Item>
+                    <Form.Item name='model' label='Model'>
+                        <Input readOnly />
+                    </Form.Item>
+                    <Form.Item name='desc' label='Description'>
+                        <Input readOnly />
+                    </Form.Item>
+
+                    <Form.Item name='dType' label='Down Type' rules={[{required: true}]}>
+                        <Input readOnly />
+                    </Form.Item>
+                    <Form.Item name='dtime' label='Duration' rules={[{required: true}]}>
+                        <Input readOnly />
+                    </Form.Item>
+                    <Form.Item name='dstatus' label='Down Status' rules={[{required: true}]}>
+                        <Select placeholder='Select Down Status'>
+                            <Option value={'progress'}>In Progress</Option>
+                            <Option value={'awaiting'}>Awaiting Parts</Option>
+                            <Option value={'awaitinglabour'}>Awaiting Labour</Option>
+                            <Option value={'completed'}>Completed</Option>
+                            <Option value={'others'}>Others</Option>
+                        </Select>
+                    </Form.Item>
+                    <Form.Item label='Custodian' name='custodian' rules={[{required: true}]}>
+                        <Input readOnly />
+                    </Form.Item>
+                    <Form.Item label='Location' name='location' rules={[{required: true}]}>
+                        <Input readOnly />
+                    </Form.Item>
+                    <Form.Item name='comment' label='Comment' >
+                        <TextArea />
+                    </Form.Item>
+                    <Form.Item name='timeStarted' label='Time Started' >
+                        <DatePicker showTime />
+                    </Form.Item>
+                    <Form.Item name='timeCompleted' label='Time Completed' >
+                        <DatePicker showTime />
                     </Form.Item>
                 </Form>
             </Modal>

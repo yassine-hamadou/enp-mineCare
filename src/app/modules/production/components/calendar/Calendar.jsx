@@ -197,7 +197,7 @@ const Calendar = () => {
                     locationId: schedule.locationId,
                     timeStart: schedule.StartTime,
                     timeEnd: schedule.EndTime,
-                    entryId: schedule.Id,
+                    entryId: 0,
                     vmModel: "null",
                     vmClass: "null"
                 }
@@ -207,6 +207,7 @@ const Calendar = () => {
             //Since format is an array, I need to change it to the format that the API will understand which is an object
             const dataToPost = formattedDataToPost[0];
             axios.post("http://208.117.44.15/SmWebApi/api/FleetSchedulesApi", dataToPost)
+            // axios.post("http://localhost:3001/FleetSchedulesApi", dataToPost)
                 .then(res => {
                     console.log("res", res);
                     console.log("res.data", res.data);
@@ -239,7 +240,7 @@ const Calendar = () => {
                     locationId: schedule.locationId,
                     timeStart: schedule.StartTime,
                     timeEnd: schedule.EndTime,
-                    entryId: schedule.Id,
+                    entryId: 0,
                     vmModel: "null",
                     vmClass: "null"
                 }

@@ -64,7 +64,11 @@ const WorkTypePage = () => {
       width: 100,
       render: (_: any, record: any ) => (
           <Space size="middle">
-            <a href="service" className="btn btn-light-info btn-sm">Services</a>
+
+            {/*<a href="service" className="btn btn-light-info btn-sm">Services</a>*/}
+            <Link to={'/setup/service'}>
+              <span className="btn btn-light-info btn-sm">Service</span>
+            </Link>
             <a href="#" className="btn btn-light-warning btn-sm ">Update</a>
             <a href="#" className="btn btn-light-danger btn-sm">Delete</a>
           </Space>

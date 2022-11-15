@@ -142,9 +142,13 @@ const ServicesPage = () => {
     <div style={{backgroundColor:'white', padding:'20px', borderRadius:'5px', boxShadow:'2px 2px 15px rgba(0,0,0,0.08)'}}>
       <KTCardBody className='py-4 '>
         <div className='table-responsive'>
-            <a href='work-type'  className='mb-3 btn btn-outline btn-outline-dashed btn-outline-primary btn-active-light-primary'>
-             Back to Models
-            </a>
+            {/*<a href='work-type'  className='mb-3 btn btn-outline btn-outline-dashed btn-outline-primary btn-active-light-primary'>*/}
+            {/* Back to Models*/}
+            {/*</a>*/}
+          <Link to={'/setup/work-type'}>
+          <span  className='mb-3 btn btn-outline btn-outline-dashed btn-outline-primary btn-active-light-primary'>
+              Back to Models
+            </span></Link>
         <div className='d-flex justify-content-between'>
           <Space style={{marginBottom: 16}}>
             <Input
