@@ -44,6 +44,8 @@ const Calendar = () => {
     const [locations, setLocations] = useState([]);
     const [dataFromAPI, setDataFromApi] = useState({});
     const [upToDateLocalData, setUpToDateLocalData] = useState({});
+    const [custodians, setCustodian] = useState([]);
+
 
     // load fleet IDs
     const loadVmequps = async () => {
@@ -54,7 +56,14 @@ const Calendar = () => {
             console.log(e);
         }
     };
-
+    const loadCustodians = async () => {
+        try {
+            const custodianResponse = await axios.get("http://localhost:3001/VmemplsApi");
+            setCustodian(custodianResponse.data);
+        } catch (e) {
+            console.log(e);
+        }
+    }
     const loadLocations = async () => {
         try {
             const locationsResponse = await axios.get("http://localhost:3001/IclocsApi");
@@ -63,7 +72,6 @@ const Calendar = () => {
             console.log(e);
         }
     };
-
     //Loading schedule data
     const loadData = async () => {
         try {
@@ -73,12 +81,13 @@ const Calendar = () => {
             console.log(e);
         }
     }
+
     const localData = (dataFromApi) => {
         return {
             dataSource: dataFromApi,
             fields: {
                 id: 'entryId',
-                subject: {name: 'fleetId', default: "No fleet ID"},
+                subject: {name: 'fleetId', default: 'No Fleet ID'},
                 location: {name: 'locationId'},
                 startTime: {name: 'timeStart'},
                 endTime: {name: 'timeEnd'}
@@ -93,6 +102,7 @@ const Calendar = () => {
         loadVmequps();
         loadLocations();
         loadData();
+        loadCustodians();
     }, []);
 
     let scheduleObj;
@@ -105,8 +115,8 @@ const Calendar = () => {
 
     function editorTemplate(props) {
         return ((props !== undefined) ?
-            <table className="custom-event-editor" style={{width: '100%'}} cellPadding={5}>
-                <tbody>
+                <table className="custom-event-editor" style={{width: '100%'}} cellPadding={5}>
+                    <tbody>
                     <tr>
                         <td className="e-textlabel">Fleet ID</td>
                         <td colSpan={4}>
@@ -147,6 +157,39 @@ const Calendar = () => {
                         </td>
                     </tr>
                     <tr>
+                        <td className="e-textlabel">Service Type</td>
+                        <td colSpan={4}>
+                            <DropDownListComponent
+                                id="ServiceType"
+                                placeholder='Choose Service Type'
+                                data-name='serviceType'
+                                className="e-field"
+                                style={{width: '100%'}}
+                                dataSource={["Service 1", "Service 2", "Service 3"]}
+                            />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td className="e-textlabel">Responsible</td>
+                        <td colSpan={4}>
+                            <DropDownListComponent
+                                id="responsible"
+                                placeholder='Responsible'
+                                data-name='custodian'
+                                className="e-field"
+                                style={{width: '100%'}}
+                                dataSource={custodians.map((custodian) => {
+                                    return {
+                                        text: `${custodian.emplCode} - ${custodian.emplName}`,
+                                        value: `${custodian.emplCode}`
+                                    };
+                                })}
+                                fields={{text: "text", value: "value"}}
+                            />
+                        </td>
+                    </tr>
+
+                    <tr>
                         <td className="e-textlabel">From</td>
                         <td colSpan={4}>
                             <DateTimePickerComponent id="StartTime" format='dd/MM/yy hh:mm a' data-name="timeStart"
@@ -162,15 +205,18 @@ const Calendar = () => {
                                                      className="e-field"></DateTimePickerComponent>
                         </td>
                     </tr>
-                </tbody>
-            </table> : <div></div>
+                    </tbody>
+                </table> : <div></div>
         );
     }
+
     const onActionBegin = (args) => {
         let data = args.data instanceof Array ? args.data[0] : args.data;
         if (args.requestType === 'eventCreate') {
             args.cancel = true;
             console.log("args.data", data);
+            //validate fields
+
 
             // make data in array so that I can map though it
             const preparedData = [{...data}];
@@ -182,7 +228,9 @@ const Calendar = () => {
                     locationId: schedule.locationId,
                     timeStart: schedule.StartTime,
                     timeEnd: schedule.EndTime,
-                    entryId: schedule.Id
+                    entryId: 0,
+                    vmModel: "null",
+                    vmClass: "null",
                 }
             });
             console.log("formattedDataToPost", formattedDataToPost);
@@ -190,6 +238,7 @@ const Calendar = () => {
             //Since format is an array, I need to change it to the format that the API will understand which is an object
             const dataToPost = formattedDataToPost[0];
             axios.post("http://localhost:3001/FleetSchedulesApi", dataToPost)
+            // axios.post("http://localhost:3001/FleetSchedulesApi", dataToPost)
                 .then(res => {
                     console.log("res", res);
                     console.log("res.data", res.data);
@@ -208,8 +257,8 @@ const Calendar = () => {
                     setUpToDateLocalData(localData(dataFromAPI.filter((schedule) => schedule.entryId !== data.entryId)));
                 })
                 .catch(err => {
-                        console.log(err);
-                    });
+                    console.log(err);
+                });
         }
         if (args.requestType === 'eventChange') {
             args.cancel = true;
@@ -222,7 +271,9 @@ const Calendar = () => {
                     locationId: schedule.locationId,
                     timeStart: schedule.StartTime,
                     timeEnd: schedule.EndTime,
-                    entryId: schedule.Id
+                    entryId: 0,
+                    vmModel: "null",
+                    vmClass: "null"
                 }
             });
             // console.log("formattedDataToPost", formattedDataToPost);
@@ -239,6 +290,7 @@ const Calendar = () => {
                 });
         }
     }
+
     // const quickInfoTemplates = {
     //     content: contentTemplate.bind(this),
     // }

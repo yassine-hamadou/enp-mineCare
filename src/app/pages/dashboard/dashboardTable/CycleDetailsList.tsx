@@ -16,33 +16,33 @@ const DashboardTable = () => {
       sorter: (a: any, b: any) => a.key - b.key,
     },
     {
-      title: 'Vehicle Type',
-      dataIndex: 'classCode',
+      title: 'Equipment Manufacturer',
+      dataIndex: 'txmanf',
       sorter: (a: any, b: any) => {
-        if (a.classCode > b.classCode) {
+        if (a.txmanf > b.txmanf) {
           return 1
         }
-        if (b.classCode > a.classCode) {
+        if (b.txmanf > a.txmanf) {
           return -1
         }
         return 0
       },
     },
     {
-      title: 'Description',
-      dataIndex: 'classDesc',
+      title: 'Model',
+      dataIndex: 'txmodel',
       sorter: (a: any, b: any) => {
-        if (a.classDesc > b.classDesc) {
+        if (a.txmodel > b.txmodel) {
           return 1
         }
-        if (a.classDesc < b.classDesc) {
+        if (a.txmodel < b.txmodel) {
           return -1
         }
         return 0
       },
     },
     {
-      title: 'Number of Vehicles',
+      title: 'Number of Equipments',
       dataIndex: 'vehicleNum',
       sorter: (a: any, b: any) => a.vehicleNum - b.vehicleNum,
     },
@@ -61,7 +61,7 @@ const DashboardTable = () => {
   const loadData = async () => {
     setLoading(true)
     try {
-      const response = await axios.get('http://208.117.44.15/SmWebApi/api/VmclasApi')
+      const response = await axios.get('http://208.117.44.15/SmWebApi/api/VmmodlsApi')
       setGridData(response.data)
       setLoading(false)
     } catch (error) {
@@ -92,8 +92,8 @@ const DashboardTable = () => {
     // @ts-ignore
     filteredData = dataWithVehicleNum.filter((value) => {
       return (
-        value.classDesc.toLowerCase().includes(searchText.toLowerCase()) ||
-        value.classCode.toLowerCase().includes(searchText.toLowerCase())
+        value.txmodel.toLowerCase().includes(searchText.toLowerCase()) ||
+        value.txmanf.toLowerCase().includes(searchText.toLowerCase())
       )
     })
     setGridData(filteredData)
