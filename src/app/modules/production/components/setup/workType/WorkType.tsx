@@ -9,7 +9,7 @@ const WorkTypePage = () => {
   const [gridData, setGridData] = useState([])
   const [loading, setLoading] = useState(false)
   const [searchText, setSearchText] = useState('')
-  let [filteredData] = useState([])
+  // let [filteredData] = useState([])
   const [isModalOpen, setIsModalOpen] = useState(false)
 
   const showModal = () => {
@@ -29,6 +29,10 @@ const WorkTypePage = () => {
     {
       title: 'Name',
       dataIndex: 'classCode',
+      key:'classCode',
+      onFilter:(value:any, record:any)=>{
+        return String(record.classCode).toLowerCase().includes(value.toLowerCase())
+      },
       sorter: (a: any, b: any) => {
         if (a.classCode > b.classCode) {
           return 1
@@ -42,8 +46,20 @@ const WorkTypePage = () => {
     
     {
       title: 'Number of Vehicles',
-      dataIndex: 'vehicleNum',
-      sorter: (a: any, b: any) => a.vehicleNum - b.vehicleNum,
+      dataIndex: 'classDesc',
+      key: "classDesc",
+      sorter: (a: any, b: any) => {
+        if (a.classCode > b.classCode) {
+          return 1
+        }
+        if (b.classCode > a.classCode) {
+          return -1
+        }
+        return 0
+      },
+      // onFilter:(value:any, record:any)=>{
+      //   return String(record.vehicleNum).toLowerCase().includes(value.toLowerCase())
+      // },
     },
 
     {
@@ -70,9 +86,9 @@ const WorkTypePage = () => {
   ]
 
   const loadData = async () => {
-    // setLoading(true)
+    setLoading(true)
     try {
-      const response = await axios.get('http://208.117.44.15/SmWebApi/api/VmclasApi')
+      const response = await axios.get('https://cors-anywhere.herokuapp.com/http://208.117.44.15/SmWebApi/api/VmclasApi')
       setGridData(response.data)
       setLoading(false)
     } catch (error) {
@@ -84,31 +100,31 @@ const WorkTypePage = () => {
     loadData()
   }, [])
 
-  const dataWithVehicleNum = gridData.map((item: any, index) => ({
-    ...item,
-    vehicleNum: Math.floor(Math.random() * 20) + 1,
-    downTime: `${Math.floor(Math.random() * 100) + 1}`,
-    numOfHrs: Math.floor(Math.random() * 20) + 1,
-    key: index,
-  }))
+  // const dataWithVehicleNum = gridData.map((item: any, index) => ({
+  //   ...item,
+  //   vehicleNum: Math.floor(Math.random() * 20) + 1,
+  //   downTime: `${Math.floor(Math.random() * 100) + 1}`,
+  //   numOfHrs: Math.floor(Math.random() * 20) + 1,
+  //   key: index,
+  // }))
 
-  const handleInputChange = (e: any) => {
-    setSearchText(e.target.value)
-    if (e.target.value === '') {
-      loadData()
-    }
-  }
+  // const handleInputChange = (e: any) => {
+  //   setSearchText(e.target.value)
+  //   if (e.target.value === '') {
+  //     loadData()
+  //   }
+  // }
 
-  const globalSearch = () => {
-    // @ts-ignore
-    filteredData = dataWithVehicleNum.filter((value) => {
-      return (
-        value.classDesc.toLowerCase().includes(searchText.toLowerCase()) ||
-        value.classCode.toLowerCase().includes(searchText.toLowerCase())
-      )
-    })
-    setGridData(filteredData)
-  }
+  // const globalSearch = () => {
+  //   // @ts-ignore
+  //   filteredData = dataWithVehicleNum.filter((value) => {
+  //     return (
+  //       value.classDesc.toLowerCase().includes(searchText.toLowerCase()) ||
+  //       value.classCode.toLowerCase().includes(searchText.toLowerCase())
+  //     )
+  //   })
+  //   setGridData(filteredData)
+  // }
 
   return (
     <div style={{backgroundColor:'white', padding:'20px', borderRadius:'5px', boxShadow:'2px 2px 15px rgba(0,0,0,0.08)'}}>
@@ -116,16 +132,24 @@ const WorkTypePage = () => {
         <div className='table-responsive'>
         <div className='d-flex justify-content-between'>
           <Space style={{marginBottom: 16}}>
-            <Input
-              placeholder='Enter Search Text'
-              onChange={handleInputChange}
+            <Input.Search
+              placeholder='Search...'
+              onSearch={(value)=>{
+                setSearchText(value)
+              }}
+              onChange={(e)=>{
+                setSearchText(e.target.value)
+                  if (e.target.value === '') {
+                    loadData()
+                  }
+              }}
               type='text'
-              allowClear
-              value={searchText}
+             
+              // value={searchText}
             />
-            <Button type='primary' onClick={globalSearch}>
+            {/* <Button type='primary' onClick={globalSearch}>
               Search
-            </Button>
+            </Button> */}
           </Space>
           <Space style={{marginBottom: 16}}>
 
@@ -144,7 +168,7 @@ const WorkTypePage = () => {
             </button>
           </Space>
         </div>
-        <Table columns={columns} dataSource={dataWithVehicleNum}  />
+        <Table columns={columns} dataSource={gridData} loading={loading} />
       </div>
       </KTCardBody>
     </div>

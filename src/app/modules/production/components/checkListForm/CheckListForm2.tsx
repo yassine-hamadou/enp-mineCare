@@ -7,28 +7,13 @@ import {Field, useFormik} from 'formik'
 import clsx from 'clsx'
 import * as Yup from 'yup'
 import { Divider } from 'antd';
-// import { Tabs } from 'antd';
-import { CheckListForm2 } from './CheckListForm2'
-import { CheckListForm3 } from './CheckListForm3'
-import { CheckListForm5 } from './CheckListForm5'
-import { CheckListForm4 } from './CheckListForm4'
-import Tabs from '@mui/material/Tabs';
-import Tab from '@mui/material/Tab';
-// import { TabContext } from '@mui/lab';
 
-interface TabPanelProps {
-  children?: React.ReactNode;
-  dir?: string;
-  index: number;
-  value: number;
-}
-
-const CheckListForm = () => {
+const CheckListForm2 = () => {
   const [gridData, setGridData] = useState([])
   const [loading, setLoading] = useState(false)
   const [searchText, setSearchText] = useState('')
   let [filteredData] = useState([])
-  const [value, setValue] = useState(0);
+
   const [agree, setAgree] = useState(false);
   const checkboxHandler = () => {
     // if agree === true, it will be set to false
@@ -45,53 +30,25 @@ const CheckListForm = () => {
   return (
     <>
     <div style={{backgroundColor:'white',  padding:'20px', borderRadius:'5px', boxShadow:'2px 2px 15px rgba(0,0,0,0.08)'}}>
-     
       <form id='kt_modal_add_plan_form' className='form' noValidate>
         {/* begin::Scroll */}
         
           <div className='d-flex justify-content-center'>
-            <h2><strong>SECTION '1' - ENGINE</strong></h2>
+            <h2><strong>SECTION '2' - ENGINE</strong></h2>
             
           </div>
           <div className='d-flex justify-content-center mb-7'>
             <span className="fst-itali fs-5 text-danger">Please read each lable carefully and select the appropriate option</span>
           </div>
-          <Divider />
-          {/* end::row */}
-          <div className='row mb-7'>
-            <div className='col-4'>
-              <label className='required fw-bold fs-6 mb-2'>Cut Open Filter (Show to Supervisor)</label>
-              <select className="form-select form-control form-control-solid mb-3" >
-                <option selected>Select one option</option>
-                <option value="1">Ok</option>
-                <option value="2">Repair</option>
-                
-              </select>
-            </div>
-            <div className='col-4'>
-              <label className='required fw-bold fs-6 mb-2'>Clean Primary Fuel filter</label>
-              <select className="form-select form-control form-control-solid mb-3" >
-                <option selected>Select one option</option>
-                <option value="1">Ok</option>
-                <option value="2">Repair</option>
-                
-              </select>
-            </div>
-            <div className='col-4'>
-              <label className='required fw-bold fs-6 mb-2'>Check condition of battery cables</label>
-              <select className="form-select form-control form-control-solid mb-3" >
-                <option selected>Select one option</option>
-                <option value="1">Ok</option>
-                <option value="2">Repair</option>
-              </select>
-            </div>
+          <div>
+            <h3><b>TRANSMISSION</b></h3>
+            <Divider />
           </div>
-        
-
+          {/* <Divider /> */}
           {/* end::row */}
-          <div className='row mb-7'>
+          <div className='row mb-10'>
             <div className='col-4'>
-              <label className='required fw-bold fs-6 mb-2'>Check condition of engine mounts</label>
+              <label className='required fw-bold fs-6 mb-2'>Replace Transmission oil filter</label>
               <select className="form-select form-control form-control-solid mb-3" >
                 <option selected>Select one option</option>
                 <option value="1">Ok</option>
@@ -100,7 +57,7 @@ const CheckListForm = () => {
               </select>
             </div>
             <div className='col-4'>
-              <label className='required fw-bold fs-6 mb-2'>Check cooling fan for cracks or damage</label>
+              <label className='required fw-bold fs-6 mb-2'>Replace Torque Converter oil filter</label>
               <select className="form-select form-control form-control-solid mb-3" >
                 <option selected>Select one option</option>
                 <option value="1">Ok</option>
@@ -109,178 +66,7 @@ const CheckListForm = () => {
               </select>
             </div>
             <div className='col-4'>
-              <label className='required fw-bold fs-6 mb-2'>Check Cooling system clamps & hoses</label>
-              <select className="form-select form-control form-control-solid mb-3" >
-                <option selected>Select one option</option>
-                <option value="1">Ok</option>
-                <option value="2">Repair</option>
-              </select>
-            </div>
-          </div>
-          {/* end::row */}
-          <div className='row mb-7'>
-            <div className='col-4'>
-              <label className='required fw-bold fs-6 mb-2'>Check pulleys for excess bearing noise</label>
-              <select className="form-select form-control form-control-solid mb-3" >
-                <option selected>Select one option</option>
-                <option value="1">Ok</option>
-                <option value="2">Repair</option>
-                
-              </select>
-            </div>
-            <div className='col-4'>
-              <label className='required fw-bold fs-6 mb-2'>Clean Engine crankcase breather</label>
-              <select className="form-select form-control form-control-solid mb-3" >
-                <option selected>Select one option</option>
-                <option value="1">Ok</option>
-                <option value="2">Repair</option>
-                
-              </select>
-            </div>
-            <div className='col-4'>
-              <label className='required fw-bold fs-6 mb-2'>Condition & tension of all drive belts</label>
-              <select className="form-select form-control form-control-solid mb-3" >
-                <option selected>Select one option</option>
-                <option value="1">Ok</option>
-                <option value="2">Repair</option>
-              </select>
-            </div>
-          </div>
-          {/* end::row */}
-          <div className='row mb-7'>
-            <div className='col-4'>
-              <label className='required fw-bold fs-6 mb-2'>Check for cracks on fan belts & tighten Bolts</label>
-              <select className="form-select form-control form-control-solid mb-3" >
-                <option selected>Select one option</option>
-                <option value="1">Ok</option>
-                <option value="2">Repair</option>
-                
-              </select>
-            </div>
-            <div className='col-4'>
-              <label className='required fw-bold fs-6 mb-2'>Drain fuel tank water trap</label>
-              <select className="form-select form-control form-control-solid mb-3" >
-                <option selected>Select one option</option>
-                <option value="1">Ok</option>
-                <option value="2">Repair</option>
-                
-              </select>
-            </div>
-            <div className='col-4'>
-              <label className='required fw-bold fs-6 mb-2'>Inspect radiator core. (Clean if needed)</label>
-              <select className="form-select form-control form-control-solid mb-3" >
-                <option selected>Select one option</option>
-                <option value="1">Ok</option>
-                <option value="2">Repair</option>
-              </select>
-            </div>
-          </div>
-          {/* end::row */}
-          <div className='row mb-7'>
-            <div className='col-4'>
-              <label className='required fw-bold fs-6 mb-2'>Jump start receptacle cables if fitted</label>
-              <select className="form-select form-control form-control-solid mb-3" >
-                <option selected>Select one option</option>
-                <option value="1">Ok</option>
-                <option value="2">Repair</option>
-                
-              </select>
-            </div>
-            <div className='col-4'>
-              <label className='required fw-bold fs-6 mb-2'>Lubricate Fan hub & jockey pulley</label>
-              <select className="form-select form-control form-control-solid mb-3" >
-                <option selected>Select one option</option>
-                <option value="1">Ok</option>
-                <option value="2">Repair</option>
-                
-              </select>
-            </div>
-            <div className='col-4'>
-              <label className='required fw-bold fs-6 mb-2'>Test Air con system</label>
-              <select className="form-select form-control form-control-solid mb-3" >
-                <option selected>Select one option</option>
-                <option value="1">Ok</option>
-                <option value="2">Repair</option>
-              </select>
-            </div>
-          </div>
-          {/* end::row */}
-          <div className='row mb-7'>
-            <div className='col-4'>
-              <label className='required fw-bold fs-6 mb-2'>Test Charging system </label>
-              <select className="form-select form-control form-control-solid mb-3" >
-                <option selected>Select one option</option>
-                <option value="1">Ok</option>
-                <option value="2">Repair</option>
-                
-              </select>
-            </div>
-            <div className='col-4'>
-              <label className='required fw-bold fs-6 mb-2'>Replace Primary Fuel filter</label>
-              <select className="form-select form-control form-control-solid mb-3" >
-                <option selected>Select one option</option>
-                <option value="1">Ok</option>
-                <option value="2">Repair</option>
-              </select>
-            </div>
-            <div className='col-4'>
-              <label className='required fw-bold fs-6 mb-2'>Replace Secondary fuel filter</label>
-              <select className="form-select form-control form-control-solid mb-3" >
-                <option selected>Select one option</option>
-                <option value="1">Ok</option>
-                <option value="2">Repair</option>
-              </select>
-            </div>
-          </div>
-          {/* end::row */}
-          <div className='row mb-7'>
-            <div className='col-4'>
-              <label className='required fw-bold fs-6 mb-2'>Replace Fuel Filter (ORS) </label>
-              <select className="form-select form-control form-control-solid mb-3" >
-                <option selected>Select one option</option>
-                <option value="1">Ok</option>
-                <option value="2">Repair</option>
-                
-              </select>
-            </div>
-            <div className='col-4'>
-              <label className='required fw-bold fs-6 mb-2'>Replace Engine oil filter</label>
-              <select className="form-select form-control form-control-solid mb-3" >
-                <option selected>Select one option</option>
-                <option value="1">Ok</option>
-                <option value="2">Repair</option>
-              </select>
-            </div>
-            <div className='col-4'>
-              <label className='required fw-bold fs-6 mb-2'>Remove & clean starter silenser</label>
-              <select className="form-select form-control form-control-solid mb-3" >
-                <option selected>Select one option</option>
-                <option value="1">Ok</option>
-                <option value="2">Repair</option>
-              </select>
-            </div>
-          </div>
-          {/* end::row */}
-          <div className='row mb-7'>
-            <div className='col-4'>
-              <label className='required fw-bold fs-6 mb-2'>Inspect pulleys for cracks & dirt build-up  </label>
-              <select className="form-select form-control form-control-solid mb-3" >
-                <option selected>Select one option</option>
-                <option value="1">Ok</option>
-                <option value="2">Repair</option>
-                
-              </select>
-            </div>
-            <div className='col-4'>
-              <label className='required fw-bold fs-6 mb-2'>Inspect Fuel lines for leaks & damage</label>
-              <select className="form-select form-control form-control-solid mb-3" >
-                <option selected>Select one option</option>
-                <option value="1">Ok</option>
-                <option value="2">Repair</option>
-              </select>
-            </div>
-            <div className='col-4'>
-              <label className='required fw-bold fs-6 mb-2'>Inspect Exhaust manifolds & lines for leaks</label>
+              <label className='required fw-bold fs-6 mb-2'>Inspect Torque Converter outlet screen</label>
               <select className="form-select form-control form-control-solid mb-3" >
                 <option selected>Select one option</option>
                 <option value="1">Ok</option>
@@ -291,64 +77,307 @@ const CheckListForm = () => {
           {/* end::row */}
           <div className='row mb-10'>
             <div className='col-4'>
-              <label className='required fw-bold fs-6 mb-2'>Inspect Air induction system clamps & hoses</label>
+              <label className='required fw-bold fs-6 mb-2'>Inspect all hoses for Leaks & damage</label>
+              <select className="form-select form-control form-control-solid mb-3" >
+                <option selected>Select one option</option>
+                <option value="1">Ok</option>
+                <option value="2">Repair</option>
+                
+              </select>
+            </div>
+            <div className='col-4'>
+              <label className='required fw-bold fs-6 mb-2'>Inspect & lubricate all drive shafts</label>
+              <select className="form-select form-control form-control-solid mb-3" >
+                <option selected>Select one option</option>
+                <option value="1">Ok</option>
+                <option value="2">Repair</option>
+                
+              </select>
+            </div>
+            <div className='col-4'>
+              <label className='required fw-bold fs-6 mb-2'>Cut Open Filter (Show to Supervisor)</label>
               <select className="form-select form-control form-control-solid mb-3" >
                 <option selected>Select one option</option>
                 <option value="1">Ok</option>
                 <option value="2">Repair</option>
               </select>
             </div>
-          </div> 
+          </div>
+          {/* end::row */}
+          <div className='row mb-10'>
+            <div className='col-4'>
+              <label className='required fw-bold fs-6 mb-2'>Check Transmission oil level</label>
+              <select className="form-select form-control form-control-solid mb-3" >
+                <option selected>Select one option</option>
+                <option value="1">Ok</option>
+                <option value="2">Repair</option>
+                
+              </select>
+            </div>
+            <div className='col-4'>
+              <label className='required fw-bold fs-6 mb-2'>Condition of transmission mounts</label>
+              <select className="form-select form-control form-control-solid mb-3" >
+                <option selected>Select one option</option>
+                <option value="1">Ok</option>
+                <option value="2">Repair</option>
+                
+              </select>
+            </div>
+            <div className='col-4'>
+              <label className='required fw-bold fs-6 mb-2'>Clean Transmission magnetic screen</label>
+              <select className="form-select form-control form-control-solid mb-3" >
+                <option selected>Select one option</option>
+                <option value="1">Ok</option>
+                <option value="2">Repair</option>
+              </select>
+            </div>
+          </div>
+          {/* end::row */}
+          <div className='row mb-10'>
+            <div className='col-4'>
+              <label className='required fw-bold fs-6 mb-2'>Check Transmission & converter for oil leaks</label>
+              <select className="form-select form-control form-control-solid mb-3" >
+                <option selected>Select one option</option>
+                <option value="1">Ok</option>
+                <option value="2">Repair</option>
+                
+              </select>
+            </div>
+            <div className='col-4'>
+              <label className='required fw-bold fs-6 mb-2'>Check for loose, missing or damaged guards</label>
+              <select className="form-select form-control form-control-solid mb-3" >
+                <option selected>Select one option</option>
+                <option value="1">Ok</option>
+                <option value="2">Repair</option>
+                
+              </select>
+            </div>
+            <div className='col-4'>
+              <label className='required fw-bold fs-6 mb-2'>Inspect Pump Drive </label>
+              <select className="form-select form-control form-control-solid mb-3" >
+                <option selected>Select one option</option>
+                <option value="1">Ok</option>
+                <option value="2">Repair</option>
+              </select>
+            </div>
+          </div>
+          {/* end::row */}
+          <div className='row mb-10'>
+            <div className='col-4'>
+              <label className='required fw-bold fs-6 mb-2'>Check for Grease injector & adjust Accordingly</label>
+              <select className="form-select form-control form-control-solid mb-3" >
+                <option selected>Select one option</option>
+                <option value="1">Ok</option>
+                <option value="2">Repair</option>
+                
+              </select>
+            </div>
+            
+          </div>
+        
           <div>
-            <h3><b>Check  condition of all Cylinders</b></h3>
+            <h3><b>HYDRAULIC</b></h3>
             <Divider />
           </div>
           {/* end::row */}
-          <div className='row mb-4'>
-            <div className='col-3'>
-              <label className='required fw-bold fs-6 mb-2'>LH Hoist Cylinder & hoses</label>
+          <div className='row mb-7'>
+            <div className='col-4'>
+              <label className='required fw-bold fs-6 mb-2'>Check hydraulic oil level</label>
               <select className="form-select form-control form-control-solid mb-3" >
                 <option selected>Select one option</option>
                 <option value="1">Ok</option>
-                <option value="2">Chrome Damage</option>
-                <option value="3">Weeping</option>
-                <option value="4">Leaking</option>
-                <option value="4">Leaking & Chrome Damage</option>
+                <option value="2">Repair</option>
+                
               </select>
             </div>
-            <div className='col-3'>
-              <label className='required fw-bold fs-6 mb-2'>LH Steering Cylinder & hoses</label>
+            <div className='col-4'>
+              <label className='required fw-bold fs-6 mb-2'>Check hydraulic Tank mounts for cracks</label>
               <select className="form-select form-control form-control-solid mb-3" >
                 <option selected>Select one option</option>
                 <option value="1">Ok</option>
-                <option value="2">Chrome Damage</option>
-                <option value="3">Weeping</option>
-                <option value="4">Leaking</option>
-                <option value="4">Leaking & Chrome Damage</option>
+                <option value="2">Repair</option>
+                
               </select>
             </div>
-            <div className='col-3'>
-              <label className='required fw-bold fs-6 mb-2'>RH Steering Cylinder & hoses</label>
+            <div className='col-4'>
+              <label className='required fw-bold fs-6 mb-2'>Cut Open Filter (Show to Supervisor)</label>
               <select className="form-select form-control form-control-solid mb-3" >
                 <option selected>Select one option</option>
                 <option value="1">Ok</option>
-                <option value="2">Chrome Damage</option>
-                <option value="3">Weeping</option>
-                <option value="4">Leaking</option>
-                <option value="4">Leaking & Chrome Damage</option>
+                <option value="2">Repair</option>
               </select>
             </div>
-            <div className='col-3'>
-              <label className='required fw-bold fs-6 mb-2'>RH Hoist Cylinder & hoses</label>
+          </div>
+          {/* end::row */}
+          <div className='row mb-7'>
+            <div className='col-4'>
+              <label className='required fw-bold fs-6 mb-2'>Inspect all cylinder pivots & bearings</label>
               <select className="form-select form-control form-control-solid mb-3" >
                 <option selected>Select one option</option>
                 <option value="1">Ok</option>
-                <option value="2">Chrome Damage</option>
-                <option value="3">Weeping</option>
-                <option value="4">Leaking</option>
-                <option value="4">Leaking & Chrome Damage</option>
+                <option value="2">Repair</option>
+                
               </select>
             </div>
+            <div className='col-4'>
+              <label className='required fw-bold fs-6 mb-2'>Inspect tank for damage & leaks</label>
+              <select className="form-select form-control form-control-solid mb-3" >
+                <option selected>Select one option</option>
+                <option value="1">Ok</option>
+                <option value="2">Repair</option>
+                
+              </select>
+            </div>
+            <div className='col-4'>
+              <label className='required fw-bold fs-6 mb-2'>Replace Hoist, Torque breather filter</label>
+              <select className="form-select form-control form-control-solid mb-3" >
+                <option selected>Select one option</option>
+                <option value="1">Ok</option>
+                <option value="2">Repair</option>
+              </select>
+            </div>
+          </div>
+          
+          {/* end::row */}
+          <div className='row mb-7'>
+            <div className='col-4'>
+              <label className='required fw-bold fs-6 mb-2'>Replace Parking brake release oil filter</label>
+              <select className="form-select form-control form-control-solid mb-3" >
+                <option selected>Select one option</option>
+                <option value="1">Ok</option>
+                <option value="2">Repair</option>
+                
+              </select>
+            </div>
+            <div className='col-4'>
+              <label className='required fw-bold fs-6 mb-2'>Replace steering oil filter</label>
+              <select className="form-select form-control form-control-solid mb-3" >
+                <option selected>Select one option</option>
+                <option value="1">Ok</option>
+                <option value="2">Repair</option>
+                
+              </select>
+            </div>
+          </div>
+          <div>
+            <h3><b>AXLES</b></h3>
+            <Divider />
+          </div>
+         
+          {/* end::row */}
+          <div className='row mb-7'>
+            <div className='col-4'>
+              <label className='required fw-bold fs-6 mb-2'>Change L/H & R/H  Front wheel oil</label>
+              <select className="form-select form-control form-control-solid mb-3" >
+                <option selected>Select one option</option>
+                <option value="1">Ok</option>
+                <option value="2">Repair</option>
+                
+              </select>
+            </div>
+            <div className='col-4'>
+              <label className='required fw-bold fs-6 mb-2'>Check Rear L/H & R/H Final drive oil level</label>
+              <select className="form-select form-control form-control-solid mb-3" >
+                <option selected>Select one option</option>
+                <option value="1">Ok</option>
+                <option value="2">Repair</option>
+              </select>
+            </div>
+            <div className='col-4'>
+              <label className='required fw-bold fs-6 mb-2'>Check Rear Axle oil level</label>
+              <select className="form-select form-control form-control-solid mb-3" >
+                <option selected>Select one option</option>
+                <option value="1">Ok</option>
+                <option value="2">Repair</option>
+              </select>
+            </div>
+          </div>
+          {/* end::row */}
+          <div className='row mb-7'>
+            <div className='col-4'>
+              <label className='required fw-bold fs-6 mb-2'>Replace Rear axle oil filter</label>
+              <select className="form-select form-control form-control-solid mb-3" >
+                <option selected>Select one option</option>
+                <option value="1">Ok</option>
+                <option value="2">Repair</option>
+                
+              </select>
+            </div>
+            <div className='col-4 mb-10'>
+              <label className='required fw-bold fs-6 mb-2'>Kidney Loop Rear Axle Oil</label>
+              <select className="form-select form-control form-control-solid mb-3" >
+                <option selected>Select one option</option>
+                <option value="1">Ok</option>
+                <option value="2">Repair</option>
+              </select>
+            </div>
+          </div>
+          <div>
+            <h3><b>Check condition of magnetic plugs</b></h3>
+            <Divider />
+          </div>
+          {/* end::row */}
+          <div className='row mb-7'>
+            <div className='col-4'>
+              <label className='required fw-bold fs-6 mb-2'>L/H Final Drive</label>
+              <select className="form-select form-control form-control-solid mb-3" >
+                <option selected>Select one option</option>
+                <option value="1">Clean </option>
+                <option value="2">Light Past</option>
+                <option value="3">Heavy Paste</option>
+                <option value="4">Light Flakes</option>
+                <option value="5">Heavy Flakes</option>
+                
+              </select>
+            </div>
+            <div className='col-4'>
+              <label className='required fw-bold fs-6 mb-2'>R/H Final Drive</label>
+              <select className="form-select form-control form-control-solid mb-3" >
+                <option selected>Select one option</option>
+                <option value="1">Clean </option>
+                <option value="2">Light Past</option>
+                <option value="3">Heavy Paste</option>
+                <option value="4">Light Flakes</option>
+                <option value="5">Heavy Flakes</option>
+              </select>
+            </div>
+            <div className='col-4'>
+              <label className='required fw-bold fs-6 mb-2'>Rear Axle</label>
+              <select className="form-select form-control form-control-solid mb-3" >
+                <option selected>Select one option</option>
+                <option value="1">Clean </option>
+                <option value="2">Light Past</option>
+                <option value="3">Heavy Paste</option>
+                <option value="4">Light Flakes</option>
+                <option value="5">Heavy Flakes</option>
+              </select>
+            </div>
+          </div>
+          {/* end::row */}
+          <div className='row mb-7'>
+            <div className='col-4'>
+              <label className='required fw-bold fs-6 mb-2'>L/H Front Wheel</label>
+              <select className="form-select form-control form-control-solid mb-3" >
+                <option selected>Select one option</option>
+                <option value="1">Clean </option>
+                <option value="2">Light Past</option>
+                <option value="3">Heavy Paste</option>
+                <option value="4">Light Flakes</option>
+                <option value="5">Heavy Flakes</option>
+                
+              </select>
+            </div>
+            <div className='col-4'>
+              <label className='required fw-bold fs-6 mb-2'>R/H Front Wheel</label>
+              <select className="form-select form-control form-control-solid mb-3" >
+                <option selected>Select one option</option>
+                <option value="1">Clean </option>
+                <option value="2">Light Past</option>
+                <option value="3">Heavy Paste</option>
+                <option value="4">Light Flakes</option>
+                <option value="5">Heavy Flakes</option>
+              </select>
+            </div>  
           </div>
           <Divider dashed />
           <div className='row mb-5'>
@@ -372,5 +401,5 @@ const CheckListForm = () => {
   )
 }
 
-export {CheckListForm}
+export {CheckListForm2}
 

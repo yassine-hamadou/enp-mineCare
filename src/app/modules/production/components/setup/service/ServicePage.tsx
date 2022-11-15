@@ -13,6 +13,10 @@ const ServicesPage = () => {
   const [loading, setLoading] = useState(false)
   const [searchText, setSearchText] = useState('')
   let [filteredData] = useState([])
+  const [formData, setFormData]= useState({
+    name:"",
+    modelID:"",
+  })
 
 
 
@@ -36,13 +40,26 @@ const ServicesPage = () => {
 
     
     {
-      title: 'Services',
-      dataIndex: 'service',
+      title: 'Model',
+      dataIndex: 'modelID',
       sorter: (a: any, b: any) => {
-        if (a.service > b.service) {
+        if (a.modelID > b.modelID) {
           return 1
         }
-        if (b.service > a.service) {
+        if (b.modelID > a.modelID) {
+          return -1
+        }
+        return 0
+      },
+    },
+    {
+      title: 'Services',
+      dataIndex: 'name',
+      sorter: (a: any, b: any) => {
+        if (a.name > b.name) {
+          return 1
+        }
+        if (b.name > a.name) {
           return -1
         }
         return 0
@@ -103,8 +120,9 @@ const ServicesPage = () => {
     setLoading(true)
     try {
       // const response = await axios.get('https://cors-anywhere.herokuapp.com/http://208.117.44.15/SmWebApi/api/VmfaltsApi')
-      // setGridData(response.data)
-      setGridData(dataSource)
+      const response = await axios.get('http://localhost:4192/services')
+      setGridData(response.data)
+      // setGridData(dataSource)
       setLoading(false)
     } catch (error) {
       console.log(error)
