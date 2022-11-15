@@ -44,6 +44,7 @@ const Calendar = () => {
     const [locations, setLocations] = useState([]);
     const [dataFromAPI, setDataFromApi] = useState({});
     const [upToDateLocalData, setUpToDateLocalData] = useState({});
+    const [custodians, setCustodian] = useState([]);
 
 
     // load fleet IDs
@@ -55,7 +56,14 @@ const Calendar = () => {
             console.log(e);
         }
     };
-
+    const loadCustodians = async () => {
+        try {
+            const custodianResponse = await axios.get("http://208.117.44.15/SmWebApi/api/VmemplsApi");
+            setCustodian(custodianResponse.data);
+        } catch (e) {
+            console.log(e);
+        }
+    }
     const loadLocations = async () => {
         try {
             const locationsResponse = await axios.get("http://208.117.44.15/SmWebApi/api/IclocsApi");
@@ -94,6 +102,7 @@ const Calendar = () => {
         loadVmequps();
         loadLocations();
         loadData();
+        loadCustodians();
     }, []);
 
     let scheduleObj;
@@ -161,6 +170,26 @@ const Calendar = () => {
                         </td>
                     </tr>
                     <tr>
+                        <td className="e-textlabel">Responsible</td>
+                        <td colSpan={4}>
+                            <DropDownListComponent
+                                id="responsible"
+                                placeholder='Responsible'
+                                data-name='custodian'
+                                className="e-field"
+                                style={{width: '100%'}}
+                                dataSource={custodians.map((custodian) => {
+                                    return {
+                                        text: `${custodian.emplCode} - ${custodian.emplName}`,
+                                        value: `${custodian.emplCode}`
+                                    };
+                                })}
+                                fields={{text: "text", value: "value"}}
+                            />
+                        </td>
+                    </tr>
+
+                    <tr>
                         <td className="e-textlabel">From</td>
                         <td colSpan={4}>
                             <DateTimePickerComponent id="StartTime" format='dd/MM/yy hh:mm a' data-name="timeStart"
@@ -207,7 +236,7 @@ const Calendar = () => {
             //Since format is an array, I need to change it to the format that the API will understand which is an object
             const dataToPost = formattedDataToPost[0];
             axios.post("http://208.117.44.15/SmWebApi/api/FleetSchedulesApi", dataToPost)
-            // axios.post("http://localhost:3001/FleetSchedulesApi", dataToPost)
+            // axios.post("http://208.117.44.15/SmWebApi/api/FleetSchedulesApi", dataToPost)
                 .then(res => {
                     console.log("res", res);
                     console.log("res.data", res.data);

@@ -9,6 +9,16 @@
       "locationId": "DRILL ",
       "custodian": "ACKON       ",
       "entryId": "7756a2aa-4b40-4b20-a5d7-dedcf5302209"
+    },
+    {
+      "fleetId": "AD063       ",
+      "vmModel": "A40F                          ",
+      "vmClass": "Articulated Dump Truck                                      ",
+      "downType": "2000 HOUR SERVICE                                           ",
+      "downtime": "2022-11-15T15:52:04.715Z",
+      "locationId": "GOLD  ",
+      "custodian": "ASIEDU      ",
+      "entryId": "bc1fee8c-83a3-4f2b-9292-8482fcf7e4f4"
     }
   ],
   "HourliesApi": [
