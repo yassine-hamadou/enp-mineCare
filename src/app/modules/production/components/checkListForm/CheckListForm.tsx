@@ -1,4 +1,4 @@
-import {Button, Input, Modal, Space, Table} from 'antd'
+import {Button, Input, Modal, Radio, RadioChangeEvent, Space, Table} from 'antd'
 import {useState, useEffect} from 'react'
 import axios from 'axios'
 import { isNotEmpty, KTCard, KTCardBody } from '../../../../../_metronic/helpers'
@@ -30,12 +30,18 @@ const CheckListForm = () => {
   let [filteredData] = useState([])
   const [value, setValue] = useState(0);
   const [agree, setAgree] = useState(false);
+  const [value1, setValue1] = useState(1);
   const checkboxHandler = () => {
     // if agree === true, it will be set to false
     // if agree === false, it will be set to true
     setAgree(!agree);
     // Don't miss the exclamation mark
   }
+
+  const onChange = (e: RadioChangeEvent) => {
+    console.log('radio checked', e.target.value);
+    setValue(e.target.value);
+  };
 
   // When the button is clicked
   const btnHandler = () => {
@@ -60,13 +66,22 @@ const CheckListForm = () => {
           {/* end::row */}
           <div className='row mb-7'>
             <div className='col-4'>
-              <label className='required fw-bold fs-6 mb-2'>Cut Open Filter (Show to Supervisor)</label>
-              <select className="form-select form-control form-control-solid mb-3" >
+              {/* <select className="form-select form-control form-control-solid mb-3" >
                 <option selected>Select one option</option>
                 <option value="1">Ok</option>
                 <option value="2">Repair</option>
                 
-              </select>
+              </select> */}
+              <div className="form-control form-control-solid mb-3" >
+                <div>
+                <label className='required fw-bold fs-6 mb-2'>Cut Open Filter (Show to Supervisor)</label>
+
+                </div>
+              <Radio.Group onChange={onChange} value={value}>
+                <Radio value={1}>A</Radio>
+                <Radio value={2}>B</Radio>
+              </Radio.Group>
+              </div>
             </div>
             <div className='col-4'>
               <label className='required fw-bold fs-6 mb-2'>Clean Primary Fuel filter</label>
