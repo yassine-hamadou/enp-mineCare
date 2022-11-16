@@ -192,7 +192,7 @@ const ItemsPage = () => {
   const loadData = async () => {
     setLoading(true)
     try {
-      // const response = await axios.get('https://cors-anywhere.herokuapp.com/http://208.117.44.15/SmWebApi/api/VmfaltsApi')
+      // const response = await axios.get('http://208.117.44.15/SmWebApi/api/VmfaltsApi')
       // setGridData(response.data)
       setGridData(dataSource)
       setLoading(false)
