@@ -1,5 +1,4 @@
 import {L10n} from '@syncfusion/ej2-base'
-import {ButtonComponent} from '@syncfusion/ej2-react-buttons'
 import {
   ScheduleComponent,
   Day,
@@ -23,7 +22,7 @@ import {useEffect, useState} from 'react'
 import axios from 'axios'
 import {DateTimePickerComponent} from '@syncfusion/ej2-react-calendars'
 import {DropDownListComponent} from '@syncfusion/ej2-react-dropdowns'
-import {Link} from 'react-router-dom'
+import {ENP_URL} from '../../../../urls'
 
 /**
  *  Schedule editor custom fields sample
@@ -47,13 +46,11 @@ const Calendar = () => {
   const [dataFromAPI, setDataFromApi] = useState({})
   const [upToDateLocalData, setUpToDateLocalData] = useState({})
   const [custodians, setCustodian] = useState([])
-  const ENP_SERVER_URL = 'http://208.117.44.15/SmWebApi/api'
-  // const ENP_SERVER_URL = "http://localhost:3001";
 
   // load fleet IDs
   const loadVmequps = async () => {
     try {
-      const VmequpsResponse = await axios.get(`${ENP_SERVER_URL}/VmequpsApi`)
+      const VmequpsResponse = await axios.get(`${ENP_URL}/VmequpsApi`)
       setVmequps(VmequpsResponse.data)
     } catch (e) {
       console.log(e)
@@ -61,7 +58,7 @@ const Calendar = () => {
   }
   const loadCustodians = async () => {
     try {
-      const custodianResponse = await axios.get(`${ENP_SERVER_URL}/VmemplsApi`)
+      const custodianResponse = await axios.get(`${ENP_URL}/VmemplsApi`)
       setCustodian(custodianResponse.data)
     } catch (e) {
       console.log(e)
@@ -69,7 +66,7 @@ const Calendar = () => {
   }
   const loadLocations = async () => {
     try {
-      const locationsResponse = await axios.get(`${ENP_SERVER_URL}/IclocsApi`)
+      const locationsResponse = await axios.get(`${ENP_URL}/IclocsApi`)
       setLocations(locationsResponse.data)
     } catch (e) {
       console.log(e)
@@ -78,7 +75,7 @@ const Calendar = () => {
   //Loading schedule data
   const loadData = async () => {
     try {
-      const dataResponse = await axios.get(`${ENP_SERVER_URL}/FleetSchedulesApi`)
+      const dataResponse = await axios.get(`${ENP_URL}/FleetSchedulesApi`)
       setDataFromApi([...dataResponse.data])
     } catch (e) {
       console.log(e)
@@ -249,8 +246,8 @@ const Calendar = () => {
       //Since format is an array, I need to change it to the format that the API will understand which is an object
       const dataToPost = formattedDataToPost[0]
       axios
-        .post(`${ENP_SERVER_URL}/FleetSchedulesApi`, dataToPost)
-        // axios.post(`${ENP_SERVER_URL}/FleetSchedulesApi`, dataToPost)
+        .post(`${ENP_URL}/FleetSchedulesApi`, dataToPost)
+        // axios.post(`${ENP_URL}/FleetSchedulesApi`, dataToPost)
         .then((res) => {
           console.log('res', res)
           console.log('res.data', res.data)
@@ -264,7 +261,7 @@ const Calendar = () => {
     if (args.requestType === 'eventRemove') {
       args.cancel = true
       axios
-        .delete(`${ENP_SERVER_URL}/FleetSchedulesApi/` + data.entryId)
+        .delete(`${ENP_URL}/FleetSchedulesApi/` + data.entryId)
         .then((res) => {
           loadData()
           setUpToDateLocalData(
@@ -294,7 +291,7 @@ const Calendar = () => {
       // console.log("formattedDataToPost", formattedDataToPost);
       const dataToPost = formattedDataToPost[0]
       axios
-        .put(`${ENP_SERVER_URL}/FleetSchedulesApi/` + data.entryId, dataToPost)
+        .put(`${ENP_URL}/FleetSchedulesApi/` + data.entryId, dataToPost)
         .then((res) => {
           console.log('resput', res)
           console.log('res.dataput', res.data)

@@ -1,9 +1,10 @@
 import {Button, Input, Space, Table} from 'antd'
 import {useState, useEffect} from 'react'
 import axios from 'axios'
-import { Pagination } from 'antd'
-import type { PaginationProps } from 'antd'
-import { KTCard, KTCardBody, KTSVG } from '../../../../../../_metronic/helpers'
+import {Pagination} from 'antd'
+import type {PaginationProps} from 'antd'
+import {KTCard, KTCardBody, KTSVG} from '../../../../../../_metronic/helpers'
+import {ENP_URL} from '../../../../../urls'
 
 const LocationPage = () => {
   const [gridData, setGridData] = useState([])
@@ -31,20 +32,18 @@ const LocationPage = () => {
         return 0
       },
     },
-    
+
     {
       title: 'Name',
       dataIndex: 'locationDesc',
       sorter: (a: any, b: any) => a.locationDesc - b.locationDesc,
     },
-    
-    
   ]
 
   const loadData = async () => {
     setLoading(true)
     try {
-      const response = await axios.get('http://208.117.44.15/SmWebApi/api/IclocsApi')
+      const response = await axios.get(`${ENP_URL}/IclocsApi`)
       setGridData(response.data)
       setLoading(false)
     } catch (error) {
@@ -71,54 +70,57 @@ const LocationPage = () => {
     }
   }
 
-  const keys =["locationCode","locationDesc"];
+  const keys = ['locationCode', 'locationDesc']
   const globalSearch = () => {
     // @ts-ignore
     filteredData = dataWithVehicleNum.filter((value) => {
-      return (
-        keys.some((key)=>value[key].toLowerCase())
+      return keys.some((key) => value[key].toLowerCase())
 
-        // value.locationCode.toLowerCase().includes(searchText.toLowerCase()) ||
-        // value.locationDesc.toLowerCase().includes(searchText.toLowerCase())
-      )
+      // value.locationCode.toLowerCase().includes(searchText.toLowerCase()) ||
+      // value.locationDesc.toLowerCase().includes(searchText.toLowerCase())
     })
     setGridData(filteredData)
   }
 
   return (
-    <div style={{backgroundColor:'white', padding:'20px', borderRadius:'5px', boxShadow:'2px 2px 15px rgba(0,0,0,0.08)'}}>
-    <KTCardBody className='py-4 '>
-      <div className='table-responsive'>
-      <div className='d-flex justify-content-between'>
-        <Space style={{marginBottom: 16}}>
-          <Input
-            placeholder='Enter Search Text'
-            onChange={handleInputChange}
-            type='text'
-            allowClear
-            value={searchText}
-          />
-          <Button type='primary' onClick={globalSearch}>
-            Search
-          </Button>
-        </Space>
-        <Space style={{marginBottom: 16}}>
-          <button type='button' className='btn btn-primary me-3'>
-            <KTSVG path='/media/icons/duotune/arrows/arr078.svg' className='svg-icon-2' />
-            Export
-          </button>
-        </Space>
-      </div>
-      <Table columns={columns} dataSource={dataWithVehicleNum} bordered loading={loading}/>
-      {/* <div >
+    <div
+      style={{
+        backgroundColor: 'white',
+        padding: '20px',
+        borderRadius: '5px',
+        boxShadow: '2px 2px 15px rgba(0,0,0,0.08)',
+      }}
+    >
+      <KTCardBody className='py-4 '>
+        <div className='table-responsive'>
+          <div className='d-flex justify-content-between'>
+            <Space style={{marginBottom: 16}}>
+              <Input
+                placeholder='Enter Search Text'
+                onChange={handleInputChange}
+                type='text'
+                allowClear
+                value={searchText}
+              />
+              <Button type='primary' onClick={globalSearch}>
+                Search
+              </Button>
+            </Space>
+            <Space style={{marginBottom: 16}}>
+              <button type='button' className='btn btn-primary me-3'>
+                <KTSVG path='/media/icons/duotune/arrows/arr078.svg' className='svg-icon-2' />
+                Export
+              </button>
+            </Space>
+          </div>
+          <Table columns={columns} dataSource={dataWithVehicleNum} bordered loading={loading} />
+          {/* <div >
         <Pagination total={dataWithVehicleNum.length} itemRender={itemRender} />
       </div> */}
-
-    </div>
-    </KTCardBody>
+        </div>
+      </KTCardBody>
     </div>
   )
 }
 
 export {LocationPage}
-

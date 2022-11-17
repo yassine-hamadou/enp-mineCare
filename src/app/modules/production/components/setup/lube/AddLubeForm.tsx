@@ -2,6 +2,7 @@ import {Form, Input, InputNumber, Select, TimePicker} from 'antd'
 import {useEffect, useRef, useState} from 'react'
 import axios from 'axios'
 import {DatePicker} from 'antd/es'
+import {ENP_URL} from '../../../../../urls'
 
 const AddLubeForm = () => {
   const [dataSource, setDataSource] = useState([])
@@ -12,14 +13,11 @@ const AddLubeForm = () => {
   const [fleet, setFleet] = useState({})
   const [fleetToAdd, setFleetToAdd] = useState(null)
 
-
-  
-
   const loadData = async () => {
     setLoading(true)
     try {
       // const response = await axios.get('https://app.sipconsult.net/SmWebApi/api/VmequpsApi')
-      const response = await axios.get('http://208.117.44.15/SmWebApi/api/VmequpsApi')
+      const response = await axios.get(`${ENP_URL}/VmequpsApi`)
       setDataSource(response.data)
       setLoading(false)
     } catch (error: any) {
@@ -51,15 +49,14 @@ const AddLubeForm = () => {
               // @ts-ignore
               value={item.fleetID}
             >
-              {item.fleetID }- {item.modlName} - {item.modlClass}
-              
+              {item.fleetID}- {item.modlName} - {item.modlClass}
             </Select.Option>
           ))}
         </Select>
       </Form.Item>
       <Form.Item label='Compartment'>
         <Input />
-      </Form.Item>   
+      </Form.Item>
       <Form.Item label='Oil Grade - Shell'>
         <Input />
       </Form.Item>
@@ -72,7 +69,6 @@ const AddLubeForm = () => {
       <Form.Item label='Capacity'>
         <InputNumber />
       </Form.Item>
-      
     </Form>
   )
 }

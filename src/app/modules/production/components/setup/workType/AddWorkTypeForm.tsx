@@ -2,6 +2,7 @@ import {Form, Input, InputNumber, Select, TimePicker} from 'antd'
 import {useEffect, useRef, useState} from 'react'
 import axios from 'axios'
 import {DatePicker} from 'antd/es'
+import {ENP_URL} from '../../../../../urls'
 
 const AddWorkTypeForm = () => {
   const [dataSource, setDataSource] = useState([])
@@ -17,8 +18,7 @@ const AddWorkTypeForm = () => {
   const loadData = async () => {
     setLoading(true)
     try {
-      // const response = await axios.get('https://app.sipconsult.net/SmWebApi/api/VmequpsApi')
-      const response = await axios.get('http://208.117.44.15/SmWebApi/api/VmequpsApi')
+      const response = await axios.get(`${ENP_URL}/VmequpsApi`)
       setDataSource(response.data)
       setLoading(false)
     } catch (error: any) {
@@ -50,14 +50,13 @@ const AddWorkTypeForm = () => {
               // @ts-ignore
               value={item.fleetID}
             >
-              {item.fleetID }- {item.modlName} - {item.modlClass}
-              
+              {item.fleetID}- {item.modlName} - {item.modlClass}
             </Select.Option>
           ))}
         </Select>
       </Form.Item>
       <Form.Item label='Previous Reading'>
-        <Input disabled={true} contentEditable={false}/>
+        <Input disabled={true} contentEditable={false} />
       </Form.Item>
       <Form.Item label='Date'>
         <DatePicker />

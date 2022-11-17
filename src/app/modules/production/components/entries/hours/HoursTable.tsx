@@ -2,8 +2,9 @@ import {Button, Popconfirm, Table, Modal, Space, Input} from 'antd'
 import 'antd/dist/antd.min.css'
 import axios from 'axios'
 import {useEffect, useState} from 'react'
-import { KTSVG } from '../../../../../../_metronic/helpers'
+import {KTSVG} from '../../../../../../_metronic/helpers'
 import {AddFaultForm} from './AddHoursForm'
+import {ENP_URL} from '../../../../../urls'
 
 const HoursTable = () => {
   const [gridData, setGridData] = useState([])
@@ -29,9 +30,7 @@ const HoursTable = () => {
 
   const loadData = async () => {
     setLoading(true)
-    // const response = await axios.get('https://app.sipconsult.net/SmWebApi/api/VmequpsApi')
-    const response = await axios.get('http://208.117.44.15/SmWebApi/api/HourliesApi')
-    // console.log('api Response', response.data)
+    const response = await axios.get(`${ENP_URL}/HourliesApi`)
     setGridData(response.data)
     setLoading(false)
   }
@@ -68,22 +67,18 @@ const HoursTable = () => {
     {
       title: 'Previous Reading',
       dataIndex: 'previousReading',
-
     },
     {
       title: 'Reading',
       dataIndex: 'reading',
-
     },
     {
       title: 'Daily HoursWorked',
       dataIndex: 'dailyHoursWorked',
-
     },
     {
       title: 'Reading Date',
       dataIndex: 'readingDate',
-
     },
     // {
     //   title: 'Date',
@@ -114,11 +109,17 @@ const HoursTable = () => {
   ]
   useEffect(() => {
     loadData()
-
   }, [])
 
   return (
-    <div style={{backgroundColor:'white', padding:'20px', borderRadius:'5px', boxShadow:'2px 2px 15px rgba(0,0,0,0.08)'}}>
+    <div
+      style={{
+        backgroundColor: 'white',
+        padding: '20px',
+        borderRadius: '5px',
+        boxShadow: '2px 2px 15px rgba(0,0,0,0.08)',
+      }}
+    >
       <div className='d-flex justify-content-between'>
         <Space style={{marginBottom: 16}}>
           <Input
@@ -133,19 +134,18 @@ const HoursTable = () => {
           </Button>
         </Space>
         <Space style={{marginBottom: 16}}>
-            <button type='button' className='btn btn-primary me-3' onClick={showModal}>
-              <KTSVG path='/media/icons/duotune/arrows/arr075.svg' className='svg-icon-2' />
-              Add
-            </button>
-            <button type='button' className='btn btn-light-primary me-3'>
-              <KTSVG path='/media/icons/duotune/arrows/arr078.svg' className='svg-icon-2' />
-              Upload
-            </button>
-            <button type='button' className='btn btn-light-primary me-3'>
-              <KTSVG path='/media/icons/duotune/arrows/arr078.svg' className='svg-icon-2' />
-              
-              Export
-            </button>
+          <button type='button' className='btn btn-primary me-3' onClick={showModal}>
+            <KTSVG path='/media/icons/duotune/arrows/arr075.svg' className='svg-icon-2' />
+            Add
+          </button>
+          <button type='button' className='btn btn-light-primary me-3'>
+            <KTSVG path='/media/icons/duotune/arrows/arr078.svg' className='svg-icon-2' />
+            Upload
+          </button>
+          <button type='button' className='btn btn-light-primary me-3'>
+            <KTSVG path='/media/icons/duotune/arrows/arr078.svg' className='svg-icon-2' />
+            Export
+          </button>
         </Space>
       </div>
       <Table columns={columns} dataSource={gridData} bordered loading={loading} />

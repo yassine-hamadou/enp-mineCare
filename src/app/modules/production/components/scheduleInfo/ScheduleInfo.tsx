@@ -2,20 +2,32 @@ import {CheckListForm3} from '../checkListForm/CheckListForm3'
 import {Divider} from 'antd'
 import {useEffect, useState} from 'react'
 import axios from 'axios'
+import {ENP_URL} from '../../../../urls'
+import {constantLineSerializationsInfo} from 'devexpress-reporting/chart/internal/meta/_axis'
 
-// const ENP_URL = 'http://localhost:3001'
-const ENP_URL = 'http://208.117.44.15/smwebapi/api'
 export function ScheduleInfo() {
   const [schedules, setSchedules] = useState<any>([])
-
+  const [scheduleDetails, setScheduleDetails] = useState<any>({})
+  const [form, setForm] = useState<any>({})
   const loadSchedules = async () => {
     const response = await axios.get(`${ENP_URL}/FleetSchedulesApi`)
     setSchedules(response.data)
   }
+  console.log('schedules', schedules)
   useEffect(() => {
     loadSchedules()
   }, [])
 
+  function onSelect(e: any) {
+    const entryID = e.target.value
+    const schedule = schedules.find((s: any) => s.entryID === entryID)
+    setScheduleDetails({...schedule})
+  }
+
+  useEffect(() => {
+    setForm({...scheduleDetails})
+  }, [scheduleDetails])
+  console.log('details', scheduleDetails)
   return (
     <>
       <div
@@ -47,15 +59,13 @@ export function ScheduleInfo() {
           <div className='row mb-10'>
             <div className='col-4'>
               <label className='required fw-bold fs-6 mb-2'>Schedule</label>
-              <select className='form-select form-control form-control-solid mb-3'>
-                <option selected>Select one schedule</option>
+              <select
+                className='form-select form-control form-control-solid mb-3'
+                onChange={onSelect}
+                defaultValue={'Select'}
+              >
                 {schedules?.map((schedule: any) => (
-                  <option
-                    onSelect={() => {
-                      //update other fields
-                    }}
-                    value={schedule.entryId}
-                  >
+                  <option value={schedule.entryId} key={schedule.entryId}>
                     {schedule.fleetId}- {schedule.locationId}
                   </option>
                 ))}
@@ -67,6 +77,7 @@ export function ScheduleInfo() {
                 type='text'
                 className='form-control form-control-solid'
                 name='fleetId'
+                value={form?.entryId}
                 readOnly
                 // defaultValue='Fleet 1'
               />
