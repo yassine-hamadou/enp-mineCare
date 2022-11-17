@@ -1,9 +1,10 @@
-import {Button, Form, Input, Modal, Radio, Space, Table} from 'antd'
+import {Button, Form, Input, Modal, Radio, Select, Space, Table} from 'antd'
 import {useState, useEffect} from 'react'
 import axios from 'axios'
 import { KTCard, KTCardBody, KTSVG } from '../../../../../../_metronic/helpers'
 import { ColumnsType } from 'antd/lib/table'
 import { Link } from 'react-router-dom'
+import { ENP_URL } from '../../../../../urls'
 
 
 
@@ -36,7 +37,7 @@ const CompartmentPage = () => {
     const deleteData = async (element: any) => {
       try {
           const response = await axios.delete(
-              `http://localhost:4192/services/${element.id}`
+              `${ENP_URL}/services/${element.id}`
           )
           // update the local state so that react can refecth and re-render the table with the new data
           const newData = gridData.filter((item: any) => item.id !== element.id)
@@ -119,7 +120,7 @@ const CompartmentPage = () => {
     setLoading(true)
     try {
       // const response = await axios.get('https://cors-anywhere.herokuapp.com/http://208.117.44.15/SmWebApi/api/VmfaltsApi')
-      const response = await axios.get('http://localhost:4192/services')
+      const response = await axios.get(`${ENP_URL}/services`)
       setGridData(response.data)
       // setGridData(dataSource)
       setLoading(false)
@@ -154,7 +155,7 @@ const CompartmentPage = () => {
     })
     setGridData(filteredData)
   }
-  const url = 'http://localhost:4192/services'
+  const url = `${ENP_URL}/services`
     const onFinish = async (values: any) => {
         setSubmitLoading(true)
         const data = {
@@ -244,6 +245,32 @@ const CompartmentPage = () => {
        <Form.Item label='Name' name='name' rules={[{required: true}]}>
         <Input />
       </Form.Item>
+      <Form.Item label='Model'>
+        <Select 
+        showSearch 
+        placeholder="Search to Select"
+        optionFilterProp="children"
+        filterOption={(input, option) => (option?.label ?? '').includes(input)}
+        filterSort={(optionA, optionB) =>
+          (optionA?.label ?? '').toLowerCase().localeCompare((optionB?.label ?? '').toLowerCase())
+        }
+        options={[
+          {
+            value: '1',
+            label: 'Not Identified',
+          },
+          {
+            value: '2',
+            label: 'Closed',
+          },
+          {
+            value: '3',
+            label: 'Communicated',
+          },
+          
+        ]}
+        />
+        </Form.Item>
       <Form.Item label='Status' name='status' rules={[{required: true}]}>
         <Radio.Group >
           <Radio value={1}>Active</Radio>

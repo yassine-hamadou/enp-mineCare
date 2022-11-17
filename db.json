@@ -15,6 +15,13 @@
       "status": "typicode"
     }
   ],
+  "refill": [
+    {
+      "id": 1,
+      "name": "Top Up - Normal",
+      "status": "typicode"
+    }
+  ],
   "sections": [
     {
       "id": 1,

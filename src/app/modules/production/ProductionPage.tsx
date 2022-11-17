@@ -9,7 +9,6 @@ import {ScheduleInfo} from './components/scheduleInfo/ScheduleInfo'
 import {EquipmentDetail} from './components/entries/equipment/CycleDetailsList'
 import {ResolutionTable} from './components/entries/resolution/ResolutionTable'
 import {FaultTable} from './components/entries/fault_d/FaultTable'
-import {HoursTable} from './components/entries/hours/HoursTable'
 import {AddFaultForm} from './components/entries/fault_d/AddFaultForm'
 import {WorkTypePage} from './components/setup/workType/WorkType'
 import {DownTypePage} from './components/setup/downType/DownType'
@@ -28,6 +27,7 @@ import {TabsTest} from './components/checkListForm/Tabs'
 import {LubePage} from './components/setup/lube/Lube'
 import { CompartmentPage } from './components/setup/compartment/Compartment'
 import { RefillPage } from './components/setup/refill/Refill'
+import { HoursPage } from './components/entries/hours/HoursTable'
 
 const accountBreadCrumbs: Array<PageLink> = []
 
@@ -94,7 +94,7 @@ const ProductionPage: React.FC = () => {
           element={
             <>
               <PageTitle breadcrumbs={accountBreadCrumbs}>All Hours</PageTitle>
-              <HoursTable />
+              <HoursPage />
             </>
           }
         />
