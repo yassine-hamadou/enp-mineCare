@@ -35,9 +35,8 @@ export function AsideMenuMain() {
         <AsideMenuItem to='entries/schedule' hasBullet={true} title='Equipment Schedule' />
         <AsideMenuItem to='entries/fault' hasBullet={true} title='Fault' />
         <AsideMenuItem to='entries/resolution' hasBullet={true} title='Resolution' />
-        <AsideMenuItem to='entries/hours' hasBullet={true} title='Hours' />
-        <AsideMenuItem to='/setup/lube' title='Lube' hasBullet={true} />
-
+        {/*<AsideMenuItem to='entries/hours' hasBullet={true} title='Hours' />*/}
+        <AsideMenuItem to='/setup/lube' title='Hours' hasBullet={true} />
       </AsideMenuItemWithSub>
 
       <AsideMenuItemWithSub

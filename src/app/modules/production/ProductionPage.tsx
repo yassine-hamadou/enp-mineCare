@@ -12,20 +12,20 @@ import {FaultTable} from './components/entries/fault_d/FaultTable'
 import {HoursTable} from './components/entries/hours/HoursTable'
 import {AddFaultForm} from './components/entries/fault_d/AddFaultForm'
 import {WorkTypePage} from './components/setup/workType/WorkType'
-import { DownTypePage } from './components/setup/downType/DownType'
-import { CustodianPage } from './components/setup/custodian/Custodian'
-import { LocationPage } from './components/setup/location/LocationPage'
-import { FleetPage } from './components/setup/fleet/FleetPage'
-import { ServicesPage } from './components/setup/service/ServicePage'
-import { GroupsPage } from './components/setup/groups/GroupsPage'
-import { ItemsPage } from './components/setup/items/ItemPage'
-import { SectionsPage } from './components/setup/sections/Sections'
-import { CheckListForm } from './components/checkListForm/CheckListForm'
-import { CheckListForm2 } from './components/checkListForm/CheckListForm2'
-import { CheckListForm3 } from './components/checkListForm/CheckListForm3'
-import { CheckListForm5 } from './components/checkListForm/CheckListForm5'
-import { TabsTest } from './components/checkListForm/Tabs'
-import { LubePage } from './components/setup/lube/Lube'
+import {DownTypePage} from './components/setup/downType/DownType'
+import {CustodianPage} from './components/setup/custodian/Custodian'
+import {LocationPage} from './components/setup/location/LocationPage'
+import {FleetPage} from './components/setup/fleet/FleetPage'
+import {ServicesPage} from './components/setup/service/ServicePage'
+import {GroupsPage} from './components/setup/groups/GroupsPage'
+import {ItemsPage} from './components/setup/items/ItemPage'
+import {SectionsPage} from './components/setup/sections/Sections'
+import {CheckListForm} from './components/checkListForm/CheckListForm'
+import {CheckListForm2} from './components/checkListForm/CheckListForm2'
+import {CheckListForm3} from './components/checkListForm/CheckListForm3'
+import {CheckListForm5} from './components/checkListForm/CheckListForm5'
+import {TabsTest} from './components/checkListForm/Tabs'
+import {LubePage} from './components/setup/lube/Lube'
 
 const accountBreadCrumbs: Array<PageLink> = []
 
@@ -50,15 +50,15 @@ const ProductionPage: React.FC = () => {
             </>
           }
         />
-          <Route
-              path='start-work'
-              element={
-                  <>
-                      <PageTitle breadcrumbs={accountBreadCrumbs}>Check List</PageTitle>
-                      <ScheduleInfo />
-                  </>
-              }
-          />
+        <Route
+          path='start-work'
+          element={
+            <>
+              <PageTitle breadcrumbs={accountBreadCrumbs}>Check List</PageTitle>
+              <ScheduleInfo />
+            </>
+          }
+        />
         <Route
           path='fault/*'
           element={
@@ -161,13 +161,13 @@ const ProductionPage: React.FC = () => {
           path='lube'
           element={
             <>
-              <PageTitle breadcrumbs={accountBreadCrumbs}>All Lubes</PageTitle>
+              <PageTitle breadcrumbs={accountBreadCrumbs}>Hours</PageTitle>
               {/*<Overview />*/}
               <LubePage />
             </>
           }
         />
-       
+
         <Route index element={<Navigate to='/dashboard' />} />
       </Route>
       <Route
@@ -179,7 +179,6 @@ const ProductionPage: React.FC = () => {
           </>
         }
       >
-       
         <Route
           path='fuel-report'
           element={
@@ -218,7 +217,6 @@ const ProductionPage: React.FC = () => {
           </>
         }
       >
-       
         <Route
           path='checkList'
           element={
@@ -237,8 +235,7 @@ const ProductionPage: React.FC = () => {
             </>
           }
         />
-        
-       
+
         <Route index element={<Navigate to='/dashboard' />} />
       </Route>
       <Route
@@ -250,7 +247,6 @@ const ProductionPage: React.FC = () => {
           </>
         }
       >
-       
         <Route
           path='service'
           element={
