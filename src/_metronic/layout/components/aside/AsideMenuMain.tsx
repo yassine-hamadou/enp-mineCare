@@ -35,8 +35,8 @@ export function AsideMenuMain() {
         <AsideMenuItem to='entries/schedule' hasBullet={true} title='Equipment Schedule' />
         <AsideMenuItem to='entries/fault' hasBullet={true} title='Fault' />
         <AsideMenuItem to='entries/resolution' hasBullet={true} title='Resolution' />
-        {/*<AsideMenuItem to='entries/hours' hasBullet={true} title='Hours' />*/}
-        <AsideMenuItem to='/setup/lube' title='Hours' hasBullet={true} />
+        <AsideMenuItem to='entries/hours' hasBullet={true} title='Hours' />
+        <AsideMenuItem to='/setup/lube' title='Lube' hasBullet={true} />
       </AsideMenuItemWithSub>
 
       <AsideMenuItemWithSub
@@ -74,6 +74,15 @@ export function AsideMenuMain() {
         <AsideMenuItem to='/setup/location' title='Location' hasBullet={true} />
         <AsideMenuItem to='/setup/work-type' title='Work Type' hasBullet={true} />
         <AsideMenuItem to='/checkListForm/tabs' title='Tabs' hasBullet={true} />
+        <AsideMenuItemWithSub
+        to='#'
+        title='Lube'
+        fontIcon='bi-archive'
+        icon='/media/icons/duotune/general/gen028.svg'
+        >
+          <AsideMenuItem to='/setup/compartment' title='Compartment'></AsideMenuItem>
+          <AsideMenuItem to='/setup/refill' title='RefillType'></AsideMenuItem>
+        </AsideMenuItemWithSub>
       </AsideMenuItemWithSub>
       <div className='menu-item'>
         <div className='menu-content'>

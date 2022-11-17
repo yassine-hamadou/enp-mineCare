@@ -26,6 +26,8 @@ import {CheckListForm3} from './components/checkListForm/CheckListForm3'
 import {CheckListForm5} from './components/checkListForm/CheckListForm5'
 import {TabsTest} from './components/checkListForm/Tabs'
 import {LubePage} from './components/setup/lube/Lube'
+import { CompartmentPage } from './components/setup/compartment/Compartment'
+import { RefillPage } from './components/setup/refill/Refill'
 
 const accountBreadCrumbs: Array<PageLink> = []
 
@@ -148,6 +150,26 @@ const ProductionPage: React.FC = () => {
           }
         />
         <Route
+          path='compartment'
+          element={
+            <>
+              <PageTitle breadcrumbs={accountBreadCrumbs}>All Compartment</PageTitle>
+              {/*<Overview />*/}
+              <CompartmentPage />
+            </>
+          }
+        />
+        <Route
+          path='refill'
+          element={
+            <>
+              <PageTitle breadcrumbs={accountBreadCrumbs}>All RefillTypes</PageTitle>
+              {/*<Overview />*/}
+              <RefillPage />
+            </>
+          }
+        />
+        <Route
           path='work-type'
           element={
             <>
@@ -161,13 +183,12 @@ const ProductionPage: React.FC = () => {
           path='lube'
           element={
             <>
-              <PageTitle breadcrumbs={accountBreadCrumbs}>Hours</PageTitle>
+              <PageTitle breadcrumbs={accountBreadCrumbs}>All Lubes</PageTitle>
               {/*<Overview />*/}
               <LubePage />
             </>
           }
         />
-
         <Route index element={<Navigate to='/dashboard' />} />
       </Route>
       <Route

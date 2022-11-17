@@ -41,12 +41,6 @@
       "modelID": "Test2",
       "status": 1,
       "id": 3
-    },
-    {
-      "name": "Service PM-D",
-      "modelID": "Test3",
-      "status": 1,
-      "id": 4
     }
   ]
 }

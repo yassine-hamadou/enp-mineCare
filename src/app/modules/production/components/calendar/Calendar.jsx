@@ -1,5 +1,5 @@
 import {L10n} from '@syncfusion/ej2-base';
-import { ButtonComponent } from '@syncfusion/ej2-react-buttons';
+// import { ButtonComponent } from '@syncfusion/ej2-react-buttons';
 import {
     ScheduleComponent,
     Day,
