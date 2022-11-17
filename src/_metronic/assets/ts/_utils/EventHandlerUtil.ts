@@ -1,5 +1,5 @@
-import {DataUtil} from './_DataUtil'
-import {getUniqueIdWithPrefix} from './_TypesHelpers'
+import { DataUtil } from "./_DataUtil";
+import { getUniqueIdWithPrefix } from "./_TypesHelpers";
 
 export interface EventMeta {
   name: string

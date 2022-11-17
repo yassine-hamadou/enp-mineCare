@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import clsx from 'clsx'
-import {KTSVG, toAbsoluteUrl} from '../../../helpers'
+import clsx from "clsx";
+import { KTSVG, toAbsoluteUrl } from "../../../helpers";
 
 type Props = {
   className?: string

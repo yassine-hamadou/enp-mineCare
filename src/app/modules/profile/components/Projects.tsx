@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React from 'react'
-import {Card2} from '../../../../_metronic/partials/content/cards/Card2'
-import {IconUserModel} from '../ProfileModels'
+import React from "react";
+import { Card2 } from "../../../../_metronic/partials/content/cards/Card2";
+import { IconUserModel } from "../ProfileModels";
 
 export function Projects() {
   return (

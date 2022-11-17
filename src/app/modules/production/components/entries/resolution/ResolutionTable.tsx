@@ -1,10 +1,10 @@
-import {Button, Popconfirm, Table, Modal, Space, Input} from 'antd'
-import 'antd/dist/antd.min.css'
-import axios from 'axios'
-import {useEffect, useState} from 'react'
-import {KTSVG} from '../../../../../../_metronic/helpers'
-import {dhm} from '../fault_d/FaultTable'
-import {ENP_URL} from '../../../../../urls'
+import { Button, Input, Space, Table } from "antd";
+import "antd/dist/antd.min.css";
+import axios from "axios";
+import { useEffect, useState } from "react";
+import { KTSVG } from "../../../../../../_metronic/helpers";
+import { dhm } from "../fault_d/FaultTable";
+import { ENP_URL } from "../../../../../urls";
 
 const ResolutionTable = () => {
   const [gridData, setGridData] = useState([])

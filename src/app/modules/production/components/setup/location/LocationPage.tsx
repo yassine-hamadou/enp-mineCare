@@ -1,10 +1,8 @@
-import {Button, Input, Space, Table} from 'antd'
-import {useState, useEffect} from 'react'
-import axios from 'axios'
-import {Pagination} from 'antd'
-import type {PaginationProps} from 'antd'
-import {KTCard, KTCardBody, KTSVG} from '../../../../../../_metronic/helpers'
-import {ENP_URL} from '../../../../../urls'
+import { Button, Input, Space, Table } from "antd";
+import { useEffect, useState } from "react";
+import axios from "axios";
+import { KTCardBody, KTSVG } from "../../../../../../_metronic/helpers";
+import { ENP_URL } from "../../../../../urls";
 
 const LocationPage = () => {
   const [gridData, setGridData] = useState([])

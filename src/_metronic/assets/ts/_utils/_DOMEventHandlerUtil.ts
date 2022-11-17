@@ -1,4 +1,4 @@
-import {getUniqueIdWithPrefix} from './_TypesHelpers'
+import { getUniqueIdWithPrefix } from "./_TypesHelpers";
 
 export class DOMEventHandlerUtil {
   public static store = new Map()

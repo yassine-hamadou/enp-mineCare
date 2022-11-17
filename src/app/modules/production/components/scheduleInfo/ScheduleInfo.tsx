@@ -3,12 +3,9 @@ import {Divider} from 'antd'
 import {useEffect, useState} from 'react'
 import axios from 'axios'
 import {ENP_URL} from '../../../../urls'
-import {constantLineSerializationsInfo} from 'devexpress-reporting/chart/internal/meta/_axis'
 
 export function ScheduleInfo() {
   const [schedules, setSchedules] = useState<any>([])
-  const [scheduleDetails, setScheduleDetails] = useState<any>({})
-  const [form, setForm] = useState<any>({})
   const loadSchedules = async () => {
     const response = await axios.get(`${ENP_URL}/FleetSchedulesApi`)
     setSchedules(response.data)
@@ -19,15 +16,9 @@ export function ScheduleInfo() {
   }, [])
 
   function onSelect(e: any) {
-    const entryID = e.target.value
+    const entryID = e.target.value.parseInt()
     const schedule = schedules.find((s: any) => s.entryID === entryID)
-    setScheduleDetails({...schedule})
   }
-
-  useEffect(() => {
-    setForm({...scheduleDetails})
-  }, [scheduleDetails])
-  console.log('details', scheduleDetails)
   return (
     <>
       <div
@@ -77,7 +68,7 @@ export function ScheduleInfo() {
                 type='text'
                 className='form-control form-control-solid'
                 name='fleetId'
-                value={form?.entryId}
+                // value={scheduleDetails?.entryId}
                 readOnly
                 // defaultValue='Fleet 1'
               />

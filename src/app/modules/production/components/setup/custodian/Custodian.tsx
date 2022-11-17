@@ -1,8 +1,8 @@
-import {Button, Input, Space, Table} from 'antd'
-import {useState, useEffect} from 'react'
-import axios from 'axios'
-import {KTCard, KTCardBody, KTSVG} from '../../../../../../_metronic/helpers'
-import {ENP_URL} from '../../../../../urls'
+import { Button, Input, Space, Table } from "antd";
+import { useEffect, useState } from "react";
+import axios from "axios";
+import { KTCardBody, KTSVG } from "../../../../../../_metronic/helpers";
+import { ENP_URL } from "../../../../../urls";
 
 const CustodianPage = () => {
   const [gridData, setGridData] = useState([])

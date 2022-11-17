@@ -1,7 +1,7 @@
-import {FC, PropsWithChildren} from 'react'
-import {HeaderProps} from 'react-table'
-import {useListView} from '../../core/ListViewProvider'
-import {User} from '../../core/_models'
+import { FC, PropsWithChildren } from "react";
+import { HeaderProps } from "react-table";
+import { useListView } from "../../core/ListViewProvider";
+import { User } from "../../core/_models";
 
 type Props = {
   tableProps: PropsWithChildren<HeaderProps<User>>

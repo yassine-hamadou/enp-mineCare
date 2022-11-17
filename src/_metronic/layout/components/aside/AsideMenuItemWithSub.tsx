@@ -1,9 +1,9 @@
-import React from 'react'
-import clsx from 'clsx'
-import {useLocation} from 'react-router'
-import {checkIsActive, KTSVG, WithChildren} from '../../../helpers'
-import {useLayout} from '../../core'
-import './menuMargin.css'
+import React from "react";
+import clsx from "clsx";
+import { useLocation } from "react-router";
+import { checkIsActive, KTSVG, WithChildren } from "../../../helpers";
+import { useLayout } from "../../core";
+import "./menuMargin.css";
 
 
 type Props = {

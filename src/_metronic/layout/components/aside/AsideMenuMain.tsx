@@ -1,11 +1,11 @@
 /* eslint-disable react/jsx-no-target-blank */
-import {useIntl} from 'react-intl'
-import {AsideMenuItemWithSub} from './AsideMenuItemWithSub'
-import {AsideMenuItem} from './AsideMenuItem'
-import {Link} from 'react-router-dom'
-import clsx from 'clsx'
-import {checkIsActive, KTSVG} from '../../../helpers'
-import {useLocation} from 'react-router'
+import { useIntl } from "react-intl";
+import { AsideMenuItemWithSub } from "./AsideMenuItemWithSub";
+import { AsideMenuItem } from "./AsideMenuItem";
+import { Link } from "react-router-dom";
+import clsx from "clsx";
+import { checkIsActive, KTSVG } from "../../../helpers";
+import { useLocation } from "react-router";
 
 export function AsideMenuMain() {
   const intl = useIntl()

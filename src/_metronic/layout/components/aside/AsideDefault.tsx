@@ -1,11 +1,11 @@
 /* eslint-disable react/jsx-no-target-blank */
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import {FC, useRef} from 'react'
-import {Link} from 'react-router-dom'
-import clsx from 'clsx'
-import {useLayout} from '../../core'
-import {KTSVG, toAbsoluteUrl} from '../../../helpers'
-import {AsideMenu} from './AsideMenu'
+import { FC, useRef } from "react";
+import { Link } from "react-router-dom";
+import clsx from "clsx";
+import { useLayout } from "../../core";
+import { KTSVG, toAbsoluteUrl } from "../../../helpers";
+import { AsideMenu } from "./AsideMenu";
 
 const AsideDefault: FC = () => {
   const {config, classes} = useLayout()

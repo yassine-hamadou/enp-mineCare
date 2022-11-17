@@ -1,8 +1,8 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import clsx from 'clsx'
-import React from 'react'
-import {KTSVG, toAbsoluteUrl} from '../../../helpers'
-import {Dropdown1} from '../../content/dropdown/Dropdown1'
+import clsx from "clsx";
+import React from "react";
+import { KTSVG, toAbsoluteUrl } from "../../../helpers";
+import { Dropdown1 } from "../../content/dropdown/Dropdown1";
 
 type Props = {
   className: string

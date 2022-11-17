@@ -1,16 +1,15 @@
-import {Button, Input, Modal, Space, Table} from 'antd'
-import {useState, useEffect} from 'react'
-import axios from 'axios'
-import {Link} from 'react-router-dom'
-import {KTCardBody, KTSVG} from '../../../../../../_metronic/helpers'
-import {AddWorkTypeForm} from './AddWorkTypeForm'
-import {ENP_URL} from '../../../../../urls'
+import { Input, Modal, Space, Table } from "antd";
+import { useEffect, useState } from "react";
+import axios from "axios";
+import { Link } from "react-router-dom";
+import { KTCardBody, KTSVG } from "../../../../../../_metronic/helpers";
+import { AddWorkTypeForm } from "./AddWorkTypeForm";
+import { ENP_URL } from "../../../../../urls";
 
 const WorkTypePage = () => {
   const [gridData, setGridData] = useState([])
   const [loading, setLoading] = useState(false)
   const [searchText, setSearchText] = useState('')
-  // let [filteredData] = useState([])
   const [isModalOpen, setIsModalOpen] = useState(false)
 
   const showModal = () => {

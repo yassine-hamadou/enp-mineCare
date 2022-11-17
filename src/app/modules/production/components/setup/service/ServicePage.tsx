@@ -1,11 +1,9 @@
-import {Button, Form, Input, Modal, Radio, Space, Table} from 'antd'
-import {useState, useEffect} from 'react'
-import axios from 'axios'
-import {KTCard, KTCardBody, KTSVG} from '../../../../../../_metronic/helpers'
-import {ColumnsType} from 'antd/lib/table'
-import {AddServiceForm} from './AddServiceForm'
-import {Link} from 'react-router-dom'
-import {ENP_URL} from '../../../../../urls'
+import { Button, Form, Input, Modal, Radio, Space, Table } from "antd";
+import { useEffect, useState } from "react";
+import axios from "axios";
+import { KTCardBody, KTSVG } from "../../../../../../_metronic/helpers";
+import { Link } from "react-router-dom";
+import { ENP_URL } from "../../../../../urls";
 
 const ServicesPage = () => {
   const [gridData, setGridData] = useState([])

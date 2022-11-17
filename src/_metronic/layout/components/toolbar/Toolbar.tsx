@@ -1,6 +1,6 @@
-import React from 'react'
-import {useLayout} from '../../core/LayoutProvider'
-import {Toolbar1} from './Toolbar1'
+import React from "react";
+import { useLayout } from "../../core/LayoutProvider";
+import { Toolbar1 } from "./Toolbar1";
 
 const Toolbar = () => {
   const {config} = useLayout()

@@ -1,13 +1,8 @@
-import {Button, Input, Modal, Space, Table} from 'antd'
-import {useState, useEffect} from 'react'
-import axios from 'axios'
-import { KTCard, KTCardBody, KTSVG } from '../../../../../../_metronic/helpers'
-
-import { ColumnsType } from 'antd/lib/table'
-import { AddGroupsForm } from './AddGroupForm'
-import { Link } from 'react-router-dom'
-import { SectionsPage } from '../sections/Sections'
-
+import { Button, Input, Modal, Space, Table } from "antd";
+import { useEffect, useState } from "react";
+import { KTCardBody, KTSVG } from "../../../../../../_metronic/helpers";
+import { AddGroupsForm } from "./AddGroupForm";
+import { Link } from "react-router-dom";
 
 
 const GroupsPage = () => {

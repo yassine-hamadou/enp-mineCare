@@ -1,16 +1,16 @@
 import {
-  EventHandlerUtil,
   DataUtil,
-  getBreakpoint,
+  EventHandlerUtil,
   getAttributeValueByBreakpoint,
-  stringSnakeToCamel,
+  getBreakpoint,
   getObjectPropertyValueByKey,
   getViewPort,
   isVisibleElement,
-  throttle,
-} from '../_utils/index'
+  stringSnakeToCamel,
+  throttle
+} from "../_utils/index";
 
-import {MenuComponent, defaultMenuOptions} from './MenuComponent'
+import { defaultMenuOptions, MenuComponent } from "./MenuComponent";
 
 export interface ISearchOptions {
   minLength: number // Miniam text lenght to query search

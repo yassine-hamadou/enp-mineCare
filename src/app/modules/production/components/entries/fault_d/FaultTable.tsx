@@ -1,25 +1,11 @@
-import {
-  Button,
-  DatePicker,
-  Form,
-  Input,
-  InputNumber,
-  Modal,
-  Popconfirm,
-  Select,
-  Space,
-  Table,
-} from 'antd'
-import 'antd/dist/antd.min.css'
-import axios from 'axios'
-import {useEffect, useState} from 'react'
-import {v4 as uuidv4} from 'uuid'
-import {KTSVG} from '../../../../../../_metronic/helpers'
-import TextArea from 'antd/lib/input/TextArea'
-import {conditionObj} from 'devexpress-reporting/designer/controls/metadata/properties/formattingrules'
-import Link from 'antd/lib/typography/Link'
-import {DropDownListComponent} from '@syncfusion/ej2-react-dropdowns'
-import {ENP_URL} from '../../../../../urls'
+import { Button, DatePicker, Form, Input, InputNumber, Modal, Popconfirm, Select, Space, Table } from "antd";
+import "antd/dist/antd.min.css";
+import axios from "axios";
+import { useEffect, useState } from "react";
+import { v4 as uuidv4 } from "uuid";
+import { KTSVG } from "../../../../../../_metronic/helpers";
+import TextArea from "antd/lib/input/TextArea";
+import { ENP_URL } from "../../../../../urls";
 
 export function dhm(t: any) {
   var cd = 24 * 60 * 60 * 1000,

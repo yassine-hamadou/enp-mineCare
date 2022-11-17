@@ -1,7 +1,7 @@
 // @ts-nocheck
-import {FC} from 'react'
-import {ColumnInstance} from 'react-table'
-import {User} from '../../core/_models'
+import { FC } from "react";
+import { ColumnInstance } from "react-table";
+import { User } from "../../core/_models";
 
 type Props = {
   column: ColumnInstance<User>

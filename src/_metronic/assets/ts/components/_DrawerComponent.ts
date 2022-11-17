@@ -1,14 +1,14 @@
 import {
-  EventHandlerUtil,
-  getUniqueIdWithPrefix,
-  getObjectPropertyValueByKey,
-  stringSnakeToCamel,
-  getAttributeValueByBreakpoint,
-  throttle,
-  getCSS,
   DOMEventHandlerUtil,
   ElementStyleUtil,
-} from '../_utils/index'
+  EventHandlerUtil,
+  getAttributeValueByBreakpoint,
+  getCSS,
+  getObjectPropertyValueByKey,
+  getUniqueIdWithPrefix,
+  stringSnakeToCamel,
+  throttle
+} from "../_utils/index";
 
 export class DrawerStore {
   static store: Map<string, DrawerComponent> = new Map()

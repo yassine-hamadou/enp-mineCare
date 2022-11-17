@@ -1,5 +1,5 @@
 import React from 'react'
-import {Navigate, Route, Routes, Outlet} from 'react-router-dom'
+import {Navigate, Outlet, Route, Routes} from 'react-router-dom'
 import {PageLink, PageTitle} from '../../../_metronic/layout/core'
 import {ProductionReportTable} from './components/report/production_table/CycleDetailsList'
 import {FuelReportTable} from './components/report/fuel/CycleDetailsList'
@@ -9,7 +9,7 @@ import {ScheduleInfo} from './components/scheduleInfo/ScheduleInfo'
 import {EquipmentDetail} from './components/entries/equipment/CycleDetailsList'
 import {ResolutionTable} from './components/entries/resolution/ResolutionTable'
 import {FaultTable} from './components/entries/fault_d/FaultTable'
-import {AddFaultForm} from './components/entries/fault_d/AddFaultForm'
+import {HoursTable} from './components/entries/hours/HoursTable'
 import {WorkTypePage} from './components/setup/workType/WorkType'
 import {DownTypePage} from './components/setup/downType/DownType'
 import {CustodianPage} from './components/setup/custodian/Custodian'
@@ -19,10 +19,7 @@ import {ServicesPage} from './components/setup/service/ServicePage'
 import {GroupsPage} from './components/setup/groups/GroupsPage'
 import {ItemsPage} from './components/setup/items/ItemPage'
 import {SectionsPage} from './components/setup/sections/Sections'
-import {CheckListForm} from './components/checkListForm/CheckListForm'
-import {CheckListForm2} from './components/checkListForm/CheckListForm2'
 import {CheckListForm3} from './components/checkListForm/CheckListForm3'
-import {CheckListForm5} from './components/checkListForm/CheckListForm5'
 import {TabsTest} from './components/checkListForm/Tabs'
 import {LubePage} from './components/setup/lube/Lube'
 import { CompartmentPage } from './components/setup/compartment/Compartment'
@@ -70,15 +67,6 @@ const ProductionPage: React.FC = () => {
           }
         >
           <Route path='' element={<FaultTable />} />
-          <Route
-            path='add'
-            element={
-              <>
-                <PageTitle breadcrumbs={accountBreadCrumbs}>Add Fault</PageTitle>
-                <AddFaultForm />
-              </>
-            }
-          />
         </Route>
         <Route
           path='resolution'

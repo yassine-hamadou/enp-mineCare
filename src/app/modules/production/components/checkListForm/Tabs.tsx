@@ -1,10 +1,9 @@
-import { Card } from 'antd';
-import React, { useState } from 'react';
-import { CheckListForm } from './CheckListForm';
-import { CheckListForm2 } from './CheckListForm2';
-import { CheckListForm3 } from './CheckListForm3';
-import { CheckListForm4 } from './CheckListForm4';
-import { CheckListForm5 } from './CheckListForm5';
+import { Card } from "antd";
+import React, { useState } from "react";
+import { CheckListForm } from "./CheckListForm";
+import { CheckListForm2 } from "./CheckListForm2";
+import { CheckListForm3 } from "./CheckListForm3";
+import { CheckListForm5 } from "./CheckListForm5";
 
 const tabList = [
   {

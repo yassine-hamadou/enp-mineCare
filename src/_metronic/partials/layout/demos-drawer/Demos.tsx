@@ -1,5 +1,5 @@
-import React, {FC} from 'react'
-import {toAbsoluteUrl} from '../../../helpers'
+import React, { FC } from "react";
+import { toAbsoluteUrl } from "../../../helpers";
 
 const Demos: FC = () => {
   const demos = [

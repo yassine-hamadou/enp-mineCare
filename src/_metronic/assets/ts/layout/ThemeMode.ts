@@ -1,4 +1,4 @@
-import {EventHandlerUtil} from '../_utils'
+import { EventHandlerUtil } from "../_utils";
 
 type Mode = 'light' | 'dark' | 'system'
 
