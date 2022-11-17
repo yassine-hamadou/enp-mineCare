@@ -1,0 +1,52 @@
+{
+  "groups": [
+    {
+      "id": 1,
+      "name": "json-server",
+      "sectioID": "json-server",
+      "status": "typicode"
+    }
+  ],
+  "items": [
+    {
+      "id": 1,
+      "name": "json-server",
+      "grouID": "json-server",
+      "status": "typicode"
+    }
+  ],
+  "sections": [
+    {
+      "id": 1,
+      "name": "json-server",
+      "serviceID": "json-server",
+      "status": "typicode"
+    }
+  ],
+  "services": [
+    {
+      "id": 1,
+      "name": "Service PM-A",
+      "modelID": "Test",
+      "status": "typicode"
+    },
+    {
+      "name": "Service PM-B",
+      "modelID": "Test1",
+      "status": 1,
+      "id": 2
+    },
+    {
+      "name": "Service PM-C",
+      "modelID": "Test2",
+      "status": 1,
+      "id": 3
+    },
+    {
+      "name": "Service PM-D",
+      "modelID": "Test3",
+      "status": 1,
+      "id": 4
+    }
+  ]
+}

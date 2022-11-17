@@ -1,8 +1,9 @@
-import {Button, Input, Space, Table} from 'antd'
+import {Button, Input, Modal, Space, Table} from 'antd'
 import {useState, useEffect} from 'react'
 import axios from 'axios'
 import { Link } from 'react-router-dom'
 import { KTCardBody, KTSVG } from '../../../../../../_metronic/helpers'
+import { AddWorkTypeForm } from './AddWorkTypeForm'
 
 
 const WorkTypePage = () => {
@@ -169,6 +170,9 @@ const WorkTypePage = () => {
           </Space>
         </div>
         <Table columns={columns} dataSource={gridData} loading={loading} />
+        <Modal title='Add Item' open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
+          <AddWorkTypeForm />
+        </Modal>
       </div>
       </KTCardBody>
     </div>
