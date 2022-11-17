@@ -5,13 +5,9 @@ import {ProductionReportTable} from './components/report/production_table/CycleD
 import {FuelReportTable} from './components/report/fuel/CycleDetailsList'
 import {EquipmentTable} from './components/report/equipment/CycleDetailsList'
 import {StatisticsTable} from './components/report/activity/CycleDetailsList'
-import {Fleet} from './components/setup/fleet/CycleDetailsList'
+import {ScheduleInfo} from './components/scheduleInfo/ScheduleInfo'
 import {EquipmentDetail} from './components/entries/equipment/CycleDetailsList'
 import {ResolutionTable} from './components/entries/resolution/ResolutionTable'
-import {DownType} from './components/setup/downType/CycleDetailsList'
-// import {WorkType} from './components/setup/workType/CycleDetailsList'
-import {LocationTable} from './components/setup/location/CycleDetailsList'
-import {Custodian} from './components/setup/custodian/CycleDetailsList'
 import {FaultTable} from './components/entries/fault_d/FaultTable'
 import {HoursTable} from './components/entries/hours/HoursTable'
 import {AddFaultForm} from './components/entries/fault_d/AddFaultForm'
@@ -52,6 +48,15 @@ const ProductionPage: React.FC = () => {
             </>
           }
         />
+          <Route
+              path='start-work'
+              element={
+                  <>
+                      <PageTitle breadcrumbs={accountBreadCrumbs}>Check List</PageTitle>
+                      <ScheduleInfo />
+                  </>
+              }
+          />
         <Route
           path='fault/*'
           element={

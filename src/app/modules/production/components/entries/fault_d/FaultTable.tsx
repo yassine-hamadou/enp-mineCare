@@ -7,6 +7,7 @@ import {KTSVG} from "../../../../../../_metronic/helpers";
 import TextArea from "antd/lib/input/TextArea";
 import {conditionObj} from "devexpress-reporting/designer/controls/metadata/properties/formattingrules";
 import Link from "antd/lib/typography/Link";
+import {DropDownListComponent} from "@syncfusion/ej2-react-dropdowns";
 
 const FaultTable = () => {
     const [gridData, setGridData] = useState([]);
@@ -20,7 +21,6 @@ const FaultTable = () => {
     const [form] = Form.useForm()
     const [formSolve] = Form.useForm()
     const [selectedRowForSolve, setSelectedRowForSolve] = useState<any>()
-    const [solveFormValues, setSolveFormValues] = useState<any>()
     const [loading, setLoading] = useState(true)
     const [submitLoading, setSubmitLoading] = useState(false)
 
@@ -205,7 +205,7 @@ const FaultTable = () => {
         setIsSolveModalOpen(false)
     }
 
-    const {Option} = Select
+    const {Option} = Select;
 
     function handleSolve(record: any) {
         showModalSolve();
@@ -322,9 +322,9 @@ const FaultTable = () => {
         loadLocation()
         loadCustodian()
     }, [])
-    useEffect(() => {
-        setSolveFormValues(selectedRowForSolve)
-    }, [selectedRowForSolve])
+    // useEffect(() => {
+    //     setSolveFormValues(selectedRowForSolve)
+    // }, [selectedRowForSolve])
 
     /*
       Function that gets called whenever a fleetID is selected from the dropdown;

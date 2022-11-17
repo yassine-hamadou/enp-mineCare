@@ -1,4 +1,5 @@
 import {L10n} from '@syncfusion/ej2-base';
+import { ButtonComponent } from '@syncfusion/ej2-react-buttons';
 import {
     ScheduleComponent,
     Day,
@@ -22,6 +23,7 @@ import {useEffect, useState} from "react";
 import axios from "axios";
 import {DateTimePickerComponent} from "@syncfusion/ej2-react-calendars";
 import {DropDownListComponent} from "@syncfusion/ej2-react-dropdowns";
+import {Link} from "react-router-dom";
 
 /**
  *  Schedule editor custom fields sample
@@ -45,12 +47,13 @@ const Calendar = () => {
     const [dataFromAPI, setDataFromApi] = useState({});
     const [upToDateLocalData, setUpToDateLocalData] = useState({});
     const [custodians, setCustodian] = useState([]);
-
+    // const ENP_SERVER_URL = "http://208.117.44.15/SmWebApi/api";
+    const ENP_SERVER_URL = "http://localhost:3001";
 
     // load fleet IDs
     const loadVmequps = async () => {
         try {
-            const VmequpsResponse = await axios.get("http://208.117.44.15/SmWebApi/api/VmequpsApi");
+            const VmequpsResponse = await axios.get(`${ENP_SERVER_URL}/VmequpsApi`);
             setVmequps(VmequpsResponse.data);
         } catch (e) {
             console.log(e);
@@ -58,7 +61,7 @@ const Calendar = () => {
     };
     const loadCustodians = async () => {
         try {
-            const custodianResponse = await axios.get("http://208.117.44.15/SmWebApi/api/VmemplsApi");
+            const custodianResponse = await axios.get(`${ENP_SERVER_URL}/VmemplsApi`);
             setCustodian(custodianResponse.data);
         } catch (e) {
             console.log(e);
@@ -66,7 +69,7 @@ const Calendar = () => {
     }
     const loadLocations = async () => {
         try {
-            const locationsResponse = await axios.get("http://208.117.44.15/SmWebApi/api/IclocsApi");
+            const locationsResponse = await axios.get(`${ENP_SERVER_URL}/IclocsApi`);
             setLocations(locationsResponse.data);
         } catch (e) {
             console.log(e);
@@ -75,7 +78,7 @@ const Calendar = () => {
     //Loading schedule data
     const loadData = async () => {
         try {
-            const dataResponse = await axios.get("http://208.117.44.15/SmWebApi/api/FleetSchedulesApi");
+            const dataResponse = await axios.get(`${ENP_SERVER_URL}/FleetSchedulesApi`);
             setDataFromApi([...dataResponse.data]);
         } catch (e) {
             console.log(e);
@@ -97,6 +100,7 @@ const Calendar = () => {
 
     useEffect(() => {
         setUpToDateLocalData(localData(dataFromAPI));
+        // loadData();
     }, [dataFromAPI])
     useEffect(() => {
         loadVmequps();
@@ -206,10 +210,9 @@ const Calendar = () => {
                         </td>
                     </tr>
                     </tbody>
-                </table> : <div></div>
+                </table> : <div>awdaw</div>
         );
     }
-
     const onActionBegin = (args) => {
         let data = args.data instanceof Array ? args.data[0] : args.data;
         if (args.requestType === 'eventCreate') {
@@ -237,8 +240,8 @@ const Calendar = () => {
 
             //Since format is an array, I need to change it to the format that the API will understand which is an object
             const dataToPost = formattedDataToPost[0];
-            axios.post("http://208.117.44.15/SmWebApi/api/FleetSchedulesApi", dataToPost)
-            // axios.post("http://208.117.44.15/SmWebApi/api/FleetSchedulesApi", dataToPost)
+            axios.post(`${ENP_SERVER_URL}/FleetSchedulesApi`, dataToPost)
+                // axios.post(`${ENP_SERVER_URL}/FleetSchedulesApi`, dataToPost)
                 .then(res => {
                     console.log("res", res);
                     console.log("res.data", res.data);
@@ -251,7 +254,7 @@ const Calendar = () => {
         }
         if (args.requestType === 'eventRemove') {
             args.cancel = true;
-            axios.delete("http://208.117.44.15/SmWebApi/api/FleetSchedulesApi/" + data.entryId)
+            axios.delete(`${ENP_SERVER_URL}/FleetSchedulesApi/` + data.entryId)
                 .then(res => {
                     loadData()
                     setUpToDateLocalData(localData(dataFromAPI.filter((schedule) => schedule.entryId !== data.entryId)));
@@ -278,10 +281,10 @@ const Calendar = () => {
             });
             // console.log("formattedDataToPost", formattedDataToPost);
             const dataToPost = formattedDataToPost[0];
-            axios.put("http://208.117.44.15/SmWebApi/api/FleetSchedulesApi/" + data.entryId, dataToPost)
+            axios.put(`${ENP_SERVER_URL}/FleetSchedulesApi/` + data.entryId, dataToPost)
                 .then(res => {
-                    console.log("res", res);
-                    console.log("res.data", res.data);
+                    console.log("resput", res);
+                    console.log("res.dataput", res.data);
                     loadData()
                     setUpToDateLocalData(localData([...dataFromAPI, res.data]));
                 })
@@ -290,20 +293,76 @@ const Calendar = () => {
                 });
         }
     }
-
-    // const quickInfoTemplates = {
-    //     content: contentTemplate.bind(this),
-    // }
-    // const contentTemplate = (props) => {
+    // const headerTemplate = (props) => {
     //     return (
-    //         <div className="content-template">
-    //             <div className="e-text-content">
-    //                 <div className="e-subject">{props.Subject}</div>
-    //                 {/*<div className="e-location">{props.Location}</div>*/}
-    //             </div>
+    //         <div>
+    //             {props.elementType === "event" ? (<div className="e-cell-header e-popup-header">
+    //                 <div className="e-header-icon-wrapper">
+    //                     {/*<button id="edit" className="e-edit e-edit-icon e-icons" title="Edit"/>*/}
+    //                     <button id="close" className="e-close e-close-icon e-icons" title="Close"/>
+    //                 </div>
+    //             </div>) : (<div className="e-event-header e-popup-header">
+    //                 <div className="e-header-icon-wrapper">
+    //                     <button id="close" className="e-close e-close-icon e-icons" title="CLOSE"/>
+    //                 </div>
+    //             </div>)}
     //         </div>
     //     );
     // }
+    // const contentTemplate = (props) => {
+    //     return (<div className="quick-info-content">
+    //         {props.elementType === 'cell' ?
+    //             <div className="e-cell-content">
+    //                 <div className="content-area">asdasd
+    //                     {/*<TextBoxComponent id="title" ref={(textbox) => titleObj = textbox} placeholder="Title"/>*/}
+    //                 </div>
+    //                 <div className="content-area">
+    //                     {/*<DropDownListComponent id="eventType" ref={(ddl) => eventTypeObj = ddl} dataSource={roomData} fields={{ text: "Name", value: "Id" }} placeholder="Choose Type" index={0} popupHeight="200px"/>*/}
+    //                 </div>
+    //                 <div className="content-area">
+    //                     {/*<TextBoxComponent id="notes" ref={(textbox) => notesObj = textbox} placeholder="Notes"/>*/}
+    //                 </div>
+    //             </div>
+    //             :
+    //             <div className="event-content">
+    //                 <div className="meeting-type-wrap">
+    //                     <label>Subject</label>:
+    //                     <span>sdfsdfs</span>
+    //                 </div>
+    //                 <div className="meeting-subject-wrap">
+    //                     <label>Type</label>:sdfsdf
+    //                     {/*<span>{getEventType(props)}</span>*/}
+    //                 </div>
+    //                 <div className="notes-wrap">
+    //                     {/*<Link to={"/checkListForm/tabs"}>View Details</Link>*/}
+    //                     {/*<span>{props.Description}</span>*/}
+    //                 </div>
+    //             </div>}
+    //     </div>);
+    // }
+    // const footerTemplate = (props) => {
+    //     console.log("props", props);
+    //     return (
+    //         <div className="quick-info-footer">
+    //
+    //             {props.elementType === "event" ?
+    //                 <div className="cell-footer">
+    //                     <ButtonComponent id="more-details" cssClass='e-flat' content="More Details" />
+    //                     <ButtonComponent id="add" cssClass='e-flat' content="Add" isPrimary={true} />
+    //                 </div>
+    //                 :
+    //                 <div className="event-footer">
+    //                     <ButtonComponent id="delete" cssClass='e-flat' content="Delete" />
+    //                     <ButtonComponent id="more-details" cssClass='e-flat' content="More Details" isPrimary={true} />
+    //                 </div>
+    //             }
+    //         </div>
+    //     );
+    // }
+
+
+
+
     return (
         <div className='schedule-control-section'>
             <div className='col-lg-12 control-section'>
@@ -314,6 +373,12 @@ const Calendar = () => {
                         eventSettings={upToDateLocalData}
                         editorTemplate={editorTemplate.bind(this)}
                         actionBegin={onActionBegin.bind(this)}
+                        // id="schedule"
+                        // quickInfoTemplates={{
+                        //     header: headerTemplate.bind(this),
+                        //     content: contentTemplate.bind(this),
+                        //     footer: footerTemplate.bind(this)
+                        // }}
                     >
                         <Inject services={[Day, Week, WorkWeek, Month, Agenda]}/>
                     </ScheduleComponent>
