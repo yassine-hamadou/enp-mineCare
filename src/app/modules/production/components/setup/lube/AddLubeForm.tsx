@@ -1,22 +1,19 @@
-import {Form, Input, InputNumber, Radio, RadioChangeEvent, Select, TimePicker} from 'antd'
+import {Form, Input, InputNumber, Select, TimePicker} from 'antd'
 import {useEffect, useRef, useState} from 'react'
 import axios from 'axios'
 import {DatePicker} from 'antd/es'
 
-const AddServiceForm = () => {
+const AddLubeForm = () => {
   const [dataSource, setDataSource] = useState([])
   const [faultType, setFaultType] = useState([])
   const [location, setLocation] = useState([])
   const [custodian, setCustodian] = useState([])
-  const [value, setValue] = useState(1);
   const [loading, setLoading] = useState(false)
-
   const [fleet, setFleet] = useState({})
   const [fleetToAdd, setFleetToAdd] = useState(null)
 
-  const [name, setName] =useState("")
-  const [modelID, setModelID] =useState("")
-  const [status, setStatus] =useState("")
+
+  
 
   const loadData = async () => {
     setLoading(true)
@@ -34,10 +31,6 @@ const AddServiceForm = () => {
   const getEqupId = (id: any) => {
     dataSource.map((item: any) => (item.fleetID === id ? setFleet(item) : null))
   }
-  const onChange = (e: RadioChangeEvent) => {
-    console.log('radio checked', e.target.value);
-    setValue(e.target.value);
-  };
 
   useEffect(() => {
     loadData()
@@ -50,8 +43,8 @@ const AddServiceForm = () => {
   }, [fleet])
 
   return (
-    <Form labelCol={{span: 7}} wrapperCol={{span: 14}} layout='horizontal' title='Add Service'>
-      {/* <Form.Item label='FleetID'>
+    <Form labelCol={{span: 7}} wrapperCol={{span: 14}} layout='horizontal' title='Add Lube'>
+      <Form.Item label='ModelID'>
         <Select onSelect={(e: any) => getEqupId(e)}>
           {dataSource.map((item: any) => (
             <Select.Option
@@ -63,23 +56,25 @@ const AddServiceForm = () => {
             </Select.Option>
           ))}
         </Select>
-      </Form.Item> */}
-      {/* <Form.Item label='Previous Reading'>
-        <Input disabled={true} contentEditable={false}/>
-      </Form.Item> */}
-       
-       <Form.Item label='Name'>
-        <Input value={name} onChange={(e)=>setName(e.target.value)}/>
       </Form.Item>
-      <Form.Item label='Status'>
-        <Radio.Group onChange={(e)=>setStatus(e.target.value)} value={status}>
-          <Radio value={1}>Active</Radio>
-          <Radio value={2}>InActive</Radio>
-        </Radio.Group>
+      <Form.Item label='Compartment'>
+        <Input />
+      </Form.Item>   
+      <Form.Item label='Oil Grade - Shell'>
+        <Input />
+      </Form.Item>
+      <Form.Item label='Oil Grade - Total'>
+        <Input />
+      </Form.Item>
+      <Form.Item label='Change our interval'>
+        <InputNumber />
+      </Form.Item>
+      <Form.Item label='Capacity'>
+        <InputNumber />
       </Form.Item>
       
     </Form>
   )
 }
 
-export {AddServiceForm}
+export {AddLubeForm}

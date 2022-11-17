@@ -66,39 +66,43 @@ const CheckListForm = () => {
           {/* end::row */}
           <div className='row mb-7'>
             <div className='col-4'>
-              {/* <select className="form-select form-control form-control-solid mb-3" >
-                <option selected>Select one option</option>
-                <option value="1">Ok</option>
-                <option value="2">Repair</option>
-                
-              </select> */}
+              
               <div className="form-control form-control-solid mb-3" >
                 <div>
                 <label className='required fw-bold fs-6 mb-2'>Cut Open Filter (Show to Supervisor)</label>
 
                 </div>
-              <Radio.Group onChange={onChange} value={value}>
-                <Radio value={1}>A</Radio>
-                <Radio value={2}>B</Radio>
-              </Radio.Group>
+                <Radio.Group onChange={onChange} value={value}>
+                  <Radio value={1}>Ok</Radio>
+                  <Radio value={2}>Repair</Radio>
+                </Radio.Group>
               </div>
             </div>
             <div className='col-4'>
-              <label className='required fw-bold fs-6 mb-2'>Clean Primary Fuel filter</label>
-              <select className="form-select form-control form-control-solid mb-3" >
-                <option selected>Select one option</option>
-                <option value="1">Ok</option>
-                <option value="2">Repair</option>
-                
-              </select>
+              
+              <div className="form-control form-control-solid mb-3" >
+                <div>
+                <label className='required fw-bold fs-6 mb-2'>Clean Primary Fuel filter</label>
+
+                </div>
+                <Radio.Group onChange={onChange} value={value}>
+                  <Radio value={1}>Ok</Radio>
+                  <Radio value={2}>Repair</Radio>
+                </Radio.Group>
+              </div>
             </div>
             <div className='col-4'>
-              <label className='required fw-bold fs-6 mb-2'>Check condition of battery cables</label>
-              <select className="form-select form-control form-control-solid mb-3" >
-                <option selected>Select one option</option>
-                <option value="1">Ok</option>
-                <option value="2">Repair</option>
-              </select>
+              <div className="form-control form-control-solid mb-3" >
+                <div>
+                <label className='required fw-bold fs-6 mb-2'>Check condition of battery cables</label>
+
+
+                </div>
+                <Radio.Group onChange={onChange} value={value}>
+                  <Radio value={1}>Ok</Radio>
+                  <Radio value={2}>Repair</Radio>
+                </Radio.Group>
+              </div>
             </div>
           </div>
         
@@ -106,212 +110,272 @@ const CheckListForm = () => {
           {/* end::row */}
           <div className='row mb-7'>
             <div className='col-4'>
-              <label className='required fw-bold fs-6 mb-2'>Check condition of engine mounts</label>
-              <select className="form-select form-control form-control-solid mb-3" >
-                <option selected>Select one option</option>
-                <option value="1">Ok</option>
-                <option value="2">Repair</option>
-                
-              </select>
+              <div className="form-control form-control-solid mb-3" >
+                <div>
+                <label className='required fw-bold fs-6 mb-2'>Check condition of engine mounts</label>
+
+
+                </div>
+                <Radio.Group onChange={onChange} value={value}>
+                  <Radio value={1}>Ok</Radio>
+                  <Radio value={2}>Repair</Radio>
+                </Radio.Group>
+              </div>
             </div>
             <div className='col-4'>
-              <label className='required fw-bold fs-6 mb-2'>Check cooling fan for cracks or damage</label>
-              <select className="form-select form-control form-control-solid mb-3" >
-                <option selected>Select one option</option>
-                <option value="1">Ok</option>
-                <option value="2">Repair</option>
-                
-              </select>
+              <div className="form-control form-control-solid mb-3" >
+                <div>
+                <label className='required fw-bold fs-6 mb-2'>Check cooling fan for cracks or damage</label>
+
+
+                </div>
+                <Radio.Group onChange={onChange} value={value}>
+                  <Radio value={1}>Ok</Radio>
+                  <Radio value={2}>Repair</Radio>
+                </Radio.Group>
+              </div>
             </div>
             <div className='col-4'>
-              <label className='required fw-bold fs-6 mb-2'>Check Cooling system clamps & hoses</label>
-              <select className="form-select form-control form-control-solid mb-3" >
-                <option selected>Select one option</option>
-                <option value="1">Ok</option>
-                <option value="2">Repair</option>
-              </select>
-            </div>
-          </div>
-          {/* end::row */}
-          <div className='row mb-7'>
-            <div className='col-4'>
-              <label className='required fw-bold fs-6 mb-2'>Check pulleys for excess bearing noise</label>
-              <select className="form-select form-control form-control-solid mb-3" >
-                <option selected>Select one option</option>
-                <option value="1">Ok</option>
-                <option value="2">Repair</option>
-                
-              </select>
-            </div>
-            <div className='col-4'>
-              <label className='required fw-bold fs-6 mb-2'>Clean Engine crankcase breather</label>
-              <select className="form-select form-control form-control-solid mb-3" >
-                <option selected>Select one option</option>
-                <option value="1">Ok</option>
-                <option value="2">Repair</option>
-                
-              </select>
-            </div>
-            <div className='col-4'>
-              <label className='required fw-bold fs-6 mb-2'>Condition & tension of all drive belts</label>
-              <select className="form-select form-control form-control-solid mb-3" >
-                <option selected>Select one option</option>
-                <option value="1">Ok</option>
-                <option value="2">Repair</option>
-              </select>
+              <div className="form-control form-control-solid mb-3" >
+                <div>
+                <label className='required fw-bold fs-6 mb-2'>Check Cooling system clamps & hoses</label>
+                </div>
+                <Radio.Group onChange={onChange} value={value}>
+                  <Radio value={1}>Ok</Radio>
+                  <Radio value={2}>Repair</Radio>
+                </Radio.Group>
+              </div>
             </div>
           </div>
           {/* end::row */}
           <div className='row mb-7'>
             <div className='col-4'>
-              <label className='required fw-bold fs-6 mb-2'>Check for cracks on fan belts & tighten Bolts</label>
-              <select className="form-select form-control form-control-solid mb-3" >
-                <option selected>Select one option</option>
-                <option value="1">Ok</option>
-                <option value="2">Repair</option>
-                
-              </select>
+              <div className="form-control form-control-solid mb-3" >
+                <div>
+                <label className='required fw-bold fs-6 mb-2'>Check pulleys for excess bearing noise</label>
+                </div>
+                <Radio.Group onChange={onChange} value={value}>
+                  <Radio value={1}>Ok</Radio>
+                  <Radio value={2}>Repair</Radio>
+                </Radio.Group>
+              </div>
             </div>
             <div className='col-4'>
-              <label className='required fw-bold fs-6 mb-2'>Drain fuel tank water trap</label>
-              <select className="form-select form-control form-control-solid mb-3" >
-                <option selected>Select one option</option>
-                <option value="1">Ok</option>
-                <option value="2">Repair</option>
-                
-              </select>
+              <div className="form-control form-control-solid mb-3" >
+                <div>
+                <label className='required fw-bold fs-6 mb-2'>Clean Engine crankcase breather</label>
+                </div>
+                <Radio.Group onChange={onChange} value={value}>
+                  <Radio value={1}>Ok</Radio>
+                  <Radio value={2}>Repair</Radio>
+                </Radio.Group>
+              </div>
             </div>
             <div className='col-4'>
-              <label className='required fw-bold fs-6 mb-2'>Inspect radiator core. (Clean if needed)</label>
-              <select className="form-select form-control form-control-solid mb-3" >
-                <option selected>Select one option</option>
-                <option value="1">Ok</option>
-                <option value="2">Repair</option>
-              </select>
-            </div>
-          </div>
-          {/* end::row */}
-          <div className='row mb-7'>
-            <div className='col-4'>
-              <label className='required fw-bold fs-6 mb-2'>Jump start receptacle cables if fitted</label>
-              <select className="form-select form-control form-control-solid mb-3" >
-                <option selected>Select one option</option>
-                <option value="1">Ok</option>
-                <option value="2">Repair</option>
-                
-              </select>
-            </div>
-            <div className='col-4'>
-              <label className='required fw-bold fs-6 mb-2'>Lubricate Fan hub & jockey pulley</label>
-              <select className="form-select form-control form-control-solid mb-3" >
-                <option selected>Select one option</option>
-                <option value="1">Ok</option>
-                <option value="2">Repair</option>
-                
-              </select>
-            </div>
-            <div className='col-4'>
-              <label className='required fw-bold fs-6 mb-2'>Test Air con system</label>
-              <select className="form-select form-control form-control-solid mb-3" >
-                <option selected>Select one option</option>
-                <option value="1">Ok</option>
-                <option value="2">Repair</option>
-              </select>
+              <div className="form-control form-control-solid mb-3" >
+                <div>
+                <label className='required fw-bold fs-6 mb-2'>Condition & tension of all drive belts</label>
+
+                </div>
+                <Radio.Group onChange={onChange} value={value}>
+                  <Radio value={1}>Ok</Radio>
+                  <Radio value={2}>Repair</Radio>
+                </Radio.Group>
+              </div>
             </div>
           </div>
           {/* end::row */}
           <div className='row mb-7'>
             <div className='col-4'>
-              <label className='required fw-bold fs-6 mb-2'>Test Charging system </label>
-              <select className="form-select form-control form-control-solid mb-3" >
-                <option selected>Select one option</option>
-                <option value="1">Ok</option>
-                <option value="2">Repair</option>
-                
-              </select>
+              <div className="form-control form-control-solid mb-3" >
+                <div>
+                <label className='required fw-bold fs-6 mb-2'>Check for cracks on fan belts & tighten Bolts</label>
+                </div>
+                <Radio.Group onChange={onChange} value={value}>
+                  <Radio value={1}>Ok</Radio>
+                  <Radio value={2}>Repair</Radio>
+                </Radio.Group>
+              </div>
             </div>
             <div className='col-4'>
-              <label className='required fw-bold fs-6 mb-2'>Replace Primary Fuel filter</label>
-              <select className="form-select form-control form-control-solid mb-3" >
-                <option selected>Select one option</option>
-                <option value="1">Ok</option>
-                <option value="2">Repair</option>
-              </select>
+              <div className="form-control form-control-solid mb-3" >
+                <div>
+                <label className='required fw-bold fs-6 mb-2'>Drain fuel tank water trap</label>
+                </div>
+                <Radio.Group onChange={onChange} value={value}>
+                  <Radio value={1}>Ok</Radio>
+                  <Radio value={2}>Repair</Radio>
+                </Radio.Group>
+              </div>
             </div>
             <div className='col-4'>
-              <label className='required fw-bold fs-6 mb-2'>Replace Secondary fuel filter</label>
-              <select className="form-select form-control form-control-solid mb-3" >
-                <option selected>Select one option</option>
-                <option value="1">Ok</option>
-                <option value="2">Repair</option>
-              </select>
-            </div>
-          </div>
-          {/* end::row */}
-          <div className='row mb-7'>
-            <div className='col-4'>
-              <label className='required fw-bold fs-6 mb-2'>Replace Fuel Filter (ORS) </label>
-              <select className="form-select form-control form-control-solid mb-3" >
-                <option selected>Select one option</option>
-                <option value="1">Ok</option>
-                <option value="2">Repair</option>
-                
-              </select>
-            </div>
-            <div className='col-4'>
-              <label className='required fw-bold fs-6 mb-2'>Replace Engine oil filter</label>
-              <select className="form-select form-control form-control-solid mb-3" >
-                <option selected>Select one option</option>
-                <option value="1">Ok</option>
-                <option value="2">Repair</option>
-              </select>
-            </div>
-            <div className='col-4'>
-              <label className='required fw-bold fs-6 mb-2'>Remove & clean starter silenser</label>
-              <select className="form-select form-control form-control-solid mb-3" >
-                <option selected>Select one option</option>
-                <option value="1">Ok</option>
-                <option value="2">Repair</option>
-              </select>
+              <div className="form-control form-control-solid mb-3" >
+                <div>
+                <label className='required fw-bold fs-6 mb-2'>Inspect radiator core. (Clean if needed)</label>
+                </div>
+                <Radio.Group onChange={onChange} value={value}>
+                  <Radio value={1}>Ok</Radio>
+                  <Radio value={2}>Repair</Radio>
+                </Radio.Group>
+              </div>
             </div>
           </div>
           {/* end::row */}
           <div className='row mb-7'>
             <div className='col-4'>
-              <label className='required fw-bold fs-6 mb-2'>Inspect pulleys for cracks & dirt build-up  </label>
-              <select className="form-select form-control form-control-solid mb-3" >
-                <option selected>Select one option</option>
-                <option value="1">Ok</option>
-                <option value="2">Repair</option>
-                
-              </select>
+              <div className="form-control form-control-solid mb-3" >
+                <div>
+                <label className='required fw-bold fs-6 mb-2'>Jump start receptacle cables if fitted</label>
+                </div>
+                <Radio.Group onChange={onChange} value={value}>
+                  <Radio value={1}>Ok</Radio>
+                  <Radio value={2}>Repair</Radio>
+                </Radio.Group>
+              </div>
             </div>
             <div className='col-4'>
-              <label className='required fw-bold fs-6 mb-2'>Inspect Fuel lines for leaks & damage</label>
-              <select className="form-select form-control form-control-solid mb-3" >
-                <option selected>Select one option</option>
-                <option value="1">Ok</option>
-                <option value="2">Repair</option>
-              </select>
+              <div className="form-control form-control-solid mb-3" >
+                <div>
+                <label className='required fw-bold fs-6 mb-2'>Lubricate Fan hub & jockey pulley</label>
+                </div>
+                <Radio.Group onChange={onChange} value={value}>
+                  <Radio value={1}>Ok</Radio>
+                  <Radio value={2}>Repair</Radio>
+                </Radio.Group>
+              </div>
             </div>
             <div className='col-4'>
-              <label className='required fw-bold fs-6 mb-2'>Inspect Exhaust manifolds & lines for leaks</label>
-              <select className="form-select form-control form-control-solid mb-3" >
-                <option selected>Select one option</option>
-                <option value="1">Ok</option>
-                <option value="2">Repair</option>
-              </select>
+              <div className="form-control form-control-solid mb-3" >
+                <div>
+                <label className='required fw-bold fs-6 mb-2'>Test Air con system</label>
+                </div>
+                <Radio.Group onChange={onChange} value={value}>
+                  <Radio value={1}>Ok</Radio>
+                  <Radio value={2}>Repair</Radio>
+                </Radio.Group>
+              </div>
+            </div>
+          </div>
+          {/* end::row */}
+          <div className='row mb-7'>
+            <div className='col-4'>
+              <div className="form-control form-control-solid mb-3" >
+                <div>
+                <label className='required fw-bold fs-6 mb-2'>Test Charging system </label>
+                </div>
+                <Radio.Group onChange={onChange} value={value}>
+                  <Radio value={1}>Ok</Radio>
+                  <Radio value={2}>Repair</Radio>
+                </Radio.Group>
+              </div>
+            </div>
+            <div className='col-4'>
+              <div className="form-control form-control-solid mb-3" >
+                <div>
+                <label className='required fw-bold fs-6 mb-2'>Replace Primary Fuel filter</label>
+                </div>
+                <Radio.Group onChange={onChange} value={value}>
+                  <Radio value={1}>Ok</Radio>
+                  <Radio value={2}>Repair</Radio>
+                </Radio.Group>
+              </div>
+            </div>
+            <div className='col-4'>
+              <div className="form-control form-control-solid mb-3" >
+                <div>
+                <label className='required fw-bold fs-6 mb-2'>Replace Secondary fuel filter</label>
+                </div>
+                <Radio.Group onChange={onChange} value={value}>
+                  <Radio value={1}>Ok</Radio>
+                  <Radio value={2}>Repair</Radio>
+                </Radio.Group>
+              </div>
+            </div>
+          </div>
+          {/* end::row */}
+          <div className='row mb-7'>
+            <div className='col-4'>
+              <div className="form-control form-control-solid mb-3" >
+                <div>
+                <label className='required fw-bold fs-6 mb-2'>Replace Fuel Filter (ORS) </label>
+                </div>
+                <Radio.Group onChange={onChange} value={value}>
+                  <Radio value={1}>Ok</Radio>
+                  <Radio value={2}>Repair</Radio>
+                </Radio.Group>
+              </div>
+            </div>
+            <div className='col-4'>
+              <div className="form-control form-control-solid mb-3" >
+                <div>
+                <label className='required fw-bold fs-6 mb-2'>Replace Engine oil filter</label>
+                </div>
+                <Radio.Group onChange={onChange} value={value}>
+                  <Radio value={1}>Ok</Radio>
+                  <Radio value={2}>Repair</Radio>
+                </Radio.Group>
+              </div>
+            </div>
+            <div className='col-4'>
+              <div className="form-control form-control-solid mb-3" >
+                <div>
+                <label className='required fw-bold fs-6 mb-2'>Remove & clean starter silenser</label>
+                </div>
+                <Radio.Group onChange={onChange} value={value}>
+                  <Radio value={1}>Ok</Radio>
+                  <Radio value={2}>Repair</Radio>
+                </Radio.Group>
+              </div>
+            </div>
+          </div>
+          {/* end::row */}
+          <div className='row mb-7'>
+            <div className='col-4'>
+              <div className="form-control form-control-solid mb-3" >
+                <div>
+                <label className='required fw-bold fs-6 mb-2'>Inspect pulleys for cracks & dirt build-up  </label>
+                </div>
+                <Radio.Group onChange={onChange} value={value}>
+                  <Radio value={1}>Ok</Radio>
+                  <Radio value={2}>Repair</Radio>
+                </Radio.Group>
+              </div>
+            </div>
+            <div className='col-4'>
+              <div className="form-control form-control-solid mb-3" >
+                <div>
+                <label className='required fw-bold fs-6 mb-2'>Inspect Fuel lines for leaks & damage</label>
+                </div>
+                <Radio.Group onChange={onChange} value={value}>
+                  <Radio value={1}>Ok</Radio>
+                  <Radio value={2}>Repair</Radio>
+                </Radio.Group>
+              </div>
+            </div>
+            <div className='col-4'>
+              <div className="form-control form-control-solid mb-3" >
+                <div>
+                <label className='required fw-bold fs-6 mb-2'>Inspect Exhaust manifolds & lines for leaks</label>
+                </div>
+                <Radio.Group onChange={onChange} value={value}>
+                  <Radio value={1}>Ok</Radio>
+                  <Radio value={2}>Repair</Radio>
+                </Radio.Group>
+              </div>
             </div>
           </div>
           {/* end::row */}
           <div className='row mb-10'>
             <div className='col-4'>
-              <label className='required fw-bold fs-6 mb-2'>Inspect Air induction system clamps & hoses</label>
-              <select className="form-select form-control form-control-solid mb-3" >
-                <option selected>Select one option</option>
-                <option value="1">Ok</option>
-                <option value="2">Repair</option>
-              </select>
+              <div className="form-control form-control-solid mb-3" >
+                <div>
+                <label className='required fw-bold fs-6 mb-2'>Inspect Air induction system clamps & hoses</label>
+                </div>
+                <Radio.Group onChange={onChange} value={value}>
+                  <Radio value={1}>Ok</Radio>
+                  <Radio value={2}>Repair</Radio>
+                </Radio.Group>
+              </div>
             </div>
           </div> 
           <div>

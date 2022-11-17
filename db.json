@@ -15,21 +15,38 @@
       "status": "typicode"
     }
   ],
-  
   "sections": [
     {
-    "id": 1,
-    "name": "json-server",
-    "serviceID": "json-server",
-    "status": "typicode"
+      "id": 1,
+      "name": "json-server",
+      "serviceID": "json-server",
+      "status": "typicode"
     }
   ],
   "services": [
     {
-    "id": 1,
-    "name": "test",
-    "modelID": "Test Service",
-    "status": "typicode"
+      "id": 1,
+      "name": "Service PM-A",
+      "modelID": "Test",
+      "status": "typicode"
+    },
+    {
+      "name": "Service PM-B",
+      "modelID": "Test1",
+      "status": 1,
+      "id": 2
+    },
+    {
+      "name": "Service PM-C",
+      "modelID": "Test2",
+      "status": 1,
+      "id": 3
+    },
+    {
+      "name": "Service PM-D",
+      "modelID": "Test3",
+      "status": 1,
+      "id": 4
     }
   ]
 }

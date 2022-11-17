@@ -29,6 +29,8 @@ import { CheckListForm2 } from './components/checkListForm/CheckListForm2'
 import { CheckListForm3 } from './components/checkListForm/CheckListForm3'
 import { CheckListForm5 } from './components/checkListForm/CheckListForm5'
 import { TabsTest } from './components/checkListForm/Tabs'
+import { LubePage } from './components/setup/lube/Lube'
+
 const accountBreadCrumbs: Array<PageLink> = []
 
 const ProductionPage: React.FC = () => {
@@ -150,6 +152,16 @@ const ProductionPage: React.FC = () => {
             </>
           }
         />
+        <Route
+          path='lube'
+          element={
+            <>
+              <PageTitle breadcrumbs={accountBreadCrumbs}>All Lubes</PageTitle>
+              {/*<Overview />*/}
+              <LubePage />
+            </>
+          }
+        />
        
         <Route index element={<Navigate to='/dashboard' />} />
       </Route>
@@ -244,7 +256,7 @@ const ProductionPage: React.FC = () => {
           }
         />
         <Route
-          path='sections'
+          path='sections/:id'
           element={
             <>
               <PageTitle breadcrumbs={accountBreadCrumbs}>Sections </PageTitle>
