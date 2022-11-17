@@ -4,6 +4,7 @@ import axios from 'axios'
 import {Link} from 'react-router-dom'
 import {KTCardBody, KTSVG} from '../../../../../../_metronic/helpers'
 import {AddWorkTypeForm} from './AddWorkTypeForm'
+import {ENP_URL} from '../../../../../urls'
 
 const WorkTypePage = () => {
   const [gridData, setGridData] = useState([])
@@ -84,13 +85,12 @@ const WorkTypePage = () => {
         </Space>
       ),
     },
-    //console
   ]
 
   const loadData = async () => {
     setLoading(true)
     try {
-      const response = await axios.get('http://208.117.44.15/SmWebApi/api/VmclasApi')
+      const response = await axios.get(`${ENP_URL}/VmclasApi`)
       setGridData(response.data)
       setLoading(false)
     } catch (error) {

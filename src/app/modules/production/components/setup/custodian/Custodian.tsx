@@ -1,7 +1,8 @@
 import {Button, Input, Space, Table} from 'antd'
 import {useState, useEffect} from 'react'
 import axios from 'axios'
-import { KTCard, KTCardBody, KTSVG } from '../../../../../../_metronic/helpers'
+import {KTCard, KTCardBody, KTSVG} from '../../../../../../_metronic/helpers'
+import {ENP_URL} from '../../../../../urls'
 
 const CustodianPage = () => {
   const [gridData, setGridData] = useState([])
@@ -29,21 +30,19 @@ const CustodianPage = () => {
         return 0
       },
     },
-    
+
     {
       title: 'Custodian Name',
       dataIndex: 'emplName',
       sorter: (a: any, b: any) => a.emplName - b.emplName,
     },
-    
-    
   ]
 
   const loadData = async () => {
     setLoading(true)
     try {
-        const response = await axios.get('http://208.117.44.15/SmWebApi/api/VmemplsApi')
-        // const response = await axios.get('https://app.sipconsult.net/SmWebApi/api/VmemplsApi')
+      const response = await axios.get(`${ENP_URL}/VmemplsApi`)
+      // const response = await axios.get('https://app.sipconsult.net/SmWebApi/api/VmemplsApi')
       setGridData(response.data)
       setLoading(false)
     } catch (error) {
@@ -82,35 +81,41 @@ const CustodianPage = () => {
   }
 
   return (
-    <div style={{backgroundColor:'white', padding:'20px', borderRadius:'5px', boxShadow:'2px 2px 15px rgba(0,0,0,0.08)'}}>
-        <KTCardBody className='py-4 '>
-            <div className='table-responsive'>
-                <div className='d-flex justify-content-between'>
-                    <Space style={{marginBottom: 16}}>
-                    <Input
-                        placeholder='Enter Search Text'
-                        onChange={handleInputChange}
-                        type='text'
-                        allowClear
-                        value={searchText}
-                    />
-                    <Button type='primary' onClick={globalSearch}>
-                        Search
-                    </Button>
-                    </Space>
-                    <Space style={{marginBottom: 16}}>
-                      <button type='button' className='btn btn-primary me-3'>
-                        <KTSVG path='/media/icons/duotune/arrows/arr078.svg' className='svg-icon-2' />
-                        Export
-                      </button>
-                    </Space>
-                </div>
-            <Table columns={columns} dataSource={dataWithVehicleNum} bordered loading={loading}/>
-            </div>
-        </KTCardBody>
+    <div
+      style={{
+        backgroundColor: 'white',
+        padding: '20px',
+        borderRadius: '5px',
+        boxShadow: '2px 2px 15px rgba(0,0,0,0.08)',
+      }}
+    >
+      <KTCardBody className='py-4 '>
+        <div className='table-responsive'>
+          <div className='d-flex justify-content-between'>
+            <Space style={{marginBottom: 16}}>
+              <Input
+                placeholder='Enter Search Text'
+                onChange={handleInputChange}
+                type='text'
+                allowClear
+                value={searchText}
+              />
+              <Button type='primary' onClick={globalSearch}>
+                Search
+              </Button>
+            </Space>
+            <Space style={{marginBottom: 16}}>
+              <button type='button' className='btn btn-primary me-3'>
+                <KTSVG path='/media/icons/duotune/arrows/arr078.svg' className='svg-icon-2' />
+                Export
+              </button>
+            </Space>
+          </div>
+          <Table columns={columns} dataSource={dataWithVehicleNum} bordered loading={loading} />
+        </div>
+      </KTCardBody>
     </div>
   )
 }
 
 export {CustodianPage}
-
