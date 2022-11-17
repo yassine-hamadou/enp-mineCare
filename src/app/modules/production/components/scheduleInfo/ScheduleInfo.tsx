@@ -3,8 +3,8 @@ import {Divider} from 'antd'
 import {useEffect, useState} from 'react'
 import axios from 'axios'
 
-const ENP_URL = 'http://localhost:3001'
-// const ENP_URL = 'http://208.117.44.15/smwebapi/api'
+// const ENP_URL = 'http://localhost:3001'
+const ENP_URL = 'http://208.117.44.15/smwebapi/api'
 export function ScheduleInfo() {
   const [schedules, setSchedules] = useState<any>([])
 
