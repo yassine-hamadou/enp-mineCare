@@ -139,22 +139,6 @@ const HoursPage: React.FC = () => {
       },
     ];
 
-
-
-    // useEffect(() => {
-    //   const data = [];
-    //   for (let i = 0; i < 7; i++) {
-    //     data.push({
-    //       key: i.toString(),
-    //       date: '2014-12-24 23:12:00',
-    //       name: 'Test fleets',
-    //       pread: '',
-    //       cread: '',
-    //     });
-    //   }
-    //   setDataSource(data);
-    // }, );
-
     const data:any = [];
     for (let i = 0; i < 3; ++i) {
       data.push({
@@ -180,24 +164,8 @@ const HoursPage: React.FC = () => {
     { title: 'Manufacturer', dataIndex: 'manu', key: 'manu' },
     { title: 'Model', dataIndex: 'model', key: 'model' },
     { title: 'Number of vehicles', dataIndex: 'count', key: 'count' },
-    // { title: 'Upgraded', dataIndex: 'upgradeNum', key: 'upgradeNum' },
-    // { title: 'Creator', dataIndex: 'creator', key: 'creator' },
-    // { title: 'Date', dataIndex: 'createdAt', key: 'createdAt' },
-    // { title: 'Action', key: 'operation', render: () => <a>Publish</a> },
-  ];
 
-  // const data: DataType[] = [];
-  // for (let i = 0; i < 3; ++i) {
-  //   data.push({
-  //     key: i.toString(),
-  //     name: 'Screem',
-  //     platform: 'iOS',
-  //     version: '10',
-  //     upgradeNum: 500,
-  //     creator: 'Jack',
-  //     createdAt: '2014-12-24 23:12:00',
-  //   });
-  // }
+  ];
   const loadData = async () => {
     setLoading(true)
     try {

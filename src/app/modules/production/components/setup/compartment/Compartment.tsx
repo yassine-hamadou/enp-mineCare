@@ -104,14 +104,8 @@ const CompartmentPage = () => {
       width: 100,
       render: (_: any, record: any ) => (
         <Space size="middle">
-          {/* <a href="sections" className="btn btn-light-info btn-sm">Sections</a> */}
-          {/* <Link to={`/setup/sections/${record.id}`}>
-          <span  className="btn btn-light-info btn-sm">
-          Sections
-            </span></Link> */}
           <a href="#" className="btn btn-light-warning btn-sm">Update</a>
           <a onClick={() => handleDelete(record)} className="btn btn-light-danger btn-sm">Delete</a>
-          {/* <a>Edit </a> */}
         </Space>
       ),
     },

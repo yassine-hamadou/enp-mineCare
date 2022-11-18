@@ -73,7 +73,7 @@ export function AsideMenuMain() {
         <AsideMenuItem to='/setup/custodian' title='Custodian' hasBullet={true} />
         <AsideMenuItem to='/setup/location' title='Location' hasBullet={true} />
         <AsideMenuItem to='/setup/work-type' title='Work Type' hasBullet={true} />
-        <AsideMenuItem to='/checkListForm/tabs' title='Tabs' hasBullet={true} />
+        {/* <AsideMenuItem to='/checkListForm/tabs' title='Tabs' hasBullet={true} /> */}
         <AsideMenuItemWithSub
         to='#'
         title='Lube'
