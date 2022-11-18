@@ -24,7 +24,6 @@ import {DateTimePickerComponent} from '@syncfusion/ej2-react-calendars'
 import {DropDownListComponent} from '@syncfusion/ej2-react-dropdowns'
 import {ENP_URL} from '../../../../urls'
 import {ButtonComponent} from '@syncfusion/ej2-react-buttons'
-import {set} from 'devextreme/events/core/events_engine'
 
 /**
  *  Schedule editor custom fields sample
@@ -46,20 +45,17 @@ const Calendar = () => {
   const [Vmequps, setVmequps] = useState([])
   const [locations, setLocations] = useState([])
   const [dataFromAPI, setDataFromApi] = useState([])
-  const [upToDateLocalData, setUpToDateLocalData] = useState()
+  const [upToDateLocalData, setUpToDateLocalData] = useState(null)
+
   const [custodians, setCustodian] = useState([])
 
-  const initialData = async () => {
-    await axios
-      .get(`${ENP_URL}/FleetSchedulesApi`)
-      .then((res) => {})
-      .catch((err) => {
-        console.log(err)
-      })
-      .then((data) => {
-        setVmequps(data)
-      })
-  }
+  // const initialData = () => {
+  //   fetch(ENP_URL + '/FleetSchedulesApi')
+  //     .then((response) => response.json())
+  //     .then((data) => {
+  //       return [...data]
+  //     })
+  // }
   // load fleet IDs
   const loadVmequps = async () => {
     try {
@@ -103,18 +99,27 @@ const Calendar = () => {
       },
     }
   }
-
+  console.log('upt', upToDateLocalData)
   useEffect(() => {
     // loadData()
-    setUpToDateLocalData(localData(dataFromAPI))
-    console.log('upToDateLocalData', upToDateLocalData.data)
+    setUpToDateLocalData(dataFromAPI)
+    localData(dataFromAPI)
     // setUpToDateLocalData(localData(dataFromAPI))
   }, [dataFromAPI])
   useEffect(() => {
     loadVmequps()
     loadLocations()
     loadData()
-    // setUpToDateLocalData(localData(dataFromAPI))
+    setUpToDateLocalData(
+      localData(
+        fetch(ENP_URL + '/FleetSchedulesApi')
+          .then((response) => response.json())
+          .then((data) => {
+            const datas = [...data]
+            return datas
+          })
+      )
+    )
     loadCustodians()
   }, [])
 
@@ -232,6 +237,7 @@ const Calendar = () => {
     )
   }
   const onActionBegin = (args) => {
+    console.log('args', args)
     let data = args.data instanceof Array ? args.data[0] : args.data
     if (args.requestType === 'eventCreate') {
       args.cancel = true
@@ -403,7 +409,8 @@ const Calendar = () => {
             width='100%'
             height='650px'
             ref={(schedule) => (scheduleObj = schedule)}
-            eventSettings={upToDateLocalData}
+            eventSettings={dataFromAPI && upToDateLocalData}
+            // eventSettings={dataFromAPI && localData(upToDateLocalData)}
             editorTemplate={editorTemplate.bind(this)}
             actionBegin={onActionBegin.bind(this)}
             // id="schedule"
