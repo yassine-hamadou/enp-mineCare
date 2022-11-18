@@ -55,34 +55,34 @@ const CompartmentPage = () => {
 
     const columns: any =[
 
-    {
-        title: 'ID',
-        dataIndex: 'id',
-        sorter: (a: any, b: any) => {
-            if (a.id > b.id) {
-            return 1
-            }
-            if (b.id > a.id) {
-            return -1
-            }
-            return 0
-        },
-    },
+    // {
+    //     title: 'ID',
+    //     dataIndex: 'id',
+    //     sorter: (a: any, b: any) => {
+    //         if (a.id > b.id) {
+    //         return 1
+    //         }
+    //         if (b.id > a.id) {
+    //         return -1
+    //         }
+    //         return 0
+    //     },
+    // },
     {
       title: 'Model',
-      dataIndex: 'modelID',
+      dataIndex: 'model',
       sorter: (a: any, b: any) => {
-        if (a.modelID > b.modelID) {
+        if (a.model > b.model) {
           return 1
         }
-        if (b.modelID > a.modelID) {
+        if (b.model > a.model) {
           return -1
         }
         return 0
       },
     },
     {
-      title: 'Name',
+      title: 'Name of Compartment',
       dataIndex: 'name',
       sorter: (a: any, b: any) => {
         if (a.name > b.name) {
@@ -114,7 +114,7 @@ const CompartmentPage = () => {
     setLoading(true)
     try {
       // const response = await axios.get('https://cors-anywhere.herokuapp.com/http://208.117.44.15/SmWebApi/api/VmfaltsApi')
-      const response = await axios.get(`${ENP_URL}/services`)
+      const response = await axios.get(`${ENP_URL}/compartment`)
       setGridData(response.data)
       // setGridData(dataSource)
       setLoading(false)
@@ -149,7 +149,7 @@ const CompartmentPage = () => {
     })
     setGridData(filteredData)
   }
-  const url = `${ENP_URL}/services`
+  const url = `${ENP_URL}/compartment`
     const onFinish = async (values: any) => {
         setSubmitLoading(true)
         const data = {
@@ -227,7 +227,6 @@ const CompartmentPage = () => {
                         Submit
                     </Button>,
           ]}>
-          {/* <AddServiceForm /> */}
           <Form 
           labelCol={{span: 7}} 
           wrapperCol={{span: 14}} 
@@ -251,15 +250,15 @@ const CompartmentPage = () => {
         options={[
           {
             value: '1',
-            label: 'Not Identified',
+            label: '793D',
           },
           {
             value: '2',
-            label: 'Closed',
+            label: 'DE810',
           },
           {
             value: '3',
-            label: 'Communicated',
+            label: 'DE810',
           },
           
         ]}
