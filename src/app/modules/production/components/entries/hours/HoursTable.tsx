@@ -201,14 +201,6 @@ const HoursPage: React.FC = () => {
           </Space>
           <Space style={{marginBottom: 16}}>
           
-            <button type='button' className='btn btn-primary me-3' onClick={showModal}>
-              <KTSVG path='/media/icons/duotune/arrows/arr075.svg' className='svg-icon-2' />
-              Add
-            </button>
-            <button type='button' className='btn btn-light-primary me-3'>
-              <KTSVG path='/media/icons/duotune/arrows/arr078.svg' className='svg-icon-2' />
-              Upload
-            </button>
             <button type='button' className='btn btn-light-primary me-3'>
               <KTSVG path='/media/icons/duotune/arrows/arr078.svg' className='svg-icon-2' />
               
@@ -219,21 +211,10 @@ const HoursPage: React.FC = () => {
         </div>
       <Table
         columns={columns}
-        expandable={{ expandedRowRender, defaultExpandedRowKeys: ['1'] }}
+        expandable={{ expandedRowRender, defaultExpandedRowKeys: ['0'] }}
         dataSource={gridData}
       />
-      {/* <Table
-        columns={columns}
-        expandable={{ expandedRowRender, defaultExpandedRowKeys: ['0'] }}
-        dataSource={data}
-        size="middle"
-      />
-      <Table
-        columns={columns}
-        expandable={{ expandedRowRender, defaultExpandedRowKeys: ['0'] }}
-        dataSource={data}
-        size="small"
-      /> */}
+      
       </div>
     </>
   );
