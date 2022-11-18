@@ -21,16 +21,6 @@
       "timeEnd": "2022-11-03T00:00:00"
     },
     {
-      "entryId": 7,
-      "fleetId": "AD065       ",
-      "vmModel": "null",
-      "vmClass": "null",
-      "locationId": "DOZER ",
-      "description": null,
-      "timeStart": "2022-11-14T09:30:00",
-      "timeEnd": "2022-11-14T10:00:00"
-    },
-    {
       "entryId": 8,
       "fleetId": "AD063       ",
       "vmModel": "null",
@@ -59,16 +49,6 @@
       "description": null,
       "timeStart": "2022-11-16T03:30:00",
       "timeEnd": "2022-11-25T04:00:00"
-    },
-    {
-      "entryId": 14,
-      "fleetId": "AD065       ",
-      "vmModel": "null",
-      "vmClass": "null",
-      "locationId": "DRILL ",
-      "description": null,
-      "timeStart": "2022-11-16T09:00:00",
-      "timeEnd": "2022-11-30T09:30:00"
     },
     {
       "fleetId": "AD062       ",
@@ -107,11 +87,47 @@
       "vmClass": "null"
     },
     {
-      "fleetId": "FT007       ",
+      "fleetId": "AD066       ",
+      "locationId": "DOZER ",
+      "timeStart": "2022-11-30T00:00:00.000Z",
+      "timeEnd": "2022-11-18T02:30:00.000Z",
+      "entryId": 22,
+      "vmModel": "null",
+      "vmClass": "null"
+    },
+    {
+      "fleetId": "AD065       ",
+      "locationId": "DRILL ",
+      "timeStart": null,
+      "timeEnd": null,
+      "entryId": 23,
+      "vmModel": "null",
+      "vmClass": "null"
+    },
+    {
+      "fleetId": "AD066       ",
       "locationId": "CRUSH ",
-      "timeStart": "2022-11-17T10:00:00.000Z",
-      "timeEnd": "2022-11-17T10:30:00.000Z",
-      "entryId": 21,
+      "timeStart": "2022-11-25T00:00:00.000Z",
+      "timeEnd": "2022-11-30T00:00:00.000Z",
+      "entryId": 24,
+      "vmModel": "null",
+      "vmClass": "null"
+    },
+    {
+      "fleetId": "AD065       ",
+      "locationId": "DRILL ",
+      "timeStart": "2022-11-16T10:30:00.000Z",
+      "timeEnd": "2022-11-16T11:00:00.000Z",
+      "entryId": 25,
+      "vmModel": "null",
+      "vmClass": "null"
+    },
+    {
+      "fleetId": "AD066       ",
+      "locationId": "DRILL ",
+      "timeStart": "2022-11-16T11:00:00.000Z",
+      "timeEnd": "2022-11-16T11:30:00.000Z",
+      "entryId": 26,
       "vmModel": "null",
       "vmClass": "null"
     }
