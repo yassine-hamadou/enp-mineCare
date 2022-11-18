@@ -61,16 +61,6 @@
       "timeEnd": "2022-11-25T04:00:00"
     },
     {
-      "entryId": 13,
-      "fleetId": "AD060       ",
-      "vmModel": "null",
-      "vmClass": "null",
-      "locationId": "ANCILL",
-      "description": null,
-      "timeStart": "2022-11-16T10:30:00",
-      "timeEnd": "2022-11-16T11:00:00"
-    },
-    {
       "entryId": 14,
       "fleetId": "AD065       ",
       "vmModel": "null",
@@ -81,28 +71,47 @@
       "timeEnd": "2022-11-30T09:30:00"
     },
     {
-      "fleetId": "AD063       ",
-      "locationId": "CRUSH ",
-      "timeStart": "2022-11-16T11:00:00.000Z",
-      "timeEnd": "2022-11-16T11:30:00.000Z",
-      "entryId": 15,
-      "vmModel": "null",
-      "vmClass": "null"
-    },
-    {
-      "fleetId": "AD066       ",
-      "locationId": "DOZER ",
-      "timeStart": "2022-11-14T11:30:00.000Z",
-      "timeEnd": "2022-11-14T12:00:00.000Z",
-      "entryId": 16,
-      "vmModel": "null",
-      "vmClass": "null"
-    },{
       "fleetId": "AD062       ",
       "locationId": "DOZER ",
       "timeStart": "2022-11-14T11:30:00.000Z",
       "timeEnd": "2022-11-14T12:00:00.000Z",
       "entryId": 17,
+      "vmModel": "null",
+      "vmClass": "null"
+    },
+    {
+      "fleetId": "FT007       ",
+      "locationId": "DRILL ",
+      "timeStart": "2022-11-14T10:30:00.000Z",
+      "timeEnd": "2022-11-14T11:00:00.000Z",
+      "entryId": 18,
+      "vmModel": "null",
+      "vmClass": "null"
+    },
+    {
+      "fleetId": "FT010       ",
+      "locationId": "GOLD  ",
+      "timeStart": "2022-11-15T10:00:00.000Z",
+      "timeEnd": "2022-11-15T10:30:00.000Z",
+      "entryId": 19,
+      "vmModel": "null",
+      "vmClass": "null"
+    },
+    {
+      "fleetId": "AD065       ",
+      "locationId": "GOLD  ",
+      "timeStart": "2022-11-16T11:30:00.000Z",
+      "timeEnd": "2022-11-16T12:00:00.000Z",
+      "entryId": 20,
+      "vmModel": "null",
+      "vmClass": "null"
+    },
+    {
+      "fleetId": "FT007       ",
+      "locationId": "CRUSH ",
+      "timeStart": "2022-11-17T10:00:00.000Z",
+      "timeEnd": "2022-11-17T10:30:00.000Z",
+      "entryId": 21,
       "vmModel": "null",
       "vmClass": "null"
     }

@@ -1,6 +1,4 @@
 import {L10n} from '@syncfusion/ej2-base'
-// import { ButtonComponent } from '@syncfusion/ej2-react-buttons';
-
 import {
   ScheduleComponent,
   Day,
@@ -26,6 +24,7 @@ import {DateTimePickerComponent} from '@syncfusion/ej2-react-calendars'
 import {DropDownListComponent} from '@syncfusion/ej2-react-dropdowns'
 import {ENP_URL} from '../../../../urls'
 import {ButtonComponent} from '@syncfusion/ej2-react-buttons'
+import {set} from 'devextreme/events/core/events_engine'
 
 /**
  *  Schedule editor custom fields sample
@@ -46,10 +45,21 @@ L10n.load({
 const Calendar = () => {
   const [Vmequps, setVmequps] = useState([])
   const [locations, setLocations] = useState([])
-  const [dataFromAPI, setDataFromApi] = useState({})
-  const [upToDateLocalData, setUpToDateLocalData] = useState({})
+  const [dataFromAPI, setDataFromApi] = useState([])
+  const [upToDateLocalData, setUpToDateLocalData] = useState()
   const [custodians, setCustodian] = useState([])
 
+  const initialData = async () => {
+    await axios
+      .get(`${ENP_URL}/FleetSchedulesApi`)
+      .then((res) => {})
+      .catch((err) => {
+        console.log(err)
+      })
+      .then((data) => {
+        setVmequps(data)
+      })
+  }
   // load fleet IDs
   const loadVmequps = async () => {
     try {
@@ -75,10 +85,11 @@ const Calendar = () => {
       console.log(e)
     }
   }
-  //Loading schedule data
   const loadData = async () => {
-    return await axios.get(`${ENP_URL}/FleetSchedulesApi`)
+    const response = await axios.get(`${ENP_URL}/FleetSchedulesApi`)
+    setDataFromApi([...response.data])
   }
+  //Loading schedule data
 
   const localData = (dataFromApi) => {
     return {
@@ -94,19 +105,16 @@ const Calendar = () => {
   }
 
   useEffect(() => {
+    // loadData()
     setUpToDateLocalData(localData(dataFromAPI))
-    // loadData();
+    console.log('upToDateLocalData', upToDateLocalData.data)
+    // setUpToDateLocalData(localData(dataFromAPI))
   }, [dataFromAPI])
   useEffect(() => {
     loadVmequps()
     loadLocations()
     loadData()
-      .then((response) => {
-        setDataFromApi([...response.data])
-      })
-      .catch((e) => {
-        console.log(e)
-      })
+    // setUpToDateLocalData(localData(dataFromAPI))
     loadCustodians()
   }, [])
 
