@@ -1,4 +1,4 @@
-import {L10n} from '@syncfusion/ej2-base';
+import {L10n} from '@syncfusion/ej2-base'
 // import { ButtonComponent } from '@syncfusion/ej2-react-buttons';
 
 import {
@@ -25,6 +25,7 @@ import axios from 'axios'
 import {DateTimePickerComponent} from '@syncfusion/ej2-react-calendars'
 import {DropDownListComponent} from '@syncfusion/ej2-react-dropdowns'
 import {ENP_URL} from '../../../../urls'
+import {ButtonComponent} from '@syncfusion/ej2-react-buttons'
 
 /**
  *  Schedule editor custom fields sample
@@ -76,12 +77,7 @@ const Calendar = () => {
   }
   //Loading schedule data
   const loadData = async () => {
-    try {
-      const dataResponse = await axios.get(`${ENP_URL}/FleetSchedulesApi`)
-      setDataFromApi([...dataResponse.data])
-    } catch (e) {
-      console.log(e)
-    }
+    return await axios.get(`${ENP_URL}/FleetSchedulesApi`)
   }
 
   const localData = (dataFromApi) => {
@@ -105,6 +101,12 @@ const Calendar = () => {
     loadVmequps()
     loadLocations()
     loadData()
+      .then((response) => {
+        setDataFromApi([...response.data])
+      })
+      .catch((e) => {
+        console.log(e)
+      })
     loadCustodians()
   }, [])
 
@@ -371,9 +373,22 @@ const Calendar = () => {
   //         </div>
   //     );
   // }
-
+  const refreshCellTemplate = () => {
+    scheduleObj.refreshTemplates()
+  }
   return (
     <div className='schedule-control-section'>
+      <div className='control-section'>
+        <div className='control-wrapper'>
+          <div style={{display: 'flex'}}>
+            <div style={{paddingRight: '10px'}}>
+              <ButtonComponent cssClass='e-info' onClick={refreshCellTemplate}>
+                Refresh
+              </ButtonComponent>
+            </div>
+          </div>
+        </div>
+      </div>
       <div className='col-lg-12 control-section'>
         <div className='control-wrapper'>
           <ScheduleComponent
