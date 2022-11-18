@@ -6,24 +6,27 @@ import {ENP_URL} from '../../../../urls'
 
 export function ScheduleInfo() {
   const [schedules, setSchedules] = useState<any>([])
+  const [scheduleToworkOn, setScheduleToWorkOn] = useState<any>([])
+
   const loadSchedules = async () => {
     const response = await axios.get(`${ENP_URL}/FleetSchedulesApi`)
     setSchedules(response.data)
   }
-  console.log('schedules', schedules)
+  const onSelect = (e: any) => {
+    const entryID = parseInt(e.target.value)
+    const schedule = schedules.find((s: any) => s.entryId === entryID)
+    console.log('scheduleSelect', schedule)
+    setScheduleToWorkOn(schedule)
+  }
   useEffect(() => {
     loadSchedules()
   }, [])
 
-  function onSelect(e: any) {
-    const entryID = e.target.value.parseInt()
-    const schedule = schedules.find((s: any) => s.entryID === entryID)
-  }
   return (
     <>
       <div
         style={{
-          backgroundColor: 'white',
+          // backgroundColor: 'white',
           padding: '20px',
           borderRadius: '5px',
           boxShadow: '2px 2px 15px rgba(0,0,0,0.08)',
@@ -31,7 +34,6 @@ export function ScheduleInfo() {
       >
         <form id='kt_modal_add_plan_form' className='form' noValidate>
           {/* begin::Scroll */}
-
           <div className='d-flex justify-content-center'>
             <h2>
               <strong>Work Schedule</strong>
@@ -45,16 +47,16 @@ export function ScheduleInfo() {
           <div>
             <Divider />
           </div>
-          {/* <Divider /> */}
           {/* end::row */}
+          {/* start::row */}
           <div className='row mb-10'>
             <div className='col-4'>
               <label className='required fw-bold fs-6 mb-2'>Schedule</label>
               <select
                 className='form-select form-control form-control-solid mb-3'
                 onChange={onSelect}
-                defaultValue={'Select'}
               >
+                <option value='Select Schedule'>Select Schedule</option>
                 {schedules?.map((schedule: any) => (
                   <option value={schedule.entryId} key={schedule.entryId}>
                     {schedule.fleetId}- {schedule.locationId}
@@ -68,9 +70,8 @@ export function ScheduleInfo() {
                 type='text'
                 className='form-control form-control-solid'
                 name='fleetId'
-                // value={scheduleDetails?.entryId}
+                value={scheduleToworkOn?.fleetId ? scheduleToworkOn?.fleetId : 'Select Schedule'}
                 readOnly
-                // defaultValue='Fleet 1'
               />
             </div>
             <div className='col-4'>
@@ -78,32 +79,48 @@ export function ScheduleInfo() {
               <input
                 type='text'
                 className='form-control form-control-solid'
-                name='fleetId'
+                name='location'
+                value={
+                  scheduleToworkOn?.locationId ? scheduleToworkOn?.locationId : 'Select Schedule'
+                }
                 readOnly
-                // defaultValue='Fleet 1'
               />
             </div>
           </div>
           {/* end::row */}
           <div className='row mb-10'>
-            <div className='col-6'>
+            <div className='col-4'>
               <label className='required fw-bold fs-6 mb-2'>From</label>
               <input
                 type='text'
                 className='form-control form-control-solid'
-                name='fleetId'
+                name='from'
+                value={
+                  scheduleToworkOn?.timeStart ? scheduleToworkOn?.timeStart : 'Select Schedule'
+                }
                 readOnly
-                // defaultValue='Fleet 1'
               />
             </div>
-            <div className='col-6'>
+            <div className='col-4'>
               <label className='required fw-bold fs-6 mb-2'>To</label>
               <input
                 type='text'
                 className='form-control form-control-solid'
-                name='fleetId'
+                name='to'
+                value={scheduleToworkOn?.timeEnd ? scheduleToworkOn?.timeEnd : 'Select Schedule'}
                 readOnly
-                // defaultValue='Fleet 1'
+              />
+            </div>
+            <div className='col-4'>
+              <label className='required fw-bold fs-6 mb-2'>Service type</label>
+              <input
+                type='text'
+                className='form-control form-control-solid'
+                name='to'
+                value={
+                  scheduleToworkOn?.serviceType ? scheduleToworkOn?.serviceType : 'No Service Type'
+                }
+                readOnly
               />
             </div>
           </div>

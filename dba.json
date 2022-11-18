@@ -88,6 +88,23 @@
       "entryId": 15,
       "vmModel": "null",
       "vmClass": "null"
+    },
+    {
+      "fleetId": "AD066       ",
+      "locationId": "DOZER ",
+      "timeStart": "2022-11-14T11:30:00.000Z",
+      "timeEnd": "2022-11-14T12:00:00.000Z",
+      "entryId": 16,
+      "vmModel": "null",
+      "vmClass": "null"
+    },{
+      "fleetId": "AD062       ",
+      "locationId": "DOZER ",
+      "timeStart": "2022-11-14T11:30:00.000Z",
+      "timeEnd": "2022-11-14T12:00:00.000Z",
+      "entryId": 17,
+      "vmModel": "null",
+      "vmClass": "null"
     }
   ],
   "IclocsApi": [
