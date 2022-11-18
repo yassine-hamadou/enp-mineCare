@@ -83,7 +83,8 @@
         "format": "prettier --write .",
         "rtl": "webpack --config webpack-rtl.config.js",
         "server": "json-server --watch dba.json --port 3001 --delay 1000 --id 'entryId'",
-        "server2": "json-server --watch Vmeqpus.json --port 3002 --delay 1000 --id 'fleetId'"
+        "server2": "json-server --watch Vmeqpus.json --port 3002 --delay 1000 --id 'fleetId'",
+        "server3": "json-server --watch db.json --port 4192 --delay 1000 --id 'id'"
     },
     "eslintConfig": {
         "extends": [

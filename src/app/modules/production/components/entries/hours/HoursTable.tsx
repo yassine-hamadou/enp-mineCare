@@ -150,6 +150,19 @@ const HoursPage: React.FC = () => {
       });
     }
 
+    const loadData = async () => {
+      setLoading(true)
+      try {
+        // const response = await axios.get('https://cors-anywhere.herokuapp.com/http://208.117.44.15/SmWebApi/api/VmfaltsApi')
+        const response = await axios.get(`${ENP_URL}/models`)
+        setGridData(response.data)
+        // setGridData(dataSource)
+        setLoading(false)
+      } catch (error) {
+        console.log(error)
+      }
+    }
+
     const onFinish = (values:any) => {
       const updatedDataSource:any = [...data];
       updatedDataSource.splice(editingRow, 1, { ...values, key: editingRow });
@@ -182,6 +195,17 @@ const HoursPage: React.FC = () => {
     loadData()
   }, [])
 
+  const data:any = [];
+    for (let i = 0; i < 3; ++i) {
+      data.push({
+        key: i.toString(),
+        date: '2014-12-24 23:12:00',
+        manu: 'CAT',
+        model: 'C33D5',
+        count: '1123',
+      });
+    }
+
   return (
     <>
     <div style={{backgroundColor:'white', padding:'20px', borderRadius:'5px', boxShadow:'2px 2px 15px rgba(0,0,0,0.08)'}}>
@@ -212,7 +236,7 @@ const HoursPage: React.FC = () => {
       <Table
         columns={columns}
         expandable={{ expandedRowRender, defaultExpandedRowKeys: ['0'] }}
-        dataSource={gridData}
+        dataSource={data}
       />
       
       </div>
