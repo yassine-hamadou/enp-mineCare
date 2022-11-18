@@ -1,8 +1,11 @@
 import { DownOutlined } from '@ant-design/icons';
+import { padding } from '@mui/system';
 import { Button, Input, TableColumnsType } from 'antd';
-import { Badge, Dropdown, Space, Table } from 'antd';
-import React, { useState } from 'react';
+import { Badge, Dropdown, Space, Table , Form} from 'antd';
+import axios from 'axios';
+import React, { useEffect, useState } from 'react';
 import { KTSVG } from '../../../../../../_metronic/helpers';
+import { ENP_URL } from '../../../../../urls';
 
 interface DataType {
   key: React.Key;
@@ -29,6 +32,14 @@ const items = [
 
 const HoursPage: React.FC = () => {
   const [searchText, setSearchText] = useState('')
+  const [editingRow, setEditingRow] = useState(null);
+  const [dataSource, setDataSource] = useState([]);
+  const [edit, setEdit] = useState(false);
+  const [form] = Form.useForm();
+  const [gridData, setGridData] = useState([])
+  const [loading, setLoading] = useState(false)
+
+
   const handleInputChange = (e: any) => {
     setSearchText(e.target.value)
     if (e.target.value === '') {
@@ -51,32 +62,100 @@ const HoursPage: React.FC = () => {
 
   }
   const expandedRowRender = () => {
+    
     const columns: TableColumnsType<ExpandedDataType> = [
       { title: 'FleetId', dataIndex: 'name', key: 'name' },
-      { title: 'Date', dataIndex: 'date', key: 'date' },
+      { 
+        title: 'Date', 
+        dataIndex: 'date', 
+        key: 'date',
+        render: (text, record) => {
+          if (editingRow === record.key) {
+            return (
+              <Form.Item name="date">
+                <Input />
+              </Form.Item>
+            );
+          } else {
+            return <p>{text}</p>;
+          }
+        },
+      },
       
-      { title: 'Prv. Reading', dataIndex: 'pread', key: 'pread' },
-      { title: 'Cur. Reading', dataIndex: 'cread', key: 'cread' },
+      { 
+        title: 'Prv. Reading', 
+        dataIndex: 'pread', 
+        key: 'pread',
+        render: (text, record) => {
+          if (editingRow === record.key) {
+            return (
+              <Form.Item name="pread">
+                <Input />
+              </Form.Item>
+            );
+          } else {
+            return <p>{text}</p>;
+          }
+        },
+      },
+      { title: 'Cur. Reading', 
+        dataIndex: 'cread', 
+        key: 'cread',
+        render: (text, record) => {
+          if (editingRow === record.key) {
+            return (
+              <Form.Item name="cread">
+                <Input />
+              </Form.Item>
+            );
+          } else {
+            return <p>{text}</p>;
+          }
+        },
+      },
       {
         title: 'Action',
         dataIndex: 'operation',
         key: 'operation',
-        render: () => (
-          // <Space size="middle">
-          //   <a>Pause</a>
-          //   <a>Stop</a>
-          //   <Dropdown menu={{ items }}>
-          //     <a>
-          //       More <DownOutlined />
-          //     </a>
-          //   </Dropdown>
-          // </Space>
-          <a href="#" className="btn btn-primary btn-sm">Edit</a>
+        render: (_, record:any) => (
+          
+          <Space>
+            <Button
+              onClick={() => {
+                setEditingRow(record.key);
+                form.setFieldsValue({
+                  date: record.date,
+                  pread: record.pread,
+                  cread: record.cread,
+                });
+              }}
+            >
+              Edit 
+            </Button>
+            <Button  htmlType="submit" danger>Done</Button>
+          </Space>
+            
         ),
       },
     ];
 
-    const data = [];
+
+
+    // useEffect(() => {
+    //   const data = [];
+    //   for (let i = 0; i < 7; i++) {
+    //     data.push({
+    //       key: i.toString(),
+    //       date: '2014-12-24 23:12:00',
+    //       name: 'Test fleets',
+    //       pread: '',
+    //       cread: '',
+    //     });
+    //   }
+    //   setDataSource(data);
+    // }, );
+
+    const data:any = [];
     for (let i = 0; i < 3; ++i) {
       data.push({
         key: i.toString(),
@@ -86,31 +165,54 @@ const HoursPage: React.FC = () => {
         cread: '',
       });
     }
-    return <Table columns={columns} dataSource={data} pagination={false} />;
+
+    const onFinish = (values:any) => {
+      const updatedDataSource:any = [...data];
+      updatedDataSource.splice(editingRow, 1, { ...values, key: editingRow });
+      setDataSource(updatedDataSource);
+      setEditingRow(null);
+    };
+    
+    return <Form form={form} onFinish={onFinish}><Table columns={columns} dataSource={data} pagination={false} /></Form>;
   };
 
   const columns: TableColumnsType<DataType> = [
-    { title: 'Manufacturer', dataIndex: 'name', key: 'name' },
-    { title: 'Model', dataIndex: 'platform', key: 'platform' },
-    { title: 'Number of vehicles', dataIndex: 'version', key: 'version' },
+    { title: 'Manufacturer', dataIndex: 'manu', key: 'manu' },
+    { title: 'Model', dataIndex: 'model', key: 'model' },
+    { title: 'Number of vehicles', dataIndex: 'count', key: 'count' },
     // { title: 'Upgraded', dataIndex: 'upgradeNum', key: 'upgradeNum' },
     // { title: 'Creator', dataIndex: 'creator', key: 'creator' },
     // { title: 'Date', dataIndex: 'createdAt', key: 'createdAt' },
     // { title: 'Action', key: 'operation', render: () => <a>Publish</a> },
   ];
 
-  const data: DataType[] = [];
-  for (let i = 0; i < 3; ++i) {
-    data.push({
-      key: i.toString(),
-      name: 'Screem',
-      platform: 'iOS',
-      version: '10',
-      upgradeNum: 500,
-      creator: 'Jack',
-      createdAt: '2014-12-24 23:12:00',
-    });
+  // const data: DataType[] = [];
+  // for (let i = 0; i < 3; ++i) {
+  //   data.push({
+  //     key: i.toString(),
+  //     name: 'Screem',
+  //     platform: 'iOS',
+  //     version: '10',
+  //     upgradeNum: 500,
+  //     creator: 'Jack',
+  //     createdAt: '2014-12-24 23:12:00',
+  //   });
+  // }
+  const loadData = async () => {
+    setLoading(true)
+    try {
+      // const response = await axios.get('https://cors-anywhere.herokuapp.com/http://208.117.44.15/SmWebApi/api/VmfaltsApi')
+      const response = await axios.get(`${ENP_URL}/models`)
+      setGridData(response.data)
+      // setGridData(dataSource)
+      setLoading(false)
+    } catch (error) {
+      console.log(error)
+    }
   }
+  useEffect(() => {
+    loadData()
+  }, [])
 
   return (
     <>
@@ -149,8 +251,8 @@ const HoursPage: React.FC = () => {
         </div>
       <Table
         columns={columns}
-        expandable={{ expandedRowRender, defaultExpandedRowKeys: ['0'] }}
-        dataSource={data}
+        expandable={{ expandedRowRender, defaultExpandedRowKeys: ['1'] }}
+        dataSource={gridData}
       />
       {/* <Table
         columns={columns}

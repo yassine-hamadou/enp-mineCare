@@ -172,12 +172,13 @@
 // export {LubePage}
 
 
-import {Button, Form, Input, InputNumber, Modal, Radio, Select, Space, Table} from 'antd'
+import {Button, DatePicker, Form, Input, InputNumber, Modal, Radio, Select, Space, Table} from 'antd'
 import {useState, useEffect} from 'react'
 import axios from 'axios'
 import { KTCard, KTCardBody, KTSVG } from '../../../../../../_metronic/helpers'
 import { ColumnsType } from 'antd/lib/table'
 import { Link } from 'react-router-dom'
+import { ENP_URL } from '../../../../../urls'
 
 
 
@@ -210,7 +211,7 @@ const LubePage = () => {
     const deleteData = async (element: any) => {
       try {
           const response = await axios.delete(
-              `http://localhost:4192/services/${element.id}`
+              `${ENP_URL}/services/${element.id}`
           )
           // update the local state so that react can refecth and re-render the table with the new data
           const newData = gridData.filter((item: any) => item.id !== element.id)
@@ -319,7 +320,7 @@ const LubePage = () => {
     setLoading(true)
     try {
       // const response = await axios.get('https://cors-anywhere.herokuapp.com/http://208.117.44.15/SmWebApi/api/VmfaltsApi')
-      const response = await axios.get('http://localhost:4192/lubes')
+      const response = await axios.get(`${ENP_URL}/lubes`)
       setGridData(response.data)
       // setGridData(dataSource)
       setLoading(false)
@@ -445,7 +446,7 @@ const LubePage = () => {
           title='Add Service' 
           onFinish={onFinish}>
        
-        <Form.Item label='Model'>
+        <Form.Item label='FleetId'>
         <Select 
         showSearch 
         placeholder="Search to Select"
@@ -497,7 +498,14 @@ const LubePage = () => {
         ]}
         />
         </Form.Item>
-        <Form.Item label='Refill Type'>
+        
+       <Form.Item label='Change Interval' name='changeIn' >
+        <InputNumber readOnly />
+      </Form.Item>
+       <Form.Item label='Capacity' name='capacity' >
+        <InputNumber readOnly />
+      </Form.Item>
+      <Form.Item label='Refill Type'>
         <Select 
         showSearch 
         placeholder="Search to Select"
@@ -513,28 +521,47 @@ const LubePage = () => {
           },
           {
             value: '2',
-            label: 'Closed',
+            label: 'Top Up - Normal',
           },
           {
             value: '3',
-            label: 'Communicated',
+            label: 'Top Up - Hose Burst',
+          },
+          {
+            value: '4',
+            label: 'Component C/O',
+          },
+          {
+            value: '5',
+            label: 'PM Refill',
+          },
+          
+          {
+            value: '6',
+            label: 'Refill',
           },
           
         ]}
         />
         </Form.Item>
-       <Form.Item label='Change Interval' name='changeIn' rules={[{required: true}]}>
-        <InputNumber />
+      <Form.Item name='volume' label='Volume' rules={[{required: true}]}>
+            <InputNumber/>
       </Form.Item>
-       <Form.Item label='Capacity' name='capacity' rules={[{required: true}]}>
-        <InputNumber />
+      <Form.Item name='pHours' label='Previous Hours'>
+            <InputNumber readOnly/>
       </Form.Item>
-      <Form.Item label='Status' name='status' rules={[{required: true}]}>
+      <Form.Item name='cHours' label='Current Hours' rules={[{required: true}]}>
+            <InputNumber/>
+      </Form.Item>
+      <Form.Item name='refillDate' label='Refill Date' rules={[{required: true}]}>
+            <DatePicker showTime />
+      </Form.Item>
+      {/* <Form.Item label='Status' name='status' rules={[{required: true}]}>
         <Radio.Group >
           <Radio value={1}>Active</Radio>
           <Radio value={2}>InActive</Radio>
         </Radio.Group>
-      </Form.Item>
+      </Form.Item> */}
       
     </Form>
         </Modal>

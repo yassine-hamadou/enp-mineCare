@@ -15,19 +15,126 @@
       "status": "typicode"
     }
   ],
-  "refill": [
-    {
-      "id": 1,
-      "name": "Top Up - Normal",
-      "status": "typicode"
-    }
-  ],
   "sections": [
     {
       "id": 1,
       "name": "json-server",
       "serviceID": "json-server",
       "status": "typicode"
+    }
+  ],
+  "models": [
+    {
+      "id": 1,
+      "manu": "Allightsykes",
+      "model": "CP300i",
+      "count": 346
+    },
+    {
+      "id": 2,
+      "manu": "BOMAG",
+      "model": "BW 216 D - 40",
+      "count": 142
+    },
+    {
+      "id": 3,
+      "manu": "CAT",
+      "model": "CS76",
+      "count": 143
+    },
+    {
+      "id": 4,
+      "manu": "CUMMINS",
+      "model": "C33D5",
+      "count": 131
+    },
+    {
+      "id": 5,
+      "manu": "LINCOLN",
+      "model": "Air Vantage",
+      "count": 431
+    },
+    {
+      "id": 6,
+      "manu": "SANDVIK",
+      "model": "DE810",
+      "count": 133
+    },
+    {
+      "id": 7,
+      "manu": "VOLVO",
+      "model": "AF04",
+      "count": 342
+    }
+  ],
+  "refils": [
+    {
+      "id": 1,
+      "name": "Top Up - Normal",
+      "status": 1
+    },
+    {
+      "name": "Top Up - Oil Leaks",
+      "status": 1,
+      "id": 2
+    },
+    {
+      "name": "Top Up - Hose Burst",
+      "status": 1,
+      "id": 3
+    },
+    {
+      "name": "Component C/O",
+      "status": 1,
+      "id": 4
+    },
+    {
+      "name": "PM Refill",
+      "status": 1,
+      "id": 5
+    },
+    {
+      "name": "Refill",
+      "status": 1,
+      "id": 6
+    }
+  ],
+  "compartment": [
+    {
+      "id": 1,
+      "name": "Engine",
+      "model": "DE810",
+      "status": 1
+    },
+    {
+      "name": "Transmission",
+      "model": "DE810",
+      "status": 1,
+      "id": 2
+    },
+    {
+      "name": "Hydraulic tank - Impliment, Conv",
+      "model": "793D",
+      "status": 1,
+      "id": 3
+    },
+    {
+      "name": "Hydraulic tank - Steering",
+      "model": "DE810",
+      "status": 1,
+      "id": 4
+    },
+    {
+      "name": "Differential & final drives",
+      "model": "793D",
+      "status": 1,
+      "id": 5
+    },
+    {
+      "name": "Front Wheels (both)",
+      "model": "793D",
+      "status": 1,
+      "id": 6
     }
   ],
   "services": [

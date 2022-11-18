@@ -4,6 +4,7 @@ import axios from 'axios'
 import { KTCard, KTCardBody, KTSVG } from '../../../../../../_metronic/helpers'
 import { ColumnsType } from 'antd/lib/table'
 import { Link } from 'react-router-dom'
+import { ENP_URL } from '../../../../../urls'
 
 
 
@@ -36,7 +37,7 @@ const RefillPage = () => {
     const deleteData = async (element: any) => {
       try {
           const response = await axios.delete(
-              `http://localhost:4192/services/${element.id}`
+              `${ENP_URL}/refils/${element.id}`
           )
           // update the local state so that react can refecth and re-render the table with the new data
           const newData = gridData.filter((item: any) => item.id !== element.id)
@@ -106,7 +107,7 @@ const RefillPage = () => {
     setLoading(true)
     try {
       // const response = await axios.get('https://cors-anywhere.herokuapp.com/http://208.117.44.15/SmWebApi/api/VmfaltsApi')
-      const response = await axios.get('http://localhost:4192/services')
+      const response = await axios.get(`${ENP_URL}/refils`)
       setGridData(response.data)
       // setGridData(dataSource)
       setLoading(false)
@@ -141,7 +142,7 @@ const RefillPage = () => {
     })
     setGridData(filteredData)
   }
-  const url = 'http://localhost:4192/services'
+  const url = `${ENP_URL}/refils`
     const onFinish = async (values: any) => {
         setSubmitLoading(true)
         const data = {
