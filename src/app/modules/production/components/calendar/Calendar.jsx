@@ -1,4 +1,5 @@
 import {L10n} from '@syncfusion/ej2-base'
+
 import {
   ScheduleComponent,
   Day,
