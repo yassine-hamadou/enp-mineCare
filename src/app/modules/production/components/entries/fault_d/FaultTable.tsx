@@ -345,6 +345,7 @@ const FaultTable = () => {
       )
     })
     setGridData(searchResult)
+    console.log('searchResult', searchResult)
   }
 
   const {Option} = Select

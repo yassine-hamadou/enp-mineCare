@@ -131,6 +131,7 @@ const Calendar = () => {
   //     }
   // }
 
+  console.log('schedOBJ', scheduleObj)
   function editorTemplate(props) {
     return props !== undefined ? (
       <table className='custom-event-editor' style={{width: '100%'}} cellPadding={5}>
@@ -389,6 +390,7 @@ const Calendar = () => {
   // }
   const refreshCellTemplate = () => {
     scheduleObj.refreshTemplates()
+    console.log('refreshCellTemplateSchedule', scheduleObj)
   }
   return (
     <div className='schedule-control-section'>
