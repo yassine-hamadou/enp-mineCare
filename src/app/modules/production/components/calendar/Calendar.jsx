@@ -43,10 +43,9 @@ L10n.load({
 const Calendar = () => {
   const [Vmequps, setVmequps] = useState([])
   const [locations, setLocations] = useState([])
+  const [custodians, setCustodian] = useState([])
   const [dataFromAPI, setDataFromApi] = useState([])
   const [upToDateLocalData, setUpToDateLocalData] = useState(null)
-
-  const [custodians, setCustodian] = useState([])
 
   const loadVmequps = async () => {
     try {
@@ -72,13 +71,6 @@ const Calendar = () => {
       console.log(e)
     }
   }
-  const loadData = async () => {
-    const response = await axios.get(`${ENP_URL}/FleetSchedulesApi`)
-    setDataFromApi(response.data)
-    console.log('response.data in loadData function', response.data)
-    console.log('dataFromAPI in loadData function', dataFromAPI)
-  }
-  //Loading schedule data
 
   const localData = (dataFromApi) => {
     return {
@@ -92,13 +84,7 @@ const Calendar = () => {
       },
     }
   }
-  console.log('upt', upToDateLocalData)
-  useEffect(() => {
-    // loadData()
-    setUpToDateLocalData(dataFromAPI)
-    localData(dataFromAPI)
-    // setUpToDateLocalData(localData(dataFromAPI))
-  }, [dataFromAPI])
+
   useEffect(() => {
     loadVmequps()
     loadLocations()
