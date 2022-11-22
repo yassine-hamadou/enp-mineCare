@@ -130,6 +130,24 @@
       "entryId": 26,
       "vmModel": "null",
       "vmClass": "null"
+    },
+    {
+      "fleetId": "AD066       ",
+      "locationId": "GOLD  ",
+      "timeStart": "2022-11-22T11:00:00.000Z",
+      "timeEnd": "2022-11-22T11:30:00.000Z",
+      "entryId": 27,
+      "vmModel": "null",
+      "vmClass": "null"
+    },
+    {
+      "fleetId": "AD065       ",
+      "locationId": "DRILL ",
+      "timeStart": "2022-11-22T10:00:00.000Z",
+      "timeEnd": "2022-11-22T10:30:00.000Z",
+      "entryId": 28,
+      "vmModel": "null",
+      "vmClass": "null"
     }
   ],
   "IclocsApi": [
@@ -3285,36 +3303,6 @@
       "downType": "FRAMES & STRUCTURAL                               ",
       "downtime": "2022-11-01T14:48:49.097",
       "locationId": "CRUSH ",
-      "resolutionId": null,
-      "wtimeStart": null,
-      "wtimeEnd": null,
-      "comment": null,
-      "status": 0
-    },
-    {
-      "entryId": "3fa85f64-5717-4562-b3fc-2c963b66afa6",
-      "fleetId": "valufesfleexgcvtId",
-      "vmModel": "valuesmogdel",
-      "vmClass": "valuesgdesc",
-      "custodian": null,
-      "downType": "valuesdTgype",
-      "downtime": "2021-08-10T00:00:00",
-      "locationId": "valugeslocationCode",
-      "resolutionId": null,
-      "wtimeStart": null,
-      "wtimeEnd": null,
-      "comment": null,
-      "status": 0
-    },
-    {
-      "entryId": "3fa85f64-5717-4562-b3fc-2c963f76afa6",
-      "fleetId": "valufesfleexgcvtId",
-      "vmModel": "valuesmogdel",
-      "vmClass": "valuesgdesc",
-      "custodian": null,
-      "downType": "valuesdTgype",
-      "downtime": "2021-08-10T00:00:00",
-      "locationId": "valugeslocationCode",
       "resolutionId": null,
       "wtimeStart": null,
       "wtimeEnd": null,

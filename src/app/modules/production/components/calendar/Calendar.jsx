@@ -23,7 +23,6 @@ import axios from 'axios'
 import {DateTimePickerComponent} from '@syncfusion/ej2-react-calendars'
 import {DropDownListComponent} from '@syncfusion/ej2-react-dropdowns'
 import {ENP_URL} from '../../../../urls'
-import {ButtonComponent} from '@syncfusion/ej2-react-buttons'
 
 /**
  *  Schedule editor custom fields sample
@@ -49,14 +48,6 @@ const Calendar = () => {
 
   const [custodians, setCustodian] = useState([])
 
-  // const initialData = () => {
-  //   fetch(ENP_URL + '/FleetSchedulesApi')
-  //     .then((response) => response.json())
-  //     .then((data) => {
-  //       return [...data]
-  //     })
-  // }
-  // load fleet IDs
   const loadVmequps = async () => {
     try {
       const VmequpsResponse = await axios.get(`${ENP_URL}/VmequpsApi`)
@@ -83,7 +74,9 @@ const Calendar = () => {
   }
   const loadData = async () => {
     const response = await axios.get(`${ENP_URL}/FleetSchedulesApi`)
-    setDataFromApi([...response.data])
+    setDataFromApi(response.data)
+    console.log('response.data in loadData function', response.data)
+    console.log('dataFromAPI in loadData function', dataFromAPI)
   }
   //Loading schedule data
 
@@ -131,6 +124,7 @@ const Calendar = () => {
   //     }
   // }
 
+  console.log('schedOBJ', scheduleObj)
   function editorTemplate(props) {
     return props !== undefined ? (
       <table className='custom-event-editor' style={{width: '100%'}} cellPadding={5}>
@@ -389,31 +383,32 @@ const Calendar = () => {
   // }
   const refreshCellTemplate = () => {
     scheduleObj.refreshTemplates()
+    console.log('refreshCellTemplateSchedule', scheduleObj)
   }
   return (
     <div className='schedule-control-section'>
-      <div className='control-section'>
-        <div className='control-wrapper'>
-          <div style={{display: 'flex'}}>
-            <div style={{paddingRight: '10px'}}>
-              <ButtonComponent cssClass='e-info' onClick={refreshCellTemplate}>
-                Refresh
-              </ButtonComponent>
-            </div>
-          </div>
-        </div>
-      </div>
+      {/*<div className='control-section'>*/}
+      {/*  <div className='control-wrapper'>*/}
+      {/*    <div style={{display: 'flex'}}>*/}
+      {/*      <div style={{paddingRight: '10px'}}>*/}
+      {/*<ButtonComponent cssClass='e-info' onClick={refreshCellTemplate}>*/}
+      {/*  Refresh*/}
+      {/*</ButtonComponent>*/}
+      {/*      </div>*/}
+      {/*    </div>*/}
+      {/*  </div>*/}
+      {/*</div>*/}
       <div className='col-lg-12 control-section'>
         <div className='control-wrapper'>
           <ScheduleComponent
             width='100%'
             height='650px'
             ref={(schedule) => (scheduleObj = schedule)}
-            eventSettings={dataFromAPI && upToDateLocalData}
+            eventSettings={upToDateLocalData}
             // eventSettings={dataFromAPI && localData(upToDateLocalData)}
             editorTemplate={editorTemplate.bind(this)}
             actionBegin={onActionBegin.bind(this)}
-            // id="schedule"
+            id='schedule'
             // quickInfoTemplates={{
             //     header: headerTemplate.bind(this),
             //     content: contentTemplate.bind(this),

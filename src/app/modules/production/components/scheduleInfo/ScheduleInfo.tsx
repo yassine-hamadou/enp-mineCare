@@ -1,8 +1,8 @@
-import {CheckListForm3} from '../checkListForm/CheckListForm3'
 import {Divider} from 'antd'
 import {useEffect, useState} from 'react'
 import axios from 'axios'
 import {ENP_URL} from '../../../../urls'
+import {CheckListForm} from '../checkListForm/CheckListForm'
 
 export function ScheduleInfo() {
   const [schedules, setSchedules] = useState<any>([])
@@ -128,7 +128,7 @@ export function ScheduleInfo() {
           <Divider dashed />
         </form>
       </div>
-      <CheckListForm3 />
+      <CheckListForm />
     </>
   )
 }

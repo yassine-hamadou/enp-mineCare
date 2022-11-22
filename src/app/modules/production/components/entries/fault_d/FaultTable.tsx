@@ -1,11 +1,22 @@
-import { Button, DatePicker, Form, Input, InputNumber, Modal, Popconfirm, Select, Space, Table } from "antd";
-import "antd/dist/antd.min.css";
-import axios from "axios";
-import { useEffect, useState } from "react";
-import { v4 as uuidv4 } from "uuid";
-import { KTSVG } from "../../../../../../_metronic/helpers";
-import TextArea from "antd/lib/input/TextArea";
-import { ENP_URL } from "../../../../../urls";
+import {
+  Button,
+  DatePicker,
+  Form,
+  Input,
+  InputNumber,
+  Modal,
+  Popconfirm,
+  Select,
+  Space,
+  Table,
+} from 'antd'
+import 'antd/dist/antd.min.css'
+import axios from 'axios'
+import {useEffect, useState} from 'react'
+import {v4 as uuidv4} from 'uuid'
+import {KTSVG} from '../../../../../../_metronic/helpers'
+import TextArea from 'antd/lib/input/TextArea'
+import {ENP_URL} from '../../../../../urls'
 
 export function dhm(t: any) {
   var cd = 24 * 60 * 60 * 1000,
@@ -32,15 +43,18 @@ const FaultTable = () => {
   const [searchText, setSearchText] = useState('')
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [isSolveModalOpen, setIsSolveModalOpen] = useState(false)
+  const [isDefectModalOpen, setIsDefectModalOpen] = useState(false)
   const [dataSource, setDataSource] = useState([])
   const [faultType, setFaultType] = useState([])
   const [location, setLocation] = useState([])
   const [custodian, setCustodian] = useState([])
   const [form] = Form.useForm()
   const [formSolve] = Form.useForm()
+  const [formDefect] = Form.useForm()
   const [selectedRowForSolve, setSelectedRowForSolve] = useState<any>()
   const [loading, setLoading] = useState(true)
   const [submitLoading, setSubmitLoading] = useState(false)
+  const [submitDefectLoading, setSubmitDefectLoading] = useState(false)
 
   const handleInputChange = (e: any) => {
     setSearchText(e.target.value)
@@ -56,6 +70,9 @@ const FaultTable = () => {
 
   const showModalSolve = () => {
     setIsSolveModalOpen(true)
+  }
+  const showModalDefect = () => {
+    setIsDefectModalOpen(true)
   }
   // Modal functions end
   const loadData = async () => {
@@ -193,12 +210,19 @@ const FaultTable = () => {
     setIsSolveModalOpen(false)
   }
 
-  const {Option} = Select
+  function handleDefectCancel() {
+    formDefect.resetFields()
+    setIsDefectModalOpen(false)
+  }
 
   function handleSolve(record: any) {
     showModalSolve()
     setSelectedRowForSolve(record)
     console.log('record in handle solve', selectedRowForSolve)
+  }
+
+  function handleDefect(record: any) {
+    showModalDefect()
   }
 
   // {/* Start Elements to Post */}
@@ -228,7 +252,6 @@ const FaultTable = () => {
       return error.statusText
     }
   }
-
   const onSolveFinish = async (values: any) => {
     setSubmitLoading(true)
     const data = {
@@ -242,18 +265,40 @@ const FaultTable = () => {
     }
     const dataWithId = {...data, entryId: uuidv4()}
     try {
-      const response = await axios.post(url, dataWithId)
-      setSubmitLoading(false)
-      form.resetFields()
-      setIsModalOpen(false)
-      loadData()
-      return response.statusText
+      // const response = await axios.post(url, dataWithId)
+      // setSubmitLoading(false)
+      // form.resetFields()
+      // setIsModalOpen(false)
+      // loadData()
+      // return response.statusText
     } catch (error: any) {
-      setSubmitLoading(false)
-      return error.statusText
+      // setSubmitLoading(false)
+      // return error.statusText
     }
   }
-
+  const onDefectFinish = async (values: any) => {
+    // setSubmitDefectLoading(true)
+    const data = {
+      fleetId: values.fleetId,
+      vmModel: values.model,
+      vmClass: values.desc,
+      downType: values.dType,
+      downtime: new Date().toISOString(),
+      locationId: values.location,
+      custodian: values.custodian,
+    }
+    const dataWithId = {...data, entryId: uuidv4()}
+    try {
+      // const response = await axios.post(url, dataWithId)
+      // setSubmitDefectLoading(false)
+      // formDefect.resetFields()
+      // setIsDefectModalOpen(false)
+      // return response.statusText
+    } catch (error: any) {
+      // setSubmitDefectLoading(false)
+      // return error.statusText
+    }
+  }
   // {/* End Elements to Post */}
 
   const loadEqupData = async () => {
@@ -267,7 +312,6 @@ const FaultTable = () => {
       return error.statusText
     }
   }
-
   const loadFaultType = async () => {
     try {
       const response = await axios.get(`${ENP_URL}/vmfaltsapi`)
@@ -276,7 +320,6 @@ const FaultTable = () => {
       return error.statusText
     }
   }
-
   const loadLocation = async () => {
     try {
       const response = await axios.get(`${ENP_URL}/IclocsApi`)
@@ -285,11 +328,27 @@ const FaultTable = () => {
       return error.statusText
     }
   }
-
   const loadCustodian = async () => {
     const response = await axios.get(`${ENP_URL}/VmemplsApi`)
     setCustodian(response.data)
   }
+  const globalSearch = () => {
+    const searchValue = searchText
+    const searchResult = gridData.filter((item: any) => {
+      return (
+        item.fleetId.toLowerCase().includes(searchValue.toLowerCase()) ||
+        item.vmModel.toLowerCase().includes(searchValue.toLowerCase()) ||
+        item.vmClass.toLowerCase().includes(searchValue.toLowerCase()) ||
+        item.downType.toLowerCase().includes(searchValue.toLowerCase()) ||
+        item.custodian.toLowerCase().includes(searchValue.toLowerCase()) ||
+        item.locationId.toLowerCase().includes(searchValue.toLowerCase())
+      )
+    })
+    setGridData(searchResult)
+    console.log('searchResult', searchResult)
+  }
+
+  const {Option} = Select
 
   useEffect(() => {
     loadData()
@@ -336,7 +395,9 @@ const FaultTable = () => {
             allowClear
             value={searchText}
           />
-          <Button type='primary'>Search</Button>
+          <Button type='primary' onClick={globalSearch}>
+            Search
+          </Button>
         </Space>
         <Space style={{marginBottom: 16}}>
           <button type='button' className='btn btn-primary me-3' onClick={showModal}>
@@ -354,6 +415,8 @@ const FaultTable = () => {
         </Space>
       </div>
       <Table columns={columns} dataSource={gridData} bordered loading={loading} />
+
+      {/*Add Fault*/}
       <Modal
         title='Add Fault'
         open={isModalOpen}
@@ -458,13 +521,16 @@ const FaultTable = () => {
           </Form.Item>
         </Form>
       </Modal>
+      {/*Add Fault End*/}
+
+      {/*Solve*/}
       <Modal
         title='Solve'
         open={isSolveModalOpen}
         onCancel={handleSolveCancel}
         closable={true}
         footer={[
-          <Button>Defect</Button>,
+          <Button onClick={showModalDefect}>Defect</Button>,
           <Button key='back' onClick={handleSolveCancel}>
             Cancel
           </Button>,
@@ -529,6 +595,60 @@ const FaultTable = () => {
           </Form.Item>
           <Form.Item name='timeCompleted' label='Time Completed' rules={[{required: true}]}>
             <DatePicker showTime />
+          </Form.Item>
+        </Form>
+      </Modal>
+      {/*Solve End*/}
+
+      {/*Defect*/}
+      <Modal
+        title='Defect'
+        open={isDefectModalOpen}
+        onCancel={handleDefectCancel}
+        closable={true}
+        footer={[
+          <Button key='back' onClick={handleDefectCancel}>
+            Cancel
+          </Button>,
+          <Button
+            key='submit'
+            type='primary'
+            htmlType='submit'
+            loading={submitDefectLoading}
+            onClick={() => {
+              // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+              formDefect.submit()
+            }}
+          >
+            Submit Defect
+          </Button>,
+        ]}
+      >
+        <Form
+          form={formDefect}
+          name='control-hooks'
+          labelCol={{span: 8}}
+          wrapperCol={{span: 14}}
+          title='Defect'
+          onFinish={onDefectFinish}
+        >
+          <Form.Item name='Fleet ID' label='Fleet ID' rules={[{required: true}]}>
+            <Select placeholder='Select a fleetID'>
+              {dataSource.map((item: any) => (
+                <Option key={item.fleetID} value={item.fleetID}>
+                  {item.fleetID} - {item.modlName} - {item.modlClass}
+                </Option>
+              ))}
+            </Select>
+          </Form.Item>
+          <Form.Item name='Defect Date' label='Expected Date' rules={[{required: true}]}>
+            <DatePicker showTime />
+          </Form.Item>
+          <Form.Item name='Item' label='Item' rules={[{required: true}]}>
+            <TextArea />
+          </Form.Item>
+          <Form.Item name='Comment' label='Comment' rules={[{required: true}]}>
+            <TextArea />
           </Form.Item>
         </Form>
       </Modal>
