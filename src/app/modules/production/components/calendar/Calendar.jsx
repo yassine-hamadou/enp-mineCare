@@ -18,11 +18,11 @@ import '@syncfusion/ej2-popups/styles/material.css'
 import '@syncfusion/ej2-splitbuttons/styles/material.css'
 import '@syncfusion/ej2-react-schedule/styles/material.css'
 import '@syncfusion/ej2-buttons/styles/material.css'
-import {useEffect, useState} from 'react'
 import axios from 'axios'
 import {DateTimePickerComponent} from '@syncfusion/ej2-react-calendars'
 import {DropDownListComponent} from '@syncfusion/ej2-react-dropdowns'
 import {ENP_URL} from '../../../../urls'
+import {useQuery} from 'react-query'
 
 /**
  *  Schedule editor custom fields sample
@@ -41,37 +41,19 @@ L10n.load({
 })
 
 const Calendar = () => {
-  const [Vmequps, setVmequps] = useState([])
-  const [locations, setLocations] = useState([])
-  const [custodians, setCustodian] = useState([])
-  const [dataFromAPI, setDataFromApi] = useState([])
-  const [upToDateLocalData, setUpToDateLocalData] = useState(null)
-
-  const loadVmequps = async () => {
-    try {
-      const VmequpsResponse = await axios.get(`${ENP_URL}/VmequpsApi`)
-      setVmequps(VmequpsResponse.data)
-    } catch (e) {
-      console.log(e)
-    }
+  let scheduleObj
+  const fetchSchedules = () => {
+    return axios.get(`${ENP_URL}/FleetSchedulesApi`)
   }
-  const loadCustodians = async () => {
-    try {
-      const custodianResponse = await axios.get(`${ENP_URL}/VmemplsApi`)
-      setCustodian(custodianResponse.data)
-    } catch (e) {
-      console.log(e)
-    }
+  const fetchVmequps = () => {
+    return axios.get(`${ENP_URL}/VmequpsApi`)
   }
-  const loadLocations = async () => {
-    try {
-      const locationsResponse = await axios.get(`${ENP_URL}/IclocsApi`)
-      setLocations(locationsResponse.data)
-    } catch (e) {
-      console.log(e)
-    }
+  const fetchLocations = () => {
+    return axios.get(`${ENP_URL}/IclocsApi`)
   }
-
+  const fetchCustodians = () => {
+    return axios.get(`${ENP_URL}/VmemplsApi`)
+  }
   const localData = (dataFromApi) => {
     return {
       dataSource: dataFromApi,
@@ -85,24 +67,11 @@ const Calendar = () => {
     }
   }
 
-  useEffect(() => {
-    loadVmequps()
-    loadLocations()
-    loadData()
-    setUpToDateLocalData(
-      localData(
-        fetch(ENP_URL + '/FleetSchedulesApi')
-          .then((response) => response.json())
-          .then((data) => {
-            const datas = [...data]
-            return datas
-          })
-      )
-    )
-    loadCustodians()
-  }, [])
+  const {data: schedulesData} = useQuery('schedules', fetchSchedules)
+  const {data: vmequps} = useQuery('vmequps', fetchVmequps)
+  const {data: locationsData} = useQuery('locations', fetchLocations)
+  const {data: custodiansData} = useQuery('custodians', fetchCustodians)
 
-  let scheduleObj
   // function onActionBegin(args) {
   //     if (args.requestType === 'eventCreate' || args.requestType === 'eventChange') {
   //         let data = args.data instanceof Array ? args.data[0] : args.data;
@@ -110,7 +79,6 @@ const Calendar = () => {
   //     }
   // }
 
-  console.log('schedOBJ', scheduleObj)
   function editorTemplate(props) {
     return props !== undefined ? (
       <table className='custom-event-editor' style={{width: '100%'}} cellPadding={5}>
@@ -124,7 +92,7 @@ const Calendar = () => {
                 data-name='fleetId'
                 className='e-field'
                 style={{width: '100%'}}
-                dataSource={Vmequps.map((Vmequp) => {
+                dataSource={vmequps?.data.map((Vmequp) => {
                   return {
                     text: `${Vmequp.fleetID}- ${Vmequp.modlName}- ${Vmequp.modlClass}`,
                     value: `${Vmequp.fleetID}`,
@@ -143,7 +111,7 @@ const Calendar = () => {
                 data-name='locationId'
                 className='e-field'
                 style={{width: '100%'}}
-                dataSource={locations.map((location) => {
+                dataSource={locationsData?.data.map((location) => {
                   return {
                     text: `${location.locationCode} - ${location.locationDesc}`,
                     value: `${location.locationCode}`,
@@ -175,7 +143,7 @@ const Calendar = () => {
                 data-name='custodian'
                 className='e-field'
                 style={{width: '100%'}}
-                dataSource={custodians.map((custodian) => {
+                dataSource={custodiansData?.data.map((custodian) => {
                   return {
                     text: `${custodian.emplCode} - ${custodian.emplName}`,
                     value: `${custodian.emplCode}`,
@@ -221,7 +189,6 @@ const Calendar = () => {
     let data = args.data instanceof Array ? args.data[0] : args.data
     if (args.requestType === 'eventCreate') {
       args.cancel = true
-      console.log('args.data', data)
       //validate fields
 
       // make data in array so that I can map though it
@@ -367,31 +334,16 @@ const Calendar = () => {
   //         </div>
   //     );
   // }
-  const refreshCellTemplate = () => {
-    scheduleObj.refreshTemplates()
-    console.log('refreshCellTemplateSchedule', scheduleObj)
-  }
+
   return (
     <div className='schedule-control-section'>
-      {/*<div className='control-section'>*/}
-      {/*  <div className='control-wrapper'>*/}
-      {/*    <div style={{display: 'flex'}}>*/}
-      {/*      <div style={{paddingRight: '10px'}}>*/}
-      {/*<ButtonComponent cssClass='e-info' onClick={refreshCellTemplate}>*/}
-      {/*  Refresh*/}
-      {/*</ButtonComponent>*/}
-      {/*      </div>*/}
-      {/*    </div>*/}
-      {/*  </div>*/}
-      {/*</div>*/}
       <div className='col-lg-12 control-section'>
         <div className='control-wrapper'>
           <ScheduleComponent
             width='100%'
             height='650px'
             ref={(schedule) => (scheduleObj = schedule)}
-            eventSettings={upToDateLocalData}
-            // eventSettings={dataFromAPI && localData(upToDateLocalData)}
+            eventSettings={schedulesData && localData(schedulesData.data)}
             editorTemplate={editorTemplate.bind(this)}
             actionBegin={onActionBegin.bind(this)}
             id='schedule'
