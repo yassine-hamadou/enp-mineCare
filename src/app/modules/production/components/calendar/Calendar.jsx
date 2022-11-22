@@ -18,11 +18,11 @@ import '@syncfusion/ej2-popups/styles/material.css'
 import '@syncfusion/ej2-splitbuttons/styles/material.css'
 import '@syncfusion/ej2-react-schedule/styles/material.css'
 import '@syncfusion/ej2-buttons/styles/material.css'
-import {useEffect, useState} from 'react'
 import axios from 'axios'
 import {DateTimePickerComponent} from '@syncfusion/ej2-react-calendars'
 import {DropDownListComponent} from '@syncfusion/ej2-react-dropdowns'
 import {ENP_URL} from '../../../../urls'
+import {useMutation, useQuery, useQueryClient} from 'react-query'
 
 /**
  *  Schedule editor custom fields sample
@@ -41,45 +41,27 @@ L10n.load({
 })
 
 const Calendar = () => {
-  const [Vmequps, setVmequps] = useState([])
-  const [locations, setLocations] = useState([])
-  const [dataFromAPI, setDataFromApi] = useState([])
-  const [upToDateLocalData, setUpToDateLocalData] = useState(null)
+  let scheduleObj
+  let scheduleQueryClient = useQueryClient()
 
-  const [custodians, setCustodian] = useState([])
+  // Functions to perform CRUD operations
+  const fetchSchedules = () => {
+    return axios.get(`${ENP_URL}/FleetSchedulesApi`)
+  }
+  const fetchVmequps = () => {
+    return axios.get(`${ENP_URL}/VmequpsApi`)
+  }
+  const fetchLocations = () => {
+    return axios.get(`${ENP_URL}/IclocsApi`)
+  }
+  const fetchCustodians = () => {
+    return axios.get(`${ENP_URL}/VmemplsApi`)
+  }
+  const addSchedule = (schedule) => {
+    return axios.post(`${ENP_URL}/FleetSchedulesApi`, schedule)
+  }
 
-  const loadVmequps = async () => {
-    try {
-      const VmequpsResponse = await axios.get(`${ENP_URL}/VmequpsApi`)
-      setVmequps(VmequpsResponse.data)
-    } catch (e) {
-      console.log(e)
-    }
-  }
-  const loadCustodians = async () => {
-    try {
-      const custodianResponse = await axios.get(`${ENP_URL}/VmemplsApi`)
-      setCustodian(custodianResponse.data)
-    } catch (e) {
-      console.log(e)
-    }
-  }
-  const loadLocations = async () => {
-    try {
-      const locationsResponse = await axios.get(`${ENP_URL}/IclocsApi`)
-      setLocations(locationsResponse.data)
-    } catch (e) {
-      console.log(e)
-    }
-  }
-  const loadData = async () => {
-    const response = await axios.get(`${ENP_URL}/FleetSchedulesApi`)
-    setDataFromApi(response.data)
-    console.log('response.data in loadData function', response.data)
-    console.log('dataFromAPI in loadData function', dataFromAPI)
-  }
-  //Loading schedule data
-
+  //Object to inject in the Calendar
   const localData = (dataFromApi) => {
     return {
       dataSource: dataFromApi,
@@ -92,31 +74,18 @@ const Calendar = () => {
       },
     }
   }
-  console.log('upt', upToDateLocalData)
-  useEffect(() => {
-    // loadData()
-    setUpToDateLocalData(dataFromAPI)
-    localData(dataFromAPI)
-    // setUpToDateLocalData(localData(dataFromAPI))
-  }, [dataFromAPI])
-  useEffect(() => {
-    loadVmequps()
-    loadLocations()
-    loadData()
-    setUpToDateLocalData(
-      localData(
-        fetch(ENP_URL + '/FleetSchedulesApi')
-          .then((response) => response.json())
-          .then((data) => {
-            const datas = [...data]
-            return datas
-          })
-      )
-    )
-    loadCustodians()
-  }, [])
 
-  let scheduleObj
+  // React Query
+  const {data: schedulesData} = useQuery('schedules', fetchSchedules)
+  const {data: vmequps} = useQuery('vmequps', fetchVmequps)
+  const {data: locationsData} = useQuery('locations', fetchLocations)
+  const {data: custodiansData} = useQuery('custodians', fetchCustodians)
+  const {mutate: addScheduleMutation} = useMutation(addSchedule, {
+    onSuccess: () => {
+      scheduleQueryClient.invalidateQueries('schedules')
+    },
+  })
+
   // function onActionBegin(args) {
   //     if (args.requestType === 'eventCreate' || args.requestType === 'eventChange') {
   //         let data = args.data instanceof Array ? args.data[0] : args.data;
@@ -124,7 +93,6 @@ const Calendar = () => {
   //     }
   // }
 
-  console.log('schedOBJ', scheduleObj)
   function editorTemplate(props) {
     return props !== undefined ? (
       <table className='custom-event-editor' style={{width: '100%'}} cellPadding={5}>
@@ -138,7 +106,7 @@ const Calendar = () => {
                 data-name='fleetId'
                 className='e-field'
                 style={{width: '100%'}}
-                dataSource={Vmequps.map((Vmequp) => {
+                dataSource={vmequps?.data.map((Vmequp) => {
                   return {
                     text: `${Vmequp.fleetID}- ${Vmequp.modlName}- ${Vmequp.modlClass}`,
                     value: `${Vmequp.fleetID}`,
@@ -157,7 +125,7 @@ const Calendar = () => {
                 data-name='locationId'
                 className='e-field'
                 style={{width: '100%'}}
-                dataSource={locations.map((location) => {
+                dataSource={locationsData?.data.map((location) => {
                   return {
                     text: `${location.locationCode} - ${location.locationDesc}`,
                     value: `${location.locationCode}`,
@@ -189,7 +157,7 @@ const Calendar = () => {
                 data-name='custodian'
                 className='e-field'
                 style={{width: '100%'}}
-                dataSource={custodians.map((custodian) => {
+                dataSource={custodiansData?.data.map((custodian) => {
                   return {
                     text: `${custodian.emplCode} - ${custodian.emplName}`,
                     value: `${custodian.emplCode}`,
@@ -235,9 +203,6 @@ const Calendar = () => {
     let data = args.data instanceof Array ? args.data[0] : args.data
     if (args.requestType === 'eventCreate') {
       args.cancel = true
-      console.log('args.data', data)
-      //validate fields
-
       // make data in array so that I can map though it
       const preparedData = [{...data}]
       console.log('preparedData', preparedData)
@@ -257,63 +222,52 @@ const Calendar = () => {
 
       //Since format is an array, I need to change it to the format that the API will understand which is an object
       const dataToPost = formattedDataToPost[0]
-      axios
-        .post(`${ENP_URL}/FleetSchedulesApi`, dataToPost)
-        // axios.post(`${ENP_URL}/FleetSchedulesApi`, dataToPost)
-        .then((res) => {
-          console.log('res', res)
-          console.log('res.data', res.data)
-          loadData()
-          setUpToDateLocalData(localData([...dataFromAPI, res.data]))
-        })
-        .catch((err) => {
-          console.log('err', err)
-        })
+      addScheduleMutation(dataToPost)
     }
-    if (args.requestType === 'eventRemove') {
-      args.cancel = true
-      axios
-        .delete(`${ENP_URL}/FleetSchedulesApi/` + data.entryId)
-        .then((res) => {
-          loadData()
-          setUpToDateLocalData(
-            localData(dataFromAPI.filter((schedule) => schedule.entryId !== data.entryId))
-          )
-        })
-        .catch((err) => {
-          console.log(err)
-        })
-    }
-    if (args.requestType === 'eventChange') {
-      args.cancel = true
-      console.log('args.data', data)
-      const preparedData = [{...data}]
-      console.log('preparedData', preparedData)
-      const formattedDataToPost = preparedData.map((schedule) => {
-        return {
-          fleetId: schedule.fleetId,
-          locationId: schedule.locationId,
-          timeStart: schedule.StartTime,
-          timeEnd: schedule.EndTime,
-          entryId: 0,
-          vmModel: 'null',
-          vmClass: 'null',
-        }
-      })
-      // console.log("formattedDataToPost", formattedDataToPost);
-      const dataToPost = formattedDataToPost[0]
-      axios
-        .put(`${ENP_URL}/FleetSchedulesApi/` + data.entryId, dataToPost)
-        .then((res) => {
-          console.log('resput', res)
-          console.log('res.dataput', res.data)
-          loadData()
-          setUpToDateLocalData(localData([...dataFromAPI, res.data]))
-        })
-        .catch((err) => {
-          console.log('err', err)
-        })
-    }
+    // if (args.requestType === 'eventRemove') {
+    //   args.cancel = true
+    //   axios
+    //     .delete(`${ENP_URL}/FleetSchedulesApi/` + data.entryId)
+    //     .then((res) => {
+    //       loadData()
+    //       setUpToDateLocalData(
+    //         localData(dataFromAPI.filter((schedule) => schedule.entryId !== data.entryId))
+    //       )
+    //     })
+    //     .catch((err) => {
+    //       console.log(err)
+    //     })
+    // }
+    // if (args.requestType === 'eventChange') {
+    //   args.cancel = true
+    //   console.log('args.data', data)
+    //   const preparedData = [{...data}]
+    //   console.log('preparedData', preparedData)
+    //   const formattedDataToPost = preparedData.map((schedule) => {
+    //     return {
+    //       fleetId: schedule.fleetId,
+    //       locationId: schedule.locationId,
+    //       timeStart: schedule.StartTime,
+    //       timeEnd: schedule.EndTime,
+    //       entryId: 0,
+    //       vmModel: 'null',
+    //       vmClass: 'null',
+    //     }
+    //   })
+    //   // console.log("formattedDataToPost", formattedDataToPost);
+    //   const dataToPost = formattedDataToPost[0]
+    //   axios
+    //     .put(`${ENP_URL}/FleetSchedulesApi/` + data.entryId, dataToPost)
+    //     .then((res) => {
+    //       console.log('resput', res)
+    //       console.log('res.dataput', res.data)
+    //       loadData()
+    //       setUpToDateLocalData(localData([...dataFromAPI, res.data]))
+    //     })
+    //     .catch((err) => {
+    //       console.log('err', err)
+    //     })
+    // }
   }
   // const headerTemplate = (props) => {
   //     return (
@@ -381,31 +335,16 @@ const Calendar = () => {
   //         </div>
   //     );
   // }
-  const refreshCellTemplate = () => {
-    scheduleObj.refreshTemplates()
-    console.log('refreshCellTemplateSchedule', scheduleObj)
-  }
+
   return (
     <div className='schedule-control-section'>
-      {/*<div className='control-section'>*/}
-      {/*  <div className='control-wrapper'>*/}
-      {/*    <div style={{display: 'flex'}}>*/}
-      {/*      <div style={{paddingRight: '10px'}}>*/}
-      {/*<ButtonComponent cssClass='e-info' onClick={refreshCellTemplate}>*/}
-      {/*  Refresh*/}
-      {/*</ButtonComponent>*/}
-      {/*      </div>*/}
-      {/*    </div>*/}
-      {/*  </div>*/}
-      {/*</div>*/}
       <div className='col-lg-12 control-section'>
         <div className='control-wrapper'>
           <ScheduleComponent
             width='100%'
             height='650px'
             ref={(schedule) => (scheduleObj = schedule)}
-            eventSettings={upToDateLocalData}
-            // eventSettings={dataFromAPI && localData(upToDateLocalData)}
+            eventSettings={schedulesData && localData(schedulesData.data)}
             editorTemplate={editorTemplate.bind(this)}
             actionBegin={onActionBegin.bind(this)}
             id='schedule'
