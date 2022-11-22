@@ -139,12 +139,6 @@
   ],
   "services": [
     {
-      "id": 1,
-      "name": "Service PM-A",
-      "modelID": "Test",
-      "status": "typicode"
-    },
-    {
       "name": "Service PM-B",
       "modelID": "Test1",
       "status": 1,
@@ -241,5 +235,6 @@
       "status": 1,
       "id": 11
     }
-  ]
+  ],
+  "lubes": []
 }

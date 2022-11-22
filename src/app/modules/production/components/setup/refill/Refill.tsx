@@ -116,6 +116,39 @@ const RefillPage = () => {
     }
   }
 
+
+  const Refills =[
+    {
+      "id": 1,
+      "name": "Top Up - Normal",
+      "status": 1
+    },
+    {
+      "name": "Top Up - Oil Leaks",
+      "status": 1,
+      "id": 2
+    },
+    {
+      "name": "Top Up - Hose Burst",
+      "status": 1,
+      "id": 3
+    },
+    {
+      "name": "Component C/O",
+      "status": 1,
+      "id": 4
+    },
+    {
+      "name": "PM Refill",
+      "status": 1,
+      "id": 5
+    },
+    {
+      "name": "Refill",
+      "status": 1,
+      "id": 6
+    }
+  ]
   useEffect(() => {
     loadData()
   }, [])
@@ -202,8 +235,8 @@ const RefillPage = () => {
             
           </Space>
         </div>
-        <Table columns={columns} dataSource={dataWithVehicleNum} loading={loading}/>
-          <Modal title='Add RefillType' open={isModalOpen} onOk={handleOk} onCancel={handleCancel} 
+        <Table columns={columns} dataSource={Refills} loading={loading}/>
+          <Modal title='Add Refill Type' open={isModalOpen} onOk={handleOk} onCancel={handleCancel} 
           footer={[
             <Button key='back' onClick={handleCancel}>
                         Cancel

@@ -149,6 +149,45 @@ const CompartmentPage = () => {
     })
     setGridData(filteredData)
   }
+
+  const compart =[
+    {
+      "id": 1,
+      "name": "Engine",
+      "model": "DE810",
+      "status": 1
+    },
+    {
+      "name": "Transmission",
+      "model": "DE810",
+      "status": 1,
+      "id": 2
+    },
+    {
+      "name": "Hydraulic tank - Impliment, Conv",
+      "model": "793D",
+      "status": 1,
+      "id": 3
+    },
+    {
+      "name": "Hydraulic tank - Steering",
+      "model": "DE810",
+      "status": 1,
+      "id": 4
+    },
+    {
+      "name": "Differential & final drives",
+      "model": "793D",
+      "status": 1,
+      "id": 5
+    },
+    {
+      "name": "Front Wheels (both)",
+      "model": "793D",
+      "status": 1,
+      "id": 6
+    }
+  ]
   const url = `${ENP_URL}/compartment`
     const onFinish = async (values: any) => {
         setSubmitLoading(true)
@@ -208,7 +247,7 @@ const CompartmentPage = () => {
             
           </Space>
         </div>
-        <Table columns={columns} dataSource={dataWithVehicleNum} loading={loading}/>
+        <Table columns={columns} dataSource={compart} loading={loading}/>
           <Modal title='Add Compartment' open={isModalOpen} onOk={handleOk} onCancel={handleCancel} 
           footer={[
             <Button key='back' onClick={handleCancel}>

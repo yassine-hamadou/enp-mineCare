@@ -211,7 +211,7 @@ const LubePage = () => {
     const deleteData = async (element: any) => {
       try {
           const response = await axios.delete(
-              `${ENP_URL}/services/${element.id}`
+              `${ENP_URL}/lubes/${element.id}`
           )
           // update the local state so that react can refecth and re-render the table with the new data
           const newData = gridData.filter((item: any) => item.id !== element.id)
@@ -231,26 +231,13 @@ const LubePage = () => {
 
     
     {
-      title: 'ID',
-      dataIndex: 'id',
+      title: 'Fleet ID',
+      dataIndex: 'fleetId',
       sorter: (a: any, b: any) => {
-        if (a.id > b.id) {
+        if (a.fleetId > b.fleetId) {
           return 1
         }
-        if (b.id > a.id) {
-          return -1
-        }
-        return 0
-      },
-    },
-    {
-      title: 'Model',
-      dataIndex: 'modelID',
-      sorter: (a: any, b: any) => {
-        if (a.modelID > b.modelID) {
-          return 1
-        }
-        if (b.modelID > a.modelID) {
+        if (b.fleetId > a.fleetId) {
           return -1
         }
         return 0
@@ -269,6 +256,7 @@ const LubePage = () => {
         return 0
       },
     },
+    
     {
       title: 'Change Out Interval',
       dataIndex: 'changeIn',
@@ -290,6 +278,71 @@ const LubePage = () => {
           return 1
         }
         if (b.capacity > a.capacity) {
+          return -1
+        }
+        return 0
+      },
+    },
+    {
+      title: 'Refill Type',
+      dataIndex: 'refilType',
+      sorter: (a: any, b: any) => {
+        if (a.refilType > b.refilType) {
+          return 1
+        }
+        if (b.refilType > a.refilType) {
+          return -1
+        }
+        return 0
+      },
+    },
+    {
+      title: 'Volume',
+      dataIndex: 'prevHour',
+      sorter: (a: any, b: any) => {
+        if (a.prevHour > b.prevHour) {
+          return 1
+        }
+        if (b.prevHour > a.prevHour) {
+          return -1
+        }
+        return 0
+      },
+    },
+    {
+      title: 'Previous Hours',
+      dataIndex: 'prevHour',
+      sorter: (a: any, b: any) => {
+        if (a.prevHour > b.prevHour) {
+          return 1
+        }
+        if (b.prevHour > a.prevHour) {
+          return -1
+        }
+        return 0
+      },
+    },
+    {
+      title: 'Current Hours',
+      dataIndex: 'curHour',
+      sorter: (a: any, b: any) => {
+        if (a.curHour > b.curHour) {
+          return 1
+        }
+        if (b.curHour > a.curHour) {
+          return -1
+        }
+        return 0
+      },
+    },
+    {
+      title: 'Refill Date',
+      dataIndex: 'refillDate',
+      sorter: (a: any, b: any) => {
+        if (a.refillDate > b.refillDate) {
+          return 1
+        }
+        if (b.refillDate > a.refillDate) {
           return -1
         }
         return 0
@@ -355,15 +408,19 @@ const LubePage = () => {
     })
     setGridData(filteredData)
   }
-  const url = 'http://localhost:4192/lubes'
+  const url = 'http://localhost:3000/lubes'
     const onFinish = async (values: any) => {
         setSubmitLoading(true)
         const data = {
             compartment: values.compartment,
-            modelID: values.modelID,
+            fleetId: values.fleetId,
             status: values.status,
             changeIn: values.changeIn,
             capacity: values.capacity,
+            refillDate: values.refillDate,
+            prevHour: values.prevHour,
+            curHour: values.curHour,
+            refilType: values.refilType,
             
         }
        
@@ -446,7 +503,7 @@ const LubePage = () => {
           title='Add Service' 
           onFinish={onFinish}>
        
-        <Form.Item label='FleetId'>
+        <Form.Item label='FleetId' name="fleetId">
         <Select 
         showSearch 
         placeholder="Search to Select"
@@ -472,7 +529,7 @@ const LubePage = () => {
         ]}
         />
         </Form.Item>
-        <Form.Item label='Compartment'>
+        <Form.Item label='Compartment' name="compartment">
         <Select 
         showSearch 
         placeholder="Search to Select"
@@ -500,12 +557,12 @@ const LubePage = () => {
         </Form.Item>
         
        <Form.Item label='Change Interval' name='changeIn' >
-        <InputNumber readOnly />
+        <InputNumber  />
       </Form.Item>
        <Form.Item label='Capacity' name='capacity' >
-        <InputNumber readOnly />
+        <InputNumber  />
       </Form.Item>
-      <Form.Item label='Refill Type'>
+      <Form.Item label='Refill Type' name="refilType">
         <Select 
         showSearch 
         placeholder="Search to Select"
@@ -520,15 +577,15 @@ const LubePage = () => {
             label: 'Not Identified',
           },
           {
-            value: '2',
+            value: 'Top Up - Normal',
             label: 'Top Up - Normal',
           },
           {
-            value: '3',
+            value: 'Top Up - Hose Burst',
             label: 'Top Up - Hose Burst',
           },
           {
-            value: '4',
+            value: 'Component C/O',
             label: 'Component C/O',
           },
           {
@@ -537,7 +594,7 @@ const LubePage = () => {
           },
           
           {
-            value: '6',
+            value: 'PM Refill',
             label: 'Refill',
           },
           
@@ -547,10 +604,10 @@ const LubePage = () => {
       <Form.Item name='volume' label='Volume' rules={[{required: true}]}>
             <InputNumber/>
       </Form.Item>
-      <Form.Item name='pHours' label='Previous Hours'>
-            <InputNumber readOnly/>
+      <Form.Item name='prevHour' label='Previous Hours'>
+            <InputNumber />
       </Form.Item>
-      <Form.Item name='cHours' label='Current Hours' rules={[{required: true}]}>
+      <Form.Item name='curHour' label='Current Hours' rules={[{required: true}]}>
             <InputNumber/>
       </Form.Item>
       <Form.Item name='refillDate' label='Refill Date' rules={[{required: true}]}>
