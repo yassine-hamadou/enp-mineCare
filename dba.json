@@ -148,6 +148,42 @@
       "entryId": 28,
       "vmModel": "null",
       "vmClass": "null"
+    },
+    {
+      "fleetId": "ANO00       ",
+      "locationId": "DOZER ",
+      "timeStart": "2022-11-22T10:30:00.000Z",
+      "timeEnd": "2022-11-22T11:00:00.000Z",
+      "entryId": 29,
+      "vmModel": "null",
+      "vmClass": "null"
+    },
+    {
+      "fleetId": "AD065       ",
+      "locationId": "GOLD  ",
+      "timeStart": "2022-11-23T11:00:00.000Z",
+      "timeEnd": "2022-11-23T11:30:00.000Z",
+      "entryId": 30,
+      "vmModel": "null",
+      "vmClass": "null"
+    },
+    {
+      "fleetId": "AD066       ",
+      "locationId": "DRILL ",
+      "timeStart": "2022-11-24T09:00:00.000Z",
+      "timeEnd": "2022-11-24T09:30:00.000Z",
+      "entryId": 31,
+      "vmModel": "null",
+      "vmClass": "null"
+    },
+    {
+      "fleetId": "AD066       ",
+      "locationId": "DRILL ",
+      "timeStart": "2022-11-23T10:00:00.000Z",
+      "timeEnd": "2022-11-23T10:30:00.000Z",
+      "entryId": 32,
+      "vmModel": "null",
+      "vmClass": "null"
     }
   ],
   "IclocsApi": [

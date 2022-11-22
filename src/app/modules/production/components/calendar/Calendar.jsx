@@ -22,7 +22,7 @@ import axios from 'axios'
 import {DateTimePickerComponent} from '@syncfusion/ej2-react-calendars'
 import {DropDownListComponent} from '@syncfusion/ej2-react-dropdowns'
 import {ENP_URL} from '../../../../urls'
-import {useQuery} from 'react-query'
+import {useMutation, useQuery, useQueryClient} from 'react-query'
 
 /**
  *  Schedule editor custom fields sample
@@ -42,6 +42,9 @@ L10n.load({
 
 const Calendar = () => {
   let scheduleObj
+  let scheduleQueryClient = useQueryClient()
+
+  // Functions to perform CRUD operations
   const fetchSchedules = () => {
     return axios.get(`${ENP_URL}/FleetSchedulesApi`)
   }
@@ -54,6 +57,11 @@ const Calendar = () => {
   const fetchCustodians = () => {
     return axios.get(`${ENP_URL}/VmemplsApi`)
   }
+  const addSchedule = (schedule) => {
+    return axios.post(`${ENP_URL}/FleetSchedulesApi`, schedule)
+  }
+
+  //Object to inject in the Calendar
   const localData = (dataFromApi) => {
     return {
       dataSource: dataFromApi,
@@ -67,10 +75,16 @@ const Calendar = () => {
     }
   }
 
+  // React Query
   const {data: schedulesData} = useQuery('schedules', fetchSchedules)
   const {data: vmequps} = useQuery('vmequps', fetchVmequps)
   const {data: locationsData} = useQuery('locations', fetchLocations)
   const {data: custodiansData} = useQuery('custodians', fetchCustodians)
+  const {mutate: addScheduleMutation} = useMutation(addSchedule, {
+    onSuccess: () => {
+      scheduleQueryClient.invalidateQueries('schedules')
+    },
+  })
 
   // function onActionBegin(args) {
   //     if (args.requestType === 'eventCreate' || args.requestType === 'eventChange') {
@@ -189,8 +203,6 @@ const Calendar = () => {
     let data = args.data instanceof Array ? args.data[0] : args.data
     if (args.requestType === 'eventCreate') {
       args.cancel = true
-      //validate fields
-
       // make data in array so that I can map though it
       const preparedData = [{...data}]
       console.log('preparedData', preparedData)
@@ -210,63 +222,52 @@ const Calendar = () => {
 
       //Since format is an array, I need to change it to the format that the API will understand which is an object
       const dataToPost = formattedDataToPost[0]
-      axios
-        .post(`${ENP_URL}/FleetSchedulesApi`, dataToPost)
-        // axios.post(`${ENP_URL}/FleetSchedulesApi`, dataToPost)
-        .then((res) => {
-          console.log('res', res)
-          console.log('res.data', res.data)
-          loadData()
-          setUpToDateLocalData(localData([...dataFromAPI, res.data]))
-        })
-        .catch((err) => {
-          console.log('err', err)
-        })
+      addScheduleMutation(dataToPost)
     }
-    if (args.requestType === 'eventRemove') {
-      args.cancel = true
-      axios
-        .delete(`${ENP_URL}/FleetSchedulesApi/` + data.entryId)
-        .then((res) => {
-          loadData()
-          setUpToDateLocalData(
-            localData(dataFromAPI.filter((schedule) => schedule.entryId !== data.entryId))
-          )
-        })
-        .catch((err) => {
-          console.log(err)
-        })
-    }
-    if (args.requestType === 'eventChange') {
-      args.cancel = true
-      console.log('args.data', data)
-      const preparedData = [{...data}]
-      console.log('preparedData', preparedData)
-      const formattedDataToPost = preparedData.map((schedule) => {
-        return {
-          fleetId: schedule.fleetId,
-          locationId: schedule.locationId,
-          timeStart: schedule.StartTime,
-          timeEnd: schedule.EndTime,
-          entryId: 0,
-          vmModel: 'null',
-          vmClass: 'null',
-        }
-      })
-      // console.log("formattedDataToPost", formattedDataToPost);
-      const dataToPost = formattedDataToPost[0]
-      axios
-        .put(`${ENP_URL}/FleetSchedulesApi/` + data.entryId, dataToPost)
-        .then((res) => {
-          console.log('resput', res)
-          console.log('res.dataput', res.data)
-          loadData()
-          setUpToDateLocalData(localData([...dataFromAPI, res.data]))
-        })
-        .catch((err) => {
-          console.log('err', err)
-        })
-    }
+    // if (args.requestType === 'eventRemove') {
+    //   args.cancel = true
+    //   axios
+    //     .delete(`${ENP_URL}/FleetSchedulesApi/` + data.entryId)
+    //     .then((res) => {
+    //       loadData()
+    //       setUpToDateLocalData(
+    //         localData(dataFromAPI.filter((schedule) => schedule.entryId !== data.entryId))
+    //       )
+    //     })
+    //     .catch((err) => {
+    //       console.log(err)
+    //     })
+    // }
+    // if (args.requestType === 'eventChange') {
+    //   args.cancel = true
+    //   console.log('args.data', data)
+    //   const preparedData = [{...data}]
+    //   console.log('preparedData', preparedData)
+    //   const formattedDataToPost = preparedData.map((schedule) => {
+    //     return {
+    //       fleetId: schedule.fleetId,
+    //       locationId: schedule.locationId,
+    //       timeStart: schedule.StartTime,
+    //       timeEnd: schedule.EndTime,
+    //       entryId: 0,
+    //       vmModel: 'null',
+    //       vmClass: 'null',
+    //     }
+    //   })
+    //   // console.log("formattedDataToPost", formattedDataToPost);
+    //   const dataToPost = formattedDataToPost[0]
+    //   axios
+    //     .put(`${ENP_URL}/FleetSchedulesApi/` + data.entryId, dataToPost)
+    //     .then((res) => {
+    //       console.log('resput', res)
+    //       console.log('res.dataput', res.data)
+    //       loadData()
+    //       setUpToDateLocalData(localData([...dataFromAPI, res.data]))
+    //     })
+    //     .catch((err) => {
+    //       console.log('err', err)
+    //     })
+    // }
   }
   // const headerTemplate = (props) => {
   //     return (
