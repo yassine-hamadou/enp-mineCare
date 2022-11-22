@@ -25,7 +25,7 @@
   ],
   "models": [
     {
-      "id": 1,
+      "id": "1",
       "manu": "Allightsykes",
       "model": "CP300i",
       "count": 346
@@ -155,6 +155,91 @@
       "modelID": "Test2",
       "status": 1,
       "id": 3
+    }
+  ],
+  "oiltypes": [
+    {
+      "name": "SHELL",
+      "status": 1,
+      "id": 1
+    },
+    {
+      "name": "TOTAL",
+      "status": 1,
+      "id": 2
+    },
+    {
+      "name": "KOMATSU",
+      "status": 1,
+      "id": 3
+    }
+  ],
+  "oilgrades": [
+    {
+      "name": "15W40 - API CH4  CAT ECF-1",
+      "typeId": "SHELL",
+      "status": 1,
+      "id": 1
+    },
+    {
+      "name": "SAE30 - Cat TDTO, TO - 4",
+      "typeId": "SHELL",
+      "status": 1,
+      "id": 2
+    },
+    {
+      "name": "RUBIA TIR 7400 SAE 15W- 40",
+      "typeId": "TOTAL",
+      "status": 1,
+      "id": 3
+    },
+    {
+      "name": "DYNATRANS AC 30",
+      "typeId": "TOTAL",
+      "status": 1,
+      "id": 4
+    },
+    {
+      "name": "AZOLLA  ZS 68",
+      "typeId": "TOTAL",
+      "status": 1,
+      "id": 5
+    },
+    {
+      "name": "DYNATRANS FD-1 SAE 60",
+      "typeId": "TOTAL",
+      "status": 1,
+      "id": 6
+    },
+    {
+      "name": "SAE60 - Cat FDAO, FD - 1",
+      "typeId": "SHELL",
+      "status": 1,
+      "id": 7
+    },
+    {
+      "name": "DYNATRANS AC 50",
+      "typeId": "TOTAL",
+      "status": 1,
+      "id": 8
+    },
+    {
+      "name": "SAE10 - Cat TDTO, TO-4",
+      "typeId": "SHELL",
+      "status": 1,
+      "id": 9
+    },
+    {
+      "name": "SAE50 - Cat TDTO, TO-4",
+      "typeId": "SHELL",
+      "status": 1,
+      "id": 10
+    },
+    {
+      "name": "15W 40",
+      "typeId": "KOMATSU",
+      "status": 1,
+      "id": 11
     }
   ]
 }

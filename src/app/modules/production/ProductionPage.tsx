@@ -23,6 +23,8 @@ import {LubePage} from './components/setup/lube/Lube'
 import { CompartmentPage } from './components/setup/compartment/Compartment'
 import { RefillPage } from './components/setup/refill/Refill'
 import { HoursPage } from './components/entries/hours/HoursTable'
+import { OilGradePage } from './components/setup/oilGrade/OilGrade'
+import { OilTypePage } from './components/setup/oilType/OilType'
 
 const accountBreadCrumbs: Array<PageLink> = []
 
@@ -152,6 +154,26 @@ const ProductionPage: React.FC = () => {
               <PageTitle breadcrumbs={accountBreadCrumbs}>All RefillTypes</PageTitle>
               {/*<Overview />*/}
               <RefillPage />
+            </>
+          }
+        />
+        <Route
+          path='oilgrade'
+          element={
+            <>
+              <PageTitle breadcrumbs={accountBreadCrumbs}>All Oil Grade</PageTitle>
+              {/*<Overview />*/}
+              <OilGradePage />
+            </>
+          }
+        />
+        <Route
+          path='oiltype'
+          element={
+            <>
+              <PageTitle breadcrumbs={accountBreadCrumbs}>All Oil Type</PageTitle>
+              {/*<Overview />*/}
+              <OilTypePage />
             </>
           }
         />

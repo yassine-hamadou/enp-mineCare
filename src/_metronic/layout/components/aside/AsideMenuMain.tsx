@@ -37,6 +37,7 @@ export function AsideMenuMain() {
         <AsideMenuItem to='entries/resolution' hasBullet={true} title='Resolution' />
         <AsideMenuItem to='entries/hours' hasBullet={true} title='Hours' />
         <AsideMenuItem to='/setup/lube' title='Lube' hasBullet={true} />
+       
       </AsideMenuItemWithSub>
 
       <AsideMenuItemWithSub
@@ -73,15 +74,16 @@ export function AsideMenuMain() {
         <AsideMenuItem to='/setup/custodian' title='Custodian' hasBullet={true} />
         <AsideMenuItem to='/setup/location' title='Location' hasBullet={true} />
         <AsideMenuItem to='/setup/work-type' title='Work Type' hasBullet={true} />
-        {/* <AsideMenuItem to='/checkListForm/tabs' title='Tabs' hasBullet={true} /> */}
+        
         <AsideMenuItemWithSub
-        to='#'
+        to='/setup/lube'
         title='Lube'
-        fontIcon='bi-archive'
-        icon='/media/icons/duotune/general/gen028.svg'
+        hasBullet={true}
         >
-          <AsideMenuItem to='/setup/compartment' title='Compartment'></AsideMenuItem>
-          <AsideMenuItem to='/setup/refill' title='RefillType'></AsideMenuItem>
+          <AsideMenuItem to='/setup/compartment' title='Compartment' hasBullet={true}/>
+          <AsideMenuItem to='/setup/oiltype' title='Oil Brand' hasBullet={true} />
+          <AsideMenuItem to='/setup/oilgrade' title='Oil Grade' hasBullet={true} />
+          <AsideMenuItem to='/setup/refill' title='Refill Type'hasBullet={true}/>
         </AsideMenuItemWithSub>
       </AsideMenuItemWithSub>
       <div className='menu-item'>

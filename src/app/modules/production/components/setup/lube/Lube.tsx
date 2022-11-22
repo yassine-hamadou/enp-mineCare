@@ -417,7 +417,7 @@ const LubePage = () => {
             
           </Space>
         </div>
-        <Table columns={columns} dataSource={dataWithVehicleNum} loading={loading}/>
+        <Table columns={columns} dataSource={dataWithVehicleNum} />
           <Modal title='Add Lube' open={isModalOpen} onOk={handleOk} onCancel={handleCancel} 
           footer={[
             <Button key='back' onClick={handleCancel}>

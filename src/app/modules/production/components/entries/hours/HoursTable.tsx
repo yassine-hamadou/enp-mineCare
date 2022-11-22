@@ -4,6 +4,7 @@ import { Button, Input, TableColumnsType } from 'antd';
 import { Badge, Dropdown, Space, Table , Form} from 'antd';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
+
 import { KTSVG } from '../../../../../../_metronic/helpers';
 import { ENP_URL } from '../../../../../urls';
 
@@ -30,13 +31,14 @@ const items = [
   { key: '2', label: 'Action 2' },
 ];
 
+
 const HoursPage: React.FC = () => {
   const [searchText, setSearchText] = useState('')
   const [editingRow, setEditingRow] = useState(null);
   const [dataSource, setDataSource] = useState([]);
   const [edit, setEdit] = useState(false);
   const [form] = Form.useForm();
-  const [gridData, setGridData] = useState([])
+  const [gridData, setGridData] = useState<any>([])
   const [loading, setLoading] = useState(false)
 
 
@@ -150,18 +152,18 @@ const HoursPage: React.FC = () => {
       });
     }
 
-    const loadData = async () => {
-      setLoading(true)
-      try {
-        // const response = await axios.get('https://cors-anywhere.herokuapp.com/http://208.117.44.15/SmWebApi/api/VmfaltsApi')
-        const response = await axios.get(`${ENP_URL}/models`)
-        setGridData(response.data)
-        // setGridData(dataSource)
-        setLoading(false)
-      } catch (error) {
-        console.log(error)
-      }
-    }
+    // const loadData = async () => {
+    //   setLoading(true)
+    //   try {
+    //     // const response = await axios.get('https://cors-anywhere.herokuapp.com/http://208.117.44.15/SmWebApi/api/VmfaltsApi')
+    //     const response = await axios.get(`${ENP_URL}/models`)
+    //     setGridData(response.data)
+    //     // setGridData(dataSource)
+    //     setLoading(false)
+    //   } catch (error) {
+    //     console.log(error)
+    //   }
+    // }
 
     const onFinish = (values:any) => {
       const updatedDataSource:any = [...data];
@@ -170,10 +172,11 @@ const HoursPage: React.FC = () => {
       setEditingRow(null);
     };
     
-    return <Form form={form} onFinish={onFinish}><Table columns={columns} dataSource={data} pagination={false} /></Form>;
+    return <Form form={form} onFinish={onFinish}><Table columns={columns} rowKey="id" dataSource={data} pagination={false} /></Form>;
   };
 
-  const columns: TableColumnsType<DataType> = [
+  const columns:any  = [
+    { title: 'ID', dataIndex: 'id', key: 'id'},
     { title: 'Manufacturer', dataIndex: 'manu', key: 'manu' },
     { title: 'Model', dataIndex: 'model', key: 'model' },
     { title: 'Number of vehicles', dataIndex: 'count', key: 'count' },
@@ -195,7 +198,7 @@ const HoursPage: React.FC = () => {
     loadData()
   }, [])
 
-  const data:any = [];
+  const data = [];
     for (let i = 0; i < 3; ++i) {
       data.push({
         key: i.toString(),
@@ -227,7 +230,6 @@ const HoursPage: React.FC = () => {
           
             <button type='button' className='btn btn-light-primary me-3'>
               <KTSVG path='/media/icons/duotune/arrows/arr078.svg' className='svg-icon-2' />
-              
               Export
             </button>
             
@@ -235,10 +237,10 @@ const HoursPage: React.FC = () => {
         </div>
       <Table
         columns={columns}
-        expandable={{ expandedRowRender, defaultExpandedRowKeys: ['0'] }}
-        dataSource={data}
+        expandable={{ expandedRowRender, defaultExpandedRowKeys: ['id'] }}
+        rowKey="id"
+        dataSource={gridData}
       />
-      
       </div>
     </>
   );
