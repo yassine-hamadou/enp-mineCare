@@ -116,6 +116,74 @@ const OilGradePage = () => {
       console.log(error)
     }
   }
+  const Oilgrade=[
+    {
+      "name": "15W40 - API CH4  CAT ECF-1",
+      "typeId": "SHELL",
+      "status": 1,
+      "id": 1
+    },
+    {
+      "name": "SAE30 - Cat TDTO, TO - 4",
+      "typeId": "SHELL",
+      "status": 1,
+      "id": 2
+    },
+    {
+      "name": "RUBIA TIR 7400 SAE 15W- 40",
+      "typeId": "TOTAL",
+      "status": 1,
+      "id": 3
+    },
+    {
+      "name": "DYNATRANS AC 30",
+      "typeId": "TOTAL",
+      "status": 1,
+      "id": 4
+    },
+    {
+      "name": "AZOLLA  ZS 68",
+      "typeId": "TOTAL",
+      "status": 1,
+      "id": 5
+    },
+    {
+      "name": "DYNATRANS FD-1 SAE 60",
+      "typeId": "TOTAL",
+      "status": 1,
+      "id": 6
+    },
+    {
+      "name": "SAE60 - Cat FDAO, FD - 1",
+      "typeId": "SHELL",
+      "status": 1,
+      "id": 7
+    },
+    {
+      "name": "DYNATRANS AC 50",
+      "typeId": "TOTAL",
+      "status": 1,
+      "id": 8
+    },
+    {
+      "name": "SAE10 - Cat TDTO, TO-4",
+      "typeId": "SHELL",
+      "status": 1,
+      "id": 9
+    },
+    {
+      "name": "SAE50 - Cat TDTO, TO-4",
+      "typeId": "SHELL",
+      "status": 1,
+      "id": 10
+    },
+    {
+      "name": "15W 40",
+      "typeId": "KOMATSU",
+      "status": 1,
+      "id": 11
+    }
+  ]
   const loadTypes = async () => {
     setLoading(true)
     try {
@@ -221,7 +289,7 @@ const OilGradePage = () => {
             
           </Space>
         </div>
-        <Table columns={columns} dataSource={dataWithVehicleNum} loading={loading}/>
+        <Table columns={columns} dataSource={Oilgrade} loading={loading}/>
           <Modal title='Add Oil Grade' open={isModalOpen} onOk={handleOk} onCancel={handleCancel} 
           footer={[
             <Button key='back' onClick={handleCancel}>

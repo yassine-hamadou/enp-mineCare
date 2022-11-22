@@ -115,6 +115,23 @@ const OilTypePage = () => {
       console.log(error)
     }
   }
+  const OilType =[
+    {
+        "name": "SHELL",
+        "status": 1,
+        "id": 1
+      },
+      {
+        "name": "TOTAL",
+        "status": 1,
+        "id": 2
+      },
+      {
+        "name": "KOMATSU",
+        "status": 1,
+        "id": 3
+      }
+  ]
 
   useEffect(() => {
     loadData()
@@ -202,7 +219,7 @@ const OilTypePage = () => {
             
           </Space>
         </div>
-        <Table columns={columns} dataSource={dataWithVehicleNum} loading={loading}/>
+        <Table columns={columns} dataSource={OilType} loading={loading}/>
           <Modal title='Add Oil-Type' open={isModalOpen} onOk={handleOk} onCancel={handleCancel} 
           footer={[
             <Button key='back' onClick={handleCancel}>
