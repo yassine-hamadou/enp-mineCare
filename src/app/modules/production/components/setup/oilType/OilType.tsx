@@ -219,7 +219,7 @@ const OilTypePage = () => {
             
           </Space>
         </div>
-        <Table columns={columns} dataSource={OilType} loading={loading}/>
+        <Table columns={columns} dataSource={OilType} />
           <Modal title='Add Oil-Type' open={isModalOpen} onOk={handleOk} onCancel={handleCancel} 
           footer={[
             <Button key='back' onClick={handleCancel}>

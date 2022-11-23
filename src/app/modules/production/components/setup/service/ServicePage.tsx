@@ -202,7 +202,7 @@ const ServicesPage = () => {
               </button>
             </Space>
           </div>
-          <Table columns={columns} dataSource={dataWithVehicleNum} loading={loading} />
+          <Table columns={columns} dataSource={dataWithVehicleNum} />
           <Modal
             title='Add Service'
             open={isModalOpen}

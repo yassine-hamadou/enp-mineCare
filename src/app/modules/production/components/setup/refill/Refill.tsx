@@ -235,7 +235,7 @@ const RefillPage = () => {
             
           </Space>
         </div>
-        <Table columns={columns} dataSource={Refills} loading={loading}/>
+        <Table columns={columns} dataSource={Refills}/>
           <Modal title='Add Refill Type' open={isModalOpen} onOk={handleOk} onCancel={handleCancel} 
           footer={[
             <Button key='back' onClick={handleCancel}>
