@@ -51,6 +51,7 @@ const CheckListForm = () => {
           </div>
           <Divider />
           {/* end::row */}
+         
           <div className='row mb-7'>
             <div className='col-4'>
               
@@ -59,7 +60,7 @@ const CheckListForm = () => {
                 <label className='required fw-bold fs-6 mb-2'>Cut Open Filter (Show to Supervisor)</label>
 
                 </div>
-                <Radio.Group onChange={onChange} value={value}>
+                <Radio.Group >
                   <Radio value={1}>Ok</Radio>
                   <Radio value={2}>Repair</Radio>
                 </Radio.Group>
@@ -72,7 +73,7 @@ const CheckListForm = () => {
                 <label className='required fw-bold fs-6 mb-2'>Clean Primary Fuel filter</label>
 
                 </div>
-                <Radio.Group onChange={onChange} value={value}>
+                <Radio.Group >
                   <Radio value={1}>Ok</Radio>
                   <Radio value={2}>Repair</Radio>
                 </Radio.Group>
@@ -85,7 +86,7 @@ const CheckListForm = () => {
 
 
                 </div>
-                <Radio.Group onChange={onChange} value={value}>
+                <Radio.Group >
                   <Radio value={1}>Ok</Radio>
                   <Radio value={2}>Repair</Radio>
                 </Radio.Group>
@@ -103,7 +104,7 @@ const CheckListForm = () => {
 
 
                 </div>
-                <Radio.Group onChange={onChange} value={value}>
+                <Radio.Group >
                   <Radio value={1}>Ok</Radio>
                   <Radio value={2}>Repair</Radio>
                 </Radio.Group>
@@ -116,7 +117,7 @@ const CheckListForm = () => {
 
 
                 </div>
-                <Radio.Group onChange={onChange} value={value}>
+                <Radio.Group >
                   <Radio value={1}>Ok</Radio>
                   <Radio value={2}>Repair</Radio>
                 </Radio.Group>
@@ -127,7 +128,7 @@ const CheckListForm = () => {
                 <div>
                 <label className='required fw-bold fs-6 mb-2'>Check Cooling system clamps & hoses</label>
                 </div>
-                <Radio.Group onChange={onChange} value={value}>
+                <Radio.Group >
                   <Radio value={1}>Ok</Radio>
                   <Radio value={2}>Repair</Radio>
                 </Radio.Group>
@@ -141,7 +142,7 @@ const CheckListForm = () => {
                 <div>
                 <label className='required fw-bold fs-6 mb-2'>Check pulleys for excess bearing noise</label>
                 </div>
-                <Radio.Group onChange={onChange} value={value}>
+                <Radio.Group >
                   <Radio value={1}>Ok</Radio>
                   <Radio value={2}>Repair</Radio>
                 </Radio.Group>
@@ -152,7 +153,7 @@ const CheckListForm = () => {
                 <div>
                 <label className='required fw-bold fs-6 mb-2'>Clean Engine crankcase breather</label>
                 </div>
-                <Radio.Group onChange={onChange} value={value}>
+                <Radio.Group >
                   <Radio value={1}>Ok</Radio>
                   <Radio value={2}>Repair</Radio>
                 </Radio.Group>
@@ -164,7 +165,7 @@ const CheckListForm = () => {
                 <label className='required fw-bold fs-6 mb-2'>Condition & tension of all drive belts</label>
 
                 </div>
-                <Radio.Group onChange={onChange} value={value}>
+                <Radio.Group >
                   <Radio value={1}>Ok</Radio>
                   <Radio value={2}>Repair</Radio>
                 </Radio.Group>
@@ -178,7 +179,7 @@ const CheckListForm = () => {
                 <div>
                 <label className='required fw-bold fs-6 mb-2'>Check for cracks on fan belts & tighten Bolts</label>
                 </div>
-                <Radio.Group onChange={onChange} value={value}>
+                <Radio.Group >
                   <Radio value={1}>Ok</Radio>
                   <Radio value={2}>Repair</Radio>
                 </Radio.Group>
@@ -189,7 +190,7 @@ const CheckListForm = () => {
                 <div>
                 <label className='required fw-bold fs-6 mb-2'>Drain fuel tank water trap</label>
                 </div>
-                <Radio.Group onChange={onChange} value={value}>
+                <Radio.Group >
                   <Radio value={1}>Ok</Radio>
                   <Radio value={2}>Repair</Radio>
                 </Radio.Group>
@@ -200,7 +201,7 @@ const CheckListForm = () => {
                 <div>
                 <label className='required fw-bold fs-6 mb-2'>Inspect radiator core. (Clean if needed)</label>
                 </div>
-                <Radio.Group onChange={onChange} value={value}>
+                <Radio.Group >
                   <Radio value={1}>Ok</Radio>
                   <Radio value={2}>Repair</Radio>
                 </Radio.Group>
@@ -214,7 +215,7 @@ const CheckListForm = () => {
                 <div>
                 <label className='required fw-bold fs-6 mb-2'>Jump start receptacle cables if fitted</label>
                 </div>
-                <Radio.Group onChange={onChange} value={value}>
+                <Radio.Group >
                   <Radio value={1}>Ok</Radio>
                   <Radio value={2}>Repair</Radio>
                 </Radio.Group>
@@ -225,7 +226,7 @@ const CheckListForm = () => {
                 <div>
                 <label className='required fw-bold fs-6 mb-2'>Lubricate Fan hub & jockey pulley</label>
                 </div>
-                <Radio.Group onChange={onChange} value={value}>
+                <Radio.Group >
                   <Radio value={1}>Ok</Radio>
                   <Radio value={2}>Repair</Radio>
                 </Radio.Group>
@@ -236,7 +237,7 @@ const CheckListForm = () => {
                 <div>
                 <label className='required fw-bold fs-6 mb-2'>Test Air con system</label>
                 </div>
-                <Radio.Group onChange={onChange} value={value}>
+                <Radio.Group >
                   <Radio value={1}>Ok</Radio>
                   <Radio value={2}>Repair</Radio>
                 </Radio.Group>
@@ -250,7 +251,7 @@ const CheckListForm = () => {
                 <div>
                 <label className='required fw-bold fs-6 mb-2'>Test Charging system </label>
                 </div>
-                <Radio.Group onChange={onChange} value={value}>
+                <Radio.Group >
                   <Radio value={1}>Ok</Radio>
                   <Radio value={2}>Repair</Radio>
                 </Radio.Group>
@@ -261,7 +262,7 @@ const CheckListForm = () => {
                 <div>
                 <label className='required fw-bold fs-6 mb-2'>Replace Primary Fuel filter</label>
                 </div>
-                <Radio.Group onChange={onChange} value={value}>
+                <Radio.Group >
                   <Radio value={1}>Ok</Radio>
                   <Radio value={2}>Repair</Radio>
                 </Radio.Group>
@@ -272,7 +273,7 @@ const CheckListForm = () => {
                 <div>
                 <label className='required fw-bold fs-6 mb-2'>Replace Secondary fuel filter</label>
                 </div>
-                <Radio.Group onChange={onChange} value={value}>
+                <Radio.Group >
                   <Radio value={1}>Ok</Radio>
                   <Radio value={2}>Repair</Radio>
                 </Radio.Group>
@@ -286,7 +287,7 @@ const CheckListForm = () => {
                 <div>
                 <label className='required fw-bold fs-6 mb-2'>Replace Fuel Filter (ORS) </label>
                 </div>
-                <Radio.Group onChange={onChange} value={value}>
+                <Radio.Group >
                   <Radio value={1}>Ok</Radio>
                   <Radio value={2}>Repair</Radio>
                 </Radio.Group>
@@ -297,7 +298,7 @@ const CheckListForm = () => {
                 <div>
                 <label className='required fw-bold fs-6 mb-2'>Replace Engine oil filter</label>
                 </div>
-                <Radio.Group onChange={onChange} value={value}>
+                <Radio.Group >
                   <Radio value={1}>Ok</Radio>
                   <Radio value={2}>Repair</Radio>
                 </Radio.Group>
@@ -308,7 +309,7 @@ const CheckListForm = () => {
                 <div>
                 <label className='required fw-bold fs-6 mb-2'>Remove & clean starter silenser</label>
                 </div>
-                <Radio.Group onChange={onChange} value={value}>
+                <Radio.Group >
                   <Radio value={1}>Ok</Radio>
                   <Radio value={2}>Repair</Radio>
                 </Radio.Group>
@@ -322,7 +323,7 @@ const CheckListForm = () => {
                 <div>
                 <label className='required fw-bold fs-6 mb-2'>Inspect pulleys for cracks & dirt build-up  </label>
                 </div>
-                <Radio.Group onChange={onChange} value={value}>
+                <Radio.Group >
                   <Radio value={1}>Ok</Radio>
                   <Radio value={2}>Repair</Radio>
                 </Radio.Group>
@@ -333,7 +334,7 @@ const CheckListForm = () => {
                 <div>
                 <label className='required fw-bold fs-6 mb-2'>Inspect Fuel lines for leaks & damage</label>
                 </div>
-                <Radio.Group onChange={onChange} value={value}>
+                <Radio.Group >
                   <Radio value={1}>Ok</Radio>
                   <Radio value={2}>Repair</Radio>
                 </Radio.Group>
@@ -344,7 +345,7 @@ const CheckListForm = () => {
                 <div>
                 <label className='required fw-bold fs-6 mb-2'>Inspect Exhaust manifolds & lines for leaks</label>
                 </div>
-                <Radio.Group onChange={onChange} value={value}>
+                <Radio.Group >
                   <Radio value={1}>Ok</Radio>
                   <Radio value={2}>Repair</Radio>
                 </Radio.Group>
@@ -358,7 +359,7 @@ const CheckListForm = () => {
                 <div>
                 <label className='required fw-bold fs-6 mb-2'>Inspect Air induction system clamps & hoses</label>
                 </div>
-                <Radio.Group onChange={onChange} value={value}>
+                <Radio.Group >
                   <Radio value={1}>Ok</Radio>
                   <Radio value={2}>Repair</Radio>
                 </Radio.Group>
