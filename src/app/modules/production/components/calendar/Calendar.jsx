@@ -8,21 +8,21 @@ import {
   Agenda,
   Inject,
 } from '@syncfusion/ej2-react-schedule'
-import '@syncfusion/ej2-base/styles/material.css'
-import '@syncfusion/ej2-calendars/styles/material.css'
-import '@syncfusion/ej2-dropdowns/styles/material.css'
-import '@syncfusion/ej2-inputs/styles/material.css'
-import '@syncfusion/ej2-lists/styles/material.css'
-import '@syncfusion/ej2-navigations/styles/material.css'
-import '@syncfusion/ej2-popups/styles/material.css'
-import '@syncfusion/ej2-splitbuttons/styles/material.css'
-import '@syncfusion/ej2-react-schedule/styles/material.css'
-import '@syncfusion/ej2-buttons/styles/material.css'
 import axios from 'axios'
 import {DateTimePickerComponent} from '@syncfusion/ej2-react-calendars'
 import {DropDownListComponent} from '@syncfusion/ej2-react-dropdowns'
 import {ENP_URL} from '../../../../urls'
 import {useMutation, useQuery, useQueryClient} from 'react-query'
+require('@syncfusion/ej2-base/styles/material.css')
+require('@syncfusion/ej2-calendars/styles/material.css')
+require('@syncfusion/ej2-dropdowns/styles/material.css')
+require('@syncfusion/ej2-inputs/styles/material.css')
+require('@syncfusion/ej2-lists/styles/material.css')
+require('@syncfusion/ej2-navigations/styles/material.css')
+require('@syncfusion/ej2-popups/styles/material.css')
+require('@syncfusion/ej2-splitbuttons/styles/material.css')
+require('@syncfusion/ej2-react-schedule/styles/material.css')
+require('@syncfusion/ej2-buttons/styles/material.css')
 
 /**
  *  Schedule editor custom fields sample
@@ -57,8 +57,20 @@ const Calendar = () => {
   const fetchCustodians = () => {
     return axios.get(`${ENP_URL}/VmemplsApi`)
   }
+
+  //Add
   const addSchedule = (schedule) => {
     return axios.post(`${ENP_URL}/FleetSchedulesApi`, schedule)
+  }
+
+  //delete
+  const deleteSchedule = (schedule) => {
+    return axios.delete(`${ENP_URL}/FleetSchedulesApi/${schedule.entryId}`)
+  }
+
+  //update
+  const updateSchedule = (schedule) => {
+    return axios.put(`${ENP_URL}/FleetSchedulesApi/${schedule.entryId}`, schedule)
   }
 
   //Object to inject in the Calendar
@@ -76,11 +88,38 @@ const Calendar = () => {
   }
 
   // React Query
-  const {data: schedulesData} = useQuery('schedules', fetchSchedules)
-  const {data: vmequps} = useQuery('vmequps', fetchVmequps)
-  const {data: locationsData} = useQuery('locations', fetchLocations)
-  const {data: custodiansData} = useQuery('custodians', fetchCustodians)
+  //Get
+  const {data: schedulesData} = useQuery('schedules', fetchSchedules, {
+    refetchOnWindowFocus: false,
+    staleTime: 300000,
+  })
+  const {data: vmequps} = useQuery('vmequps', fetchVmequps, {
+    refetchOnWindowFocus: false,
+    staleTime: Infinity,
+  })
+  const {data: locationsData} = useQuery('locations', fetchLocations, {
+    refetchOnWindowFocus: false,
+    staleTime: Infinity,
+  })
+  const {data: custodiansData} = useQuery('custodians', fetchCustodians, {
+    refetchOnWindowFocus: false,
+    staleTime: Infinity,
+  })
+
+  //Create
   const {mutate: addScheduleMutation} = useMutation(addSchedule, {
+    onSuccess: () => {
+      scheduleQueryClient.invalidateQueries('schedules')
+    },
+  })
+  //delete
+  const {mutate: deleteScheduleMutation} = useMutation(deleteSchedule, {
+    onSuccess: () => {
+      scheduleQueryClient.invalidateQueries('schedules')
+    },
+  })
+  //put (update)
+  const {mutate: updateScheduleMutation} = useMutation(updateSchedule, {
     onSuccess: () => {
       scheduleQueryClient.invalidateQueries('schedules')
     },
@@ -94,6 +133,10 @@ const Calendar = () => {
   // }
 
   function editorTemplate(props) {
+    console.log('props in editorTemmplate', props)
+    console.log('props.timeStart', props.timeStart)
+    console.log('props.startTime', props.startTime)
+    console.log('props.StartTime', props.StartTime)
     return props !== undefined ? (
       <table className='custom-event-editor' style={{width: '100%'}} cellPadding={5}>
         <tbody>
@@ -113,7 +156,7 @@ const Calendar = () => {
                   }
                 })}
                 fields={{text: 'text', value: 'value'}}
-              ></DropDownListComponent>
+              />
             </td>
           </tr>
           <tr>
@@ -164,6 +207,7 @@ const Calendar = () => {
                   }
                 })}
                 fields={{text: 'text', value: 'value'}}
+                value={props.custodian}
               />
             </td>
           </tr>
@@ -175,7 +219,7 @@ const Calendar = () => {
                 id='StartTime'
                 format='dd/MM/yy hh:mm a'
                 data-name='timeStart'
-                value={new Date(props.startTime || props.StartTime)}
+                value={new Date(props.timeStart ? props.timeStart : props.StartTime)}
                 className='e-field'
               ></DateTimePickerComponent>
             </td>
@@ -187,7 +231,7 @@ const Calendar = () => {
                 id='EndTime'
                 format='dd/MM/yy hh:mm a'
                 data-name='timeEnd'
-                value={new Date(props.endTime || props.EndTime)}
+                value={new Date(props.timeEnd ? props.timeEnd : props.EndTime)}
                 className='e-field'
               ></DateTimePickerComponent>
             </td>
@@ -195,14 +239,17 @@ const Calendar = () => {
         </tbody>
       </table>
     ) : (
-      <div>awdaw</div>
+      <div>
+        <h1>loading</h1>
+      </div>
     )
   }
+
   const onActionBegin = (args) => {
-    console.log('args', args)
+    console.log('args in actionbegin', args)
     let data = args.data instanceof Array ? args.data[0] : args.data
     if (args.requestType === 'eventCreate') {
-      args.cancel = true
+      // args.cancel = true
       // make data in array so that I can map though it
       const preparedData = [{...data}]
       console.log('preparedData', preparedData)
@@ -218,56 +265,33 @@ const Calendar = () => {
           vmClass: 'null',
         }
       })
-      console.log('formattedDataToPost', formattedDataToPost)
-
       //Since format is an array, I need to change it to the format that the API will understand which is an object
       const dataToPost = formattedDataToPost[0]
       addScheduleMutation(dataToPost)
     }
-    // if (args.requestType === 'eventRemove') {
-    //   args.cancel = true
-    //   axios
-    //     .delete(`${ENP_URL}/FleetSchedulesApi/` + data.entryId)
-    //     .then((res) => {
-    //       loadData()
-    //       setUpToDateLocalData(
-    //         localData(dataFromAPI.filter((schedule) => schedule.entryId !== data.entryId))
-    //       )
-    //     })
-    //     .catch((err) => {
-    //       console.log(err)
-    //     })
-    // }
-    // if (args.requestType === 'eventChange') {
-    //   args.cancel = true
-    //   console.log('args.data', data)
-    //   const preparedData = [{...data}]
-    //   console.log('preparedData', preparedData)
-    //   const formattedDataToPost = preparedData.map((schedule) => {
-    //     return {
-    //       fleetId: schedule.fleetId,
-    //       locationId: schedule.locationId,
-    //       timeStart: schedule.StartTime,
-    //       timeEnd: schedule.EndTime,
-    //       entryId: 0,
-    //       vmModel: 'null',
-    //       vmClass: 'null',
-    //     }
-    //   })
-    //   // console.log("formattedDataToPost", formattedDataToPost);
-    //   const dataToPost = formattedDataToPost[0]
-    //   axios
-    //     .put(`${ENP_URL}/FleetSchedulesApi/` + data.entryId, dataToPost)
-    //     .then((res) => {
-    //       console.log('resput', res)
-    //       console.log('res.dataput', res.data)
-    //       loadData()
-    //       setUpToDateLocalData(localData([...dataFromAPI, res.data]))
-    //     })
-    //     .catch((err) => {
-    //       console.log('err', err)
-    //     })
-    // }
+    if (args.requestType === 'eventRemove') {
+      // args.cancel = true
+      deleteScheduleMutation(data)
+    }
+    if (args.requestType === 'eventChange') {
+      // args.cancel = true
+      console.log('data', data)
+      console.log('args in eventChange', args)
+      const preparedData = [{...data}]
+      const formattedDataToPost = preparedData.map((schedule) => {
+        return {
+          fleetId: schedule.fleetId,
+          locationId: schedule.locationId,
+          timeStart: schedule.StartTime,
+          timeEnd: schedule.EndTime,
+          entryId: schedule.entryId,
+          vmModel: 'null',
+          vmClass: 'null',
+        }
+      })
+      const dataToPost = formattedDataToPost[0]
+      updateScheduleMutation(dataToPost)
+    }
   }
   // const headerTemplate = (props) => {
   //     return (
@@ -347,7 +371,7 @@ const Calendar = () => {
             eventSettings={schedulesData && localData(schedulesData.data)}
             editorTemplate={editorTemplate.bind(this)}
             actionBegin={onActionBegin.bind(this)}
-            id='schedule'
+            // id='schedule'
             // quickInfoTemplates={{
             //     header: headerTemplate.bind(this),
             //     content: contentTemplate.bind(this),

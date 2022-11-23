@@ -41,14 +41,13 @@
       "timeEnd": "2022-11-16T02:30:00"
     },
     {
+      "fleetId": "AD063       ",
+      "locationId": null,
+      "timeStart": null,
+      "timeEnd": null,
       "entryId": 12,
-      "fleetId": "LV282       ",
       "vmModel": "null",
-      "vmClass": "null",
-      "locationId": "GOLD  ",
-      "description": null,
-      "timeStart": "2022-11-16T03:30:00",
-      "timeEnd": "2022-11-25T04:00:00"
+      "vmClass": "null"
     },
     {
       "fleetId": "AD062       ",
@@ -132,33 +131,6 @@
       "vmClass": "null"
     },
     {
-      "fleetId": "AD066       ",
-      "locationId": "GOLD  ",
-      "timeStart": "2022-11-22T11:00:00.000Z",
-      "timeEnd": "2022-11-22T11:30:00.000Z",
-      "entryId": 27,
-      "vmModel": "null",
-      "vmClass": "null"
-    },
-    {
-      "fleetId": "AD065       ",
-      "locationId": "DRILL ",
-      "timeStart": "2022-11-22T10:00:00.000Z",
-      "timeEnd": "2022-11-22T10:30:00.000Z",
-      "entryId": 28,
-      "vmModel": "null",
-      "vmClass": "null"
-    },
-    {
-      "fleetId": "ANO00       ",
-      "locationId": "DOZER ",
-      "timeStart": "2022-11-22T10:30:00.000Z",
-      "timeEnd": "2022-11-22T11:00:00.000Z",
-      "entryId": 29,
-      "vmModel": "null",
-      "vmClass": "null"
-    },
-    {
       "fleetId": "AD065       ",
       "locationId": "GOLD  ",
       "timeStart": "2022-11-23T11:00:00.000Z",
@@ -177,11 +149,38 @@
       "vmClass": "null"
     },
     {
-      "fleetId": "AD066       ",
-      "locationId": "DRILL ",
+      "fleetId": "AD071       ",
+      "locationId": "GOLD  ",
       "timeStart": "2022-11-23T10:00:00.000Z",
       "timeEnd": "2022-11-23T10:30:00.000Z",
       "entryId": 32,
+      "vmModel": "null",
+      "vmClass": "null"
+    },
+    {
+      "fleetId": "BH017       ",
+      "locationId": "DRILL ",
+      "timeStart": "2022-11-21T00:00:00.000Z",
+      "timeEnd": "2022-11-26T00:30:00.000Z",
+      "entryId": 33,
+      "vmModel": "null",
+      "vmClass": "null"
+    },
+    {
+      "fleetId": "AD065       ",
+      "locationId": "CRUSH ",
+      "timeStart": "2022-11-01T00:00:00.000Z",
+      "timeEnd": "2022-11-23T00:00:00.000Z",
+      "entryId": 34,
+      "vmModel": "null",
+      "vmClass": "null"
+    },
+    {
+      "fleetId": null,
+      "locationId": null,
+      "timeStart": null,
+      "timeEnd": null,
+      "entryId": 35,
       "vmModel": "null",
       "vmClass": "null"
     }
