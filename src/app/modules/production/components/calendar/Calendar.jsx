@@ -131,12 +131,9 @@ const Calendar = () => {
   //         args.cancel = !scheduleObj.isSlotAvailable(data.StartTime, data.EndTime);
   //     }
   // }
-
   function editorTemplate(props) {
     console.log('props in editorTemmplate', props)
-    console.log('props.timeStart', props.timeStart)
-    console.log('props.startTime', props.startTime)
-    console.log('props.StartTime', props.StartTime)
+    console.log(scheduleObj)
     return props !== undefined ? (
       <table className='custom-event-editor' style={{width: '100%'}} cellPadding={5}>
         <tbody>
@@ -219,7 +216,7 @@ const Calendar = () => {
                 id='StartTime'
                 format='dd/MM/yy hh:mm a'
                 data-name='timeStart'
-                value={new Date(props.timeStart ? props.timeStart : props.StartTime)}
+                value={new Date(props.timeStart ? props.timeStart : props.startTime)}
                 className='e-field'
               ></DateTimePickerComponent>
             </td>
@@ -231,7 +228,7 @@ const Calendar = () => {
                 id='EndTime'
                 format='dd/MM/yy hh:mm a'
                 data-name='timeEnd'
-                value={new Date(props.timeEnd ? props.timeEnd : props.EndTime)}
+                value={new Date(props.timeEnd ? props.timeEnd : props.endTime)}
                 className='e-field'
               ></DateTimePickerComponent>
             </td>
@@ -239,17 +236,14 @@ const Calendar = () => {
         </tbody>
       </table>
     ) : (
-      <div>
-        <h1>loading</h1>
-      </div>
+      <div></div>
     )
   }
-
   const onActionBegin = (args) => {
-    console.log('args in actionbegin', args)
+    console.log('args in action begin', args)
     let data = args.data instanceof Array ? args.data[0] : args.data
     if (args.requestType === 'eventCreate') {
-      // args.cancel = true
+      console.log(scheduleObj)
       // make data in array so that I can map though it
       const preparedData = [{...data}]
       console.log('preparedData', preparedData)
@@ -270,11 +264,11 @@ const Calendar = () => {
       addScheduleMutation(dataToPost)
     }
     if (args.requestType === 'eventRemove') {
-      // args.cancel = true
+      args.cancel = true
       deleteScheduleMutation(data)
     }
     if (args.requestType === 'eventChange') {
-      // args.cancel = true
+      args.cancel = true
       console.log('data', data)
       console.log('args in eventChange', args)
       const preparedData = [{...data}]

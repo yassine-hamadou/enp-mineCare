@@ -131,15 +131,6 @@
       "vmClass": "null"
     },
     {
-      "fleetId": "AD065       ",
-      "locationId": "GOLD  ",
-      "timeStart": "2022-11-23T11:00:00.000Z",
-      "timeEnd": "2022-11-23T11:30:00.000Z",
-      "entryId": 30,
-      "vmModel": "null",
-      "vmClass": "null"
-    },
-    {
       "fleetId": "AD066       ",
       "locationId": "DRILL ",
       "timeStart": "2022-11-24T09:00:00.000Z",
@@ -181,6 +172,15 @@
       "timeStart": null,
       "timeEnd": null,
       "entryId": 35,
+      "vmModel": "null",
+      "vmClass": "null"
+    },
+    {
+      "fleetId": "AD066       ",
+      "locationId": "CRUSH ",
+      "timeStart": "2022-11-22T12:00:00.000Z",
+      "timeEnd": "2022-11-22T12:30:00.000Z",
+      "entryId": 36,
       "vmModel": "null",
       "vmClass": "null"
     }
