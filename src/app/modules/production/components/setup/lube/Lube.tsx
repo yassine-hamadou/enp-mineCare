@@ -189,6 +189,7 @@ const LubePage = () => {
   let [filteredData] = useState([])
   const [submitLoading, setSubmitLoading] = useState(false)
   const [form] = Form.useForm()
+  const [dataSource, setDataSource] = useState([])
 
 
     // Modal functions
@@ -381,9 +382,21 @@ const LubePage = () => {
       console.log(error)
     }
   }
+  const loadEqupData = async () => {
+    setLoading(true)
+    try {
+      const response = await axios.get(`${ENP_URL}/VmequpsApi`)
+      setDataSource(response.data)
+      setLoading(false)
+    } catch (error: any) {
+      setLoading(false)
+      return error.statusText
+    }
+  }
 
   useEffect(() => {
     loadData()
+    loadEqupData()
   }, [])
 
   const dataWithVehicleNum = gridData.map((item: any, index) => ({
@@ -541,15 +554,23 @@ const LubePage = () => {
         options={[
           {
             value: '1',
-            label: 'Not Identified',
+            label: 'Engine',
           },
           {
             value: '2',
-            label: 'Closed',
+            label: 'Transmission',
           },
           {
             value: '3',
-            label: 'Communicated',
+            label: 'Hydraulic tank - Impliment, Conv',
+          },
+          {
+            value: '4',
+            label: 'Differential & final drives',
+          },
+          {
+            value: '5',
+            label: 'Front Wheels (both)',
           },
           
         ]}
@@ -557,10 +578,10 @@ const LubePage = () => {
         </Form.Item>
         
        <Form.Item label='Change Interval' name='changeIn' >
-        <InputNumber  />
+        <InputNumber  disabled={true}/>
       </Form.Item>
        <Form.Item label='Capacity' name='capacity' >
-        <InputNumber  />
+        <InputNumber  disabled={true}/>
       </Form.Item>
       <Form.Item label='Refill Type' name="refilType">
         <Select 
@@ -572,10 +593,6 @@ const LubePage = () => {
           (optionA?.label ?? '').toLowerCase().localeCompare((optionB?.label ?? '').toLowerCase())
         }
         options={[
-          {
-            value: '1',
-            label: 'Not Identified',
-          },
           {
             value: 'Top Up - Normal',
             label: 'Top Up - Normal',
@@ -605,7 +622,7 @@ const LubePage = () => {
             <InputNumber/>
       </Form.Item>
       <Form.Item name='prevHour' label='Previous Hours'>
-            <InputNumber />
+            <InputNumber disabled={true}/>
       </Form.Item>
       <Form.Item name='curHour' label='Current Hours' rules={[{required: true}]}>
             <InputNumber/>
