@@ -1,4 +1,4 @@
-import { Divider } from "antd";
+import { Divider, Radio } from "antd";
 import { useState } from "react";
 
 const CheckListForm3 = () => {
@@ -27,7 +27,7 @@ const CheckListForm3 = () => {
         {/* begin::Scroll */}
         
           <div className='d-flex justify-content-center'>
-            <h2><strong>SECTION '3' - ENGINE</strong></h2>
+            <h2><strong>SECTION '3' - BODY/FRAME</strong></h2>
             
           </div>
           <div className='d-flex justify-content-center mb-7'>
@@ -37,30 +37,40 @@ const CheckListForm3 = () => {
           {/* end::row */}
           <div className='row mb-7'>
             <div className='col-4'>
-              <label className='required fw-bold fs-6 mb-2'>Check Auto Lub Supply to all pins & bearings</label>
-              <select className="form-select form-control form-control-solid mb-3" >
-                <option selected>Select one option</option>
-                <option value="1">Ok</option>
-                <option value="2">Repair</option>
-                
-              </select>
+              <div className="form-control form-control-solid mb-3" >
+                <div>
+                  <label className='required fw-bold fs-6 mb-2'>Check Auto Lub Supply to all pins & bearings</label>
+                </div>
+                <Radio.Group >
+                  <Radio value={1}>Ok</Radio>
+                  <Radio value={2}>Repair</Radio>
+                </Radio.Group>
+              </div>
+              
             </div>
             <div className='col-4'>
-              <label className='required fw-bold fs-6 mb-2'>Check operation of Auto Lub system</label>
-              <select className="form-select form-control form-control-solid mb-3" >
-                <option selected>Select one option</option>
-                <option value="1">Ok</option>
-                <option value="2">Repair</option>
-                
-              </select>
+              <div className="form-control form-control-solid mb-3" >
+                <div>
+                  <label className='required fw-bold fs-6 mb-2'>Check operation of Auto Lub system</label>
+                </div>
+                <Radio.Group >
+                  <Radio value={1}>Ok</Radio>
+                  <Radio value={2}>Repair</Radio>
+                </Radio.Group>
+              </div>
+              
             </div>
             <div className='col-4'>
-              <label className='required fw-bold fs-6 mb-2'>Clean Air conditioner filter</label>
-              <select className="form-select form-control form-control-solid mb-3" >
-                <option selected>Select one option</option>
-                <option value="1">Ok</option>
-                <option value="2">Repair</option>
-              </select>
+              <div className="form-control form-control-solid mb-3" >
+                <div>
+                  <label className='required fw-bold fs-6 mb-2'>Clean Air conditioner filter</label>
+                </div>
+                <Radio.Group >
+                  <Radio value={1}>Ok</Radio>
+                  <Radio value={2}>Repair</Radio>
+                </Radio.Group>
+              </div>
+              
             </div>
           </div>
         
@@ -68,137 +78,182 @@ const CheckListForm3 = () => {
           {/* end::row */}
           <div className='row mb-7'>
             <div className='col-4'>
-              <label className='required fw-bold fs-6 mb-2'>Clean cab air filter</label>
-              <select className="form-select form-control form-control-solid mb-3" >
-                <option selected>Select one option</option>
-                <option value="1">Ok</option>
-                <option value="2">Repair</option>
-                
-              </select>
+              <div className="form-control form-control-solid mb-3" >
+                <div>
+                  <label className='required fw-bold fs-6 mb-2'>Clean cab air filter</label>
+                </div>
+                <Radio.Group >
+                  <Radio value={1}>Ok</Radio>
+                  <Radio value={2}>Repair</Radio>
+                </Radio.Group>
+              </div>
+              
             </div>
             <div className='col-4'>
-              <label className='required fw-bold fs-6 mb-2'>Inspect Access steps, grab rails & handrails</label>
-              <select className="form-select form-control form-control-solid mb-3" >
-                <option selected>Select one option</option>
-                <option value="1">Ok</option>
-                <option value="2">Repair</option>
-                
-              </select>
+              <div className="form-control form-control-solid mb-3" >
+                <div>
+                  <label className='required fw-bold fs-6 mb-2'>Inspect Access steps, grab rails & handrails</label>
+                </div>
+                <Radio.Group >
+                  <Radio value={1}>Ok</Radio>
+                  <Radio value={2}>Repair</Radio>
+                </Radio.Group>
+              </div>
+             
             </div>
             <div className='col-4'>
-              <label className='required fw-bold fs-6 mb-2'>Inspect Cab Mounts</label>
-              <select className="form-select form-control form-control-solid mb-3" >
-                <option selected>Select one option</option>
-                <option value="1">Ok</option>
-                <option value="2">Repair</option>
-              </select>
-            </div>
-          </div>
-          {/* end::row */}
-          <div className='row mb-7'>
-            <div className='col-4'>
-              <label className='required fw-bold fs-6 mb-2'>Inspect Frame & Body support pads</label>
-              <select className="form-select form-control form-control-solid mb-3" >
-                <option selected>Select one option</option>
-                <option value="1">Ok</option>
-                <option value="2">Repair</option>
-                
-              </select>
-            </div>
-            <div className='col-4'>
-              <label className='required fw-bold fs-6 mb-2'>Inspect ROPS</label>
-              <select className="form-select form-control form-control-solid mb-3" >
-                <option selected>Select one option</option>
-                <option value="1">Ok</option>
-                <option value="2">Repair</option>
-                
-              </select>
-            </div>
-            <div className='col-4'>
-              <label className='required fw-bold fs-6 mb-2'>Inspect and repair Skip ropes</label>
-              <select className="form-select form-control form-control-solid mb-3" >
-                <option selected>Select one option</option>
-                <option value="1">Ok</option>
-                <option value="2">Repair</option>
-              </select>
+              <div className="form-control form-control-solid mb-3" >
+                <div>
+                  <label className='required fw-bold fs-6 mb-2'>Inspect Cab Mounts</label>
+                </div>
+                <Radio.Group >
+                  <Radio value={1}>Ok</Radio>
+                  <Radio value={2}>Repair</Radio>
+                </Radio.Group>
+              </div>
+             
             </div>
           </div>
           {/* end::row */}
           <div className='row mb-7'>
             <div className='col-4'>
-              <label className='required fw-bold fs-6 mb-2'>Check all other linkages & bearings.</label>
-              <select className="form-select form-control form-control-solid mb-3" >
-                <option selected>Select one option</option>
-                <option value="1">Ok</option>
-                <option value="2">Repair</option>
-                
-              </select>
+              <div className="form-control form-control-solid mb-3" >
+                <div>
+                  <label className='required fw-bold fs-6 mb-2'>Inspect Frame & Body support pads</label>
+                </div>
+                <Radio.Group >
+                  <Radio value={1}>Ok</Radio>
+                  <Radio value={2}>Repair</Radio>
+                </Radio.Group>
+              </div>
+            
             </div>
             <div className='col-4'>
-              <label className='required fw-bold fs-6 mb-2'>Check Steering Accumulator</label>
-              <select className="form-select form-control form-control-solid mb-3" >
-                <option selected>Select one option</option>
-                <option value="1">Ok</option>
-                <option value="2">Repair</option>
-                
-              </select>
+              <div className="form-control form-control-solid mb-3" >
+                <div>
+                  <label className='required fw-bold fs-6 mb-2'>Inspect ROPS</label>
+                </div>
+                <Radio.Group >
+                  <Radio value={1}>Ok</Radio>
+                  <Radio value={2}>Repair</Radio>
+                </Radio.Group>
+              </div>
             </div>
             <div className='col-4'>
-              <label className='required fw-bold fs-6 mb-2'>Check Suspension cylinders</label>
-              <select className="form-select form-control form-control-solid mb-3" >
-                <option selected>Select one option</option>
-                <option value="1">Ok</option>
-                <option value="2">Repair</option>
-              </select>
-            </div>
-          </div>
-          {/* end::row */}
-          <div className='row mb-7'>
-            <div className='col-4'>
-              <label className='required fw-bold fs-6 mb-2'>Inspect catwalk for cracks</label>
-              <select className="form-select form-control form-control-solid mb-3" >
-                <option selected>Select one option</option>
-                <option value="1">Ok</option>
-                <option value="2">Repair</option>
-                
-              </select>
-            </div>
-            <div className='col-4'>
-              <label className='required fw-bold fs-6 mb-2'>Inspect Condition of Tyres </label>
-              <select className="form-select form-control form-control-solid mb-3" >
-                <option selected>Select one option</option>
-                <option value="1">Ok</option>
-                <option value="2">Repair</option>
-                
-              </select>
-            </div>
-            <div className='col-4'>
-              <label className='required fw-bold fs-6 mb-2'>Inspect service brakes</label>
-              <select className="form-select form-control form-control-solid mb-3" >
-                <option selected>Select one option</option>
-                <option value="1">Ok</option>
-                <option value="2">Repair</option>
-              </select>
+              <div className="form-control form-control-solid mb-3" >
+                <div>
+                  <label className='required fw-bold fs-6 mb-2'>Inspect and repair Skip ropes</label>
+                </div>
+                <Radio.Group >
+                  <Radio value={1}>Ok</Radio>
+                  <Radio value={2}>Repair</Radio>
+                </Radio.Group>
+              </div>
             </div>
           </div>
           {/* end::row */}
           <div className='row mb-7'>
             <div className='col-4'>
-              <label className='required fw-bold fs-6 mb-2'>Inspect Steering linkage </label>
-              <select className="form-select form-control form-control-solid mb-3" >
-                <option selected>Select one option</option>
-                <option value="1">Ok</option>
-                <option value="2">Repair</option>
-                
-              </select>
+              <div className="form-control form-control-solid mb-3" >
+                <div>
+                  <label className='required fw-bold fs-6 mb-2'>Check all other linkages & bearings</label>
+                </div>
+                <Radio.Group >
+                  <Radio value={1}>Ok</Radio>
+                  <Radio value={2}>Repair</Radio>
+                </Radio.Group>
+              </div>
+              
             </div>
             <div className='col-4'>
-              <label className='required fw-bold fs-6 mb-2'>Lubricate Steering cylinder bearings</label>
-              <select className="form-select form-control form-control-solid mb-3" >
-                <option selected>Select one option</option>
-                <option value="1">Ok</option>
-                <option value="2">Repair</option>
-              </select>
+              <div className="form-control form-control-solid mb-3" >
+                <div>
+                  <label className='required fw-bold fs-6 mb-2'>Check Steering Accumulator</label>
+                </div>
+                <Radio.Group >
+                  <Radio value={1}>Ok</Radio>
+                  <Radio value={2}>Repair</Radio>
+                </Radio.Group>
+              </div>
+             
+            </div>
+            <div className='col-4'>
+              <div className="form-control form-control-solid mb-3" >
+                <div>
+                  <label className='required fw-bold fs-6 mb-2'>Check Suspension cylinders</label>
+                </div>
+                <Radio.Group >
+                  <Radio value={1}>Ok</Radio>
+                  <Radio value={2}>Repair</Radio>
+                </Radio.Group>
+              </div>
+              
+            </div>
+          </div>
+          {/* end::row */}
+          <div className='row mb-7'>
+            <div className='col-4'>
+              <div className="form-control form-control-solid mb-3" >
+                <div>
+                  <label className='required fw-bold fs-6 mb-2'>Inspect catwalk for cracks</label>
+                </div>
+                <Radio.Group >
+                  <Radio value={1}>Ok</Radio>
+                  <Radio value={2}>Repair</Radio>
+                </Radio.Group>
+              </div>
+             
+            </div>
+            <div className='col-4'>
+              <div className="form-control form-control-solid mb-3" >
+                <div>
+                  <label className='required fw-bold fs-6 mb-2'>Inspect Condition of Tyres</label>
+                </div>
+                <Radio.Group >
+                  <Radio value={1}>Ok</Radio>
+                  <Radio value={2}>Repair</Radio>
+                </Radio.Group>
+              </div>
+              
+            </div>
+            <div className='col-4'>
+              <div className="form-control form-control-solid mb-3" >
+                <div>
+                  <label className='required fw-bold fs-6 mb-2'>Inspect service brakes</label>
+                </div>
+                <Radio.Group >
+                  <Radio value={1}>Ok</Radio>
+                  <Radio value={2}>Repair</Radio>
+                </Radio.Group>
+              </div>
+             
+            </div>
+          </div>
+          {/* end::row */}
+          <div className='row mb-7'>
+            <div className='col-4'>
+              <div className="form-control form-control-solid mb-3" >
+                <div>
+                  <label className='required fw-bold fs-6 mb-2'>Inspect Steering linkage</label>
+                </div>
+                <Radio.Group >
+                  <Radio value={1}>Ok</Radio>
+                  <Radio value={2}>Repair</Radio>
+                </Radio.Group>
+              </div>
+            
+            </div>
+            <div className='col-4'>
+              <div className="form-control form-control-solid mb-3" >
+                <div>
+                  <label className='required fw-bold fs-6 mb-2'>Lubricate Steering cylinder bearings</label>
+                </div>
+                <Radio.Group >
+                  <Radio value={1}>Ok</Radio>
+                  <Radio value={2}>Repair</Radio>
+                </Radio.Group>
+              </div>
+              
             </div>
            
           </div>
