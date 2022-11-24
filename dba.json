@@ -183,6 +183,24 @@
       "entryId": 36,
       "vmModel": "null",
       "vmClass": "null"
+    },
+    {
+      "fleetId": "ANO00       ",
+      "locationId": "UNDER ",
+      "timeStart": "2022-11-03T00:00:00.000Z",
+      "timeEnd": "2022-11-24T00:00:00.000Z",
+      "entryId": 37,
+      "vmModel": "null",
+      "vmClass": "null"
+    },
+    {
+      "fleetId": "AD065       ",
+      "locationId": "CRUSH ",
+      "timeStart": "2022-11-20T09:30:00.000Z",
+      "timeEnd": "2022-11-20T10:00:00.000Z",
+      "entryId": 38,
+      "vmModel": "null",
+      "vmClass": "null"
     }
   ],
   "IclocsApi": [

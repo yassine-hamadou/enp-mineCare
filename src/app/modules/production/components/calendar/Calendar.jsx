@@ -8,21 +8,28 @@ import {
   Agenda,
   Inject,
 } from '@syncfusion/ej2-react-schedule'
-import axios from 'axios'
 import {DateTimePickerComponent} from '@syncfusion/ej2-react-calendars'
 import {DropDownListComponent} from '@syncfusion/ej2-react-dropdowns'
-import {ENP_URL} from '../../../../urls'
 import {useMutation, useQuery, useQueryClient} from 'react-query'
-require('@syncfusion/ej2-base/styles/material.css')
-require('@syncfusion/ej2-calendars/styles/material.css')
-require('@syncfusion/ej2-dropdowns/styles/material.css')
-require('@syncfusion/ej2-inputs/styles/material.css')
-require('@syncfusion/ej2-lists/styles/material.css')
-require('@syncfusion/ej2-navigations/styles/material.css')
-require('@syncfusion/ej2-popups/styles/material.css')
-require('@syncfusion/ej2-splitbuttons/styles/material.css')
-require('@syncfusion/ej2-react-schedule/styles/material.css')
-require('@syncfusion/ej2-buttons/styles/material.css')
+import '@syncfusion/ej2-base/styles/material.css'
+import '@syncfusion/ej2-calendars/styles/material.css'
+import '@syncfusion/ej2-dropdowns/styles/material.css'
+import '@syncfusion/ej2-inputs/styles/material.css'
+import '@syncfusion/ej2-lists/styles/material.css'
+import '@syncfusion/ej2-navigations/styles/material.css'
+import '@syncfusion/ej2-popups/styles/material.css'
+import '@syncfusion/ej2-splitbuttons/styles/material.css'
+import '@syncfusion/ej2-react-schedule/styles/material.css'
+import '@syncfusion/ej2-buttons/styles/material.css'
+import {
+  addSchedule,
+  deleteSchedule,
+  fetchCustodians,
+  fetchSchedules,
+  fetchVmequps,
+  localData,
+  updateSchedule,
+} from './requests'
 
 /**
  *  Schedule editor custom fields sample
@@ -44,49 +51,6 @@ const Calendar = () => {
   let scheduleObj
   let scheduleQueryClient = useQueryClient()
 
-  // Functions to perform CRUD operations
-  const fetchSchedules = () => {
-    return axios.get(`${ENP_URL}/FleetSchedulesApi`)
-  }
-  const fetchVmequps = () => {
-    return axios.get(`${ENP_URL}/VmequpsApi`)
-  }
-  const fetchLocations = () => {
-    return axios.get(`${ENP_URL}/IclocsApi`)
-  }
-  const fetchCustodians = () => {
-    return axios.get(`${ENP_URL}/VmemplsApi`)
-  }
-
-  //Add
-  const addSchedule = (schedule) => {
-    return axios.post(`${ENP_URL}/FleetSchedulesApi`, schedule)
-  }
-
-  //delete
-  const deleteSchedule = (schedule) => {
-    return axios.delete(`${ENP_URL}/FleetSchedulesApi/${schedule.entryId}`)
-  }
-
-  //update
-  const updateSchedule = (schedule) => {
-    return axios.put(`${ENP_URL}/FleetSchedulesApi/${schedule.entryId}`, schedule)
-  }
-
-  //Object to inject in the Calendar
-  const localData = (dataFromApi) => {
-    return {
-      dataSource: dataFromApi,
-      fields: {
-        id: 'entryId',
-        subject: {name: 'fleetId', default: 'No Fleet ID'},
-        location: {name: 'locationId'},
-        startTime: {name: 'timeStart'},
-        endTime: {name: 'timeEnd'},
-      },
-    }
-  }
-
   // React Query
   //Get
   const {data: schedulesData} = useQuery('schedules', fetchSchedules, {
@@ -94,10 +58,6 @@ const Calendar = () => {
     staleTime: 300000,
   })
   const {data: vmequps} = useQuery('vmequps', fetchVmequps, {
-    refetchOnWindowFocus: false,
-    staleTime: Infinity,
-  })
-  const {data: locationsData} = useQuery('locations', fetchLocations, {
     refetchOnWindowFocus: false,
     staleTime: Infinity,
   })
@@ -124,6 +84,9 @@ const Calendar = () => {
       scheduleQueryClient.invalidateQueries('schedules')
     },
   })
+
+  //Access the same location query from cycledetails component
+  const locationQuery = useQueryClient().getQueryData('Locations')
 
   // function onActionBegin(args) {
   //     if (args.requestType === 'eventCreate' || args.requestType === 'eventChange') {
@@ -165,7 +128,7 @@ const Calendar = () => {
                 data-name='locationId'
                 className='e-field'
                 style={{width: '100%'}}
-                dataSource={locationsData?.data.map((location) => {
+                dataSource={locationQuery?.data.map((location) => {
                   return {
                     text: `${location.locationCode} - ${location.locationDesc}`,
                     value: `${location.locationCode}`,
