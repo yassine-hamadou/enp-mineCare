@@ -247,7 +247,7 @@ const CompartmentPage = () => {
             
           </Space>
         </div>
-        <Table columns={columns} dataSource={compart} loading={loading}/>
+        <Table columns={columns} dataSource={compart}/>
           <Modal title='Add Compartment' open={isModalOpen} onOk={handleOk} onCancel={handleCancel} 
           footer={[
             <Button key='back' onClick={handleCancel}>

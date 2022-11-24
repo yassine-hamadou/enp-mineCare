@@ -172,7 +172,7 @@ const HoursPage: React.FC = () => {
       setEditingRow(null);
     };
     
-    return <Form form={form} onFinish={onFinish}><Table columns={columns} rowKey="id" dataSource={data} pagination={false} /></Form>;
+    return <Form form={form} onFinish={onFinish}><Table columns={columns} rowKey="id"  dataSource={data} pagination={false} /></Form>;
   };
 
   const columns:any  = [
@@ -198,14 +198,56 @@ const HoursPage: React.FC = () => {
     loadData()
   }, [])
 
-  const data = [];
+  const data = [
+    {
+      id: "1",
+      manu: "Allightsykes",
+      model: "CP300i",
+      count: 346
+    },
+    {
+      id: "2",
+      manu: "BOMAG",
+      model: "BW 216 D - 40",
+      count: 142
+    },
+    {
+      id: "3",
+      manu: "CAT",
+      model: "CS76",
+      count: 143
+    },
+    {
+      id: "4",
+      manu: "CUMMINS",
+      model: "C33D5",
+      count: 131
+    },
+    {
+      id: "5",
+      manu: "LINCOLN",
+      model: "Air Vantage",
+      count: 431
+    },
+    {
+      id: "6",
+      manu: "SANDVIK",
+      model: "DE810",
+      count: 133
+    },
+    {
+      id: "7",
+      manu: "VOLVO",
+      model: "AF04",
+      count: 342
+    }
+  ];
     for (let i = 0; i < 3; ++i) {
       data.push({
-        key: i.toString(),
-        date: '2014-12-24 23:12:00',
-        manu: 'CAT',
-        model: 'C33D5',
-        count: '1123',
+        id: data[i].id,
+        manu: data[i].manu,
+        model: data[i].model,
+        count: data[i].count,
       });
     }
 
@@ -239,7 +281,7 @@ const HoursPage: React.FC = () => {
         columns={columns}
         expandable={{ expandedRowRender, defaultExpandedRowKeys: ['id'] }}
         rowKey="id"
-        dataSource={gridData}
+        dataSource={data}
       />
       </div>
     </>
