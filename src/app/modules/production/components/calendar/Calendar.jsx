@@ -88,12 +88,37 @@ const Calendar = () => {
   //Access the same location query from cycledetails component
   const locationQuery = useQueryClient().getQueryData('Locations')
 
-  // function onActionBegin(args) {
-  //     if (args.requestType === 'eventCreate' || args.requestType === 'eventChange') {
-  //         let data = args.data instanceof Array ? args.data[0] : args.data;
-  //         args.cancel = !scheduleObj.isSlotAvailable(data.StartTime, data.EndTime);
-  //     }
-  // }
+  function onEventRendered(args) {
+    let categoryColor = {
+      location1: '#1aaa55',
+      location2: '#357cd2',
+      location3: '#7fa900',
+      location4: '#ea7a57',
+      location5: '#00bdae',
+      location6: '#f57f17',
+      location7: '#8e24aa',
+    }
+    if (!args.element || !args.data) {
+      return
+    }
+    if (args.data.locationId === 'GOLD  ') {
+      args.element.style.backgroundColor = categoryColor.location7
+    } else if (args.data.locationId === 'CRUSH ') {
+      args.element.style.backgroundColor = categoryColor.location1
+    } else if (args.data.locationId === 'UNDER ') {
+      args.element.style.backgroundColor = categoryColor.location2
+    } else if (args.data.locationId === 'DRILL ') {
+      args.element.style.backgroundColor = categoryColor.location3
+    } else if (args.data.locationId === 'WELD ') {
+      args.element.style.backgroundColor = categoryColor.location4
+    }
+
+    // if (scheduleObj.currentView === 'Agenda') {
+    //   args.element.firstChild.style.borderLeftColor = categoryColor.location7
+    // } else {
+    //   args.element.style.backgroundColor = categoryColor
+    // }
+  }
   function editorTemplate(props) {
     console.log('props in editorTemmplate', props)
     console.log(scheduleObj)
@@ -326,8 +351,9 @@ const Calendar = () => {
             height='650px'
             ref={(schedule) => (scheduleObj = schedule)}
             eventSettings={schedulesData && localData(schedulesData.data)}
-            editorTemplate={editorTemplate.bind(this)}
-            actionBegin={onActionBegin.bind(this)}
+            eventRendered={onEventRendered}
+            editorTemplate={editorTemplate}
+            actionBegin={onActionBegin}
             // id='schedule'
             // quickInfoTemplates={{
             //     header: headerTemplate.bind(this),
