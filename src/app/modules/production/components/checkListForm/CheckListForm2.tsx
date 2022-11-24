@@ -27,7 +27,7 @@ const CheckListForm2 = () => {
         {/* begin::Scroll */}
         
           <div className='d-flex justify-content-center'>
-            <h2><strong>SECTION '2' - ENGINE</strong></h2>
+            <h2><strong>SECTION '2' - TRANSMISSION/HYDRAULIC/AXLES</strong></h2>
             
           </div>
           <div className='d-flex justify-content-center mb-7'>
@@ -326,49 +326,67 @@ const CheckListForm2 = () => {
           {/* end::row */}
           <div className='row mb-7'>
             <div className='col-4'>
-              <label className='required fw-bold fs-6 mb-2'>Change L/H & R/H  Front wheel oil</label>
-              <select className="form-select form-control form-control-solid mb-3" >
-                <option selected>Select one option</option>
-                <option value="1">Ok</option>
-                <option value="2">Repair</option>
-                
-              </select>
+              <div className="form-control form-control-solid mb-3" >
+                <div>
+                  <label className='required fw-bold fs-6 mb-2'>Change L/H & R/H  Front wheel oil</label>
+                </div>
+                <Radio.Group >
+                  <Radio value={1}>Ok</Radio>
+                  <Radio value={2}>Repair</Radio>
+                </Radio.Group>
+              </div>
+              
             </div>
             <div className='col-4'>
-              <label className='required fw-bold fs-6 mb-2'>Check Rear L/H & R/H Final drive oil level</label>
-              <select className="form-select form-control form-control-solid mb-3" >
-                <option selected>Select one option</option>
-                <option value="1">Ok</option>
-                <option value="2">Repair</option>
-              </select>
+              <div className="form-control form-control-solid mb-3" >
+                <div>
+                  <label className='required fw-bold fs-6 mb-2'>Check Rear L/H & R/H Final drive oil level</label>
+                </div>
+                <Radio.Group >
+                  <Radio value={1}>Ok</Radio>
+                  <Radio value={2}>Repair</Radio>
+                </Radio.Group>
+              </div>
+              
             </div>
             <div className='col-4'>
-              <label className='required fw-bold fs-6 mb-2'>Check Rear Axle oil level</label>
-              <select className="form-select form-control form-control-solid mb-3" >
-                <option selected>Select one option</option>
-                <option value="1">Ok</option>
-                <option value="2">Repair</option>
-              </select>
+              <div className="form-control form-control-solid mb-3" >
+                <div>
+                  <label className='required fw-bold fs-6 mb-2'>Check Rear Axle oil level</label>
+                </div>
+                <Radio.Group >
+                  <Radio value={1}>Ok</Radio>
+                  <Radio value={2}>Repair</Radio>
+                </Radio.Group>
+              </div>
+              
             </div>
           </div>
           {/* end::row */}
           <div className='row mb-7'>
             <div className='col-4'>
-              <label className='required fw-bold fs-6 mb-2'>Replace Rear axle oil filter</label>
-              <select className="form-select form-control form-control-solid mb-3" >
-                <option selected>Select one option</option>
-                <option value="1">Ok</option>
-                <option value="2">Repair</option>
-                
-              </select>
+              <div className="form-control form-control-solid mb-3" >
+                <div>
+                  <label className='required fw-bold fs-6 mb-2'>Replace Rear axle oil filter</label>
+                </div>
+                <Radio.Group >
+                  <Radio value={1}>Ok</Radio>
+                  <Radio value={2}>Repair</Radio>
+                </Radio.Group>
+              </div>
+            
             </div>
             <div className='col-4 mb-10'>
-              <label className='required fw-bold fs-6 mb-2'>Kidney Loop Rear Axle Oil</label>
-              <select className="form-select form-control form-control-solid mb-3" >
-                <option selected>Select one option</option>
-                <option value="1">Ok</option>
-                <option value="2">Repair</option>
-              </select>
+            <div className="form-control form-control-solid mb-3" >
+                <div>
+                  <label className='required fw-bold fs-6 mb-2'>Kidney Loop Rear Axle Oil</label>
+                </div>
+                <Radio.Group >
+                  <Radio value={1}>Ok</Radio>
+                  <Radio value={2}>Repair</Radio>
+                </Radio.Group>
+              </div>
+              
             </div>
           </div>
           <div>
