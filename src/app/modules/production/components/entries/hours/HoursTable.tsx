@@ -1,17 +1,53 @@
-import {Button, Popconfirm, Table, Modal, Space, Input} from 'antd'
-import 'antd/dist/antd.min.css'
-import axios from 'axios'
-import {useEffect, useState} from 'react'
-import { KTSVG } from '../../../../../../_metronic/helpers'
-import {AddFaultForm} from './AddHoursForm'
+import { DownOutlined } from '@ant-design/icons';
+import { padding } from '@mui/system';
+import { Button, Input, TableColumnsType } from 'antd';
+import { Badge, Dropdown, Space, Table , Form} from 'antd';
+import axios from 'axios';
+import React, { useEffect, useState } from 'react';
 
-const HoursTable = () => {
-  const [gridData, setGridData] = useState([])
-  const [loading, setLoading] = useState(false)
+import { KTSVG } from '../../../../../../_metronic/helpers';
+import { ENP_URL } from '../../../../../urls';
+
+interface DataType {
+  key: React.Key;
+  name: string;
+  platform: string;
+  version: string;
+  upgradeNum: number;
+  creator: string;
+  createdAt: string;
+}
+
+interface ExpandedDataType {
+  key: React.Key;
+  date: string;
+  name: string;
+  pread: string;
+  cread: string;
+}
+
+const items = [
+  { key: '1', label: 'Action 1' },
+  { key: '2', label: 'Action 2' },
+];
+
+
+const HoursPage: React.FC = () => {
   const [searchText, setSearchText] = useState('')
-  let [filteredData] = useState([])
+  const [editingRow, setEditingRow] = useState(null);
+  const [dataSource, setDataSource] = useState([]);
+  const [edit, setEdit] = useState(false);
+  const [form] = Form.useForm();
+  const [gridData, setGridData] = useState<any>([])
+  const [loading, setLoading] = useState(false)
 
-  // Modal functions
+
+  const handleInputChange = (e: any) => {
+    setSearchText(e.target.value)
+    if (e.target.value === '') {
+      // loadData()
+    }
+  }
   const [isModalOpen, setIsModalOpen] = useState(false)
 
   const showModal = () => {
@@ -23,137 +59,191 @@ const HoursTable = () => {
   }
 
   const handleCancel = () => {
-    setIsModalOpen(false)
-  }
-  // Modal functions end
+    // form.resetFields()
+  setIsModalOpen(false)
 
+  }
+  const expandedRowRender = () => {
+    
+    const columns: TableColumnsType<ExpandedDataType> = [
+      { title: 'FleetId', dataIndex: 'name', key: 'name' },
+      { 
+        title: 'Date', 
+        dataIndex: 'date', 
+        key: 'date',
+        render: (text, record) => {
+          if (editingRow === record.key) {
+            return (
+              <Form.Item name="date">
+                <Input />
+              </Form.Item>
+            );
+          } else {
+            return <p>{text}</p>;
+          }
+        },
+      },
+      
+      { 
+        title: 'Prv. Reading', 
+        dataIndex: 'pread', 
+        key: 'pread',
+        render: (text, record) => {
+          if (editingRow === record.key) {
+            return (
+              <Form.Item name="pread">
+                <Input />
+              </Form.Item>
+            );
+          } else {
+            return <p>{text}</p>;
+          }
+        },
+      },
+      { title: 'Cur. Reading', 
+        dataIndex: 'cread', 
+        key: 'cread',
+        render: (text, record) => {
+          if (editingRow === record.key) {
+            return (
+              <Form.Item name="cread">
+                <Input />
+              </Form.Item>
+            );
+          } else {
+            return <p>{text}</p>;
+          }
+        },
+      },
+      {
+        title: 'Action',
+        dataIndex: 'operation',
+        key: 'operation',
+        render: (_, record:any) => (
+          
+          <Space>
+            <Button
+              onClick={() => {
+                setEditingRow(record.key);
+                form.setFieldsValue({
+                  date: record.date,
+                  pread: record.pread,
+                  cread: record.cread,
+                });
+              }}
+            >
+              Edit 
+            </Button>
+            <Button  htmlType="submit" danger>Done</Button>
+          </Space>
+            
+        ),
+      },
+    ];
+
+    const data:any = [];
+    for (let i = 0; i < 3; ++i) {
+      data.push({
+        key: i.toString(),
+        date: '2014-12-24 23:12:00',
+        name: 'Test fleets',
+        pread: '',
+        cread: '',
+      });
+    }
+
+    // const loadData = async () => {
+    //   setLoading(true)
+    //   try {
+    //     // const response = await axios.get('https://cors-anywhere.herokuapp.com/http://208.117.44.15/SmWebApi/api/VmfaltsApi')
+    //     const response = await axios.get(`${ENP_URL}/models`)
+    //     setGridData(response.data)
+    //     // setGridData(dataSource)
+    //     setLoading(false)
+    //   } catch (error) {
+    //     console.log(error)
+    //   }
+    // }
+
+    const onFinish = (values:any) => {
+      const updatedDataSource:any = [...data];
+      updatedDataSource.splice(editingRow, 1, { ...values, key: editingRow });
+      setDataSource(updatedDataSource);
+      setEditingRow(null);
+    };
+    
+    return <Form form={form} onFinish={onFinish}><Table columns={columns} rowKey="id" dataSource={data} pagination={false} /></Form>;
+  };
+
+  const columns:any  = [
+    { title: 'ID', dataIndex: 'id', key: 'id'},
+    { title: 'Manufacturer', dataIndex: 'manu', key: 'manu' },
+    { title: 'Model', dataIndex: 'model', key: 'model' },
+    { title: 'Number of vehicles', dataIndex: 'count', key: 'count' },
+
+  ];
   const loadData = async () => {
     setLoading(true)
-    // const response = await axios.get('https://app.sipconsult.net/SmWebApi/api/VmequpsApi')
-    const response = await axios.get('http://208.117.44.15/SmWebApi/api/HourliesApi')
-    // console.log('api Response', response.data)
-    setGridData(response.data)
-    setLoading(false)
-  }
-
-  function handleDelete(element: any) {
-    const dataSource = [...gridData]
-    const filteredData = dataSource.filter((item: any) => item.fleetID !== element.fleetID)
-    setGridData(filteredData)
-  }
-  const handleInputChange = (e: any) => {
-    setSearchText(e.target.value)
-    if (e.target.value === '') {
-      loadData()
+    try {
+      // const response = await axios.get('https://cors-anywhere.herokuapp.com/http://208.117.44.15/SmWebApi/api/VmfaltsApi')
+      const response = await axios.get(`${ENP_URL}/models`)
+      setGridData(response.data)
+      // setGridData(dataSource)
+      setLoading(false)
+    } catch (error) {
+      console.log(error)
     }
   }
-
-  const globalSearch = () => {
-    // @ts-ignore
-    filteredData = dataWithVehicleNum.filter((value) => {
-      return (
-        value.entryId.toLowerCase().includes(searchText.toLowerCase()) ||
-        value.classCode.toLowerCase().includes(searchText.toLowerCase())
-      )
-    })
-    setGridData(filteredData)
-  }
-
-  const columns = [
-    {
-      title: 'FleetId',
-      dataIndex: 'fleetId',
-      key: 'fleetId',
-    },
-    {
-      title: 'Previous Reading',
-      dataIndex: 'previousReading',
-
-    },
-    {
-      title: 'Reading',
-      dataIndex: 'reading',
-
-    },
-    {
-      title: 'Daily HoursWorked',
-      dataIndex: 'dailyHoursWorked',
-
-    },
-    {
-      title: 'Reading Date',
-      dataIndex: 'readingDate',
-
-    },
-    // {
-    //   title: 'Date',
-    // },
-    // {
-    //   title: 'Daily Hours Worked',
-    // },
-    // {
-    //   title: 'New Reading',
-    // },
-    // {
-    //   title: 'Comment',
-    // },
-    {
-      title: 'Action',
-      dataIndex: 'action',
-      render: (_: any, record: any) =>
-        gridData.length >= 1 ? (
-          <>
-            <Popconfirm title='Sure to adjust'>
-              <Button type='primary' className='mx-3 mb-3'>
-                Adjust Hours
-              </Button>
-            </Popconfirm>
-          </>
-        ) : null,
-    },
-  ]
   useEffect(() => {
     loadData()
-
   }, [])
 
+  const data = [];
+    for (let i = 0; i < 3; ++i) {
+      data.push({
+        key: i.toString(),
+        date: '2014-12-24 23:12:00',
+        manu: 'CAT',
+        model: 'C33D5',
+        count: '1123',
+      });
+    }
+
   return (
+    <>
     <div style={{backgroundColor:'white', padding:'20px', borderRadius:'5px', boxShadow:'2px 2px 15px rgba(0,0,0,0.08)'}}>
-      <div className='d-flex justify-content-between'>
-        <Space style={{marginBottom: 16}}>
-          <Input
-            placeholder='Enter Search Text'
-            onChange={handleInputChange}
-            type='text'
-            allowClear
-            value={searchText}
-          />
-          <Button type='primary' onClick={globalSearch}>
-            Search
-          </Button>
-        </Space>
-        <Space style={{marginBottom: 16}}>
-            <button type='button' className='btn btn-primary me-3' onClick={showModal}>
-              <KTSVG path='/media/icons/duotune/arrows/arr075.svg' className='svg-icon-2' />
-              Add
-            </button>
-            <button type='button' className='btn btn-light-primary me-3'>
-              <KTSVG path='/media/icons/duotune/arrows/arr078.svg' className='svg-icon-2' />
-              Upload
-            </button>
-            <button type='button' className='btn btn-light-primary me-3'>
-              <KTSVG path='/media/icons/duotune/arrows/arr078.svg' className='svg-icon-2' />
+    <div className='d-flex justify-content-between'>
+          <Space style={{marginBottom: 16}}>
+            <Input
               
+              placeholder='Enter Search Text'
+              onChange={handleInputChange}
+              type='text'
+              allowClear
+              value={searchText}
+            />
+            <Button type='primary'>
+              Search
+            </Button>
+          </Space>
+          <Space style={{marginBottom: 16}}>
+          
+            <button type='button' className='btn btn-light-primary me-3'>
+              <KTSVG path='/media/icons/duotune/arrows/arr078.svg' className='svg-icon-2' />
               Export
             </button>
-        </Space>
+            
+          </Space>
+        </div>
+      <Table
+        columns={columns}
+        expandable={{ expandedRowRender, defaultExpandedRowKeys: ['id'] }}
+        rowKey="id"
+        dataSource={gridData}
+      />
       </div>
-      <Table columns={columns} dataSource={gridData} bordered loading={loading} />
-      <Modal title='Add Hour' open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
-        <AddFaultForm />
-      </Modal>
-    </div>
-  )
-}
+    </>
+  );
+};
 
-export {HoursTable}
+export {HoursPage}

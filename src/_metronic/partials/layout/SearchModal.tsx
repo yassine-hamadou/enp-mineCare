@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React from 'react'
-import {Modal} from 'react-bootstrap'
-import {KTSVG, toAbsoluteUrl} from '../../helpers'
+import React from "react";
+import { Modal } from "react-bootstrap";
+import { KTSVG, toAbsoluteUrl } from "../../helpers";
 // import {ListsWidget4, ListsWidget5} from '../widgets'
 
 type Props = {

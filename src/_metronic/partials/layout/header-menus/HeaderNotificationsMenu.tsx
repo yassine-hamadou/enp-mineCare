@@ -1,8 +1,8 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import clsx from 'clsx'
-import {FC} from 'react'
-import {Link} from 'react-router-dom'
-import {KTSVG, toAbsoluteUrl, defaultAlerts, defaultLogs} from '../../../helpers'
+import clsx from "clsx";
+import { FC } from "react";
+import { Link } from "react-router-dom";
+import { defaultAlerts, defaultLogs, KTSVG, toAbsoluteUrl } from "../../../helpers";
 
 const HeaderNotificationsMenu: FC = () => (
   <div

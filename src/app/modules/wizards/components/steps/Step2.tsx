@@ -1,6 +1,6 @@
-import React, {FC} from 'react'
-import {KTSVG} from '../../../../../_metronic/helpers'
-import {Field, ErrorMessage} from 'formik'
+import React, { FC } from "react";
+import { KTSVG } from "../../../../../_metronic/helpers";
+import { ErrorMessage, Field } from "formik";
 
 const Step2: FC = () => {
   return (

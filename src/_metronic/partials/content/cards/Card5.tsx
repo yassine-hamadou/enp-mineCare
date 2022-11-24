@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import {FC} from 'react'
-import {toAbsoluteUrl, KTSVG} from '../../../helpers'
-import {Dropdown1} from '../dropdown/Dropdown1'
+import { FC } from "react";
+import { KTSVG, toAbsoluteUrl } from "../../../helpers";
+import { Dropdown1 } from "../dropdown/Dropdown1";
 
 type Props = {
   image: string

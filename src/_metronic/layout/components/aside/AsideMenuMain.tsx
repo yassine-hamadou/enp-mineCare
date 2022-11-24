@@ -1,11 +1,11 @@
 /* eslint-disable react/jsx-no-target-blank */
-import {useIntl} from 'react-intl'
-import {AsideMenuItemWithSub} from './AsideMenuItemWithSub'
-import {AsideMenuItem} from './AsideMenuItem'
-import {Link} from 'react-router-dom'
-import clsx from 'clsx'
-import {checkIsActive, KTSVG} from '../../../helpers'
-import {useLocation} from 'react-router'
+import { useIntl } from "react-intl";
+import { AsideMenuItemWithSub } from "./AsideMenuItemWithSub";
+import { AsideMenuItem } from "./AsideMenuItem";
+import { Link } from "react-router-dom";
+import clsx from "clsx";
+import { checkIsActive, KTSVG } from "../../../helpers";
+import { useLocation } from "react-router";
 
 export function AsideMenuMain() {
   const intl = useIntl()
@@ -36,6 +36,8 @@ export function AsideMenuMain() {
         <AsideMenuItem to='entries/fault' hasBullet={true} title='Fault' />
         <AsideMenuItem to='entries/resolution' hasBullet={true} title='Resolution' />
         <AsideMenuItem to='entries/hours' hasBullet={true} title='Hours' />
+        <AsideMenuItem to='/setup/lube' title='Lube' hasBullet={true} />
+       
       </AsideMenuItemWithSub>
 
       <AsideMenuItemWithSub
@@ -72,7 +74,17 @@ export function AsideMenuMain() {
         <AsideMenuItem to='/setup/custodian' title='Custodian' hasBullet={true} />
         <AsideMenuItem to='/setup/location' title='Location' hasBullet={true} />
         <AsideMenuItem to='/setup/work-type' title='Work Type' hasBullet={true} />
-        <AsideMenuItem to='/checkListForm/tabs' title='Tabs' hasBullet={true} />
+        
+        <AsideMenuItemWithSub
+        to='/setup/lube'
+        title='Lube'
+        hasBullet={true}
+        >
+          <AsideMenuItem to='/setup/compartment' title='Compartment' hasBullet={true}/>
+          <AsideMenuItem to='/setup/oiltype' title='Oil Brand' hasBullet={true} />
+          <AsideMenuItem to='/setup/oilgrade' title='Oil Grade' hasBullet={true} />
+          <AsideMenuItem to='/setup/refill' title='Refill Type'hasBullet={true}/>
+        </AsideMenuItemWithSub>
       </AsideMenuItemWithSub>
       <div className='menu-item'>
         <div className='menu-content'>

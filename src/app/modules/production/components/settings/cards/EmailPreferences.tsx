@@ -1,5 +1,5 @@
-import React, {useState} from 'react'
-import {IEmailPreferences, emailPreferences} from '../SettingsModel'
+import React, { useState } from "react";
+import { emailPreferences, IEmailPreferences } from "../SettingsModel";
 
 const EmailPreferences: React.FC = () => {
   const [data, setData] = useState<IEmailPreferences>(emailPreferences)

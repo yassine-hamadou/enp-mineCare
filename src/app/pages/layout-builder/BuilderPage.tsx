@@ -1,8 +1,8 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import clsx from 'clsx'
-import React, {useState} from 'react'
-import {KTSVG} from '../../../_metronic/helpers'
-import {getLayout, ILayout, LayoutSetup, useLayout} from '../../../_metronic/layout/core'
+import clsx from "clsx";
+import React, { useState } from "react";
+import { KTSVG } from "../../../_metronic/helpers";
+import { getLayout, ILayout, LayoutSetup, useLayout } from "../../../_metronic/layout/core";
 
 const BuilderPage: React.FC = () => {
   const {setLayout} = useLayout()

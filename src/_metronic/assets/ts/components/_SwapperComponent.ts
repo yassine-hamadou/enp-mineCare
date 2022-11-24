@@ -1,10 +1,10 @@
 import {
-  getAttributeValueByBreakpoint,
-  stringSnakeToCamel,
-  getObjectPropertyValueByKey,
   EventHandlerUtil,
-  throttle,
-} from '../_utils/index'
+  getAttributeValueByBreakpoint,
+  getObjectPropertyValueByKey,
+  stringSnakeToCamel,
+  throttle
+} from "../_utils/index";
 
 export class SwapperStore {
   static store: Map<string, SwapperComponent> = new Map()

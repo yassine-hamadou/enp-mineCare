@@ -1,6 +1,6 @@
-import clsx from 'clsx'
-import {KTSVG} from '../../../helpers'
-import {ThemeModeType, useThemeMode} from './ThemeModeProvider'
+import clsx from "clsx";
+import { KTSVG } from "../../../helpers";
+import { ThemeModeType, useThemeMode } from "./ThemeModeProvider";
 
 /* eslint-disable jsx-a11y/anchor-is-valid */
 type Props = {

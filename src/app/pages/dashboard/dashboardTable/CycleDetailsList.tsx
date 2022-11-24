@@ -1,6 +1,8 @@
-import {Button, Input, Space, Table} from 'antd'
-import {useState, useEffect} from 'react'
-import axios from 'axios'
+import { Button, Input, Space, Table } from "antd";
+import { useEffect, useState } from "react";
+import axios from "axios";
+import { KTSVG } from "../../../../_metronic/helpers";
+import { ENP_URL } from "../../../urls";
 
 const DashboardTable = () => {
   const [gridData, setGridData] = useState([])
@@ -61,7 +63,7 @@ const DashboardTable = () => {
   const loadData = async () => {
     setLoading(true)
     try {
-      const response = await axios.get('http://208.117.44.15/SmWebApi/api/VmmodlsApi')
+      const response = await axios.get(`${ENP_URL}/VmmodlsApi`)
       setGridData(response.data)
       setLoading(false)
     } catch (error) {
@@ -115,12 +117,14 @@ const DashboardTable = () => {
           </Button>
         </Space>
         <Space style={{marginBottom: 16}}>
-          <Button type='primary' className='mb-3'>
-            Export
-          </Button>
-          <Button type='primary' className='mb-3'>
+          <button type='button' className='btn btn-light-primary me-3'>
+            <KTSVG path='/media/icons/duotune/arrows/arr078.svg' className='svg-icon-2' />
             Upload
-          </Button>
+          </button>
+          <button type='button' className='btn btn-light-primary me-3'>
+            <KTSVG path='/media/icons/duotune/arrows/arr078.svg' className='svg-icon-2' />
+            Export
+          </button>
         </Space>
       </div>
       <Table columns={columns} dataSource={dataWithVehicleNum} bordered loading={loading} />

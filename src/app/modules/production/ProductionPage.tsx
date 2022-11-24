@@ -1,34 +1,31 @@
 import React from 'react'
-import {Navigate, Route, Routes, Outlet} from 'react-router-dom'
+import {Navigate, Outlet, Route, Routes} from 'react-router-dom'
 import {PageLink, PageTitle} from '../../../_metronic/layout/core'
-import {ProductionReportTable} from './components/report/production_table/CycleDetailsList'
 import {FuelReportTable} from './components/report/fuel/CycleDetailsList'
 import {EquipmentTable} from './components/report/equipment/CycleDetailsList'
 import {StatisticsTable} from './components/report/activity/CycleDetailsList'
-import {Fleet} from './components/setup/fleet/CycleDetailsList'
+import {ScheduleInfo} from './components/scheduleInfo/ScheduleInfo'
 import {EquipmentDetail} from './components/entries/equipment/CycleDetailsList'
 import {ResolutionTable} from './components/entries/resolution/ResolutionTable'
-import {DownType} from './components/setup/downType/CycleDetailsList'
-// import {WorkType} from './components/setup/workType/CycleDetailsList'
-import {LocationTable} from './components/setup/location/CycleDetailsList'
-import {Custodian} from './components/setup/custodian/CycleDetailsList'
 import {FaultTable} from './components/entries/fault_d/FaultTable'
-import {HoursTable} from './components/entries/hours/HoursTable'
-import {AddFaultForm} from './components/entries/fault_d/AddFaultForm'
 import {WorkTypePage} from './components/setup/workType/WorkType'
-import { DownTypePage } from './components/setup/downType/DownType'
-import { CustodianPage } from './components/setup/custodian/Custodian'
-import { LocationPage } from './components/setup/location/LocationPage'
-import { FleetPage } from './components/setup/fleet/FleetPage'
-import { ServicesPage } from './components/setup/service/ServicePage'
-import { GroupsPage } from './components/setup/groups/GroupsPage'
-import { ItemsPage } from './components/setup/items/ItemPage'
-import { SectionsPage } from './components/setup/sections/Sections'
-import { CheckListForm } from './components/checkListForm/CheckListForm'
-import { CheckListForm2 } from './components/checkListForm/CheckListForm2'
-import { CheckListForm3 } from './components/checkListForm/CheckListForm3'
-import { CheckListForm5 } from './components/checkListForm/CheckListForm5'
-import { TabsTest } from './components/checkListForm/Tabs'
+import {DownTypePage} from './components/setup/downType/DownType'
+import {CustodianPage} from './components/setup/custodian/Custodian'
+import {LocationPage} from './components/setup/location/LocationPage'
+import {FleetPage} from './components/setup/fleet/FleetPage'
+import {ServicesPage} from './components/setup/service/ServicePage'
+import {GroupsPage} from './components/setup/groups/GroupsPage'
+import {ItemsPage} from './components/setup/items/ItemPage'
+import {SectionsPage} from './components/setup/sections/Sections'
+import {CheckListForm3} from './components/checkListForm/CheckListForm3'
+import {TabsTest} from './components/checkListForm/Tabs'
+import {LubePage} from './components/setup/lube/Lube'
+import { CompartmentPage } from './components/setup/compartment/Compartment'
+import { RefillPage } from './components/setup/refill/Refill'
+import { HoursPage } from './components/entries/hours/HoursTable'
+import { OilGradePage } from './components/setup/oilGrade/OilGrade'
+import { OilTypePage } from './components/setup/oilType/OilType'
+
 const accountBreadCrumbs: Array<PageLink> = []
 
 const ProductionPage: React.FC = () => {
@@ -53,6 +50,15 @@ const ProductionPage: React.FC = () => {
           }
         />
         <Route
+          path='start-work'
+          element={
+            <>
+              <PageTitle breadcrumbs={accountBreadCrumbs}>Check List</PageTitle>
+              <ScheduleInfo />
+            </>
+          }
+        />
+        <Route
           path='fault/*'
           element={
             <>
@@ -61,15 +67,6 @@ const ProductionPage: React.FC = () => {
           }
         >
           <Route path='' element={<FaultTable />} />
-          <Route
-            path='add'
-            element={
-              <>
-                <PageTitle breadcrumbs={accountBreadCrumbs}>Add Fault</PageTitle>
-                <AddFaultForm />
-              </>
-            }
-          />
         </Route>
         <Route
           path='resolution'
@@ -85,7 +82,7 @@ const ProductionPage: React.FC = () => {
           element={
             <>
               <PageTitle breadcrumbs={accountBreadCrumbs}>All Hours</PageTitle>
-              <HoursTable />
+              <HoursPage />
             </>
           }
         />
@@ -141,6 +138,46 @@ const ProductionPage: React.FC = () => {
           }
         />
         <Route
+          path='compartment'
+          element={
+            <>
+              <PageTitle breadcrumbs={accountBreadCrumbs}>All Compartment</PageTitle>
+              {/*<Overview />*/}
+              <CompartmentPage />
+            </>
+          }
+        />
+        <Route
+          path='refill'
+          element={
+            <>
+              <PageTitle breadcrumbs={accountBreadCrumbs}>All RefillTypes</PageTitle>
+              {/*<Overview />*/}
+              <RefillPage />
+            </>
+          }
+        />
+        <Route
+          path='oilgrade'
+          element={
+            <>
+              <PageTitle breadcrumbs={accountBreadCrumbs}>All Oil Grade</PageTitle>
+              {/*<Overview />*/}
+              <OilGradePage />
+            </>
+          }
+        />
+        <Route
+          path='oiltype'
+          element={
+            <>
+              <PageTitle breadcrumbs={accountBreadCrumbs}>All Oil Type</PageTitle>
+              {/*<Overview />*/}
+              <OilTypePage />
+            </>
+          }
+        />
+        <Route
           path='work-type'
           element={
             <>
@@ -150,7 +187,16 @@ const ProductionPage: React.FC = () => {
             </>
           }
         />
-       
+        <Route
+          path='lube'
+          element={
+            <>
+              <PageTitle breadcrumbs={accountBreadCrumbs}>All Lubes</PageTitle>
+              {/*<Overview />*/}
+              <LubePage />
+            </>
+          }
+        />
         <Route index element={<Navigate to='/dashboard' />} />
       </Route>
       <Route
@@ -162,7 +208,6 @@ const ProductionPage: React.FC = () => {
           </>
         }
       >
-       
         <Route
           path='fuel-report'
           element={
@@ -201,7 +246,6 @@ const ProductionPage: React.FC = () => {
           </>
         }
       >
-       
         <Route
           path='checkList'
           element={
@@ -220,8 +264,7 @@ const ProductionPage: React.FC = () => {
             </>
           }
         />
-        
-       
+
         <Route index element={<Navigate to='/dashboard' />} />
       </Route>
       <Route
@@ -233,7 +276,6 @@ const ProductionPage: React.FC = () => {
           </>
         }
       >
-       
         <Route
           path='service'
           element={
@@ -244,7 +286,7 @@ const ProductionPage: React.FC = () => {
           }
         />
         <Route
-          path='sections'
+          path='sections/:id'
           element={
             <>
               <PageTitle breadcrumbs={accountBreadCrumbs}>Sections </PageTitle>

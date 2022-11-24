@@ -15,21 +15,226 @@
       "status": "typicode"
     }
   ],
-  
   "sections": [
     {
-    "id": 1,
-    "name": "json-server",
-    "serviceID": "json-server",
-    "status": "typicode"
+      "id": 1,
+      "name": "json-server",
+      "serviceID": "json-server",
+      "status": "typicode"
+    }
+  ],
+  "models": [
+    {
+      "id": "1",
+      "manu": "Allightsykes",
+      "model": "CP300i",
+      "count": 346
+    },
+    {
+      "id": "2",
+      "manu": "BOMAG",
+      "model": "BW 216 D - 40",
+      "count": 142
+    },
+    {
+      "id": "3",
+      "manu": "CAT",
+      "model": "CS76",
+      "count": 143
+    },
+    {
+      "id": "4",
+      "manu": "CUMMINS",
+      "model": "C33D5",
+      "count": 131
+    },
+    {
+      "id": "5",
+      "manu": "LINCOLN",
+      "model": "Air Vantage",
+      "count": 431
+    },
+    {
+      "id": "6",
+      "manu": "SANDVIK",
+      "model": "DE810",
+      "count": 133
+    },
+    {
+      "id": "7",
+      "manu": "VOLVO",
+      "model": "AF04",
+      "count": 342
+    }
+  ],
+  "refils": [
+    {
+      "id": 1,
+      "name": "Top Up - Normal",
+      "status": 1
+    },
+    {
+      "name": "Top Up - Oil Leaks",
+      "status": 1,
+      "id": 2
+    },
+    {
+      "name": "Top Up - Hose Burst",
+      "status": 1,
+      "id": 3
+    },
+    {
+      "name": "Component C/O",
+      "status": 1,
+      "id": 4
+    },
+    {
+      "name": "PM Refill",
+      "status": 1,
+      "id": 5
+    },
+    {
+      "name": "Refill",
+      "status": 1,
+      "id": 6
+    }
+  ],
+  "compartment": [
+    {
+      "id": 1,
+      "name": "Engine",
+      "model": "DE810",
+      "status": 1
+    },
+    {
+      "name": "Transmission",
+      "model": "DE810",
+      "status": 1,
+      "id": 2
+    },
+    {
+      "name": "Hydraulic tank - Impliment, Conv",
+      "model": "793D",
+      "status": 1,
+      "id": 3
+    },
+    {
+      "name": "Hydraulic tank - Steering",
+      "model": "DE810",
+      "status": 1,
+      "id": 4
+    },
+    {
+      "name": "Differential & final drives",
+      "model": "793D",
+      "status": 1,
+      "id": 5
+    },
+    {
+      "name": "Front Wheels (both)",
+      "model": "793D",
+      "status": 1,
+      "id": 6
     }
   ],
   "services": [
     {
-    "id": 1,
-    "name": "test",
-    "modelID": "Test Service",
-    "status": "typicode"
+      "name": "Service PM-B",
+      "modelID": "Test1",
+      "status": 1,
+      "id": 2
+    },
+    {
+      "name": "Service PM-C",
+      "modelID": "Test2",
+      "status": 1,
+      "id": 3
     }
-  ]
+  ],
+  "oiltypes": [
+    {
+      "name": "SHELL",
+      "status": 1,
+      "id": 1
+    },
+    {
+      "name": "TOTAL",
+      "status": 1,
+      "id": 2
+    },
+    {
+      "name": "KOMATSU",
+      "status": 1,
+      "id": 3
+    }
+  ],
+  "oilgrades": [
+    {
+      "name": "15W40 - API CH4  CAT ECF-1",
+      "typeId": "SHELL",
+      "status": 1,
+      "id": 1
+    },
+    {
+      "name": "SAE30 - Cat TDTO, TO - 4",
+      "typeId": "SHELL",
+      "status": 1,
+      "id": 2
+    },
+    {
+      "name": "RUBIA TIR 7400 SAE 15W- 40",
+      "typeId": "TOTAL",
+      "status": 1,
+      "id": 3
+    },
+    {
+      "name": "DYNATRANS AC 30",
+      "typeId": "TOTAL",
+      "status": 1,
+      "id": 4
+    },
+    {
+      "name": "AZOLLA  ZS 68",
+      "typeId": "TOTAL",
+      "status": 1,
+      "id": 5
+    },
+    {
+      "name": "DYNATRANS FD-1 SAE 60",
+      "typeId": "TOTAL",
+      "status": 1,
+      "id": 6
+    },
+    {
+      "name": "SAE60 - Cat FDAO, FD - 1",
+      "typeId": "SHELL",
+      "status": 1,
+      "id": 7
+    },
+    {
+      "name": "DYNATRANS AC 50",
+      "typeId": "TOTAL",
+      "status": 1,
+      "id": 8
+    },
+    {
+      "name": "SAE10 - Cat TDTO, TO-4",
+      "typeId": "SHELL",
+      "status": 1,
+      "id": 9
+    },
+    {
+      "name": "SAE50 - Cat TDTO, TO-4",
+      "typeId": "SHELL",
+      "status": 1,
+      "id": 10
+    },
+    {
+      "name": "15W 40",
+      "typeId": "KOMATSU",
+      "status": 1,
+      "id": 11
+    }
+  ],
+  "lubes": []
 }

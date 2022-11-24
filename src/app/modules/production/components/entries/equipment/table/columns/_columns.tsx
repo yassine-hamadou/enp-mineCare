@@ -1,8 +1,7 @@
 // @ts-nocheck
-import {Column} from 'react-table'
-import {UserActionsCell} from './UserActionsCell'
-import {UserCustomHeader} from './UserCustomHeader'
-import {User} from '../../core/_models'
+import { Column } from "react-table";
+import { UserCustomHeader } from "./UserCustomHeader";
+import { User } from "../../core/_models";
 
 const usersColumns: ReadonlyArray<Column<User>> = [
 

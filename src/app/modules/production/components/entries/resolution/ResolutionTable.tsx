@@ -1,8 +1,10 @@
-import {Button, Popconfirm, Table, Modal, Space, Input} from 'antd'
-import 'antd/dist/antd.min.css'
-import axios from 'axios'
-import {useEffect, useState} from 'react'
-import { KTSVG } from '../../../../../../_metronic/helpers'
+import { Button, Input, Space, Table } from "antd";
+import "antd/dist/antd.min.css";
+import axios from "axios";
+import { useEffect, useState } from "react";
+import { KTSVG } from "../../../../../../_metronic/helpers";
+import { dhm } from "../fault_d/FaultTable";
+import { ENP_URL } from "../../../../../urls";
 
 const ResolutionTable = () => {
   const [gridData, setGridData] = useState([])
@@ -12,18 +14,21 @@ const ResolutionTable = () => {
   const loadData = async () => {
     setLoading(true)
     try {
-      const response = await axios.get('http://208.117.44.15/SmWebApi/api/FaultEntriesApi')
+      const response = await axios.get(`${ENP_URL}/FaultEntriesApi`)
 
       //Formatting date to the received data
       const dataReceivedfromAPI = {
+        /*
+         I am using the getter method to be able to read the object's own
+         properties since I wasn't able to read the object properties directly
+         without the getter method.
+        */
         get withFormatDate() {
           return response.data.map((item: any, index: number) => ({
             ...item,
             key: index,
             //Calculating duration: Present Time - Time fault was reported
-            duration: `${Math.floor(
-              (new Date().getTime() - new Date(item.downtime).getTime()) / (1000 * 3600 * 24)
-            )} Day(s)`,
+            duration: `${dhm(new Date().getTime() - new Date(item.downtime).getTime())}`,
             formattedDate: new Date(item.downtime).toLocaleString(),
           }))
         },
@@ -103,7 +108,14 @@ const ResolutionTable = () => {
   }
 
   return (
-    <div style={{backgroundColor:'white', padding:'20px', borderRadius:'5px', boxShadow:'2px 2px 15px rgba(0,0,0,0.08)'}}>
+    <div
+      style={{
+        backgroundColor: 'white',
+        padding: '20px',
+        borderRadius: '5px',
+        boxShadow: '2px 2px 15px rgba(0,0,0,0.08)',
+      }}
+    >
       <div className='d-flex justify-content-between'>
         <Space style={{marginBottom: 16}}>
           <Input
@@ -113,17 +125,13 @@ const ResolutionTable = () => {
             allowClear
             value={searchText}
           />
-          <Button type='primary'>
-            Search
-          </Button>
+          <Button type='primary'>Search</Button>
         </Space>
         <Space style={{marginBottom: 16}}>
-            <button type='button' className='btn btn-primary me-3'>
-              <KTSVG path='/media/icons/duotune/arrows/arr078.svg' className='svg-icon-2' />
-              
-              Export
-            </button>
-          
+          <button type='button' className='btn btn-primary me-3'>
+            <KTSVG path='/media/icons/duotune/arrows/arr078.svg' className='svg-icon-2' />
+            Export
+          </button>
         </Space>
       </div>
       <Table columns={columns} dataSource={gridData} bordered loading={loading} />

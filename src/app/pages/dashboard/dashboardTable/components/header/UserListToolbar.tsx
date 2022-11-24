@@ -1,6 +1,5 @@
-import {useListView} from '../../core/ListViewProvider'
-import {UsersListFilter} from './UsersListFilter'
-import {KTSVG} from "../../../../../../_metronic/helpers";
+import { useListView } from "../../core/ListViewProvider";
+import { KTSVG } from "../../../../../../_metronic/helpers";
 
 const UsersListToolbar = () => {
   const {setItemIdForUpdate} = useListView()

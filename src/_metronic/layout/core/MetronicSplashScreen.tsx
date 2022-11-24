@@ -1,13 +1,5 @@
-import React, {
-  FC,
-  createContext,
-  useContext,
-  useState,
-  useEffect,
-  SetStateAction,
-  Dispatch,
-} from 'react'
-import {WithChildren} from '../../helpers'
+import React, { createContext, Dispatch, FC, SetStateAction, useContext, useEffect, useState } from "react";
+import { WithChildren } from "../../helpers";
 
 const MetronicSplashScreenContext = createContext<Dispatch<SetStateAction<number>> | undefined>(
   undefined

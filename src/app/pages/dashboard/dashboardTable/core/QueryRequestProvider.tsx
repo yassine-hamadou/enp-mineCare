@@ -1,10 +1,10 @@
-import {FC, useState, createContext, useContext} from 'react'
+import { createContext, FC, useContext, useState } from "react";
 import {
-  QueryState,
-  QueryRequestContextProps,
   initialQueryRequest,
-  WithChildren,
-} from '../../../../../_metronic/helpers'
+  QueryRequestContextProps,
+  QueryState,
+  WithChildren
+} from "../../../../../_metronic/helpers";
 
 const QueryRequestContext = createContext<QueryRequestContextProps>(initialQueryRequest)
 

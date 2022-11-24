@@ -1,14 +1,14 @@
-import {FC, Suspense} from 'react'
-import {Route, Routes, Navigate} from 'react-router-dom'
-import {MasterLayout} from '../../_metronic/layout/MasterLayout'
-import TopBarProgress from 'react-topbar-progress-indicator'
-import {DashboardWrapper} from '../pages/dashboard/DashboardWrapper'
-import {getCSSVariableValue} from '../../_metronic/assets/ts/_utils'
-import {WithChildren} from '../../_metronic/helpers'
-import ProductionPage from '../modules/production/ProductionPage'
-import WeeklyReport from '../modules/production/components/report/weekly/WeeklyReport'
-import DailyReport from '../modules/production/components/report/daily/DailyReport'
-import DownTimeReport from '../modules/production/components/report/downtime/DowntimeReport'
+import { FC, Suspense } from "react";
+import { Navigate, Route, Routes } from "react-router-dom";
+import { MasterLayout } from "../../_metronic/layout/MasterLayout";
+import TopBarProgress from "react-topbar-progress-indicator";
+import { DashboardWrapper } from "../pages/dashboard/DashboardWrapper";
+import { getCSSVariableValue } from "../../_metronic/assets/ts/_utils";
+import { WithChildren } from "../../_metronic/helpers";
+import ProductionPage from "../modules/production/ProductionPage";
+import WeeklyReport from "../modules/production/components/report/weekly/WeeklyReport";
+import DailyReport from "../modules/production/components/report/daily/DailyReport";
+import DownTimeReport from "../modules/production/components/report/downtime/DowntimeReport";
 
 
 const PrivateRoutes = () => {

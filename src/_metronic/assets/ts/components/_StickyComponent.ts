@@ -1,16 +1,16 @@
 import {
-  getElementOffset,
-  getScrollTop,
-  getAttributeValueByBreakpoint,
-  getUniqueIdWithPrefix,
-  getObjectPropertyValueByKey,
-  stringSnakeToCamel,
-  getCSS,
   DataUtil,
   ElementAnimateUtil,
   ElementStyleUtil,
   EventHandlerUtil,
-} from '../_utils/index'
+  getAttributeValueByBreakpoint,
+  getCSS,
+  getElementOffset,
+  getObjectPropertyValueByKey,
+  getScrollTop,
+  getUniqueIdWithPrefix,
+  stringSnakeToCamel
+} from "../_utils/index";
 
 export interface StickyOptions {
   offset: number

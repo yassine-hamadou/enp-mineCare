@@ -1,6 +1,5 @@
-import {useEffect} from 'react'
-import {UserEditModalHeader} from './UserEditModalHeader'
-import {UserEditModalFormWrapper} from './UserEditModalFormWrapper'
+import { useEffect } from "react";
+import { UserEditModalHeader } from "./UserEditModalHeader";
 
 const UserEditModal = () => {
   useEffect(() => {

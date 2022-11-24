@@ -1,15 +1,15 @@
 import {
   DataUtil,
-  getObjectPropertyValueByKey,
-  stringSnakeToCamel,
+  ElementStyleUtil,
   getAttributeValueByBreakpoint,
+  getCSS,
+  getObjectPropertyValueByKey,
   getViewPort,
   isVisibleElement,
-  throttle,
-  getCSS,
-  ElementStyleUtil,
-} from '../_utils/index'
-import {CookieComponent} from './_CookieComponent'
+  stringSnakeToCamel,
+  throttle
+} from "../_utils/index";
+import { CookieComponent } from "./_CookieComponent";
 
 export interface ScrollOptions {
   saveState?: boolean

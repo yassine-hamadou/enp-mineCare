@@ -1,44 +1,51 @@
-import {Button, Input, Modal, Space, Table} from 'antd'
-import {useState, useEffect} from 'react'
-import axios from 'axios'
-import { KTCard, KTCardBody, KTSVG } from '../../../../../../_metronic/helpers'
-import { ColumnsType } from 'antd/lib/table'
-import { AddServiceForm } from './AddServiceForm'
-import { Link } from 'react-router-dom'
-
-
+import { Button, Form, Input, Modal, Radio, Space, Table } from "antd";
+import { useEffect, useState } from "react";
+import axios from "axios";
+import { KTCardBody, KTSVG } from "../../../../../../_metronic/helpers";
+import { Link } from "react-router-dom";
+import { ENP_URL } from "../../../../../urls";
 
 const ServicesPage = () => {
   const [gridData, setGridData] = useState([])
   const [loading, setLoading] = useState(false)
   const [searchText, setSearchText] = useState('')
   let [filteredData] = useState([])
-  const [formData, setFormData]= useState({
-    name:"",
-    modelID:"",
-  })
+  const [submitLoading, setSubmitLoading] = useState(false)
+  const [form] = Form.useForm()
 
+  // Modal functions
+  const [isModalOpen, setIsModalOpen] = useState(false)
 
+  const showModal = () => {
+    setIsModalOpen(true)
+  }
 
-    // Modal functions
-    const [isModalOpen, setIsModalOpen] = useState(false)
+  const handleOk = () => {
+    setIsModalOpen(false)
+  }
 
-    const showModal = () => {
-      setIsModalOpen(true)
+  const handleCancel = () => {
+    form.resetFields()
+    setIsModalOpen(false)
+  }
+  // Modal functions end
+  const deleteData = async (element: any) => {
+    try {
+      const response = await axios.delete(`${ENP_URL}/services/${element.id}`)
+      // update the local state so that react can refecth and re-render the table with the new data
+      const newData = gridData.filter((item: any) => item.id !== element.id)
+      setGridData(newData)
+      return response.status
+    } catch (e) {
+      return e
     }
-  
-    const handleOk = () => {
-      setIsModalOpen(false)
-    }
-  
-    const handleCancel = () => {
-      setIsModalOpen(false)
-    }
-    // Modal functions end
+  }
 
-    const columns: any =[
+  function handleDelete(element: any) {
+    deleteData(element)
+  }
 
-    
+  const columns: any = [
     {
       title: 'Model',
       dataIndex: 'modelID',
@@ -67,60 +74,33 @@ const ServicesPage = () => {
     },
     {
       title: 'Action',
-      
+
       // dataIndex: 'faultDesc',
       // sorter: (a: any, b: any) => a.faultDesc - b.faultDesc,
       fixed: 'right',
       width: 100,
-      render: (_: any, record: any ) => (
-        <Space size="middle">
+      render: (_: any, record: any) => (
+        <Space size='middle'>
           {/* <a href="sections" className="btn btn-light-info btn-sm">Sections</a> */}
-          <Link to={'/setup/sections'}>
-          <span  className="btn btn-light-info btn-sm">
-          Sections
-            </span></Link>
-          <a href="#" className="btn btn-light-warning btn-sm">Update</a>
-          <a href="#" className="btn btn-light-danger btn-sm">Delete</a>
+          <Link to={`/setup/sections/${record.id}`}>
+            <span className='btn btn-light-info btn-sm'>Sections</span>
+          </Link>
+          <a href='#' className='btn btn-light-warning btn-sm'>
+            Update
+          </a>
+          <a onClick={() => handleDelete(record)} className='btn btn-light-danger btn-sm'>
+            Delete
+          </a>
           {/* <a>Edit </a> */}
         </Space>
       ),
     },
-    //console
-      
-    
-    
   ]
-
-  const dataSource: any = [
-    {
-      model: "PM-A",
-      service: "Service PM-A"
-    },
-    {
-      model: "PM-A",
-      service: "Service PM-B"
-    },
-    {
-      model: "PM-A",
-      service: "Service PM-C"
-    },
-    {
-      model: "PM-A",
-      service: "Service PM-D"
-    },
-  
-    {
-      model: "PM-A",
-      service: "Service PM-E"
-    },
-  
-  ]
-
   const loadData = async () => {
     setLoading(true)
     try {
       // const response = await axios.get('https://cors-anywhere.herokuapp.com/http://208.117.44.15/SmWebApi/api/VmfaltsApi')
-      const response = await axios.get('http://localhost:4192/services')
+      const response = await axios.get(`${ENP_URL}/services`)
       setGridData(response.data)
       // setGridData(dataSource)
       setLoading(false)
@@ -155,51 +135,122 @@ const ServicesPage = () => {
     })
     setGridData(filteredData)
   }
+  const url = `${ENP_URL}/services`
+  const onFinish = async (values: any) => {
+    setSubmitLoading(true)
+    const data = {
+      name: values.name,
+      modelID: values.modelID,
+      status: values.status,
+    }
+
+    try {
+      const response = await axios.post(url, data)
+      setSubmitLoading(false)
+      form.resetFields()
+      setIsModalOpen(false)
+      loadData()
+      return response.statusText
+    } catch (error: any) {
+      setSubmitLoading(false)
+      return error.statusText
+    }
+  }
 
   return (
-    <div style={{backgroundColor:'white', padding:'20px', borderRadius:'5px', boxShadow:'2px 2px 15px rgba(0,0,0,0.08)'}}>
+    <div
+      style={{
+        backgroundColor: 'white',
+        padding: '20px',
+        borderRadius: '5px',
+        boxShadow: '2px 2px 15px rgba(0,0,0,0.08)',
+      }}
+    >
       <KTCardBody className='py-4 '>
         <div className='table-responsive'>
-            <a href='work-type'  className='mb-3 btn btn-outline btn-outline-dashed btn-outline-primary btn-active-light-primary'>
-             Back to Models
-            </a>
-        <div className='d-flex justify-content-between'>
-          <Space style={{marginBottom: 16}}>
-            <Input
-              
-              placeholder='Enter Search Text'
-              onChange={handleInputChange}
-              type='text'
-              allowClear
-              value={searchText}
-            />
-            <Button type='primary' onClick={globalSearch}>
-              Search
-            </Button>
-          </Space>
-          <Space style={{marginBottom: 16}}>
-          
-            <button type='button' className='btn btn-primary me-3' onClick={showModal}>
-              <KTSVG path='/media/icons/duotune/arrows/arr075.svg' className='svg-icon-2' />
-              Add
-            </button>
-            <button type='button' className='btn btn-light-primary me-3'>
-              <KTSVG path='/media/icons/duotune/arrows/arr078.svg' className='svg-icon-2' />
-              Upload
-            </button>
-            <button type='button' className='btn btn-light-primary me-3'>
-              <KTSVG path='/media/icons/duotune/arrows/arr078.svg' className='svg-icon-2' />
-              
-              Export
-            </button>
-            
-          </Space>
+          <a
+            href='work-type'
+            className='mb-3 btn btn-outline btn-outline-dashed btn-outline-primary btn-active-light-primary'
+          >
+            Back to Models
+          </a>
+          <div className='d-flex justify-content-between'>
+            <Space style={{marginBottom: 16}}>
+              <Input
+                placeholder='Enter Search Text'
+                onChange={handleInputChange}
+                type='text'
+                allowClear
+                value={searchText}
+              />
+              <Button type='primary' onClick={globalSearch}>
+                Search
+              </Button>
+            </Space>
+            <Space style={{marginBottom: 16}}>
+              <button type='button' className='btn btn-primary me-3' onClick={showModal}>
+                <KTSVG path='/media/icons/duotune/arrows/arr075.svg' className='svg-icon-2' />
+                Add
+              </button>
+              <button type='button' className='btn btn-light-primary me-3'>
+                <KTSVG path='/media/icons/duotune/arrows/arr078.svg' className='svg-icon-2' />
+                Upload
+              </button>
+              <button type='button' className='btn btn-light-primary me-3'>
+                <KTSVG path='/media/icons/duotune/arrows/arr078.svg' className='svg-icon-2' />
+                Export
+              </button>
+            </Space>
+          </div>
+          <Table columns={columns} dataSource={dataWithVehicleNum} />
+          <Modal
+            title='Add Service'
+            open={isModalOpen}
+            onOk={handleOk}
+            onCancel={handleCancel}
+            footer={[
+              <Button key='back' onClick={handleCancel}>
+                Cancel
+              </Button>,
+              <Button
+                key='submit'
+                type='primary'
+                htmlType='submit'
+                loading={submitLoading}
+                onClick={() => {
+                  // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+                  form.submit()
+                }}
+              >
+                Submit
+              </Button>,
+            ]}
+          >
+            {/* <AddServiceForm /> */}
+            <Form
+              labelCol={{span: 7}}
+              wrapperCol={{span: 14}}
+              layout='horizontal'
+              form={form}
+              name='control-hooks'
+              title='Add Service'
+              onFinish={onFinish}
+            >
+              <Form.Item label='Name' name='name' rules={[{required: true}]}>
+                <Input />
+              </Form.Item>
+              <Form.Item label='Model' name='modelID'>
+                <Input />
+              </Form.Item>
+              <Form.Item label='Status' name='status' rules={[{required: true}]}>
+                <Radio.Group>
+                  <Radio value={1}>Active</Radio>
+                  <Radio value={2}>InActive</Radio>
+                </Radio.Group>
+              </Form.Item>
+            </Form>
+          </Modal>
         </div>
-        <Table columns={columns} dataSource={dataWithVehicleNum} loading={loading}/>
-          <Modal title='Add Service' open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
-        <AddServiceForm />
-      </Modal>
-      </div>
       </KTCardBody>
     </div>
   )
@@ -207,3 +258,6 @@ const ServicesPage = () => {
 
 export {ServicesPage}
 
+function uuidv4() {
+  throw new Error('Function not implemented.')
+}

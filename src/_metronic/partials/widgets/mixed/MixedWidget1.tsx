@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React from 'react'
-import {Dropdown1} from '../../content/dropdown/Dropdown1'
-import {KTSVG} from '../../../helpers'
+import React from "react";
+import { Dropdown1 } from "../../content/dropdown/Dropdown1";
+import { KTSVG } from "../../../helpers";
 
 type Props = {
   className: string

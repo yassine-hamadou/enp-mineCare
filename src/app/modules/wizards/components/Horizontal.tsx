@@ -1,13 +1,13 @@
-import React, {FC, useEffect, useRef, useState} from 'react'
-import {Step1} from './steps/Step1'
-import {Step2} from './steps/Step2'
-import {Step3} from './steps/Step3'
-import {Step4} from './steps/Step4'
-import {Step5} from './steps/Step5'
-import {KTSVG} from '../../../../_metronic/helpers'
-import {StepperComponent} from '../../../../_metronic/assets/ts/components'
-import {Formik, Form, FormikValues} from 'formik'
-import {createAccountSchemas, ICreateAccount, inits} from './CreateAccountWizardHelper'
+import React, { FC, useEffect, useRef, useState } from "react";
+import { Step1 } from "./steps/Step1";
+import { Step2 } from "./steps/Step2";
+import { Step3 } from "./steps/Step3";
+import { Step4 } from "./steps/Step4";
+import { Step5 } from "./steps/Step5";
+import { KTSVG } from "../../../../_metronic/helpers";
+import { StepperComponent } from "../../../../_metronic/assets/ts/components";
+import { Form, Formik, FormikValues } from "formik";
+import { createAccountSchemas, ICreateAccount, inits } from "./CreateAccountWizardHelper";
 
 const Horizontal: FC = () => {
   const stepperRef = useRef<HTMLDivElement | null>(null)

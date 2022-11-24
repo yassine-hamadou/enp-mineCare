@@ -17,6 +17,7 @@
         "@mui/material": "^5.10.13",
         "@popperjs/core": "2.11.5",
         "@syncfusion/ej2-base": "^20.3.56",
+        "@syncfusion/ej2-react-buttons": "^20.3.57",
         "@syncfusion/ej2-react-calendars": "^20.3.50",
         "@syncfusion/ej2-react-dropdowns": "^20.3.50",
         "@syncfusion/ej2-react-schedule": "^20.3.49",
@@ -81,7 +82,9 @@
         "lint": "prettier --check .",
         "format": "prettier --write .",
         "rtl": "webpack --config webpack-rtl.config.js",
-        "server": "json-server --watch dba.json --port 3001 --delay 1000 --id 'entryId'"
+        "server": "json-server --watch dba.json --port 3001 --delay 1000 --id 'entryId'",
+        "server2": "json-server --watch Vmeqpus.json --port 3002 --delay 1000 --id 'fleetId'",
+        "server3": "json-server --watch db.json --port 4192 --delay 1000 --id 'id'"
     },
     "eslintConfig": {
         "extends": [

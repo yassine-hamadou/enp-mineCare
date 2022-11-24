@@ -1,6 +1,6 @@
-import {createContext, Dispatch, SetStateAction, useEffect, useState} from 'react'
-import qs from 'qs'
-import {ID, QueryResponseContextProps, QueryState} from './models'
+import { createContext, Dispatch, SetStateAction, useEffect, useState } from "react";
+import qs from "qs";
+import { ID, QueryResponseContextProps, QueryState } from "./models";
 
 function createResponseContext<T>(initialState: QueryResponseContextProps<T>) {
   return createContext(initialState)
