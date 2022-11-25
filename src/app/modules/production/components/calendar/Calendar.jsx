@@ -8,21 +8,28 @@ import {
   Agenda,
   Inject,
 } from '@syncfusion/ej2-react-schedule'
-import axios from 'axios'
 import {DateTimePickerComponent} from '@syncfusion/ej2-react-calendars'
 import {DropDownListComponent} from '@syncfusion/ej2-react-dropdowns'
-import {ENP_URL} from '../../../../urls'
 import {useMutation, useQuery, useQueryClient} from 'react-query'
-require('@syncfusion/ej2-base/styles/material.css')
-require('@syncfusion/ej2-calendars/styles/material.css')
-require('@syncfusion/ej2-dropdowns/styles/material.css')
-require('@syncfusion/ej2-inputs/styles/material.css')
-require('@syncfusion/ej2-lists/styles/material.css')
-require('@syncfusion/ej2-navigations/styles/material.css')
-require('@syncfusion/ej2-popups/styles/material.css')
-require('@syncfusion/ej2-splitbuttons/styles/material.css')
-require('@syncfusion/ej2-react-schedule/styles/material.css')
-require('@syncfusion/ej2-buttons/styles/material.css')
+import '@syncfusion/ej2-base/styles/material.css'
+import '@syncfusion/ej2-calendars/styles/material.css'
+import '@syncfusion/ej2-dropdowns/styles/material.css'
+import '@syncfusion/ej2-inputs/styles/material.css'
+import '@syncfusion/ej2-lists/styles/material.css'
+import '@syncfusion/ej2-navigations/styles/material.css'
+import '@syncfusion/ej2-popups/styles/material.css'
+import '@syncfusion/ej2-splitbuttons/styles/material.css'
+import '@syncfusion/ej2-react-schedule/styles/material.css'
+import '@syncfusion/ej2-buttons/styles/material.css'
+import {
+  addSchedule,
+  deleteSchedule,
+  fetchCustodians,
+  fetchSchedules,
+  fetchVmequps,
+  localData,
+  updateSchedule,
+} from './requests'
 
 /**
  *  Schedule editor custom fields sample
@@ -44,49 +51,6 @@ const Calendar = () => {
   let scheduleObj
   let scheduleQueryClient = useQueryClient()
 
-  // Functions to perform CRUD operations
-  const fetchSchedules = () => {
-    return axios.get(`${ENP_URL}/FleetSchedulesApi`)
-  }
-  const fetchVmequps = () => {
-    return axios.get(`${ENP_URL}/VmequpsApi`)
-  }
-  const fetchLocations = () => {
-    return axios.get(`${ENP_URL}/IclocsApi`)
-  }
-  const fetchCustodians = () => {
-    return axios.get(`${ENP_URL}/VmemplsApi`)
-  }
-
-  //Add
-  const addSchedule = (schedule) => {
-    return axios.post(`${ENP_URL}/FleetSchedulesApi`, schedule)
-  }
-
-  //delete
-  const deleteSchedule = (schedule) => {
-    return axios.delete(`${ENP_URL}/FleetSchedulesApi/${schedule.entryId}`)
-  }
-
-  //update
-  const updateSchedule = (schedule) => {
-    return axios.put(`${ENP_URL}/FleetSchedulesApi/${schedule.entryId}`, schedule)
-  }
-
-  //Object to inject in the Calendar
-  const localData = (dataFromApi) => {
-    return {
-      dataSource: dataFromApi,
-      fields: {
-        id: 'entryId',
-        subject: {name: 'fleetId', default: 'No Fleet ID'},
-        location: {name: 'locationId'},
-        startTime: {name: 'timeStart'},
-        endTime: {name: 'timeEnd'},
-      },
-    }
-  }
-
   // React Query
   //Get
   const {data: schedulesData} = useQuery('schedules', fetchSchedules, {
@@ -94,10 +58,6 @@ const Calendar = () => {
     staleTime: 300000,
   })
   const {data: vmequps} = useQuery('vmequps', fetchVmequps, {
-    refetchOnWindowFocus: false,
-    staleTime: Infinity,
-  })
-  const {data: locationsData} = useQuery('locations', fetchLocations, {
     refetchOnWindowFocus: false,
     staleTime: Infinity,
   })
@@ -125,12 +85,40 @@ const Calendar = () => {
     },
   })
 
-  // function onActionBegin(args) {
-  //     if (args.requestType === 'eventCreate' || args.requestType === 'eventChange') {
-  //         let data = args.data instanceof Array ? args.data[0] : args.data;
-  //         args.cancel = !scheduleObj.isSlotAvailable(data.StartTime, data.EndTime);
-  //     }
-  // }
+  //Access the same location query from cycledetails component
+  const locationQuery = useQueryClient().getQueryData('Locations')
+
+  function onEventRendered(args) {
+    let categoryColor = {
+      location1: '#1aaa55',
+      location2: '#357cd2',
+      location3: '#7fa900',
+      location4: '#ea7a57',
+      location5: '#00bdae',
+      location6: '#f57f17',
+      location7: '#8e24aa',
+    }
+    if (!args.element || !args.data) {
+      return
+    }
+    if (args.data.locationId === 'GOLD  ') {
+      args.element.style.backgroundColor = categoryColor.location7
+    } else if (args.data.locationId === 'CRUSH ') {
+      args.element.style.backgroundColor = categoryColor.location1
+    } else if (args.data.locationId === 'UNDER ') {
+      args.element.style.backgroundColor = categoryColor.location2
+    } else if (args.data.locationId === 'DRILL ') {
+      args.element.style.backgroundColor = categoryColor.location3
+    } else if (args.data.locationId === 'WELD ') {
+      args.element.style.backgroundColor = categoryColor.location4
+    }
+
+    // if (scheduleObj.currentView === 'Agenda') {
+    //   args.element.firstChild.style.borderLeftColor = categoryColor.location7
+    // } else {
+    //   args.element.style.backgroundColor = categoryColor
+    // }
+  }
   function editorTemplate(props) {
     console.log('props in editorTemmplate', props)
     console.log(scheduleObj)
@@ -165,7 +153,7 @@ const Calendar = () => {
                 data-name='locationId'
                 className='e-field'
                 style={{width: '100%'}}
-                dataSource={locationsData?.data.map((location) => {
+                dataSource={locationQuery?.data.map((location) => {
                   return {
                     text: `${location.locationCode} - ${location.locationDesc}`,
                     value: `${location.locationCode}`,
@@ -363,8 +351,9 @@ const Calendar = () => {
             height='650px'
             ref={(schedule) => (scheduleObj = schedule)}
             eventSettings={schedulesData && localData(schedulesData.data)}
-            editorTemplate={editorTemplate.bind(this)}
-            actionBegin={onActionBegin.bind(this)}
+            eventRendered={onEventRendered}
+            editorTemplate={editorTemplate}
+            actionBegin={onActionBegin}
             // id='schedule'
             // quickInfoTemplates={{
             //     header: headerTemplate.bind(this),

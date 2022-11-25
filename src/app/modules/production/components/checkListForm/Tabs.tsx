@@ -8,19 +8,19 @@ import { CheckListForm5 } from "./CheckListForm5";
 const tabList = [
   {
     key: 'tab1',
-    tab: String('Section 1').toUpperCase(),
+    tab: String("Section '1' - ENGINE").toUpperCase(),
   },
   {
     key: 'tab2',
-    tab: String('Section 2').toUpperCase(),
+    tab: String("Section '2' - TRANSMISSION/HYDRAULIC/AXLES").toUpperCase(),
   },
   {
     key: 'tab3',
-    tab: String('Section 3').toUpperCase(),
+    tab: String("Section '3' - BODY/FRAME").toUpperCase(),
   },
   {
     key: 'tab4',
-    tab: String('Section 5').toUpperCase(),
+    tab: String("SECTION '5' - OPERATION/CAP").toUpperCase(),
   },
 //   {
 //     key: 'tab5',
