@@ -257,6 +257,32 @@ const LubePage = () => {
         return 0
       },
     },
+    {
+      title: 'Brand',
+      dataIndex: 'brand',
+      sorter: (a: any, b: any) => {
+        if (a.brand > b.brand) {
+          return 1
+        }
+        if (b.brand > a.brand) {
+          return -1
+        }
+        return 0
+      },
+    },
+    {
+      title: 'Grade',
+      dataIndex: 'Grade',
+      sorter: (a: any, b: any) => {
+        if (a.Grade > b.Grade) {
+          return 1
+        }
+        if (b.Grade > a.Grade) {
+          return -1
+        }
+        return 0
+      },
+    },
     
     {
       title: 'Change Out Interval',
@@ -488,7 +514,7 @@ const LubePage = () => {
           </Space>
         </div>
         <Table columns={columns} dataSource={dataWithVehicleNum} />
-          <Modal title='Add Lube' open={isModalOpen} onOk={handleOk} onCancel={handleCancel} 
+          <Modal title='Lube Entry' open={isModalOpen} onOk={handleOk} onCancel={handleCancel} 
           footer={[
             <Button key='back' onClick={handleCancel}>
                         Cancel
@@ -513,7 +539,7 @@ const LubePage = () => {
           layout='horizontal' 
           form={form}
           name='control-hooks' 
-          title='Add Service' 
+          // title='Add Service' 
           onFinish={onFinish}>
        
         <Form.Item label='FleetId' name="fleetId">
@@ -614,6 +640,56 @@ const LubePage = () => {
             value: 'PM Refill',
             label: 'Refill',
           },
+          
+        ]}
+        />
+        </Form.Item>
+      <Form.Item label='Brand' name="refilType">
+        <Select 
+        showSearch 
+        placeholder="Search to Select"
+        optionFilterProp="children"
+        filterOption={(input, option) => (option?.label ?? '').includes(input)}
+        filterSort={(optionA, optionB) =>
+          (optionA?.label ?? '').toLowerCase().localeCompare((optionB?.label ?? '').toLowerCase())
+        }
+        options={[
+          
+          {
+            value: '5',
+            label: 'PM Refill',
+          },
+          
+          {
+            value: 'PM Refill',
+            label: 'Refill',
+          },
+          
+        ]}
+        />
+        </Form.Item>
+      <Form.Item label='Grade' name="refilType">
+        <Select 
+        showSearch 
+        placeholder="Search to Select"
+        optionFilterProp="children"
+        filterOption={(input, option) => (option?.label ?? '').includes(input)}
+        filterSort={(optionA, optionB) =>
+          (optionA?.label ?? '').toLowerCase().localeCompare((optionB?.label ?? '').toLowerCase())
+        }
+        options={[
+          {
+            value: 'Top Up - Normal',
+            label: 'Top Up - Normal',
+          },
+          {
+            value: 'Top Up - Hose Burst',
+            label: 'Top Up - Hose Burst',
+          },
+          {
+            value: 'Component C/O',
+            label: 'Component C/O',
+          }
           
         ]}
         />

@@ -290,7 +290,7 @@ const OilGradePage = () => {
           </Space>
         </div>
         <Table columns={columns} dataSource={Oilgrade} />
-          <Modal title='Add Oil Grade' open={isModalOpen} onOk={handleOk} onCancel={handleCancel} 
+          <Modal title='Add Lube Grade' open={isModalOpen} onOk={handleOk} onCancel={handleCancel} 
           footer={[
             <Button key='back' onClick={handleCancel}>
                         Cancel
