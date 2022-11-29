@@ -54,6 +54,7 @@ const FaultTable = () => {
   const [selectedRowForSolve, setSelectedRowForSolve] = useState<any>()
   const [loading, setLoading] = useState(true)
   const [submitLoading, setSubmitLoading] = useState(false)
+  const [submitSolveLoading, setSubmitSolveLoading] = useState(false)
   const [submitDefectLoading, setSubmitDefectLoading] = useState(false)
 
   const handleInputChange = (e: any) => {
@@ -188,6 +189,11 @@ const FaultTable = () => {
                   dtime: record.duration,
                 })
                 handleSolve(record)
+
+                //set the defect fleet id to the selected row
+                formDefect.setFieldsValue({
+                  fleetId: record.fleetId,
+                })
               }}
             >
               Solve
@@ -217,8 +223,7 @@ const FaultTable = () => {
 
   function handleSolve(record: any) {
     showModalSolve()
-    setSelectedRowForSolve(record)
-    console.log('record in handle solve', selectedRowForSolve)
+    // setSelectedRowForSolve(record)
   }
 
   function handleDefect(record: any) {
@@ -253,7 +258,7 @@ const FaultTable = () => {
     }
   }
   const onSolveFinish = async (values: any) => {
-    setSubmitLoading(true)
+    setSubmitSolveLoading(true)
     const data = {
       fleetId: values.fleetId,
       vmModel: values.model,
@@ -266,9 +271,9 @@ const FaultTable = () => {
     const dataWithId = {...data, entryId: uuidv4()}
     try {
       // const response = await axios.post(url, dataWithId)
-      // setSubmitLoading(false)
-      // form.resetFields()
-      // setIsModalOpen(false)
+      setSubmitSolveLoading(false)
+      form.resetFields()
+      setIsSolveModalOpen(false)
       // loadData()
       // return response.statusText
     } catch (error: any) {
@@ -291,8 +296,8 @@ const FaultTable = () => {
     try {
       // const response = await axios.post(url, dataWithId)
       // setSubmitDefectLoading(false)
-      // formDefect.resetFields()
-      // setIsDefectModalOpen(false)
+      formDefect.resetFields()
+      setIsDefectModalOpen(false)
       // return response.statusText
     } catch (error: any) {
       // setSubmitDefectLoading(false)
@@ -376,7 +381,6 @@ const FaultTable = () => {
         : null
     )
   }
-  console.log('selectedRowForSolve', selectedRowForSolve)
   return (
     <div
       style={{
@@ -458,10 +462,10 @@ const FaultTable = () => {
             </Select>
           </Form.Item>
           <Form.Item name='model' label='Model'>
-            <Input readOnly />
+            <Input disabled />
           </Form.Item>
           <Form.Item name='desc' label='Description'>
-            <Input readOnly />
+            <Input disabled />
           </Form.Item>
           <Form.Item name='hours' label='Fleet Hours' rules={[{required: true}]}>
             <InputNumber min={1} />
@@ -530,22 +534,26 @@ const FaultTable = () => {
         onCancel={handleSolveCancel}
         closable={true}
         footer={[
-          <Button onClick={showModalDefect}>Defect</Button>,
-          <Button key='back' onClick={handleSolveCancel}>
-            Cancel
-          </Button>,
-          <Button
-            key='submit'
-            type='primary'
-            htmlType='submit'
-            loading={submitLoading}
-            onClick={() => {
-              // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-              formSolve.submit()
-            }}
-          >
-            Solve
-          </Button>,
+          <Space style={{display: 'flex', justifyContent: 'space-between'}}>
+            <Button onClick={showModalDefect}>Defect</Button>
+            <Space>
+              <Button key='back' onClick={handleSolveCancel}>
+                Cancel
+              </Button>
+              <Button
+                key='submit'
+                type='primary'
+                htmlType='submit'
+                loading={submitSolveLoading}
+                onClick={() => {
+                  // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+                  formSolve.submit()
+                }}
+              >
+                Solve
+              </Button>
+            </Space>
+          </Space>,
         ]}
       >
         <Form
@@ -557,20 +565,35 @@ const FaultTable = () => {
           onFinish={onSolveFinish}
         >
           <Form.Item name='fleetId' label='fleetID' rules={[{required: true}]}>
-            <Input readOnly />
+            <Input disabled />
           </Form.Item>
           <Form.Item name='model' label='Model'>
-            <Input readOnly />
+            <Input disabled />
           </Form.Item>
           <Form.Item name='desc' label='Description'>
-            <Input readOnly />
+            <Input disabled />
           </Form.Item>
 
           <Form.Item name='dType' label='Down Type' rules={[{required: true}]}>
-            <Input readOnly />
+            <Input disabled />
           </Form.Item>
           <Form.Item name='dtime' label='Duration' rules={[{required: true}]}>
-            <Input readOnly />
+            <Input disabled />
+          </Form.Item>
+          <Form.Item label='Custodian' name='custodian' rules={[{required: true}]}>
+            <Input disabled />
+          </Form.Item>
+          <Form.Item label='Location' name='location' rules={[{required: true}]}>
+            <Input disabled />
+          </Form.Item>
+          <Form.Item name='Work Type' label='Work Type' rules={[{required: true}]}>
+            <Select placeholder='Work Type'>
+              <Option value={'Scheduled'}>Scheduled</Option>
+              <Option value={'Unscheduled'}>Unscheduled</Option>
+              <Option value={'Operational'}>Operational</Option>
+              <Option value={'Damages'}>Damages</Option>
+              <Option value={'Warranty'}>Warranty</Option>
+            </Select>
           </Form.Item>
           <Form.Item name='dstatus' label='Down Status' rules={[{required: true}]}>
             <Select placeholder='Select Down Status'>
@@ -580,12 +603,6 @@ const FaultTable = () => {
               <Option value={'completed'}>Completed</Option>
               <Option value={'others'}>Others</Option>
             </Select>
-          </Form.Item>
-          <Form.Item label='Custodian' name='custodian' rules={[{required: true}]}>
-            <Input readOnly />
-          </Form.Item>
-          <Form.Item label='Location' name='location' rules={[{required: true}]}>
-            <Input readOnly />
           </Form.Item>
           <Form.Item name='comment' label='Comment' rules={[{required: true}]}>
             <TextArea />
@@ -632,14 +649,8 @@ const FaultTable = () => {
           title='Defect'
           onFinish={onDefectFinish}
         >
-          <Form.Item name='Fleet ID' label='Fleet ID' rules={[{required: true}]}>
-            <Select placeholder='Select a fleetID'>
-              {dataSource.map((item: any) => (
-                <Option key={item.fleetID} value={item.fleetID}>
-                  {item.fleetID} - {item.modlName} - {item.modlClass}
-                </Option>
-              ))}
-            </Select>
+          <Form.Item name='fleetId' label='Fleet ID' rules={[{required: true}]}>
+            <Input disabled />
           </Form.Item>
           <Form.Item name='Defect Date' label='Expected Date' rules={[{required: true}]}>
             <DatePicker showTime />

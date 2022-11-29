@@ -1,26 +1,18 @@
-import { KTCard, KTCardBody, KTSVG } from "../../../../../../_metronic/helpers";
-import { useEffect, useState } from "react";
-import axios from "axios";
-import { DropDownListComponent } from "@syncfusion/ej2-react-dropdowns";
-import { Calendar } from "../../calendar/Calendar";
-import { Space } from "antd";
-import { useNavigate } from "react-router-dom";
-import { ENP_URL } from "../../../../../urls";
+import {KTCard, KTCardBody, KTSVG} from '../../../../../../_metronic/helpers'
+import axios from 'axios'
+import {DropDownListComponent} from '@syncfusion/ej2-react-dropdowns'
+import {Calendar} from '../../calendar/Calendar'
+import {Space} from 'antd'
+import {useNavigate} from 'react-router-dom'
+import {ENP_URL} from '../../../../../urls'
+import {useQuery} from 'react-query'
 
 const EquipmentDetail = () => {
-  const [vehicle, setVehicle] = useState([])
-  const [loading, setLoading] = useState(false)
   const navigate = useNavigate()
-  const loadData = async () => {
-    setLoading(true)
-    const response = await axios.get(`${ENP_URL}/VmclasApi`)
-    setVehicle(response.data)
-    setLoading(false)
-  }
-
-  useEffect(() => {
-    loadData()
-  }, [])
+  const {data: locations} = useQuery('Locations', () => axios.get(`${ENP_URL}/IclocsApi`), {
+    refetchOnWindowFocus: false,
+    staleTime: Infinity,
+  })
 
   return (
     <>
@@ -30,13 +22,26 @@ const EquipmentDetail = () => {
             id='dropdownlist'
             placeholder='Equipment Type'
             data-name='equips'
-            dataSource={vehicle.map((vehi: any) => {
-              return {text: `${vehi.classCode}- ${vehi.classDesc}`, value: `${vehi.classCode}`}
+            dataSource={locations?.data.map((location: any) => {
+              return {
+                text: `${location.locationCode}- ${location.locationDesc}`,
+                value: `${location.locationCode}`,
+              }
             })}
             fields={{text: 'text', value: 'value'}}
           />
         </Space>
         <Space style={{marginBottom: 0}}>
+          <button
+            type='button'
+            className='btn btn-primary me-3'
+            onClick={() => {
+              navigate('/entries/start-work')
+            }}
+          >
+            <KTSVG path='/media/icons/duotune/arrows/arr078.svg' className='svg-icon-2' />
+            Upload
+          </button>
           <button
             type='button'
             className='btn btn-primary me-3'
