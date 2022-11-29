@@ -161,7 +161,7 @@ const ProductionPage: React.FC = () => {
           path='oilgrade'
           element={
             <>
-              <PageTitle breadcrumbs={accountBreadCrumbs}>All Oil Grade</PageTitle>
+              <PageTitle breadcrumbs={accountBreadCrumbs}>All Lube Grade</PageTitle>
               {/*<Overview />*/}
               <OilGradePage />
             </>
@@ -171,7 +171,7 @@ const ProductionPage: React.FC = () => {
           path='oiltype'
           element={
             <>
-              <PageTitle breadcrumbs={accountBreadCrumbs}>All Oil Type</PageTitle>
+              <PageTitle breadcrumbs={accountBreadCrumbs}>All Lube Type</PageTitle>
               {/*<Overview />*/}
               <OilTypePage />
             </>

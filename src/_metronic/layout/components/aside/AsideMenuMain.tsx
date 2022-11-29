@@ -81,8 +81,8 @@ export function AsideMenuMain() {
         hasBullet={true}
         >
           <AsideMenuItem to='/setup/compartment' title='Compartment' hasBullet={true}/>
-          <AsideMenuItem to='/setup/oiltype' title='Oil Brand' hasBullet={true} />
-          <AsideMenuItem to='/setup/oilgrade' title='Oil Grade' hasBullet={true} />
+          <AsideMenuItem to='/setup/oiltype' title='Brand' hasBullet={true} />
+          <AsideMenuItem to='/setup/oilgrade' title='Grade' hasBullet={true} />
           <AsideMenuItem to='/setup/refill' title='Refill Type'hasBullet={true}/>
         </AsideMenuItemWithSub>
       </AsideMenuItemWithSub>
