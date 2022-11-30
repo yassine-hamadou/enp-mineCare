@@ -230,7 +230,6 @@ const FaultTable = () => {
 
   function handleSolve(record: any) {
     showModalSolve()
-    // setSelectedRowForSolve(record)
   }
 
   function handleDefect(record: any) {
@@ -238,7 +237,6 @@ const FaultTable = () => {
   }
 
   // {/* Start Elements to Post */}
-  // const url = `{ENP_URL}/FaultEntriesApi'
   const url = `${ENP_URL}/FaultEntriesApi`
   const onFinish = async (values: any) => {
     setSubmitLoading(true)
@@ -604,8 +602,8 @@ const FaultTable = () => {
           <Form.Item label='Location' name='location'>
             <Input disabled />
           </Form.Item>
-          <Form.Item name='Work Type' label='Work Type' rules={[{required: true}]}>
-            <Select placeholder='Work Type'>
+          <Form.Item name='Resolution Type' label='Resolution Type' rules={[{required: true}]}>
+            <Select placeholder='Resolution Type'>
               <Option value={'Scheduled'}>Scheduled</Option>
               <Option value={'Unscheduled'}>Unscheduled</Option>
               <Option value={'Operational'}>Operational</Option>
