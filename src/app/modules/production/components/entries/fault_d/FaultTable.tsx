@@ -55,7 +55,7 @@ const FaultTable = () => {
   const [submitLoading, setSubmitLoading] = useState(false)
   const [submitSolveLoading, setSubmitSolveLoading] = useState(false)
   const [submitDefectLoading, setSubmitDefectLoading] = useState(false)
-
+  const [isHovering, setIsHovering] = useState(false)
   const handleInputChange = (e: any) => {
     setSearchText(e.target.value)
     if (e.target.value === '') {
@@ -73,6 +73,14 @@ const FaultTable = () => {
   }
   const showModalDefect = () => {
     setIsDefectModalOpen(true)
+  }
+
+  const ApplyHover = () => {
+    setIsHovering(true)
+  }
+
+  const RemoveHover = () => {
+    setIsHovering(false)
   }
   // Modal functions end
   const loadData = async () => {
@@ -534,7 +542,18 @@ const FaultTable = () => {
         closable={true}
         footer={[
           <Space style={{display: 'flex', justifyContent: 'space-between'}}>
-            <Button onClick={showModalDefect}>Defect</Button>
+            <Button
+              onClick={showModalDefect}
+              type='dashed'
+              style={{
+                border: isHovering ? '1px solid orange' : '1px dashed orange',
+                color: isHovering ? 'orange' : 'black',
+              }}
+              onMouseEnter={ApplyHover}
+              onMouseLeave={RemoveHover}
+            >
+              Defect
+            </Button>
             <Space>
               <Button key='back' onClick={handleSolveCancel}>
                 Cancel
@@ -563,7 +582,7 @@ const FaultTable = () => {
           title='Solve'
           onFinish={onSolveFinish}
         >
-          <Form.Item name='fleetId' label='fleetID' rules={[{required: true}]}>
+          <Form.Item name='fleetId' label='fleetID'>
             <Input disabled />
           </Form.Item>
           <Form.Item name='model' label='Model'>
@@ -573,16 +592,16 @@ const FaultTable = () => {
             <Input disabled />
           </Form.Item>
 
-          <Form.Item name='dType' label='Down Type' rules={[{required: true}]}>
+          <Form.Item name='dType' label='Down Type'>
             <Input disabled />
           </Form.Item>
-          <Form.Item name='dtime' label='Duration' rules={[{required: true}]}>
+          <Form.Item name='dtime' label='Duration'>
             <Input disabled />
           </Form.Item>
-          <Form.Item label='Custodian' name='custodian' rules={[{required: true}]}>
+          <Form.Item label='Custodian' name='custodian'>
             <Input disabled />
           </Form.Item>
-          <Form.Item label='Location' name='location' rules={[{required: true}]}>
+          <Form.Item label='Location' name='location'>
             <Input disabled />
           </Form.Item>
           <Form.Item name='Work Type' label='Work Type' rules={[{required: true}]}>
