@@ -22,7 +22,7 @@
         "@syncfusion/ej2-react-dropdowns": "^20.3.50",
         "@syncfusion/ej2-react-schedule": "^20.3.49",
         "animate.css": "4.1.1",
-        "antd": "^4.23.6",
+        "antd": "^5.0.2",
         "apexcharts": "3.35.0",
         "axios": "0.26.1",
         "bootstrap": "5.2.0-beta1",
