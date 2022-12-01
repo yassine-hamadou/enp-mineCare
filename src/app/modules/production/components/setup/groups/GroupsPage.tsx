@@ -1,16 +1,23 @@
-import { Button, Input, Modal, Space, Table } from "antd";
+import { Button, Form, Input, Modal, Select, Space, Table } from "antd";
 import { useEffect, useState } from "react";
 import { KTCardBody, KTSVG } from "../../../../../../_metronic/helpers";
 import { AddGroupsForm } from "./AddGroupForm";
 import { Link } from "react-router-dom";
+import axios from "axios";
+import { ENP_URL } from "../../../../../urls";
 
 
 const GroupsPage = () => {
   const [gridData, setGridData] = useState([])
+  const [sectionData, setSectionData] = useState([])
   const [loading, setLoading] = useState(false)
   const [searchText, setSearchText] = useState('')
   let [filteredData] = useState([])
+  const [form] = Form.useForm()
+  const [submitLoading, setSubmitLoading] = useState(false)
 
+
+  const {Option} = Select
 
 
     // Modal functions
@@ -136,9 +143,21 @@ const GroupsPage = () => {
       console.log(error)
     }
   }
+  const loadSection = async () => {
+    setLoading(true)
+    try {
+    
+      const response = await axios.get(`${ENP_URL}/Sections`)
+      setSectionData(response.data)
+      setLoading(false)
+    } catch (error) {
+      console.log(error)
+    }
+  }
 
   useEffect(() => {
     loadData()
+    loadSection()
   }, [])
 
   const dataWithVehicleNum = gridData.map((item: any, index) => ({
@@ -153,6 +172,8 @@ const GroupsPage = () => {
     }
   }
 
+
+
   const globalSearch = () => {
     // @ts-ignore
     filteredData = dataWithVehicleNum.filter((value) => {
@@ -162,6 +183,28 @@ const GroupsPage = () => {
       )
     })
     setGridData(filteredData)
+  }
+
+  const url = `${ENP_URL}/Sections`
+  const onFinish = async (values: any) => {
+    setSubmitLoading(true)
+    const data = {
+      name: values.name,
+      sectionId: values.sectionId,
+
+    }
+
+    try {
+      const response = await axios.post(url, data)
+      setSubmitLoading(false)
+      form.resetFields()
+      setIsModalOpen(false)
+      loadData()
+      return response.statusText
+    } catch (error: any) {
+      setSubmitLoading(false)
+      return error.statusText
+    }
   }
 
   return (
@@ -202,9 +245,56 @@ const GroupsPage = () => {
           </Space>
         </div>
         <Table columns={columns} dataSource={dataWithVehicleNum} loading={loading}/>
-          <Modal title='Add Group' open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
+          {/* <Modal title='Add Group' open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
         <AddGroupsForm />
-      </Modal>
+      </Modal> */}
+
+      <Modal title='Add Group' 
+        open={isModalOpen} onOk={handleOk} 
+        onCancel={handleCancel}
+        footer={[
+          <Button key='back' onClick={handleCancel}>
+            Cancel
+          </Button>,
+          <Button
+            key='submit'
+            type='primary'
+            htmlType='submit'
+            loading={submitLoading}
+            onClick={() => {
+         
+              form.submit()
+            }}
+          >
+            Submit
+          </Button>,
+        ]}
+        >
+          
+          <Form
+              labelCol={{span: 7}}
+              wrapperCol={{span: 14}}
+              layout='horizontal'
+              form={form}
+              name='control-hooks'
+              title='Add Service'
+              onFinish={onFinish}
+            >
+              <Form.Item label='Name' name='name' rules={[{required: true}]}>
+                <Input />
+              </Form.Item>
+            
+              <Form.Item name='sectionId' label='Section'>
+                <Select  placeholder="Select">
+                  {sectionData.map((item: any) => (
+                  <Option key={item.id} value={item.id}>
+                    {item.name} 
+                  </Option>
+                ))}
+                </Select>
+              </Form.Item>
+            </Form>
+        </Modal>
       </div>
       </KTCardBody>
     </div>

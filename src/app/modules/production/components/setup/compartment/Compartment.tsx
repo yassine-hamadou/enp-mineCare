@@ -37,7 +37,7 @@ const CompartmentPage = () => {
     const deleteData = async (element: any) => {
       try {
           const response = await axios.delete(
-              `${ENP_URL}/services/${element.id}`
+              `https://cors-anywhere.herokuapp.com/${ENP_URL}/Compartment/${element.id}`
           )
           // update the local state so that react can refecth and re-render the table with the new data
           const newData = gridData.filter((item: any) => item.id !== element.id)
@@ -101,7 +101,7 @@ const CompartmentPage = () => {
     setLoading(true)
     try {
       // const response = await axios.get('https://cors-anywhere.herokuapp.com/http://208.117.44.15/SmWebApi/api/VmfaltsApi')
-      const response = await axios.get(`${ENP_URL}/compartment`)
+      const response = await axios.get(`https://cors-anywhere.herokuapp.com/${ENP_URL}/Compartment`)
       setGridData(response.data)
       // setGridData(dataSource)
       setLoading(false)
@@ -175,13 +175,13 @@ const CompartmentPage = () => {
       "id": 6
     }
   ]
-  const url = `${ENP_URL}/compartment`
+  const url = `https://cors-anywhere.herokuapp.com/${ENP_URL}/compartment`
     const onFinish = async (values: any) => {
         setSubmitLoading(true)
         const data = {
             name: values.name,
-            modelID: values.modelID,
-            status: values.status,
+            // modelID: values.modelID,
+            // status: values.status,
             
         }
        
@@ -234,7 +234,7 @@ const CompartmentPage = () => {
             
           </Space>
         </div>
-        <Table columns={columns} dataSource={compart}/>
+        <Table columns={columns} dataSource={dataWithVehicleNum}/>
           <Modal title='Add Compartment' open={isModalOpen} onOk={handleOk} onCancel={handleCancel} 
           footer={[
             <Button key='back' onClick={handleCancel}>
@@ -264,7 +264,7 @@ const CompartmentPage = () => {
        <Form.Item label='Name' name='name' rules={[{required: true}]}>
         <Input />
       </Form.Item>
-      <Form.Item label='Model'>
+      {/* <Form.Item label='Model'>
         <Select 
         showSearch 
         placeholder="Search to Select"
@@ -289,13 +289,13 @@ const CompartmentPage = () => {
           
         ]}
         />
-        </Form.Item>
-      <Form.Item label='Status' name='status' rules={[{required: true}]}>
+        </Form.Item> */}
+      {/* <Form.Item label='Status' name='status' rules={[{required: true}]}>
         <Radio.Group >
           <Radio value={1}>Active</Radio>
           <Radio value={2}>InActive</Radio>
         </Radio.Group>
-      </Form.Item>
+      </Form.Item> */}
       
     </Form>
         </Modal>
