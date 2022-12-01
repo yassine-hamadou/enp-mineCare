@@ -13,12 +13,12 @@ const DownTypePage = () => {
   const columns: any = [
     {
       title: 'Code',
-      dataIndex: 'faultCode',
+      dataIndex: 'classCode',
       sorter: (a: any, b: any) => {
-        if (a.faultCode > b.faultCode) {
+        if (a.classCode > b.classCode) {
           return 1
         }
-        if (b.faultCode > a.faultCode) {
+        if (b.classCode > a.classCode) {
           return -1
         }
         return 0
@@ -27,8 +27,8 @@ const DownTypePage = () => {
 
     {
       title: 'Name',
-      dataIndex: 'faultDesc',
-      sorter: (a: any, b: any) => a.faultDesc - b.faultDesc,
+      dataIndex: 'classDesc',
+      sorter: (a: any, b: any) => a.classDesc - b.classDesc,
     },
   ]
 

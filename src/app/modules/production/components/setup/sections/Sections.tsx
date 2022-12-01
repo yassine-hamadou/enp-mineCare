@@ -1,17 +1,21 @@
-import { Button, Input, Modal, Space, Table } from "antd";
+import { Button, Form, Input, Modal, Select, Space, Table } from "antd";
 import { useEffect, useState } from "react";
 import { KTCardBody, KTSVG } from "../../../../../../_metronic/helpers";
 // import { AddWorkTypeForm } from './AddWorkTypeForm'
 import { Link } from "react-router-dom";
 import { AddSectionForm } from "./AddSectionForm";
+import axios from "axios";
+import { ENP_URL } from "../../../../../urls";
 
 
 const SectionsPage = () => {
   const [gridData, setGridData] = useState([])
+  const [serviceData, setServiceData] = useState([])
   const [loading, setLoading] = useState(false)
   const [searchText, setSearchText] = useState('')
   let [filteredData] = useState([])
-
+  const [form] = Form.useForm()
+  const [submitLoading, setSubmitLoading] = useState(false)
 
 
 
@@ -75,12 +79,12 @@ const SectionsPage = () => {
     
     {
       title: 'Section',
-      dataIndex: 'section',
+      dataIndex: 'name',
       sorter: (a: any, b: any) => {
-        if (a.section > b.section) {
+        if (a.name > b.name) {
           return 1
         }
-        if (b.section > a.section) {
+        if (b.name > a.name) {
           return -1
         }
         return 0
@@ -106,19 +110,31 @@ const SectionsPage = () => {
       ),
     },
     //console
-      
-    
-    
   ]
+
+
+  const {Option} = Select
 
   const loadData = async () => {
     setLoading(true)
     try {
 
-      // const response = await axios.get('http://208.117.44.15/SmWebApi/api/VmclasApi')
+      const response = await axios.get(`${ENP_URL}/Sections`)
 
-      // setGridData(response.data)
-      setGridData(dataSource)
+      setGridData(response.data)
+      // setGridData(dataSource)
+      setLoading(false)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  const loadService = async () => {
+    setLoading(true)
+    try {
+      // const response = await axios.get('https://cors-anywhere.herokuapp.com/http://208.117.44.15/SmWebApi/api/VmfaltsApi')
+      const response = await axios.get(`${ENP_URL}/Services`)
+      setServiceData(response.data)
       setLoading(false)
     } catch (error) {
       console.log(error)
@@ -127,6 +143,7 @@ const SectionsPage = () => {
 
   useEffect(() => {
     loadData()
+    loadService()
   }, [])
 
   const dataWithVehicleNum = gridData.map((item: any, index) => ({
@@ -150,6 +167,28 @@ const SectionsPage = () => {
       )
     })
     setGridData(filteredData)
+  }
+
+  const url = `${ENP_URL}/Sections`
+  const onFinish = async (values: any) => {
+    setSubmitLoading(true)
+    const data = {
+      name: values.name,
+      serviceId: values.serviceId,
+
+    }
+
+    try {
+      const response = await axios.post(url, data)
+      setSubmitLoading(false)
+      form.resetFields()
+      setIsModalOpen(false)
+      loadData()
+      return response.statusText
+    } catch (error: any) {
+      setSubmitLoading(false)
+      return error.statusText
+    }
   }
 
   return (
@@ -193,9 +232,55 @@ const SectionsPage = () => {
           </Space>
         </div>
         <Table columns={columns} dataSource={dataWithVehicleNum} />
-        <Modal title='Add Section' open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
-          <AddSectionForm />
-        </Modal>
+        
+        <Modal
+            title='Add Service'
+            open={isModalOpen}
+            onOk={handleOk}
+            onCancel={handleCancel}
+            footer={[
+              <Button key='back' onClick={handleCancel}>
+                Cancel
+              </Button>,
+              <Button
+                key='submit'
+                type='primary'
+                htmlType='submit'
+                loading={submitLoading}
+                onClick={() => {
+             
+                  form.submit()
+                }}
+              >
+                Submit
+              </Button>,
+            ]}
+          >
+           
+            <Form
+              labelCol={{span: 7}}
+              wrapperCol={{span: 14}}
+              layout='horizontal'
+              form={form}
+              name='control-hooks'
+              title='Add Section'
+              onFinish={onFinish}
+            >
+              <Form.Item label='Name' name='name' rules={[{required: true}]}>
+                <Input />
+              </Form.Item>
+              
+              {/* <Form.Item name='serviceId' label='Service'>
+                <Select  placeholder="Select">
+                  {serviceData.map((item: any) => (
+                  <Option key={item.name} value={item.name}>
+                    {item.name} 
+                  </Option>
+                ))}
+                </Select>
+              </Form.Item> */}
+            </Form>
+          </Modal>
       </div>
       </KTCardBody>
      
