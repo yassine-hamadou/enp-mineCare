@@ -2,13 +2,14 @@ import { KTCard, KTCardBody, KTSVG } from "../../../../../../_metronic/helpers";
 import axios from "axios";
 import { DropDownListComponent } from "@syncfusion/ej2-react-dropdowns";
 import { Calendar } from "../../calendar/Calendar";
-import { Space } from "antd";
+import { Button, Space } from "antd";
 import { useNavigate } from "react-router-dom";
 import { ENP_URL } from "../../../../../urls";
 import { useQuery } from "react-query";
 import { useState } from "react";
 
 const EquipmentDetail = () => {
+  let dropDownListObj: any;
   const [chosenLocationIdFromDropdown, setChosenLocationIdFromDropdown] = useState(null);
   const navigate = useNavigate();
   const { data: locations } = useQuery("Locations",
@@ -27,8 +28,10 @@ const EquipmentDetail = () => {
           <DropDownListComponent
             id="dropdownlist"
             placeholder="Equipment Type"
-            data-name="equips"
             onChange={(e: any) => (setChosenLocationIdFromDropdown(e.value))}
+            ref={(scope) => {
+              dropDownListObj = scope;
+            }}
             dataSource={locations?.data.map((location: any) => {
               return {
                 text: `${location.locationCode}- ${location.locationDesc}`,
@@ -36,7 +39,15 @@ const EquipmentDetail = () => {
               };
             })}
             fields={{ text: "text", value: "value" }}
+
           />
+          <Button type='primary' onClick={() => {
+            setChosenLocationIdFromDropdown(null)
+            dropDownListObj.value = null
+          }
+          }>
+            Reset
+          </Button>
         </Space>
         <Space style={{ marginBottom: 0 }}>
           <button

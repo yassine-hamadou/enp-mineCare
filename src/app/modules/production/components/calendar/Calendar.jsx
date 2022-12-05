@@ -48,7 +48,7 @@ L10n.load({
   }
 });
 
-const Calendar = ({chosenLocationIdFromDropdown}) => {
+const Calendar = ({ chosenLocationIdFromDropdown }) => {
   let scheduleObj;
   let scheduleQueryClient = useQueryClient();
   // const [chosenLocationIdFromDropdown, setChosenLocationIdFromDropdown] = useState(null);
@@ -357,8 +357,9 @@ const Calendar = ({chosenLocationIdFromDropdown}) => {
             height="650px"
             ref={(schedule) => (scheduleObj = schedule)}
             eventSettings={
-              schedulesData && localData(chosenLocationIdFromDropdown && schedulesData.data.filter(
-                (schedule) => schedule.locationId === chosenLocationIdFromDropdown)
+              schedulesData && localData(
+                chosenLocationIdFromDropdown ? schedulesData.data.filter(
+                  (schedule) => schedule.locationId === chosenLocationIdFromDropdown) : schedulesData.data
               )
             }
             eventRendered={onEventRendered}
