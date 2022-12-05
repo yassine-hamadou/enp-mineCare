@@ -13,7 +13,7 @@ const ResolutionTable = () => {
   const loadData = async () => {
     setLoading(true)
     try {
-      const response = await axios.get(`${ENP_URL}/FaultEntriesApi`)
+      const response = await axios.get(`${ENP_URL}/Resolution`)
 
       //Formatting date to the received data
       const dataReceivedfromAPI = {
@@ -69,23 +69,31 @@ const ResolutionTable = () => {
       dataIndex: 'vmClass',
     },
     {
-      title: 'Work Type',
+      title: 'Down Type',
+    },
+    {
+      title: 'Duration',
+    },
+    {
+      title: 'Custodian',
+    },
+    {
+      title: 'Location',
+    },
+    {
+      title: 'Resolution Type',
+    },
+    {
+      title: 'Down Status',
     },
     {
       title: 'Comment',
     },
     {
-      title: 'Time Start',
-      dataIndex: 'formattedDate',
-      defaultSortOrder: 'descend',
-      sorter: (a: any, b: any) => new Date(a.downtime).getTime() - new Date(b.downtime).getTime(),
+      title: 'Time Started',
     },
     {
-      title: 'Time End',
-    },
-    {
-      title: 'Duration',
-      dataIndex: 'duration',
+      title: 'Time Completed',
     },
   ]
   const handleInputChange = (e: any) => {

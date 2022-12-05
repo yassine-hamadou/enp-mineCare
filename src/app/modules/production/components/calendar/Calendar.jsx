@@ -1,4 +1,4 @@
-import {L10n} from '@syncfusion/ej2-base'
+import { L10n } from "@syncfusion/ej2-base";
 import {
   ScheduleComponent,
   Day,
@@ -6,21 +6,21 @@ import {
   WorkWeek,
   Month,
   Agenda,
-  Inject,
-} from '@syncfusion/ej2-react-schedule'
-import {DateTimePickerComponent} from '@syncfusion/ej2-react-calendars'
-import {DropDownListComponent} from '@syncfusion/ej2-react-dropdowns'
-import {useMutation, useQuery, useQueryClient} from 'react-query'
-import '@syncfusion/ej2-base/styles/material.css'
-import '@syncfusion/ej2-calendars/styles/material.css'
-import '@syncfusion/ej2-dropdowns/styles/material.css'
-import '@syncfusion/ej2-inputs/styles/material.css'
-import '@syncfusion/ej2-lists/styles/material.css'
-import '@syncfusion/ej2-navigations/styles/material.css'
-import '@syncfusion/ej2-popups/styles/material.css'
-import '@syncfusion/ej2-splitbuttons/styles/material.css'
-import '@syncfusion/ej2-react-schedule/styles/material.css'
-import '@syncfusion/ej2-buttons/styles/material.css'
+  Inject
+} from "@syncfusion/ej2-react-schedule";
+import { DateTimePickerComponent } from "@syncfusion/ej2-react-calendars";
+import { DropDownListComponent } from "@syncfusion/ej2-react-dropdowns";
+import { useMutation, useQuery, useQueryClient } from "react-query";
+import "@syncfusion/ej2-base/styles/material.css";
+import "@syncfusion/ej2-calendars/styles/material.css";
+import "@syncfusion/ej2-dropdowns/styles/material.css";
+import "@syncfusion/ej2-inputs/styles/material.css";
+import "@syncfusion/ej2-lists/styles/material.css";
+import "@syncfusion/ej2-navigations/styles/material.css";
+import "@syncfusion/ej2-popups/styles/material.css";
+import "@syncfusion/ej2-splitbuttons/styles/material.css";
+import "@syncfusion/ej2-react-schedule/styles/material.css";
+import "@syncfusion/ej2-buttons/styles/material.css";
 import {
   addSchedule,
   deleteSchedule,
@@ -28,8 +28,9 @@ import {
   fetchSchedules,
   fetchVmequps,
   localData,
-  updateSchedule,
-} from './requests'
+  updateSchedule
+} from "./requests";
+import { useState } from "react";
 
 /**
  *  Schedule editor custom fields sample
@@ -37,80 +38,81 @@ import {
 
 //Editing editor buttons
 L10n.load({
-  'en-US': {
+  "en-US": {
     schedule: {
-      saveButton: 'Add',
-      cancelButton: 'Close',
-      deleteButton: 'Remove',
-      newEvent: 'Add Equipment Schedule',
-    },
-  },
-})
+      saveButton: "Add",
+      cancelButton: "Close",
+      deleteButton: "Remove",
+      newEvent: "Add Equipment Schedule"
+    }
+  }
+});
 
-const Calendar = () => {
-  let scheduleObj
-  let scheduleQueryClient = useQueryClient()
+const Calendar = ({ chosenLocationIdFromDropdown }) => {
+  let scheduleObj;
+  let scheduleQueryClient = useQueryClient();
+  // const [chosenLocationIdFromDropdown, setChosenLocationIdFromDropdown] = useState(null);
 
   // React Query
   //Get
-  const {data: schedulesData} = useQuery('schedules', fetchSchedules, {
+  const { data: schedulesData } = useQuery("schedules", fetchSchedules, {
     refetchOnWindowFocus: false,
-    staleTime: 300000,
-  })
-  const {data: vmequps} = useQuery('vmequps', fetchVmequps, {
+    staleTime: 300000
+  });
+  const { data: vmequps } = useQuery("vmequps", fetchVmequps, {
     refetchOnWindowFocus: false,
-    staleTime: Infinity,
-  })
-  const {data: custodiansData} = useQuery('custodians', fetchCustodians, {
+    staleTime: Infinity
+  });
+  const { data: custodiansData } = useQuery("custodians", fetchCustodians, {
     refetchOnWindowFocus: false,
-    staleTime: Infinity,
-  })
+    staleTime: Infinity
+  });
 
   //Create
-  const {mutate: addScheduleMutation} = useMutation(addSchedule, {
+  const { mutate: addScheduleMutation } = useMutation(addSchedule, {
     onSuccess: () => {
-      scheduleQueryClient.invalidateQueries('schedules')
-    },
-  })
+      scheduleQueryClient.invalidateQueries("schedules");
+    }
+  });
   //delete
-  const {mutate: deleteScheduleMutation} = useMutation(deleteSchedule, {
+  const { mutate: deleteScheduleMutation } = useMutation(deleteSchedule, {
     onSuccess: () => {
-      scheduleQueryClient.invalidateQueries('schedules')
-    },
-  })
+      scheduleQueryClient.invalidateQueries("schedules");
+    }
+  });
   //put (update)
-  const {mutate: updateScheduleMutation} = useMutation(updateSchedule, {
+  const { mutate: updateScheduleMutation } = useMutation(updateSchedule, {
     onSuccess: () => {
-      scheduleQueryClient.invalidateQueries('schedules')
-    },
-  })
-
+      scheduleQueryClient.invalidateQueries("schedules");
+    }
+  });
+  console.log("chosenlocation in calendar", chosenLocationIdFromDropdown);
   //Access the same location query from cycledetails component
-  const locationQuery = useQueryClient().getQueryData('Locations')
+  const locationQuery = useQueryClient().getQueryData("Locations");
 
   function onEventRendered(args) {
     let categoryColor = {
-      location1: '#1aaa55',
-      location2: '#357cd2',
-      location3: '#7fa900',
-      location4: '#ea7a57',
-      location5: '#00bdae',
-      location6: '#f57f17',
-      location7: '#8e24aa',
-    }
+      location1: "#1aaa55",
+      location2: "#357cd2",
+      location3: "#7fa900",
+      location4: "#ea7a57",
+      location5: "#00bdae",
+      location6: "#f57f17",
+      location7: "#8e24aa"
+    };
     if (!args.element || !args.data) {
-      return
+      return;
     }
-    if (args.data.locationId === 'GOLD  ') {
-      args.element.style.backgroundColor = categoryColor.location7
-    } else if (args.data.locationId === 'CRUSH ') {
-      args.element.style.backgroundColor = categoryColor.location1
-    } else if (args.data.locationId === 'UNDER ') {
-      args.element.style.backgroundColor = categoryColor.location2
-    } else if (args.data.locationId === 'DRILL ') {
-      args.element.style.backgroundColor = categoryColor.location3
-    } else if (args.data.locationId === 'WELD ') {
-      args.element.style.backgroundColor = categoryColor.location4
+    if (args.data.locationId === "GOLD  ") {
+      args.element.style.backgroundColor = categoryColor.location7;
+    } else if (args.data.locationId === "CRUSH ") {
+      args.element.style.backgroundColor = categoryColor.location1;
+    } else if (args.data.locationId === "UNDER ") {
+      args.element.style.backgroundColor = categoryColor.location2;
+    } else if (args.data.locationId === "DRILL ") {
+      args.element.style.backgroundColor = categoryColor.location3;
+    } else if (args.data.locationId === "WELD ") {
+      args.element.style.backgroundColor = categoryColor.location4;
     }
 
     // if (scheduleObj.currentView === 'Agenda') {
@@ -119,122 +121,126 @@ const Calendar = () => {
     //   args.element.style.backgroundColor = categoryColor
     // }
   }
-  function editorTemplate(props) {
-    console.log('props in editorTemmplate', props)
-    console.log(scheduleObj)
-    return props !== undefined ? (
-      <table className='custom-event-editor' style={{width: '100%'}} cellPadding={5}>
-        <tbody>
-          <tr>
-            <td className='e-textlabel'>Fleet ID</td>
-            <td colSpan={4}>
-              <DropDownListComponent
-                id='Summary'
-                placeholder='Choose Equipment ID'
-                data-name='fleetId'
-                className='e-field'
-                style={{width: '100%'}}
-                dataSource={vmequps?.data.map((Vmequp) => {
-                  return {
-                    text: `${Vmequp.fleetID}- ${Vmequp.modlName}- ${Vmequp.modlClass}`,
-                    value: `${Vmequp.fleetID}`,
-                  }
-                })}
-                fields={{text: 'text', value: 'value'}}
-              />
-            </td>
-          </tr>
-          <tr>
-            <td className='e-textlabel'>Location</td>
-            <td colSpan={4}>
-              <DropDownListComponent
-                id='Location'
-                placeholder='Choose location'
-                data-name='locationId'
-                className='e-field'
-                style={{width: '100%'}}
-                dataSource={locationQuery?.data.map((location) => {
-                  return {
-                    text: `${location.locationCode} - ${location.locationDesc}`,
-                    value: `${location.locationCode}`,
-                  }
-                })}
-                fields={{text: 'text', value: 'value'}}
-              />
-            </td>
-          </tr>
-          <tr>
-            <td className='e-textlabel'>Service Type</td>
-            <td colSpan={4}>
-              <DropDownListComponent
-                id='ServiceType'
-                placeholder='Choose Service Type'
-                data-name='serviceType'
-                className='e-field'
-                style={{width: '100%'}}
-                dataSource={['Service 1', 'Service 2', 'Service 3']}
-              />
-            </td>
-          </tr>
-          <tr>
-            <td className='e-textlabel'>Responsible</td>
-            <td colSpan={4}>
-              <DropDownListComponent
-                id='responsible'
-                placeholder='Responsible'
-                data-name='custodian'
-                className='e-field'
-                style={{width: '100%'}}
-                dataSource={custodiansData?.data.map((custodian) => {
-                  return {
-                    text: `${custodian.emplCode} - ${custodian.emplName}`,
-                    value: `${custodian.emplCode}`,
-                  }
-                })}
-                fields={{text: 'text', value: 'value'}}
-                value={props.custodian}
-              />
-            </td>
-          </tr>
 
-          <tr>
-            <td className='e-textlabel'>From</td>
-            <td colSpan={4}>
-              <DateTimePickerComponent
-                id='StartTime'
-                format='dd/MM/yy hh:mm a'
-                data-name='timeStart'
-                value={new Date(props.timeStart ? props.timeStart : props.startTime)}
-                className='e-field'
-              ></DateTimePickerComponent>
-            </td>
-          </tr>
-          <tr>
-            <td className='e-textlabel'>To</td>
-            <td colSpan={4}>
-              <DateTimePickerComponent
-                id='EndTime'
-                format='dd/MM/yy hh:mm a'
-                data-name='timeEnd'
-                value={new Date(props.timeEnd ? props.timeEnd : props.endTime)}
-                className='e-field'
-              ></DateTimePickerComponent>
-            </td>
-          </tr>
+  function editorTemplate(props) {
+    console.log("props in editorTemmplate", props);
+    console.log(scheduleObj);
+    return props !== undefined ? (
+      <table className="custom-event-editor" style={{ width: "100%" }} cellPadding={5}>
+        <tbody>
+        <tr>
+          <td className="e-textlabel">Fleet ID</td>
+          <td colSpan={4}>
+            <DropDownListComponent
+              id="Summary"
+              placeholder="Choose Equipment ID"
+              data-name="fleetId"
+              className="e-field"
+              style={{ width: "100%" }}
+              dataSource={vmequps?.data.map((Vmequp) => {
+                return {
+                  text: `${Vmequp.fleetID}- ${Vmequp.modlName}- ${Vmequp.modlClass}`,
+                  value: `${Vmequp.fleetID}`
+                };
+              })}
+              fields={{ text: "text", value: "value" }}
+              value={props.fleetId}
+            />
+          </td>
+        </tr>
+        <tr>
+          <td className="e-textlabel">Location</td>
+          <td colSpan={4}>
+            <DropDownListComponent
+              id="Location"
+              placeholder="Choose location"
+              data-name="locationId"
+              className="e-field"
+              style={{ width: "100%" }}
+              dataSource={locationQuery?.data.map((location) => {
+                return {
+                  text: `${location.locationCode} - ${location.locationDesc}`,
+                  value: `${location.locationCode}`
+                };
+              })}
+              fields={{ text: "text", value: "value" }}
+              value={props.locationId}
+            />
+          </td>
+        </tr>
+        <tr>
+          <td className="e-textlabel">Service Type</td>
+          <td colSpan={4}>
+            <DropDownListComponent
+              id="ServiceType"
+              placeholder="Choose Service Type"
+              data-name="serviceType"
+              className="e-field"
+              style={{ width: "100%" }}
+              dataSource={["Service 1", "Service 2", "Service 3"]}
+            />
+          </td>
+        </tr>
+        <tr>
+          <td className="e-textlabel">Responsible</td>
+          <td colSpan={4}>
+            <DropDownListComponent
+              id="responsible"
+              placeholder="Responsible"
+              data-name="custodian"
+              className="e-field"
+              style={{ width: "100%" }}
+              dataSource={custodiansData?.data.map((custodian) => {
+                return {
+                  text: `${custodian.emplCode} - ${custodian.emplName}`,
+                  value: `${custodian.emplCode}`
+                };
+              })}
+              fields={{ text: "text", value: "value" }}
+              value={props.custodian}
+            />
+          </td>
+        </tr>
+
+        <tr>
+          <td className="e-textlabel">From</td>
+          <td colSpan={4}>
+            <DateTimePickerComponent
+              id="StartTime"
+              format="dd/MM/yy hh:mm a"
+              data-name="timeStart"
+              value={new Date(props.timeStart ? props.timeStart : props.startTime)}
+              className="e-field"
+            ></DateTimePickerComponent>
+          </td>
+        </tr>
+        <tr>
+          <td className="e-textlabel">To</td>
+          <td colSpan={4}>
+            <DateTimePickerComponent
+              id="EndTime"
+              format="dd/MM/yy hh:mm a"
+              data-name="timeEnd"
+              value={new Date(props.timeEnd ? props.timeEnd : props.endTime)}
+              className="e-field"
+            ></DateTimePickerComponent>
+          </td>
+        </tr>
         </tbody>
       </table>
     ) : (
       <div></div>
-    )
+    );
   }
+
   const onActionBegin = (args) => {
-    console.log('args in action begin', args)
-    let data = args.data instanceof Array ? args.data[0] : args.data
-    if (args.requestType === 'eventCreate') {
-      console.log(scheduleObj)
+    console.log("args in action begin", args);
+    let data = args.data instanceof Array ? args.data[0] : args.data;
+    if (args.requestType === "eventCreate") {
+      console.log(scheduleObj);
       // make data in array so that I can map though it
-      const preparedData = [{...data}]
-      console.log('preparedData', preparedData)
+      const preparedData = [{ ...data }];
+      console.log("preparedData", preparedData);
       // map through the array and set each field to what the calendar will understand
       const formattedDataToPost = preparedData.map((schedule) => {
         return {
@@ -243,23 +249,23 @@ const Calendar = () => {
           timeStart: schedule.StartTime,
           timeEnd: schedule.EndTime,
           entryId: 0,
-          vmModel: 'null',
-          vmClass: 'null',
-        }
-      })
+          vmModel: "null",
+          vmClass: "null"
+        };
+      });
       //Since format is an array, I need to change it to the format that the API will understand which is an object
-      const dataToPost = formattedDataToPost[0]
-      addScheduleMutation(dataToPost)
+      const dataToPost = formattedDataToPost[0];
+      addScheduleMutation(dataToPost);
     }
-    if (args.requestType === 'eventRemove') {
-      args.cancel = true
-      deleteScheduleMutation(data)
+    if (args.requestType === "eventRemove") {
+      args.cancel = true;
+      deleteScheduleMutation(data);
     }
-    if (args.requestType === 'eventChange') {
-      args.cancel = true
-      console.log('data', data)
-      console.log('args in eventChange', args)
-      const preparedData = [{...data}]
+    if (args.requestType === "eventChange") {
+      args.cancel = true;
+      console.log("data", data);
+      console.log("args in eventChange", args);
+      const preparedData = [{ ...data }];
       const formattedDataToPost = preparedData.map((schedule) => {
         return {
           fleetId: schedule.fleetId,
@@ -267,14 +273,14 @@ const Calendar = () => {
           timeStart: schedule.StartTime,
           timeEnd: schedule.EndTime,
           entryId: schedule.entryId,
-          vmModel: 'null',
-          vmClass: 'null',
-        }
-      })
-      const dataToPost = formattedDataToPost[0]
-      updateScheduleMutation(dataToPost)
+          vmModel: "null",
+          vmClass: "null"
+        };
+      });
+      const dataToPost = formattedDataToPost[0];
+      updateScheduleMutation(dataToPost);
     }
-  }
+  };
   // const headerTemplate = (props) => {
   //     return (
   //         <div>
@@ -343,14 +349,19 @@ const Calendar = () => {
   // }
 
   return (
-    <div className='schedule-control-section'>
-      <div className='col-lg-12 control-section'>
-        <div className='control-wrapper'>
+    <div className="schedule-control-section">
+      <div className="col-lg-12 control-section">
+        <div className="control-wrapper">
           <ScheduleComponent
-            width='100%'
-            height='650px'
+            width="100%"
+            height="650px"
             ref={(schedule) => (scheduleObj = schedule)}
-            eventSettings={schedulesData && localData(schedulesData.data)}
+            eventSettings={
+              schedulesData && localData(
+                chosenLocationIdFromDropdown ? schedulesData.data.filter(
+                  (schedule) => schedule.locationId === chosenLocationIdFromDropdown) : schedulesData.data
+              )
+            }
             eventRendered={onEventRendered}
             editorTemplate={editorTemplate}
             actionBegin={onActionBegin}
@@ -366,6 +377,6 @@ const Calendar = () => {
         </div>
       </div>
     </div>
-  )
-}
-export {Calendar}
+  );
+};
+export { Calendar };

@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import { KTCardBody, KTSVG } from "../../../../../../_metronic/helpers";
-import { AddWorkTypeForm } from "./AddWorkTypeForm";
 import { ENP_URL} from "../../../../../urls";
 
 const WorkTypePage = () => {

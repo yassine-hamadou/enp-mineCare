@@ -2,8 +2,6 @@ import {Button, Form, Input, Modal, Radio, Space, Table} from 'antd'
 import {useState, useEffect} from 'react'
 import axios from 'axios'
 import { KTCard, KTCardBody, KTSVG } from '../../../../../../_metronic/helpers'
-import { ColumnsType } from 'antd/lib/table'
-import { Link } from 'react-router-dom'
 import { ENP_URL } from '../../../../../urls'
 
 
@@ -91,11 +89,6 @@ const OilTypePage = () => {
       width: 100,
       render: (_: any, record: any ) => (
         <Space size="middle">
-          {/* <a href="sections" className="btn btn-light-info btn-sm">Sections</a> */}
-          {/* <Link to={`/setup/sections/${record.id}`}>
-          <span  className="btn btn-light-info btn-sm">
-          Sections
-            </span></Link> */}
           <a href="#" className="btn btn-light-warning btn-sm">Update</a>
           <a onClick={() => handleDelete(record)} className="btn btn-light-danger btn-sm">Delete</a>
           {/* <a>Edit </a> */}

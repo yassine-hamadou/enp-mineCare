@@ -1,7 +1,7 @@
 import { Button, Input, Space, Table } from "antd";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { KTSVG } from "../../../../_metronic/helpers";
+import { KTCard, KTCardBody, KTSVG } from "../../../../_metronic/helpers";
 import { ENP_URL } from "../../../urls";
 
 const DashboardTable = () => {
@@ -14,7 +14,6 @@ const DashboardTable = () => {
     {
       title: 'ID',
       dataIndex: 'key',
-      defaultSortOrder: 'descend',
       sorter: (a: any, b: any) => a.key - b.key,
     },
     {
@@ -102,33 +101,35 @@ const DashboardTable = () => {
   }
 
   return (
-    <div>
-      <div className='d-flex justify-content-between'>
-        <Space style={{marginBottom: 16}}>
-          <Input
-            placeholder='Enter Search Text'
-            onChange={handleInputChange}
-            type='text'
-            allowClear
-            value={searchText}
-          />
-          <Button type='primary' onClick={globalSearch}>
-            Search
-          </Button>
-        </Space>
-        <Space style={{marginBottom: 16}}>
-          <button type='button' className='btn btn-light-primary me-3'>
-            <KTSVG path='/media/icons/duotune/arrows/arr078.svg' className='svg-icon-2' />
-            Upload
-          </button>
-          <button type='button' className='btn btn-light-primary me-3'>
-            <KTSVG path='/media/icons/duotune/arrows/arr078.svg' className='svg-icon-2' />
-            Export
-          </button>
-        </Space>
-      </div>
-      <Table columns={columns} dataSource={dataWithVehicleNum} bordered loading={loading} />
-    </div>
+    <KTCard>
+      <KTCardBody>
+        <div className='d-flex justify-content-between'>
+          <Space style={{marginBottom: 16}}>
+            <Input
+              placeholder='Enter Search Text'
+              onChange={handleInputChange}
+              type='text'
+              allowClear
+              value={searchText}
+            />
+            <Button type='primary' onClick={globalSearch}>
+              Search
+            </Button>
+          </Space>
+          <Space style={{marginBottom: 16}}>
+            <button type='button' className='btn btn-light-primary me-3'>
+              <KTSVG path='/media/icons/duotune/arrows/arr078.svg' className='svg-icon-2' />
+              Upload
+            </button>
+            <button type='button' className='btn btn-light-primary me-3'>
+              <KTSVG path='/media/icons/duotune/arrows/arr078.svg' className='svg-icon-2' />
+              Export
+            </button>
+          </Space>
+        </div>
+        <Table columns={columns} dataSource={dataWithVehicleNum} bordered loading={loading} />
+      </KTCardBody>
+    </KTCard>
   )
 }
 
