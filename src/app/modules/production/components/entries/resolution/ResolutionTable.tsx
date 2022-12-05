@@ -13,7 +13,7 @@ const ResolutionTable = () => {
   const loadData = async () => {
     setLoading(true)
     try {
-      const response = await axios.get(`${ENP_URL}/FaultEntriesApi`)
+      const response = await axios.get(`${ENP_URL}/Resolution`)
 
       //Formatting date to the received data
       const dataReceivedfromAPI = {
