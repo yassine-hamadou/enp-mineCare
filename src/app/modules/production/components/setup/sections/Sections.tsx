@@ -17,28 +17,6 @@ const SectionsPage = () => {
   const [form] = Form.useForm()
   const [submitLoading, setSubmitLoading] = useState(false)
 
-
-
-  const dataSource: any = [
-    {
-      service: "PM-A",
-      section: "Section 1 - Engine"
-    },
-    {
-      service: "PM-A",
-      section: "Section 2 - Transmission/Hydraulic/Axles"
-    },
-    {
-      service: "PM-A",
-      section: "Section 3 - Body/Frame"
-    },
-    {
-      service: "PM-A",
-      section: "Section 4 - Operation/Cap"
-    },
-  
-  ]
-
     // Modal functions
     const [isModalOpen, setIsModalOpen] = useState(false)
 
@@ -53,8 +31,26 @@ const SectionsPage = () => {
     const handleCancel = () => {
       setIsModalOpen(false)
     }
+
+
     // Modal functions end
 
+
+    const deleteData = async (element: any) => {
+      try {
+        const response = await axios.delete(`${ENP_URL}/Sections/${element.id}`)
+        // update the local state so that react can refecth and re-render the table with the new data
+        const newData = gridData.filter((item: any) => item.id !== element.id)
+        setGridData(newData)
+        return response.status
+      } catch (e) {
+        return e
+      }
+    }
+  
+    function handleDelete(element: any) {
+      deleteData(element)
+    }
     const columns: any =[
     // {
     //   title: 'ID',
@@ -105,7 +101,10 @@ const SectionsPage = () => {
             Groups
             </span></Link>
           <a href="#" className="btn btn-light-warning btn-sm ">Update</a>
-          <a href="#" className="btn btn-light-danger btn-sm">Delete</a>
+          {/* <a href="#" className="btn btn-light-danger btn-sm">Delete</a> */}
+          <a onClick={() => handleDelete(record)} className='btn btn-light-danger btn-sm'>
+            Delete
+          </a>
         </Space>
       ),
     },
@@ -174,12 +173,13 @@ const SectionsPage = () => {
     setSubmitLoading(true)
     const data = {
       name: values.name,
-      serviceId: values.serviceId,
+      serviceId: values.serviceId.toString(),
 
     }
 
     try {
       const response = await axios.post(url, data)
+      console.log(data)
       setSubmitLoading(false)
       form.resetFields()
       setIsModalOpen(false)
@@ -270,15 +270,15 @@ const SectionsPage = () => {
                 <Input />
               </Form.Item>
               
-              {/* <Form.Item name='serviceId' label='Service'>
+              <Form.Item name='serviceId' label='Service'>
                 <Select  placeholder="Select">
                   {serviceData.map((item: any) => (
-                  <Option key={item.name} value={item.name}>
+                  <Option key={item.id} value={item.id}>
                     {item.name} 
                   </Option>
                 ))}
                 </Select>
-              </Form.Item> */}
+              </Form.Item>
             </Form>
           </Modal>
       </div>

@@ -10,14 +10,11 @@ import "../../../../../../../node_modules/@devexpress/analytics-core/dist/css/dx
 class ReportViewer extends React.Component {
 constructor(props) {
     super(props);
-    this.myRef = React.createRef();
-    this.reportUrl = ko.observable("Activities");
+    this.reportUrl = ko.observable("SalesByCategoryReport");
     this.requestOptions = {
-    host: "https://app.sipconsult.net/LbmsReporting/",
-    // Use this line for the ASP.NET MVC backend.
-    //invokeAction: "/WebDocumentViewer/Invoke"
-    // Use this line for the ASP.NET Core backend  
-    invokeAction: "DXXRDV"
+        host: "https://localhost:44312/",
+        
+        invokeAction: "DXXRDV"
     };
 }
 render() {
@@ -25,15 +22,13 @@ render() {
 }
 componentDidMount() {
     ko.applyBindings({
-    reportUrl: ko.observable("Clients"),
+    reportUrl: this.reportUrl,
     requestOptions: this.requestOptions
     }, this.refs.viewer);
 }
 componentWillUnmount() {
     ko.cleanNode(this.refs.viewer);
 }
-
-
 };
 
 function WeeklyReport() {
@@ -41,5 +36,4 @@ return (<div style={{ width: "100%", height: "1000px" }}>
     <ReportViewer />
 </div>);
 }
-
 export default WeeklyReport;

@@ -1237,10 +1237,10 @@
   resolved "https://registry.yarnpkg.com/@ctrl/tinycolor/-/tinycolor-3.4.1.tgz#75b4c27948c81e88ccd3a8902047bcd797f38d32"
   integrity sha512-ej5oVy6lykXsvieQtqZxCOaLT+xD4+QNarq78cIYISHmZXshCvROLudpQN3lfL8G0NL7plMSSK+zlyvCaIJ4Iw==
 
-"@devexpress/analytics-core@^22.1.6":
-  version "22.1.6"
-  resolved "https://registry.yarnpkg.com/@devexpress/analytics-core/-/analytics-core-22.1.6.tgz#4a57ec9b6101dad7e47a4ba97028d35948150ad7"
-  integrity sha512-mlY1JjpJRmzzcMblil/WTS5XpWNdFb44GKKjCT6NW67gMZUr4u/797i+1k8kN9kqpFq6dt8bIsAZBV2TRVr/yg==
+"@devexpress/analytics-core@^21.2.5":
+  version "21.2.11"
+  resolved "https://registry.yarnpkg.com/@devexpress/analytics-core/-/analytics-core-21.2.11.tgz#899b06df063226aca79fed3edf43059d2767f1be"
+  integrity sha512-xT4B5JxoHDpbqj8RSYi9qWVik09P3CRrrRVpr7Bb5zw8lyWVrGkzq25y3FBXCKZQRsdwCWE0Kp/Gb322k2bPAg==
   dependencies:
     "@types/jquery" "^3.1.1"
     "@types/jqueryui" "^1.12.1"
@@ -1263,12 +1263,13 @@
   dependencies:
     tslib "2.0.1"
 
-"@devextreme/runtime@3.0.11":
-  version "3.0.11"
-  resolved "https://registry.yarnpkg.com/@devextreme/runtime/-/runtime-3.0.11.tgz#fc5829851b4b454ef5d770147d52d3a8a787deb7"
-  integrity sha512-j17t+7Uv2iji9YKSzoArw8TyYCjRBWKFRjUyQrog77Z9CVUsQnv2kI7MVNHKjmQgD/aTnHvb57dYq9UL6HesLw==
+"@devextreme/runtime@~2.3.15":
+  version "2.3.15"
+  resolved "https://registry.yarnpkg.com/@devextreme/runtime/-/runtime-2.3.15.tgz#7ed62c9df9bcc6413b7400d1396177f00f62b1dd"
+  integrity sha512-yl0A5gxtickdiWx/iXy0PzHwsAbrfciflVK7sG8Rr1Wh50w2ZzL+jVCOD7GWODtzKwo9VVM2nAo6yvxItz0V/g==
   dependencies:
     inferno "^7.4.6"
+    inferno-compat "^7.4.6"
     inferno-create-element "^7.4.6"
     inferno-hydrate "^7.4.6"
 
@@ -4602,26 +4603,26 @@ detective@^5.2.1:
     defined "^1.0.0"
     minimist "^1.2.6"
 
-devexpress-diagram@2.1.65:
-  version "2.1.65"
-  resolved "https://registry.yarnpkg.com/devexpress-diagram/-/devexpress-diagram-2.1.65.tgz#b558aec087f114af0fa4b14f2d659ea7755a1734"
-  integrity sha512-Xdq0EQTtYZQJwWWW+xBpjVeAJYK2kCugsGXRR4IRlp4hcCJ80dKAW19SQOZ3n5pIAbs3Oz4e1xZQhKZ7OyQXEw==
+devexpress-diagram@2.1.63:
+  version "2.1.63"
+  resolved "https://registry.yarnpkg.com/devexpress-diagram/-/devexpress-diagram-2.1.63.tgz#8f00f2757e77ae7e4ba221ab146ba4a116b460fd"
+  integrity sha512-zsqt3VFJpIlkW+/N1+GXuZEP2BG1NOirCqItFnbrZZhcNPl5nxr8LnxqiNF7MtOCjgUmCD4MbU7GxShlu9J7JA==
   dependencies:
     "@devexpress/utils" "1.3.16"
     es6-object-assign "^1.1.0"
 
-devexpress-gantt@4.1.33:
-  version "4.1.33"
-  resolved "https://registry.yarnpkg.com/devexpress-gantt/-/devexpress-gantt-4.1.33.tgz#6fb7d5c8bfb38dada166a4f6e1d3f7e8f554addc"
-  integrity sha512-0gR2QlFk2DhQ2oC2ibbknCIXErZgn0JXJRAGNBNsTjteq0QFJ4oxvUHZBlJcY9h/mYeczgnvZHGaBq4/vI1quw==
+devexpress-gantt@4.0.27:
+  version "4.0.27"
+  resolved "https://registry.yarnpkg.com/devexpress-gantt/-/devexpress-gantt-4.0.27.tgz#3b9fd4cfbd0ea1e9084562802d607b297510b3f7"
+  integrity sha512-BhtjFZoORdzpez0FbUm7ByCzDm0goQxMZWy0952HzjzDXk0fWX8muzmScMlZ4rxnutfU04evhwktxjbQg6jscg==
   dependencies:
     "@devexpress/utils" "1.3.14"
     tslib "2.3.1"
 
-devexpress-reporting@^22.1.6:
-  version "22.1.6"
-  resolved "https://registry.yarnpkg.com/devexpress-reporting/-/devexpress-reporting-22.1.6.tgz#04c38cdaf0d88fde1f5821e6a305f5ae3caf2e02"
-  integrity sha512-x7OqxNlq8eX8e5TfwNVJHdwsCPlLiN7xNWllqKryfywl3NqyzjjL0/DKo4/nwPsY++6egpSRtMao06q/5UaokQ==
+devexpress-reporting@^21.2.5:
+  version "21.2.11"
+  resolved "https://registry.yarnpkg.com/devexpress-reporting/-/devexpress-reporting-21.2.11.tgz#e69f559a85e862d9ed76a760a9a64df0fe0eefa0"
+  integrity sha512-edE8wB9StMt+5vnGBHzrXdzfgHruQFCkzHM9JpSa1zC6s2XLYlnSAwOzJ1Yy36VrKgRlvxUls9oA5hYyoTY/eg==
   dependencies:
     ace-builds "^1.3.0"
     jquery "^3.1.1"
@@ -4648,15 +4649,15 @@ devextreme-showdown@^1.0.1:
   dependencies:
     yargs "^17.2.1"
 
-devextreme@^22.1.6:
-  version "22.1.6"
-  resolved "https://registry.yarnpkg.com/devextreme/-/devextreme-22.1.6.tgz#acbdd43e37f45ec9c24b8755c9540173b4b9760d"
-  integrity sha512-V8uGlX3wiAZ4AtB2CtDcsK97bEbTtSaQgcdfPh9wniqEpx1sk3coUoJCz8JpIUhpRGcafzAZjktmCMcFYJqbTw==
+devextreme@^21.2.5:
+  version "21.2.11"
+  resolved "https://registry.yarnpkg.com/devextreme/-/devextreme-21.2.11.tgz#713bc50790b85325a35036f26a098a86e94529c2"
+  integrity sha512-vQr2NiQRmy8Q0ZXHuz8JiKXBcmT42RBFbVJcGqPYRcYxF7iHiY70WDCrkHDV0f0ZwQkeapRNtNYExsD95m2O0Q==
   dependencies:
     "@babel/runtime" "^7.12.1"
-    "@devextreme/runtime" "3.0.11"
-    devexpress-diagram "2.1.65"
-    devexpress-gantt "4.1.33"
+    "@devextreme/runtime" "~2.3.15"
+    devexpress-diagram "2.1.63"
+    devexpress-gantt "4.0.27"
     devextreme-quill "~1.5.18"
     devextreme-showdown "^1.0.1"
     inferno "^7.4.9"
@@ -4665,7 +4666,7 @@ devextreme@^22.1.6:
     inferno-hydrate "^7.4.9"
     jszip "^3.7.1"
     rrule "2.6.6"
-    turndown "~7.1.0"
+    turndown "~7.0.0"
 
 didyoumean@^1.2.2:
   version "1.2.2"
@@ -6090,7 +6091,7 @@ inferno-clone-vnode@7.4.11:
   dependencies:
     inferno "7.4.11"
 
-inferno-compat@^7.4.9:
+inferno-compat@^7.4.6, inferno-compat@^7.4.9:
   version "7.4.11"
   resolved "https://registry.yarnpkg.com/inferno-compat/-/inferno-compat-7.4.11.tgz#fc12813b0abd1ae3fbacb2adbeac82fbce109f79"
   integrity sha512-gaF5yL6CpN1DckVzMN/eiPZqlkWIMjWtr6BCBJbpUF+hXE5bJ60xNrtTFNsu2ChbYtO96UPqUNfC2VBRMz+k9Q==
@@ -10659,10 +10660,10 @@ tsutils@^3.21.0:
   dependencies:
     tslib "^1.8.1"
 
-turndown@~7.1.0:
-  version "7.1.1"
-  resolved "https://registry.yarnpkg.com/turndown/-/turndown-7.1.1.tgz#96992f2d9b40a1a03d3ea61ad31b5a5c751ef77f"
-  integrity sha512-BEkXaWH7Wh7e9bd2QumhfAXk5g34+6QUmmWx+0q6ThaVOLuLUqsnkq35HQ5SBHSaxjSfSM7US5o4lhJNH7B9MA==
+turndown@~7.0.0:
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/turndown/-/turndown-7.0.0.tgz#19b2a6a2d1d700387a1e07665414e4af4fec5225"
+  integrity sha512-G1FfxfR0mUNMeGjszLYl3kxtopC4O9DRRiMlMDDVHvU1jaBkGFg4qxIyjIk2aiKLHyDyZvZyu4qBO2guuYBy3Q==
   dependencies:
     domino "^2.1.6"
 
@@ -10917,6 +10918,11 @@ wbuf@^1.1.0, wbuf@^1.7.3:
   integrity sha512-O84QOnr0icsbFGLS0O3bI5FswxzRr8/gHwWkDlQFskhSPryQXvrTMxjxGP4+iWYoauLoBvfDpkrOauZ+0iZpDA==
   dependencies:
     minimalistic-assert "^1.0.0"
+
+web-vitals@^2.1.4:
+  version "2.1.4"
+  resolved "https://registry.yarnpkg.com/web-vitals/-/web-vitals-2.1.4.tgz#76563175a475a5e835264d373704f9dde718290c"
+  integrity sha512-sVWcwhU5mX6crfI5Vd2dC4qchyTqxV8URinzt25XqVh+bHEPGH4C3NPrNionCP7Obx59wrYEbNlw4Z8sjALzZg==
 
 webidl-conversions@^4.0.2:
   version "4.0.2"

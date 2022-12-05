@@ -78,33 +78,34 @@ const GroupsPage = () => {
     //   sorter: (a: any, b: any) => a.key - b.key,
     // },
     {
-      title: 'Section',
-      dataIndex: 'section',
+      title: 'Name',
+      dataIndex: 'name',
       // defaultSortOrder: 'descend',
       sorter: (a: any, b: any) => {
-        if (a.section > b.section) {
+        if (a.name > b.name) {
           return 1
         }
-        if (b.section > a.section) {
+        if (b.name > a.name) {
           return -1
         }
         return 0
       },
     },
     
-    {
-      title: 'Group',
-      dataIndex: 'group',
-      sorter: (a: any, b: any) => {
-        if (a.group > b.group) {
-          return 1
-        }
-        if (b.group > a.group) {
-          return -1
-        }
-        return 0
-      },
-    },
+    // {
+    //   title: 'Group',
+    //   dataIndex: 'group',
+    //   sorter: (a: any, b: any) => {
+    //     if (a.group > b.group) {
+    //       return 1
+    //     }
+    //     if (b.group > a.group) {
+    //       return -1
+    //     }
+    //     return 0
+    //   },
+    // },
+
     {
       title: 'Action',
       
@@ -135,9 +136,9 @@ const GroupsPage = () => {
   const loadData = async () => {
     setLoading(true)
     try {
-      // const response = await axios.get('http://208.117.44.15/SmWebApi/api/VmfaltsApi')
-      // setGridData(response.data)
-      setGridData(dataSource)
+      const response = await axios.get(`${ENP_URL}/Groups`)
+      setGridData(response.data)
+      // setGridData(dataSource)
       setLoading(false)
     } catch (error) {
       console.log(error)
@@ -185,22 +186,23 @@ const GroupsPage = () => {
     setGridData(filteredData)
   }
 
-  const url = `${ENP_URL}/Sections`
+  const url = `${ENP_URL}/Groups`
   const onFinish = async (values: any) => {
     setSubmitLoading(true)
     const data = {
       name: values.name,
-      sectionId: values.sectionId,
+      sectionId: values.sectionId.toString(),
 
     }
 
     try {
-      const response = await axios.post(url, data)
+      // const response = await axios.post(url, data)
+      console.log(data)
       setSubmitLoading(false)
       form.resetFields()
       setIsModalOpen(false)
       loadData()
-      return response.statusText
+      // return response.statusText
     } catch (error: any) {
       setSubmitLoading(false)
       return error.statusText
@@ -283,7 +285,6 @@ const GroupsPage = () => {
               <Form.Item label='Name' name='name' rules={[{required: true}]}>
                 <Input />
               </Form.Item>
-            
               <Form.Item name='sectionId' label='Section'>
                 <Select  placeholder="Select">
                   {sectionData.map((item: any) => (
