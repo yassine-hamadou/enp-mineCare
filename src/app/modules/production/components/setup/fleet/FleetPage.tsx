@@ -19,12 +19,6 @@ const FleetPage = () => {
   }
 
   const columns: any = [
-    // {
-    //   title: 'ID',
-    //   dataIndex: 'key',
-    //   defaultSortOrder: 'descend',
-    //   sorter: (a: any, b: any) => a.key - b.key,
-    // },
     {
       title: 'FleetID',
       dataIndex: 'fleetID',

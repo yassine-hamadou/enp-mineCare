@@ -16,6 +16,7 @@ import {useEffect, useState} from 'react'
 import {v4 as uuidv4} from 'uuid'
 import {KTSVG} from '../../../../../../_metronic/helpers'
 import {ENP_URL} from '../../../../../urls'
+import { disableCursor, enableCursor } from "@fullcalendar/react";
 
 export function dhm(t: any) {
   var cd = 24 * 60 * 60 * 1000,
@@ -462,10 +463,10 @@ const FaultTable = () => {
             </Select>
           </Form.Item>
           <Form.Item name='model' label='Model'>
-            <Input disabled />
+            <Input disabled style={{color: "black"}} />
           </Form.Item>
           <Form.Item name='desc' label='Description'>
-            <Input disabled />
+            <Input disabled style={{color: "black"}} />
           </Form.Item>
           <Form.Item name='hours' label='Fleet Hours' rules={[{required: true}]}>
             <InputNumber min={1} />
@@ -576,26 +577,47 @@ const FaultTable = () => {
           onFinish={onSolveFinish}
         >
           <Form.Item name='fleetId' label='fleetID'>
-            <Input disabled />
+            <Input
+              disabled
+              style={{color: "black"}}
+            />
           </Form.Item>
           <Form.Item name='model' label='Model'>
-            <Input disabled />
+            <Input
+              disabled
+              style={{color: "black"}}
+            />
           </Form.Item>
           <Form.Item name='desc' label='Description'>
-            <Input disabled />
+            <Input
+              disabled
+              style={{color: "black"}}
+            />
           </Form.Item>
 
           <Form.Item name='dType' label='Down Type'>
-            <Input disabled />
+            <Input
+              disabled
+              style={{color: "black"}}
+            />
           </Form.Item>
           <Form.Item name='dtime' label='Duration'>
-            <Input disabled />
+            <Input
+              disabled
+              style={{color: "black"}}
+            />
           </Form.Item>
           <Form.Item label='Custodian' name='custodian'>
-            <Input disabled />
+            <Input
+              disabled
+              style={{color: "black"}}
+            />
           </Form.Item>
           <Form.Item label='Location' name='location'>
-            <Input disabled />
+            <Input
+              disabled
+              style={{color: "black"}}
+            />
           </Form.Item>
           <Form.Item name='Resolution Type' label='Resolution Type' rules={[{required: true}]}>
             <Select placeholder='Resolution Type'>
