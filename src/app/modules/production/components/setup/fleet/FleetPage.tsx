@@ -3,12 +3,20 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { KTCardBody, KTSVG } from "../../../../../../_metronic/helpers";
 import { ENP_URL } from "../../../../../urls";
+import { useQuery } from "react-query";
+import { index } from "devexpress-reporting/designer/controls/metadata/pivotgrid/pivotgridfield";
 
 const FleetPage = () => {
   const [gridData, setGridData] = useState([])
   const [loading, setLoading] = useState(false)
   const [searchText, setSearchText] = useState('')
   let [filteredData] = useState([])
+  const {data: Vmmodls}: any = useQuery('Vmmodls', () => axios.get(`${ENP_URL}/VmmodlsApi`))
+
+  const findManufacturer = (modlName: any) => {
+    const vmManufacturer = Vmmodls?.data.find((element: any) => (element?.txmodel === modlName))
+    return vmManufacturer?.txmanf
+  }
 
   const columns: any = [
     // {
@@ -30,7 +38,6 @@ const FleetPage = () => {
         return 0
       },
     },
-
     {
       title: 'Model Name',
       dataIndex: 'modlName',
@@ -40,6 +47,12 @@ const FleetPage = () => {
       title: 'Model Class',
       dataIndex: 'modlClass',
       sorter: (a: any, b: any) => a.modlClass - b.modlClass,
+    },
+    {
+      title: 'Manufacturer',
+      render: (record: any) => {
+        return findManufacturer(record.modlName)
+      }
     },
   ]
 
@@ -59,13 +72,12 @@ const FleetPage = () => {
     loadData()
   }, [])
 
+
   const dataWithVehicleNum = gridData.map((item: any, index) => ({
     ...item,
-    vehicleNum: Math.floor(Math.random() * 20) + 1,
-    downTime: `${Math.floor(Math.random() * 100) + 1}`,
-    numOfHrs: Math.floor(Math.random() * 20) + 1,
     key: index,
   }))
+
 
   const handleInputChange = (e: any) => {
     setSearchText(e.target.value)

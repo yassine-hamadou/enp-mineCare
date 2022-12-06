@@ -275,15 +275,10 @@ const FaultTable = () => {
     }
     const dataWithId = {...data, entryId: uuidv4()}
     try {
-      // const response = await axios.post(url, dataWithId)
       setSubmitSolveLoading(false)
       form.resetFields()
       setIsSolveModalOpen(false)
-      // loadData()
-      // return response.statusText
     } catch (error: any) {
-      // setSubmitLoading(false)
-      // return error.statusText
     }
   }
   const onDefectFinish = async (values: any) => {
