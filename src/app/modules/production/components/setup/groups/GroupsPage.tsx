@@ -138,7 +138,7 @@ const GroupsPage = () => {
     try {
       const response = await axios.get(`${ENP_URL}/Groups`)
       setGridData(response.data)
-      // setGridData(dataSource)
+      console.log(gridData);
       setLoading(false)
     } catch (error) {
       console.log(error)
