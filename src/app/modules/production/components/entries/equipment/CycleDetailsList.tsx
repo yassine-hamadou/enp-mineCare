@@ -27,7 +27,7 @@ const EquipmentDetail = () => {
         <Space style={{ marginBottom: 0 }}>
           <DropDownListComponent
             id="dropdownlist"
-            placeholder="Equipment Type"
+            placeholder="Select a location"
             onChange={(e: any) => (setChosenLocationIdFromDropdown(e.value))}
             ref={(scope) => {
               dropDownListObj = scope;

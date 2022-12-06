@@ -101,7 +101,7 @@ const ProductionPage: React.FC = () => {
           path='fleet'
           element={
             <>
-              <PageTitle breadcrumbs={accountBreadCrumbs}>All Fleet</PageTitle>
+              <PageTitle breadcrumbs={accountBreadCrumbs}>All Fleets</PageTitle>
               {/*<Overview />*/}
               <FleetPage />
             </>
