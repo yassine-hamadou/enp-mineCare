@@ -10,10 +10,9 @@ import "../../../../../../../node_modules/@devexpress/analytics-core/dist/css/dx
 class ReportViewer extends React.Component {
 constructor(props) {
     super(props);
-    this.reportUrl = ko.observable("SalesByCategoryReport");
+    this.reportUrl = ko.observable("TestReport");
     this.requestOptions = {
-        host: "https://localhost:44312/",
-        
+        host: "https://app.sipconsult.net/serverside/",
         invokeAction: "DXXRDV"
     };
 }

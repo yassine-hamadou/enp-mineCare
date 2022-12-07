@@ -196,13 +196,13 @@ const GroupsPage = () => {
     }
 
     try {
-      // const response = await axios.post(url, data)
+      const response = await axios.post(url, data)
       console.log(data)
       setSubmitLoading(false)
       form.resetFields()
       setIsModalOpen(false)
       loadData()
-      // return response.statusText
+      return response.statusText
     } catch (error: any) {
       setSubmitLoading(false)
       return error.statusText
