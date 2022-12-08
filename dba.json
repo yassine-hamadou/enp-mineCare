@@ -3387,21 +3387,6 @@
       "status": 1
     },
     {
-      "entryId": "2ca625ae-6e07-430f-8f73-7a8f264f59db",
-      "fleetId": "CP015       ",
-      "vmModel": "PDS                           ",
-      "vmClass": "Compressor                                        ",
-      "downType": "BOOM                                              ",
-      "downtime": "904 Hour(s) 42 Minute(s)",
-      "locationId": "WELD  ",
-      "custodian": "ATOAH       ",
-      "resolutionId": "87bed116-efc8-434f-bc7a-866ea1a8f7cb",
-      "comment": "sdfsdf",
-      "wtimeStart": "2022-12-08T09:53:06.293Z",
-      "wtimeEnd": "2022-12-08T09:53:08.104Z",
-      "status": 1
-    },
-    {
       "entryId": "bac9890e-d3d2-4729-a90f-8cb3186afbac",
       "fleetId": "CP015       ",
       "vmModel": "PDS                           ",
@@ -3410,11 +3395,13 @@
       "downtime": "906 Hour(s) 56 Minute(s)",
       "locationId": "WELD  ",
       "custodian": "ATOAH       ",
-      "resolutionId": "66a55dcb-d8de-40b0-a349-cc4f9018b239",
-      "comment": "test4",
-      "wtimeStart": "2022-12-08T12:09:56.102Z",
-      "wtimeEnd": "2022-12-08T12:09:58.217Z",
-      "status": 1
+      "resolutionId": "eb55d30a-eaa3-4469-b2e2-12b34d08b2f7",
+      "comment": "the",
+      "wtimeStart": "2022-12-08T16:31:38.067Z",
+      "wtimeEnd": "2022-12-06T16:31:40.699Z",
+      "status": 1,
+      "resolutionType": "Scheduled",
+      "downStatus": "progress"
     },
     {
       "entryId": "a3c5f3c1-eda2-4549-89f2-be3fe1bbc6a2",
@@ -3425,11 +3412,13 @@
       "downtime": "907 Hour(s) 0 Minute(s)",
       "locationId": "WELD  ",
       "custodian": "ATOAH       ",
-      "resolutionId": "c10b020b-14c4-4bab-b9fb-2c6ea27af5ba",
-      "comment": "Test 5",
-      "wtimeStart": "2022-12-08T12:10:59.214Z",
-      "wtimeEnd": "2022-12-08T12:11:01.047Z",
-      "status": 1
+      "resolutionId": "8ed3b8fc-97b9-4a3e-bba0-0f729d850956",
+      "comment": "sdf",
+      "wtimeStart": "2022-12-08T16:26:55.353Z",
+      "wtimeEnd": "2022-12-06T16:26:58.018Z",
+      "status": 1,
+      "resolutionType": "Unscheduled",
+      "downStatus": "awaiting"
     },
     {
       "entryId": "df4443d7-aa5c-4e52-8cd3-c77617348680",
@@ -3440,11 +3429,13 @@
       "downtime": "885 Hour(s) 5 Minute(s)",
       "locationId": "CRUSH ",
       "custodian": "ACKON       ",
-      "resolutionId": "54bed3d7-e8f0-4c31-890e-1ed8ca0a9716",
-      "comment": "Test Comment",
-      "wtimeStart": "2022-12-08T11:54:50.977Z",
-      "wtimeEnd": "2022-12-08T11:54:53.541Z",
-      "status": 1
+      "resolutionId": "d357fbe9-f7f5-40e5-ab98-999876095881",
+      "comment": "sdfdf",
+      "wtimeStart": "2022-12-08T16:34:20.023Z",
+      "wtimeEnd": "2022-12-05T16:34:34.378Z",
+      "status": 1,
+      "resolutionType": "Scheduled",
+      "downStatus": "progress"
     },
     {
       "entryId": "81da0567-d8c6-4f0a-847d-d1896f9e68d6",
@@ -3455,11 +3446,13 @@
       "downtime": "908 Hour(s) 45 Minute(s)",
       "locationId": "WELD  ",
       "custodian": "ATOAH       ",
-      "resolutionId": "befeeca9-fb18-414e-890e-f819792f1362",
-      "comment": "Test 6",
-      "wtimeStart": "2022-12-08T13:56:03.061Z",
-      "wtimeEnd": "2022-12-08T13:56:04.692Z",
-      "status": 1
+      "resolutionId": "57e47a9f-58ed-4673-84b4-2cce5593e9df",
+      "comment": "sdf",
+      "wtimeStart": "2022-12-08T16:42:02.657Z",
+      "wtimeEnd": "2022-12-08T16:42:05.391Z",
+      "status": 1,
+      "resolutionType": "Unscheduled",
+      "downStatus": "awaitinglabour"
     },
     {
       "entryId": "2b41c8e7-eb9b-4f57-81dc-e225c9f72876",
@@ -3470,13 +3463,13 @@
       "downType": "BOOM                                              ",
       "downtime": "2022-10-31T17:10:27.89",
       "locationId": "WELD  ",
-      "resolutionId": "96bbfbcb-c5c6-432c-898c-823e63dd7230",
-      "wtimeStart": "2022-12-08T14:31:16.696Z",
-      "wtimeEnd": "2022-12-08T14:31:19.127Z",
-      "comment": "test 6",
+      "resolutionId": "65fecb7b-5189-4e42-ac27-8b64aa96ba7e",
+      "wtimeStart": "2022-12-08T16:25:22.237Z",
+      "wtimeEnd": "2022-12-06T16:25:34.705Z",
+      "comment": "asdas",
       "status": 1,
-      "resolutionType": "Operational",
-      "downStatus": "awaitinglabour"
+      "resolutionType": "Unscheduled",
+      "downStatus": "progress"
     },
     {
       "entryId": "41d81332-8a12-4956-8a63-e502f3852d0d",
@@ -3487,10 +3480,10 @@
       "downType": "BOOM                                              ",
       "downtime": "2022-10-31T17:10:27.89",
       "locationId": "WELD  ",
-      "resolutionId": "574290c9-8a20-4909-a680-91d44dd28eed",
-      "wtimeStart": "2022-12-08T14:55:45.590Z",
-      "wtimeEnd": "2022-12-08T14:55:47.333Z",
-      "comment": "Test 8",
+      "resolutionId": "19b7cf23-e8b2-4404-849a-8d90ff032e38",
+      "wtimeStart": "2022-12-08T16:24:06.647Z",
+      "wtimeEnd": "2022-12-06T16:24:08.968Z",
+      "comment": "sdvsd",
       "status": 1,
       "resolutionType": "Unscheduled",
       "downStatus": "progress"
@@ -3504,26 +3497,13 @@
       "downType": "500 HOURS SERVICE                                 ",
       "downtime": "2022-10-28T18:19:22.663",
       "locationId": "CRUSH ",
-      "resolutionId": null,
-      "wtimeStart": null,
-      "wtimeEnd": null,
-      "comment": null,
-      "status": 0
-    },
-    {
-      "entryId": "32fa7ef3-b799-4be2-8a16-fd5b114595b8",
-      "fleetId": "AD063       ",
-      "vmModel": "A40F                          ",
-      "vmClass": "Articulated Dump Truck                            ",
-      "downType": "500 HOURS SERVICE                                 ",
-      "downtime": "853 Hour(s) 27 Minute(s)",
-      "locationId": "WELD  ",
-      "custodian": "AMOS        ",
-      "resolutionId": "9b27906a-bcdc-4d3a-a580-48aaaa9a5b12",
-      "comment": "Test 2",
-      "wtimeStart": "2022-12-08T11:58:49.129Z",
-      "wtimeEnd": "2022-12-08T11:58:51.322Z",
-      "status": 1
+      "resolutionId": "02bd66c5-f057-4a5d-83de-0ec8a33aad59",
+      "wtimeStart": "2022-12-08T16:44:20.829Z",
+      "wtimeEnd": "2022-12-08T16:44:52.698Z",
+      "comment": "TEST COMPLETED",
+      "status": 1,
+      "resolutionType": "Unscheduled",
+      "downStatus": "awaiting"
     }
   ]
 }

@@ -4,6 +4,7 @@ import {
   Form,
   Input,
   InputNumber,
+  message,
   Modal,
   Popconfirm,
   Select,
@@ -337,6 +338,21 @@ const FaultTable = () => {
       status: 1,
     }
     try {
+      //if time completed is less than time started, do not submit but rather
+      //show an error message
+      if (new Date(data.wtimeEnd).getTime() < new Date(data.wtimeStart).getTime()) {
+        setSubmitSolveLoading(false) //stop loading
+        formSolve.setFields(
+          //set warning message
+          [
+            {
+              name: 'timeCompleted',
+              errors: ['Sorry Time completed cannot be less than Time Started'],
+            }
+          ]
+        )
+        return message.error('Sorry Time completed cannot be less than Time Started')
+      }
       solveFault(data)
       console.log('Data, to repost in fault', data)
       console.log('Solve fault', solveFault)
@@ -344,6 +360,7 @@ const FaultTable = () => {
       formSolve.resetFields()
       setIsSolveModalOpen(false)
     } catch (error: any) {
+      console.log('Error in cath ', error)
       setSubmitSolveLoading(false)
       formSolve.resetFields()
       return error.statusText
@@ -724,10 +741,10 @@ const FaultTable = () => {
           <Form.Item name='comment' label='Comment' rules={[{required: true}]}>
             <TextArea />
           </Form.Item>
-          <Form.Item name='timeStarted' label='Time Started' rules={[{required: true}]}>
+          <Form.Item id='SolveTimeStarted' name='timeStarted' label='Time Started' rules={[{required: true}]}>
             <DatePicker showTime />
           </Form.Item>
-          <Form.Item name='timeCompleted' label='Time Completed' rules={[{required: true}]}>
+          <Form.Item id='solveTimeCompleted' name='timeCompleted' label='Time Completed' rules={[{required: true}]}>
             <DatePicker showTime />
           </Form.Item>
         </Form>
