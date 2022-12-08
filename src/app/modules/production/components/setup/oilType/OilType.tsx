@@ -2,7 +2,8 @@ import {Button, Form, Input, Modal, Radio, Space, Table} from 'antd'
 import {useState, useEffect} from 'react'
 import axios from 'axios'
 import { KTCard, KTCardBody, KTSVG } from '../../../../../../_metronic/helpers'
-import { ENP_URL } from '../../../../../urls'
+import { ENP_URL, fetchBrands } from '../../../../../urls'
+import { useQuery } from 'react-query'
 
 
 
@@ -35,7 +36,7 @@ const OilTypePage = () => {
     const deleteData = async (element: any) => {
       try {
           const response = await axios.delete(
-              `${ENP_URL}/oiltypes/${element.id}`
+              `${ENP_URL}/LubeBrands/${element.id}`
           )
           // update the local state so that react can refecth and re-render the table with the new data
           const newData = gridData.filter((item: any) => item.id !== element.id)
@@ -54,19 +55,19 @@ const OilTypePage = () => {
     const columns: any =[
 
     
-    {
-      title: 'ID',
-      dataIndex: 'id',
-      sorter: (a: any, b: any) => {
-        if (a.id > b.id) {
-          return 1
-        }
-        if (b.id > a.id) {
-          return -1
-        }
-        return 0
-      },
-    },
+    // {
+    //   title: 'ID',
+    //   dataIndex: 'id',
+    //   sorter: (a: any, b: any) => {
+    //     if (a.id > b.id) {
+    //       return 1
+    //     }
+    //     if (b.id > a.id) {
+    //       return -1
+    //     }
+    //     return 0
+    //   },
+    // },
     {
       title: 'Name',
       dataIndex: 'name',
@@ -96,41 +97,32 @@ const OilTypePage = () => {
       ),
     },
   ]
-  const loadData = async () => {
-    setLoading(true)
-    try {
-      // const response = await axios.get('https://cors-anywhere.herokuapp.com/http://208.117.44.15/SmWebApi/api/VmfaltsApi')
-      const response = await axios.get(`${ENP_URL}/oiltypes`)
-      setGridData(response.data)
-      // setGridData(dataSource)
-      setLoading(false)
-    } catch (error) {
-      console.log(error)
-    }
-  }
-  const OilType =[
-    {
-        "name": "SHELL",
-        "status": 1,
-        "id": 1
-      },
-      {
-        "name": "TOTAL",
-        "status": 1,
-        "id": 2
-      },
-      {
-        "name": "KOMATSU",
-        "status": 1,
-        "id": 3
-      }
-  ]
 
-  useEffect(() => {
-    loadData()
-  }, [])
+  // const OilType =[
+  //   {
+  //       "name": "SHELL",
+  //       "status": 1,
+  //       "id": 1
+  //     },
+  //     {
+  //       "name": "TOTAL",
+  //       "status": 1,
+  //       "id": 2
+  //     },
+  //     {
+  //       "name": "KOMATSU",
+  //       "status": 1,
+  //       "id": 3
+  //     }
+  // ]
 
-  const dataWithVehicleNum = gridData.map((item: any, index) => ({
+  // useEffect(() => {
+  //   loadData()
+  // }, [])
+
+  const {data:allBrands} = useQuery('brands', fetchBrands, {cacheTime:5000})
+
+  const dataWithVehicleNum = allBrands?.data.map((item: any, index:any ) => ({
     ...item,
     key: index,
   }))
@@ -138,7 +130,7 @@ const OilTypePage = () => {
   const handleInputChange = (e: any) => {
     setSearchText(e.target.value)
     if (e.target.value === '') {
-      loadData()
+      fetchBrands()
     }
   }
 
@@ -152,14 +144,12 @@ const OilTypePage = () => {
     })
     setGridData(filteredData)
   }
-  const url = `${ENP_URL}/oiltypes`
+  const url = `${ENP_URL}/LubeBrands`
     const onFinish = async (values: any) => {
         setSubmitLoading(true)
         const data = {
             name: values.name,
-            modelID: values.modelID,
-            status: values.status,
-            
+
         }
        
         try {
@@ -167,7 +157,7 @@ const OilTypePage = () => {
             setSubmitLoading(false)
             form.resetFields()
             setIsModalOpen(false)
-            loadData()
+            fetchBrands()
             return response.statusText
         } catch (error: any) {
             setSubmitLoading(false)
@@ -212,8 +202,8 @@ const OilTypePage = () => {
             
           </Space>
         </div>
-        <Table columns={columns} dataSource={OilType} />
-          <Modal title='Add Oil-Type' open={isModalOpen} onOk={handleOk} onCancel={handleCancel} 
+        <Table columns={columns} dataSource={dataWithVehicleNum} />
+          <Modal title='Add Brand' open={isModalOpen} onOk={handleOk} onCancel={handleCancel} 
           footer={[
             <Button key='back' onClick={handleCancel}>
                         Cancel
@@ -238,17 +228,17 @@ const OilTypePage = () => {
           layout='horizontal' 
           form={form}
           name='control-hooks' 
-          title='Add Service' 
+          title='Add Brand' 
           onFinish={onFinish}>
        <Form.Item label='Name' name='name' rules={[{required: true}]}>
         <Input />
       </Form.Item>
-      <Form.Item label='Status' name='status' rules={[{required: true}]}>
+      {/* <Form.Item label='Status' name='status' rules={[{required: true}]}>
         <Radio.Group >
           <Radio value={1}>Active</Radio>
           <Radio value={2}>InActive</Radio>
         </Radio.Group>
-      </Form.Item>
+      </Form.Item> */}
       
     </Form>
         </Modal>

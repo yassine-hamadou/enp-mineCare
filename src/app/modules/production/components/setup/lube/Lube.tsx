@@ -4,7 +4,8 @@ import axios from 'axios'
 import { KTCard, KTCardBody, KTSVG } from '../../../../../../_metronic/helpers'
 import { ColumnsType } from 'antd/lib/table'
 import { Link } from 'react-router-dom'
-import { ENP_URL } from '../../../../../urls'
+import { ENP_URL, fetchEquips } from '../../../../../urls'
+import { useQuery } from 'react-query'
 
 
 
@@ -227,21 +228,10 @@ const LubePage = () => {
     },
   ]
 
-  const loadFleet = async () => {
-    setLoading(true)
-    try {
-      // const response = await axios.get('https://app.sipconsult.net/SmWebApi/api/VmequpsApi')
-      const response = await axios.get(`${ENP_URL}/VmequpsApi`)
-      setFleetData(response.data)
-      setLoading(false)
-    } catch (error) {
-      console.log(error)
-    }
-  }
   const loadData = async () => {
     setLoading(true)
     try {
-      // const response = await axios.get('https://cors-anywhere.herokuapp.com/http://208.117.44.15/SmWebApi/api/VmfaltsApi')
+     
       const response = await axios.get(`${ENP_URL}/lubes`)
       setGridData(response.data)
       // setGridData(dataSource)
@@ -250,22 +240,10 @@ const LubePage = () => {
       console.log(error)
     }
   }
-  const loadEqupData = async () => {
-    setLoading(true)
-    try {
-      const response = await axios.get(`${ENP_URL}/VmequpsApi`)
-      setDataSource(response.data)
-      setLoading(false)
-    } catch (error: any) {
-      setLoading(false)
-      return error.statusText
-    }
-  }
 
-  useEffect(() => {
-    loadData()
-    loadEqupData()
-  }, [])
+
+
+  const {data:allEquips} = useQuery('equips', fetchEquips, {cacheTime:5000})
 
   const dataWithVehicleNum = gridData.map((item: any, index) => ({
     ...item,
@@ -382,38 +360,11 @@ const LubePage = () => {
           name='control-hooks' 
           // title='Add Service' 
           onFinish={onFinish}>
-       
-        {/* <Form.Item label='FleetId' name="fleetId">
-        <Select 
-        showSearch 
-        placeholder="Search to Select"
-        optionFilterProp="children"
-        filterOption={(input, option) => (option?.label ?? '').includes(input)}
-        filterSort={(optionA, optionB) =>
-          (optionA?.label ?? '').toLowerCase().localeCompare((optionB?.label ?? '').toLowerCase())
-        }
-        options={[
-          {
-            value: '1',
-            label: 'Not Identified',
-          },
-          {
-            value: '2',
-            label: 'Closed',
-          },
-          {
-            value: '3',
-            label: 'Communicated',
-          },
-          
-        ]}
-        />
-        </Form.Item> */}
         <Form.Item name='fleetId' label='fleetId'>
                 <Select  placeholder="Select">
-                  {allFleet.map((item: any) => (
-                  <Option key={item.fleetId} value={item.fleetId}>
-                    {item.fleetId} 
+                  {allEquips?.data.map((item: any) => (
+                  <Option key={item.modlName} value={item.fleetID}>
+                    {item.modlName} 
                   </Option>
                 ))}
                 </Select>

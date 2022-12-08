@@ -133,7 +133,7 @@ const CompartmentPage = () => {
     setGridData(filteredData)
   }
 
-  const url = `${ENP_URL}/compartment`
+  const url = `${ENP_URL}/Compartment`
     const onFinish = async (values: any) => {
         setSubmitLoading(true)
         const data = {
