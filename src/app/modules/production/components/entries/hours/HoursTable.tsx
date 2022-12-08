@@ -2,9 +2,9 @@ import {Button, Input, TableColumnsType} from 'antd'
 import {Space, Table, Form} from 'antd'
 import axios from 'axios'
 import React, {useEffect, useState} from 'react'
-
+import { useQuery } from "react-query";
 import {KTSVG} from '../../../../../../_metronic/helpers'
-import {ENP_URL} from '../../../../../urls'
+import {ENP_URL, fetchEquips, fetchHours, fetchModels} from '../../../../../urls'
 
 interface DataType {
   key: React.Key
@@ -35,7 +35,6 @@ const HoursPage: React.FC = () => {
   const [dataSource, setDataSource] = useState([])
   const [edit, setEdit] = useState(false)
   const [form] = Form.useForm()
-  const [gridData, setGridData] = useState<any>([])
   const [loading, setLoading] = useState(false)
 
   const handleInputChange = (e: any) => {
@@ -58,15 +57,30 @@ const HoursPage: React.FC = () => {
     // form.resetFields()
     setIsModalOpen(false)
   }
+  const {data:allHours} = useQuery('hours', fetchHours, {cacheTime:5000})
+  const {data:equipData} = useQuery('equip-count', fetchEquips, {cacheTime:5000})
+  const countNumberOfEquipment = (model: any) => {
+    //count number of model
+    let count = 0
+    equipData?.data.forEach((item: any) => {
+      if (item.modlName === model) {
+        count++
+      }
+    })
+    return count
+  }
+
+  
   const expandedRowRender = () => {
     const columns: TableColumnsType<ExpandedDataType> = [
-      {title: 'FleetId', dataIndex: 'name', key: 'name'},
+      // {title: 'ID', dataIndex: 'id', key: 'id'},
+      {title: 'FleetId', dataIndex: 'fleetID', key: 'fleetID'},
       {
         title: 'Date',
         dataIndex: 'date',
         key: 'date',
         render: (text, record) => {
-          if (editingRow === record.key) {
+          if (editingRow === record) {
             return (
               <Form.Item name='date'>
                 <Input />
@@ -80,12 +94,12 @@ const HoursPage: React.FC = () => {
 
       {
         title: 'Prv. Reading',
-        dataIndex: 'pread',
-        key: 'pread',
+        dataIndex: 'previousReading',
+        key: 'previousReading',
         render: (text, record) => {
-          if (editingRow === record.key) {
+          if (editingRow === record.key.toString()) {
             return (
-              <Form.Item name='pread'>
+              <Form.Item name='previousReading'>
                 <Input />
               </Form.Item>
             )
@@ -96,12 +110,12 @@ const HoursPage: React.FC = () => {
       },
       {
         title: 'Cur. Reading',
-        dataIndex: 'cread',
-        key: 'cread',
+        dataIndex: 'currentReading',
+        key: 'currentReading',
         render: (text, record) => {
-          if (editingRow === record.key) {
+          if (editingRow === record.key.toString()) {
             return (
-              <Form.Item name='cread'>
+              <Form.Item name='currentReading'>
                 <Input />
               </Form.Item>
             )
@@ -121,8 +135,8 @@ const HoursPage: React.FC = () => {
                 setEditingRow(record.key)
                 form.setFieldsValue({
                   date: record.date,
-                  pread: record.pread,
-                  cread: record.cread,
+                  previousReading: record.previousReading,
+                  currentReading: record.currentReading
                 })
               }}
             >
@@ -136,32 +150,18 @@ const HoursPage: React.FC = () => {
       },
     ]
 
-    const data: any = []
-    for (let i = 0; i < 3; ++i) {
-      data.push({
-        key: i.toString(),
-        date: '2014-12-24 23:12:00',
-        name: 'Test fleets',
-        pread: '',
-        cread: '',
-      })
-    }
-
-    // const loadData = async () => {
-    //   setLoading(true)
-    //   try {
-    //     // const response = await axios.get('https://cors-anywhere.herokuapp.com/http://208.117.44.15/SmWebApi/api/VmfaltsApi')
-    //     const response = await axios.get(`${ENP_URL}/models`)
-    //     setGridData(response.data)
-    //     // setGridData(dataSource)
-    //     setLoading(false)
-    //   } catch (error) {
-    //     console.log(error)
-    //   }
+    // const rowData:any = [];
+    // for (let i = 0; i < allHours?.data.lenght; ++i) {
+    //   allHours?.data.push({
+    //     key: allHours.data[i].id.toString(),
+    //     date: allHours.data[i].date,
+    //     fleetID: allHours.data[i].fleetID,
+    //     previousReading: allHours.data[i].previousReading,
+    //     currentReading: allHours.data[i].currentReading,
+    //   })
     // }
-
     const onFinish = (values: any) => {
-      const updatedDataSource: any = [...data]
+      const updatedDataSource: any = [...allHours?.data]
       updatedDataSource.splice(editingRow, 1, {...values, key: editingRow})
       setDataSource(updatedDataSource)
       setEditingRow(null)
@@ -169,85 +169,48 @@ const HoursPage: React.FC = () => {
 
     return (
       <Form form={form} onFinish={onFinish}>
-        <Table columns={columns} rowKey='id' dataSource={data} pagination={false} />
+        <Table columns={columns} rowKey='id' dataSource={allHours?.data} pagination={false} />
       </Form>
     )
   }
 
   const columns: any = [
     {title: 'ID', dataIndex: 'id', key: 'id'},
-    {title: 'Manufacturer', dataIndex: 'manu', key: 'manu'},
-    {title: 'Model', dataIndex: 'model', key: 'model'},
-    {title: 'Number of vehicles', dataIndex: 'count', key: 'count'},
-  ]
-  const loadData = async () => {
-    setLoading(true)
-    try {
-      // const response = await axios.get('https://cors-anywhere.herokuapp.com/http://208.117.44.15/SmWebApi/api/VmfaltsApi')
-      const response = await axios.get(`${ENP_URL}/models`)
-      setGridData(response.data)
-      // setGridData(dataSource)
-      setLoading(false)
-    } catch (error) {
-      console.log(error)
+    {title: 'Manufacturer', dataIndex: 'txmanf', key: 'txmanf'},
+    {title: 'Model', dataIndex: 'txmodel', key: 'txmodel'},
+    {
+      title: 'Number of vehicles',
+      key:'txmodel', 
+      render: (row: any) => {
+        return countNumberOfEquipment(row.txmodel)
+      }
     }
-  }
-  useEffect(() => {
-    loadData()
-  }, [])
-
-  const data = [
-    {
-      id: '1',
-      manu: 'Allightsykes',
-      model: 'CP300i',
-      count: 346,
-    },
-    {
-      id: '2',
-      manu: 'BOMAG',
-      model: 'BW 216 D - 40',
-      count: 142,
-    },
-    {
-      id: '3',
-      manu: 'CAT',
-      model: 'CS76',
-      count: 143,
-    },
-    {
-      id: '4',
-      manu: 'CUMMINS',
-      model: 'C33D5',
-      count: 131,
-    },
-    {
-      id: '5',
-      manu: 'LINCOLN',
-      model: 'Air Vantage',
-      count: 431,
-    },
-    {
-      id: '6',
-      manu: 'SANDVIK',
-      model: 'DE810',
-      count: 133,
-    },
-    {
-      id: '7',
-      manu: 'VOLVO',
-      model: 'AF04',
-      count: 342,
-    },
   ]
-  for (let i = 0; i < 3; ++i) {
-    data.push({
-      id: data[i].id,
-      manu: data[i].manu,
-      model: data[i].model,
-      count: data[i].count,
-    })
-  }
+  // const loadData = async () => {
+  //   setLoading(true)
+  //   try {
+  //     const response = await axios.get(`${ENP_URL}/VmmodlsApi`)
+  //     setGridData(response.data)
+  //     setLoading(false)
+  //   } catch (error) {
+  //     console.log(error)
+  //   }
+  // }
+  // const loadEquip = async () => {
+  //   setLoading(true)
+  //   try {
+  //     const response = await axios.get(`${ENP_URL}/VmequpsApi`)
+  //     setEqipData(response.data)
+  //     setLoading(false)
+  //   } catch (error) {
+  //     console.log(error)
+  //   }
+  // }
+  const {data:mainData} = useQuery('main-data', fetchModels, {cacheTime:5000})
+  useEffect(() => {
+    // loadData()
+    // loadEquip()
+  }, [])
 
   return (
     <>
@@ -279,9 +242,9 @@ const HoursPage: React.FC = () => {
         </div>
         <Table
           columns={columns}
-          expandable={{expandedRowRender, defaultExpandedRowKeys: ['id']}}
-          rowKey='id'
-          dataSource={data}
+          expandable={{expandedRowRender, defaultExpandedRowKeys: ['txmodl']}}
+          rowKey='txmodl'
+          dataSource={mainData?.data}
         />
       </div>
     </>
