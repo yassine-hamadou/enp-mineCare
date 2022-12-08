@@ -1,14 +1,14 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import { FC, useState } from "react";
-import clsx from "clsx";
+import {FC, useState} from 'react'
+import clsx from 'clsx'
 import {
   defaultMessages,
   defaultUserInfos,
   messageFromClient,
   MessageModel,
   toAbsoluteUrl,
-  UserInfoModel
-} from "../../helpers";
+  UserInfoModel,
+} from '../../helpers'
 
 type Props = {
   isDrawer?: boolean

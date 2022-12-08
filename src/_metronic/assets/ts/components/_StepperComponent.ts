@@ -5,8 +5,8 @@ import {
   ElementStyleUtil,
   EventHandlerUtil,
   getElementIndex,
-  getUniqueIdWithPrefix
-} from "../_utils/index";
+  getUniqueIdWithPrefix,
+} from '../_utils/index'
 
 export interface IStepperOptions {
   startIndex: number

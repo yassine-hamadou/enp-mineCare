@@ -1,11 +1,11 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React, { useState } from "react";
-import * as Yup from "yup";
-import clsx from "clsx";
-import { Link } from "react-router-dom";
-import { useFormik } from "formik";
-import { getUserByToken, login } from "../core/_requests";
-import { useAuth } from "../core/Auth";
+import React, {useState} from 'react'
+import * as Yup from 'yup'
+import clsx from 'clsx'
+import {Link} from 'react-router-dom'
+import {useFormik} from 'formik'
+import {getUserByToken, login} from '../core/_requests'
+import {useAuth} from '../core/Auth'
 
 const loginSchema = Yup.object().shape({
   email: Yup.string()
@@ -74,11 +74,11 @@ export function Login() {
       {/*</div>*/}
       {/*/!* begin::Heading *!/*/}
 
-      {formik.status ?
+      {formik.status ? (
         <div className='mb-lg-15 alert alert-danger'>
           <div className='alert-text font-weight-bold'>{formik.status}</div>
         </div>
-        : null}
+      ) : null}
 
       {/* begin::Form group */}
       <div className='fv-row mb-10'>
@@ -167,9 +167,6 @@ export function Login() {
             </select>
           </div>
         </div>
-
-
-
       </div>
 
       {/* end::Form group */}
@@ -228,7 +225,7 @@ export function Login() {
         {/*</a>*/}
         {/*/!* end::Google link *!/*/}
       </div>
-       {/*end::Action */}
+      {/*end::Action */}
     </form>
   )
 }

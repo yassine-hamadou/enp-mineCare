@@ -1,7 +1,7 @@
-import clsx from "clsx";
-import { KTSVG, toAbsoluteUrl } from "../../../helpers";
-import { HeaderUserMenu } from "../../../partials";
-import { useLayout } from "../../core";
+import clsx from 'clsx'
+import {KTSVG, toAbsoluteUrl} from '../../../helpers'
+import {HeaderUserMenu} from '../../../partials'
+import {useLayout} from '../../core'
 
 const toolbarButtonMarginClass = 'ms-1 ms-lg-3',
   // toolbarButtonHeightClass = 'w-30px h-30px w-md-40px h-md-40px',

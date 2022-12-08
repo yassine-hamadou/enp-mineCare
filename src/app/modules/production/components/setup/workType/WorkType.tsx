@@ -1,9 +1,9 @@
-import { Button, Input, Modal, Space, Table } from "antd";
-import { useEffect, useState } from "react";
-import axios from "axios";
-import { Link } from "react-router-dom";
-import { KTCardBody, KTSVG } from "../../../../../../_metronic/helpers";
-import { ENP_URL} from "../../../../../urls";
+import {Button, Input, Modal, Space, Table} from 'antd'
+import {useEffect, useState} from 'react'
+import axios from 'axios'
+import {Link} from 'react-router-dom'
+import {KTCardBody, KTSVG} from '../../../../../../_metronic/helpers'
+import {ENP_URL} from '../../../../../urls'
 
 const WorkTypePage = () => {
   const [gridData, setGridData] = useState([])
@@ -145,9 +145,7 @@ const WorkTypePage = () => {
 
                 // value={searchText}
               />
-              <Button type='primary' >
-              Search
-            </Button>
+              <Button type='primary'>Search</Button>
             </Space>
             <Space style={{marginBottom: 16}}>
               {/* <button type='button' className='btn btn-primary me-3' onClick={showModal}>

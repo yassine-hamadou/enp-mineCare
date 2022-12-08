@@ -1,11 +1,11 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React, { FC, useEffect } from "react";
-import { useMutation, useQueryClient } from "react-query";
-import { MenuComponent } from "../../../../../../../../_metronic/assets/ts/components";
-import { ID, KTSVG, QUERIES } from "../../../../../../../../_metronic/helpers";
-import { useListView } from "../../core/ListViewProvider";
-import { useQueryResponse } from "../../core/QueryResponseProvider";
-import { deleteUser } from "../../core/_requests";
+import React, {FC, useEffect} from 'react'
+import {useMutation, useQueryClient} from 'react-query'
+import {MenuComponent} from '../../../../../../../../_metronic/assets/ts/components'
+import {ID, KTSVG, QUERIES} from '../../../../../../../../_metronic/helpers'
+import {useListView} from '../../core/ListViewProvider'
+import {useQueryResponse} from '../../core/QueryResponseProvider'
+import {deleteUser} from '../../core/_requests'
 
 type Props = {
   id: ID
@@ -35,10 +35,7 @@ const UserActionsCell: FC<Props> = ({id}) => {
 
   return (
     <>
-      <div
-        className='d-flex flex-shrink-0'
-        data-kt-menu='true'
-      >
+      <div className='d-flex flex-shrink-0' data-kt-menu='true'>
         <a
           href='#'
           className='btn btn-icon btn-light-warning btn-active-color-white btn-sm me-1'
@@ -52,10 +49,7 @@ const UserActionsCell: FC<Props> = ({id}) => {
           className='btn btn-icon btn-light-danger btn-active-color-white btn-sm'
           onClick={async () => await deleteItem.mutateAsync()}
         >
-          <KTSVG
-            path='/media/icons/duotune/general/gen027.svg'
-            className='svg-icon-3'
-          />
+          <KTSVG path='/media/icons/duotune/general/gen027.svg' className='svg-icon-3' />
         </a>
       </div>
     </>

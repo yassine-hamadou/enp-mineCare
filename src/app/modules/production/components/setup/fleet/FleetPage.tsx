@@ -1,10 +1,10 @@
-import { Button, Input, Space, Table } from "antd";
-import { useEffect, useState } from "react";
-import axios from "axios";
-import { KTCardBody, KTSVG } from "../../../../../../_metronic/helpers";
-import { ENP_URL } from "../../../../../urls";
-import { useQuery } from "react-query";
-import { index } from "devexpress-reporting/designer/controls/metadata/pivotgrid/pivotgridfield";
+import {Button, Input, Space, Table} from 'antd'
+import {useEffect, useState} from 'react'
+import axios from 'axios'
+import {KTCardBody, KTSVG} from '../../../../../../_metronic/helpers'
+import {ENP_URL} from '../../../../../urls'
+import {useQuery} from 'react-query'
+import {index} from 'devexpress-reporting/designer/controls/metadata/pivotgrid/pivotgridfield'
 
 const FleetPage = () => {
   const [gridData, setGridData] = useState([])
@@ -14,7 +14,7 @@ const FleetPage = () => {
   const {data: Vmmodls}: any = useQuery('Vmmodls', () => axios.get(`${ENP_URL}/VmmodlsApi`))
 
   const findManufacturer = (modlName: any) => {
-    const vmManufacturer = Vmmodls?.data.find((element: any) => (element?.txmodel === modlName))
+    const vmManufacturer = Vmmodls?.data.find((element: any) => element?.txmodel === modlName)
     return vmManufacturer?.txmanf
   }
 
@@ -46,7 +46,7 @@ const FleetPage = () => {
       title: 'Manufacturer',
       render: (record: any) => {
         return findManufacturer(record.modlName)
-      }
+      },
     },
   ]
 
@@ -66,12 +66,10 @@ const FleetPage = () => {
     loadData()
   }, [])
 
-
   const dataWithVehicleNum = gridData.map((item: any, index) => ({
     ...item,
     key: index,
   }))
-
 
   const handleInputChange = (e: any) => {
     setSearchText(e.target.value)

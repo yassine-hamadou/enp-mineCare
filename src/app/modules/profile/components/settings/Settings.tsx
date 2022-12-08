@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { defaultSettings, ISettings } from "./SettingsModel";
+import React, {useState} from 'react'
+import {defaultSettings, ISettings} from './SettingsModel'
 
 export function Settings() {
   const [data, setData] = useState<ISettings>(defaultSettings)

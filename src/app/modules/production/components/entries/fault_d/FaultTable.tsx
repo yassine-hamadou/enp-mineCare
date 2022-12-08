@@ -8,15 +8,17 @@ import {
   Popconfirm,
   Select,
   Space,
-  Table,
-} from 'antd'
+  Table, Tabs
+} from "antd";
 import TextArea from 'antd/lib/input/TextArea'
 import axios from 'axios'
-import {useEffect, useState} from 'react'
+import React, {useEffect, useState} from 'react'
 import {v4 as uuidv4} from 'uuid'
 import {KTSVG} from '../../../../../../_metronic/helpers'
 import {ENP_URL} from '../../../../../urls'
-import { disableCursor, enableCursor } from "@fullcalendar/react";
+import {disableCursor, enableCursor} from '@fullcalendar/react'
+import {useMutation, useQuery, useQueryClient} from 'react-query'
+import { ResolutionTable } from "../resolution/ResolutionTable";
 
 export function dhm(t: any) {
   var cd = 24 * 60 * 60 * 1000,
@@ -38,6 +40,7 @@ export function dhm(t: any) {
   return d * 24 + h + ` Hour(s) ${m} Minute(s)`
   // return `${d} Day(s) ${pad(h)} Hour(s) ${pad(m)} Minute(s)`;
 }
+
 const FaultTable = () => {
   const [gridData, setGridData] = useState([])
   const [searchText, setSearchText] = useState('')
@@ -57,10 +60,11 @@ const FaultTable = () => {
   const [submitSolveLoading, setSubmitSolveLoading] = useState(false)
   const [submitDefectLoading, setSubmitDefectLoading] = useState(false)
   const [isHovering, setIsHovering] = useState(false)
+  let QueryClient = useQueryClient()
   const handleInputChange = (e: any) => {
     setSearchText(e.target.value)
     if (e.target.value === '') {
-      loadData()
+      // loadData();
     }
   }
   // Modal functions
@@ -84,32 +88,57 @@ const FaultTable = () => {
     setIsHovering(false)
   }
   // Modal functions end
-  const loadData = async () => {
-    setLoading(true)
-    try {
-      const response = await axios.get(`${ENP_URL}/FaultEntriesApi`)
 
-      //Formatting date to the received data
-      const dataReceivedfromAPI = {
-        get withFormatDate() {
-          return response.data.map((item: any, index: number) => ({
-            ...item,
-            key: index,
+  const {data: allFaultsEntries} = useQuery(
+    'faults',
+    () => axios.get(`${ENP_URL}/FaultEntriesApi`),
+    {
+      onSuccess: (data) => {
+        const tableData = data?.data.map((item: any, index: number) => ({
+          ...item,
+          key: index,
 
-            //Calculating duration: Present Time MINUS Time the fault was reported
-            duration: `${dhm(new Date().getTime() - new Date(item.downtime).getTime())}`,
-            formattedDate: new Date(item.downtime).toLocaleString(),
-          }))
-        },
-      }
-      console.log('Datafrom apt', dataReceivedfromAPI.withFormatDate)
-      setGridData(dataReceivedfromAPI.withFormatDate)
-      setLoading(false)
-    } catch (error: any) {
-      setLoading(false)
-      return error.statusText
+          //Calculating duration: Present Time MINUS Time the fault was reported
+          duration: `${dhm(new Date().getTime() - new Date(item.downtime).getTime())}`,
+          formattedDate: new Date(item.downtime).toLocaleString(),
+        }))
+        setGridData(tableData)
+        setLoading(false)
+      },
+      onError: (error: any) => {
+        setLoading(false)
+        return error.statusText
+      },
     }
-  }
+  )
+
+  console.log('allFaultsEntries', allFaultsEntries)
+  // const loadData = async () => {
+  //   setLoading(true);
+  //   try {
+  //     const response = await axios.get(`${ENP_URL}/FaultEntriesApi`);
+  //
+  //     //Formatting date to the received data
+  //     const dataReceivedfromAPI = {
+  //       get withFormatDate() {
+  //         return response.data.map((item: any, index: number) => ({
+  //           ...item,
+  //           key: index,
+  //
+  //           //Calculating duration: Present Time MINUS Time the fault was reported
+  //           duration: `${dhm(new Date().getTime() - new Date(item.downtime).getTime())}`,
+  //           formattedDate: new Date(item.downtime).toLocaleString()
+  //         }));
+  //       }
+  //     };
+  //     console.log("Datafrom apt", dataReceivedfromAPI.withFormatDate);
+  //     setGridData(dataReceivedfromAPI.withFormatDate);
+  //     setLoading(false);
+  //   } catch (error: any) {
+  //     setLoading(false);
+  //     return error.statusText;
+  //   }
+  // };
 
   const deleteData = async (element: any) => {
     try {
@@ -188,6 +217,7 @@ const FaultTable = () => {
               className='btn btn-light-success btn-sm'
               onClick={() => {
                 formSolve.setFieldsValue({
+                  entryId: record.entryId,
                   fleetId: record.fleetId,
                   model: record.vmModel,
                   desc: record.vmClass,
@@ -256,30 +286,67 @@ const FaultTable = () => {
       setSubmitLoading(false)
       form.resetFields()
       setIsModalOpen(false)
-      loadData()
+      //invalidate the query to refetch the data
+      QueryClient.invalidateQueries('faults')
       return response.statusText
     } catch (error: any) {
       setSubmitLoading(false)
       return error.statusText
     }
   }
+
+  //react query
+  const {
+    mutate: solveFault,
+    isLoading: isSolveLoading,
+    data,
+    error,
+  } = useMutation(
+    (values: any) => axios.patch(`${ENP_URL}/FaultEntriesApi/${values.entryId}`, values),
+    {
+      onSuccess: () => {
+        console.log('Solved', data)
+        //invalidate the query to refetch the data
+        QueryClient.invalidateQueries('faults')
+      },
+      onError: () => {
+        console.log('Error', error)
+      },
+    }
+  )
+
   const onSolveFinish = async (values: any) => {
+    console.log('Solve values', values)
     setSubmitSolveLoading(true)
     const data = {
-      fleetId: values.fleetId,
-      vmModel: values.model,
-      vmClass: values.desc,
-      downType: values.dType,
-      downtime: new Date().toISOString(),
-      locationId: values.location,
-      custodian: values.custodian,
+      entryId: values.entryId,
+      // fleetId: values.fleetId,
+      // vmModel: values.model,
+      // vmClass: values.desc,
+      // downType: values.dType,
+      // downtime: values.dtime,
+      // locationId: values.location,
+      // custodian: values.custodian,
+      //New columns being filled to the table
+      resolutionId: uuidv4(),
+      resolutionType: values.resolutionType,
+      downStatus: values.dStatus,
+      comment: values.comment,
+      wtimeStart: values.timeStarted,
+      wtimeEnd: values.timeCompleted,
+      status: 1,
     }
-    const dataWithId = {...data, entryId: uuidv4()}
     try {
+      solveFault(data)
+      console.log('Data, to repost in fault', data)
+      console.log('Solve fault', solveFault)
       setSubmitSolveLoading(false)
-      form.resetFields()
+      formSolve.resetFields()
       setIsSolveModalOpen(false)
     } catch (error: any) {
+      setSubmitSolveLoading(false)
+      formSolve.resetFields()
+      return error.statusText
     }
   }
   const onDefectFinish = async (values: any) => {
@@ -357,15 +424,12 @@ const FaultTable = () => {
   const {Option} = Select
 
   useEffect(() => {
-    loadData()
+    // loadData();
     loadEqupData()
     loadFaultType()
     loadLocation()
     loadCustodian()
   }, [])
-  // useEffect(() => {
-  //     setSolveFormValues(selectedRowForSolve)
-  // }, [selectedRowForSolve])
 
   /*
       Function that gets called whenever a fleetID is selected from the dropdown;
@@ -391,35 +455,60 @@ const FaultTable = () => {
         boxShadow: '2px 2px 15px rgba(0,0,0,0.08)',
       }}
     >
-      <div className='d-flex justify-content-between'>
-        <Space style={{marginBottom: 16}}>
-          <Input
-            placeholder='Enter Search Text'
-            onChange={handleInputChange}
-            type='text'
-            allowClear
-            value={searchText}
-          />
-          <Button type='primary' onClick={globalSearch}>
-            Search
-          </Button>
-        </Space>
-        <Space style={{marginBottom: 16}}>
-          <button type='button' className='btn btn-primary me-3' onClick={showModal}>
-            <KTSVG path='/media/icons/duotune/arrows/arr075.svg' className='svg-icon-2' />
-            Add
-          </button>
-          <button type='button' className='btn btn-light-primary me-3'>
-            <KTSVG path='/media/icons/duotune/arrows/arr078.svg' className='svg-icon-2' />
-            Upload
-          </button>
-          <button type='button' className='btn btn-light-primary me-3'>
-            <KTSVG path='/media/icons/duotune/arrows/arr078.svg' className='svg-icon-2' />
-            Export
-          </button>
-        </Space>
-      </div>
-      <Table columns={columns} dataSource={gridData} bordered loading={loading} />
+      <Tabs
+        defaultActiveKey="1"
+        items={[
+          {
+            label: `All Faults`,
+            key: '1',
+            children: (
+              <>
+                <div className='d-flex justify-content-between'>
+                  <Space style={{marginBottom: 16}}>
+                    <Input
+                      placeholder='Enter Search Text'
+                      onChange={handleInputChange}
+                      type='text'
+                      allowClear
+                      value={searchText}
+                    />
+                    <Button type='primary' onClick={globalSearch}>
+                      Search
+                    </Button>
+                  </Space>
+                  <Space style={{marginBottom: 16}}>
+                    <button type='button' className='btn btn-primary me-3' onClick={showModal}>
+                      <KTSVG path='/media/icons/duotune/arrows/arr075.svg' className='svg-icon-2' />
+                      Add
+                    </button>
+                    <button type='button' className='btn btn-light-primary me-3'>
+                      <KTSVG path='/media/icons/duotune/arrows/arr078.svg' className='svg-icon-2' />
+                      Upload
+                    </button>
+                    <button type='button' className='btn btn-light-primary me-3'>
+                      <KTSVG path='/media/icons/duotune/arrows/arr078.svg' className='svg-icon-2' />
+                      Export
+                    </button>
+                  </Space>
+                </div>
+                <Table columns={columns} dataSource={gridData.filter(
+                  (fault: any) => fault.status === 0)} bordered loading={isSolveLoading ? isSolveLoading : loading}
+                       rowKey={(record: any) => record.entryId}
+                />
+              </>
+            ),
+          },
+          {
+            label: `Resolution`,
+            key: '2',
+            children: (
+              <>
+                <ResolutionTable />
+              </>
+            ),
+          },
+        ]}
+      />
 
       {/*Add Fault*/}
       <Modal
@@ -463,10 +552,10 @@ const FaultTable = () => {
             </Select>
           </Form.Item>
           <Form.Item name='model' label='Model'>
-            <Input disabled style={{color: "black"}} />
+            <Input disabled style={{color: 'black'}} />
           </Form.Item>
           <Form.Item name='desc' label='Description'>
-            <Input disabled style={{color: "black"}} />
+            <Input disabled style={{color: 'black'}} />
           </Form.Item>
           <Form.Item name='hours' label='Fleet Hours' rules={[{required: true}]}>
             <InputNumber min={1} />
@@ -577,49 +666,40 @@ const FaultTable = () => {
           onFinish={onSolveFinish}
         >
           <Form.Item name='fleetId' label='fleetID'>
-            <Input
-              disabled
-              style={{color: "black"}}
-            />
+            <Input disabled style={{color: 'black'}} />
+          </Form.Item>
+          <Form.Item name='entryId' label='EntryID' hidden>
+            <Input disabled />
           </Form.Item>
           <Form.Item name='model' label='Model'>
-            <Input
-              disabled
-              style={{color: "black"}}
-            />
+            <Input disabled style={{color: 'black'}} />
           </Form.Item>
           <Form.Item name='desc' label='Description'>
-            <Input
-              disabled
-              style={{color: "black"}}
-            />
+            <Input disabled style={{color: 'black'}} />
           </Form.Item>
 
           <Form.Item name='dType' label='Down Type'>
-            <Input
-              disabled
-              style={{color: "black"}}
-            />
+            <Input disabled style={{color: 'black'}} />
           </Form.Item>
           <Form.Item name='dtime' label='Duration'>
-            <Input
-              disabled
-              style={{color: "black"}}
-            />
+            <Input disabled style={{color: 'black'}} />
           </Form.Item>
           <Form.Item label='Custodian' name='custodian'>
-            <Input
-              disabled
-              style={{color: "black"}}
-            />
+            <Input disabled style={{color: 'black'}} />
           </Form.Item>
           <Form.Item label='Location' name='location'>
-            <Input
-              disabled
-              style={{color: "black"}}
-            />
+            <Input disabled style={{color: 'black'}} />
           </Form.Item>
-          <Form.Item name='Resolution Type' label='Resolution Type' rules={[{required: true}]}>
+          <Form.Item
+            name='resolutionType'
+            label='Resolution Type'
+            rules={[
+              {
+                required: true,
+                message: 'Resolution Type is required',
+              },
+            ]}
+          >
             <Select placeholder='Resolution Type'>
               <Option value={'Scheduled'}>Scheduled</Option>
               <Option value={'Unscheduled'}>Unscheduled</Option>
@@ -628,7 +708,11 @@ const FaultTable = () => {
               <Option value={'Warranty'}>Warranty</Option>
             </Select>
           </Form.Item>
-          <Form.Item name='dstatus' label='Down Status' rules={[{required: true}]}>
+          <Form.Item
+            name='dStatus'
+            label='Down Status'
+            rules={[{required: true, message: 'Down Status is required'}]}
+          >
             <Select placeholder='Select Down Status'>
               <Option value={'progress'}>In Progress</Option>
               <Option value={'awaiting'}>Awaiting Parts</Option>
@@ -683,7 +767,7 @@ const FaultTable = () => {
           onFinish={onDefectFinish}
         >
           <Form.Item name='fleetId' label='Fleet ID' rules={[{required: true}]}>
-            <Input disabled />
+            <Input disabled style={{color: 'black'}} />
           </Form.Item>
           <Form.Item name='Defect Date' label='Expected Date' rules={[{required: true}]}>
             <DatePicker showTime />

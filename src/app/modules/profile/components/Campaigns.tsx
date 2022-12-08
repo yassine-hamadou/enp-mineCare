@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React from "react";
-import { Card5 } from "../../../../_metronic/partials/content/cards/Card5";
+import React from 'react'
+import {Card5} from '../../../../_metronic/partials/content/cards/Card5'
 
 export function Campaigns() {
   return (

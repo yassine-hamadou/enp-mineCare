@@ -1,12 +1,11 @@
-import { Button, Form, Input, Modal, Select, Space, Table } from "antd";
-import { useEffect, useState } from "react";
-import { KTCardBody, KTSVG } from "../../../../../../_metronic/helpers";
+import {Button, Form, Input, Modal, Select, Space, Table} from 'antd'
+import {useEffect, useState} from 'react'
+import {KTCardBody, KTSVG} from '../../../../../../_metronic/helpers'
 // import { AddWorkTypeForm } from './AddWorkTypeForm'
-import { Link } from "react-router-dom";
-import { AddSectionForm } from "./AddSectionForm";
-import axios from "axios";
-import { ENP_URL } from "../../../../../urls";
-
+import {Link} from 'react-router-dom'
+import {AddSectionForm} from './AddSectionForm'
+import axios from 'axios'
+import {ENP_URL} from '../../../../../urls'
 
 const SectionsPage = () => {
   const [gridData, setGridData] = useState([])
@@ -17,41 +16,39 @@ const SectionsPage = () => {
   const [form] = Form.useForm()
   const [submitLoading, setSubmitLoading] = useState(false)
 
-    // Modal functions
-    const [isModalOpen, setIsModalOpen] = useState(false)
+  // Modal functions
+  const [isModalOpen, setIsModalOpen] = useState(false)
 
-    const showModal = () => {
-      setIsModalOpen(true)
-    }
-  
-    const handleOk = () => {
-      setIsModalOpen(false)
-    }
-  
-    const handleCancel = () => {
-      setIsModalOpen(false)
-    }
+  const showModal = () => {
+    setIsModalOpen(true)
+  }
 
+  const handleOk = () => {
+    setIsModalOpen(false)
+  }
 
-    // Modal functions end
+  const handleCancel = () => {
+    setIsModalOpen(false)
+  }
 
+  // Modal functions end
 
-    const deleteData = async (element: any) => {
-      try {
-        const response = await axios.delete(`${ENP_URL}/Sections/${element.id}`)
-        // update the local state so that react can refecth and re-render the table with the new data
-        const newData = gridData.filter((item: any) => item.id !== element.id)
-        setGridData(newData)
-        return response.status
-      } catch (e) {
-        return e
-      }
+  const deleteData = async (element: any) => {
+    try {
+      const response = await axios.delete(`${ENP_URL}/Sections/${element.id}`)
+      // update the local state so that react can refecth and re-render the table with the new data
+      const newData = gridData.filter((item: any) => item.id !== element.id)
+      setGridData(newData)
+      return response.status
+    } catch (e) {
+      return e
     }
-  
-    function handleDelete(element: any) {
-      deleteData(element)
-    }
-    const columns: any =[
+  }
+
+  function handleDelete(element: any) {
+    deleteData(element)
+  }
+  const columns: any = [
     // {
     //   title: 'ID',
     //   dataIndex: 'key',
@@ -72,7 +69,7 @@ const SectionsPage = () => {
     //     return 0
     //   },
     // },
-    
+
     {
       title: 'Section',
       dataIndex: 'name',
@@ -88,19 +85,20 @@ const SectionsPage = () => {
     },
     {
       title: 'Action',
-      
+
       // dataIndex: 'faultDesc',
       // sorter: (a: any, b: any) => a.faultDesc - b.faultDesc,
       fixed: 'right',
       width: 100,
-      render: (_: any, record: any ) => (
-        <Space size="middle">
+      render: (_: any, record: any) => (
+        <Space size='middle'>
           {/* <a href="groups" className="btn btn-light-info btn-sm">Groups</a> */}
           <Link to={'/setup/groups'}>
-          <span className="btn btn-light-info btn-sm">
-            Groups
-            </span></Link>
-          <a href="#" className="btn btn-light-warning btn-sm ">Update</a>
+            <span className='btn btn-light-info btn-sm'>Groups</span>
+          </Link>
+          <a href='#' className='btn btn-light-warning btn-sm '>
+            Update
+          </a>
           {/* <a href="#" className="btn btn-light-danger btn-sm">Delete</a> */}
           <a onClick={() => handleDelete(record)} className='btn btn-light-danger btn-sm'>
             Delete
@@ -111,13 +109,11 @@ const SectionsPage = () => {
     //console
   ]
 
-
   const {Option} = Select
 
   const loadData = async () => {
     setLoading(true)
     try {
-
       const response = await axios.get(`${ENP_URL}/Sections`)
 
       setGridData(response.data)
@@ -174,7 +170,6 @@ const SectionsPage = () => {
     const data = {
       name: values.name,
       serviceId: values.serviceId.toString(),
-
     }
 
     try {
@@ -192,48 +187,53 @@ const SectionsPage = () => {
   }
 
   return (
-    <div style={{backgroundColor:'white', padding:'20px', borderRadius:'5px', boxShadow:'2px 2px 15px rgba(0,0,0,0.08)'}}>
+    <div
+      style={{
+        backgroundColor: 'white',
+        padding: '20px',
+        borderRadius: '5px',
+        boxShadow: '2px 2px 15px rgba(0,0,0,0.08)',
+      }}
+    >
       {/* <div style={{backgroundColor:'white'}}> */}
       <KTCardBody className='py-4 '>
         <div className='table-responsive'>
-        <Link to={"/setup/service"}>
-            <span  className='mb-3 btn btn-outline btn-outline-dashed btn-outline-primary btn-active-light-primary'>
+          <Link to={'/setup/service'}>
+            <span className='mb-3 btn btn-outline btn-outline-dashed btn-outline-primary btn-active-light-primary'>
               Back to Services
             </span>
-        </Link>
-        <div className='d-flex justify-content-between'>
-          <Space style={{marginBottom: 16}}>
-            <Input
-              placeholder='Enter Search Text'
-              onChange={handleInputChange}
-              type='text'
-              allowClear
-              value={searchText}
-            />
-            <Button type='primary' onClick={globalSearch}>
-              Search
-            </Button>
-          </Space>
-          <Space style={{marginBottom: 16}}>
-            
-            <button type='button' className='btn btn-primary me-3' onClick={showModal}>
-              <KTSVG path='/media/icons/duotune/arrows/arr075.svg' className='svg-icon-2' />
-              Add
-            </button>
-            <button type='button' className='btn btn-light-primary me-3'>
-              <KTSVG path='/media/icons/duotune/arrows/arr078.svg' className='svg-icon-2' />
-              Upload
-            </button>
-            <button type='button' className='btn btn-light-primary me-3'>
-              <KTSVG path='/media/icons/duotune/arrows/arr078.svg' className='svg-icon-2' />
-              
-              Export
-            </button>
-          </Space>
-        </div>
-        <Table columns={columns} dataSource={dataWithVehicleNum} />
-        
-        <Modal
+          </Link>
+          <div className='d-flex justify-content-between'>
+            <Space style={{marginBottom: 16}}>
+              <Input
+                placeholder='Enter Search Text'
+                onChange={handleInputChange}
+                type='text'
+                allowClear
+                value={searchText}
+              />
+              <Button type='primary' onClick={globalSearch}>
+                Search
+              </Button>
+            </Space>
+            <Space style={{marginBottom: 16}}>
+              <button type='button' className='btn btn-primary me-3' onClick={showModal}>
+                <KTSVG path='/media/icons/duotune/arrows/arr075.svg' className='svg-icon-2' />
+                Add
+              </button>
+              <button type='button' className='btn btn-light-primary me-3'>
+                <KTSVG path='/media/icons/duotune/arrows/arr078.svg' className='svg-icon-2' />
+                Upload
+              </button>
+              <button type='button' className='btn btn-light-primary me-3'>
+                <KTSVG path='/media/icons/duotune/arrows/arr078.svg' className='svg-icon-2' />
+                Export
+              </button>
+            </Space>
+          </div>
+          <Table columns={columns} dataSource={dataWithVehicleNum} />
+
+          <Modal
             title='Add Service'
             open={isModalOpen}
             onOk={handleOk}
@@ -248,7 +248,6 @@ const SectionsPage = () => {
                 htmlType='submit'
                 loading={submitLoading}
                 onClick={() => {
-             
                   form.submit()
                 }}
               >
@@ -256,7 +255,6 @@ const SectionsPage = () => {
               </Button>,
             ]}
           >
-           
             <Form
               labelCol={{span: 7}}
               wrapperCol={{span: 14}}
@@ -269,24 +267,22 @@ const SectionsPage = () => {
               <Form.Item label='Name' name='name' rules={[{required: true}]}>
                 <Input />
               </Form.Item>
-              
+
               <Form.Item name='serviceId' label='Service'>
-                <Select  placeholder="Select">
+                <Select placeholder='Select'>
                   {serviceData.map((item: any) => (
-                  <Option key={item.id} value={item.id}>
-                    {item.name} 
-                  </Option>
-                ))}
+                    <Option key={item.id} value={item.id}>
+                      {item.name}
+                    </Option>
+                  ))}
                 </Select>
               </Form.Item>
             </Form>
           </Modal>
-      </div>
+        </div>
       </KTCardBody>
-     
     </div>
   )
 }
 
 export {SectionsPage}
-

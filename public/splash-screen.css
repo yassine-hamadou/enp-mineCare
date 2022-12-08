@@ -14,14 +14,14 @@ body {
   flex-direction: column;
   font-family: Helvetica, 'sans-serif';
   background-color: #f2f3f8;
-  color: #5E6278;
+  color: #5e6278;
   line-height: 1;
   font-size: 14px;
   font-weight: 400;
 }
 
 .splash-screen span {
-  color: #5E6278;
+  color: #5e6278;
   transition: none !important;
   text-size-adjust: 100%;
   -webkit-font-smoothing: antialiased;
@@ -33,11 +33,11 @@ body {
   height: 30px !important;
 }
 
-[data-theme="dark"] .splash-screen {
+[data-theme='dark'] .splash-screen {
   background-color: #151521;
-  color: #92929F;
+  color: #92929f;
 }
 
-[data-theme="dark"] .splash-screen span {
-  color: #92929F;
+[data-theme='dark'] .splash-screen span {
+  color: #92929f;
 }

@@ -1,8 +1,13 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React from "react";
-import { Link } from "react-router-dom";
-import { KTSVG } from "../../../../_metronic/helpers";
-import { ChartsWidget1, ListsWidget5, TablesWidget1, TablesWidget5 } from "../../../../_metronic/partials/widgets";
+import React from 'react'
+import {Link} from 'react-router-dom'
+import {KTSVG} from '../../../../_metronic/helpers'
+import {
+  ChartsWidget1,
+  ListsWidget5,
+  TablesWidget1,
+  TablesWidget5,
+} from '../../../../_metronic/partials/widgets'
 
 export function Overview() {
   return (

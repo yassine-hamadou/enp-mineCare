@@ -27,7 +27,7 @@ export const defaultCreateAppData: ICreateAppData = {
 }
 
 export type StepProps = {
-  data: ICreateAppData,
-  updateData: (fieldsToUpdate: Partial<ICreateAppData>) => void,
+  data: ICreateAppData
+  updateData: (fieldsToUpdate: Partial<ICreateAppData>) => void
   hasError: boolean
 }

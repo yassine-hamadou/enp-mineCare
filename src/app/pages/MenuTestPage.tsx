@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import { FC } from "react";
-import SVG from "react-inlinesvg";
-import { toAbsoluteUrl } from "../../_metronic/helpers";
+import {FC} from 'react'
+import SVG from 'react-inlinesvg'
+import {toAbsoluteUrl} from '../../_metronic/helpers'
 
 const MenuTestPage: FC = () => {
   return (

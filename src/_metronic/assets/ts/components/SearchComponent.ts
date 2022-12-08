@@ -7,10 +7,10 @@ import {
   getViewPort,
   isVisibleElement,
   stringSnakeToCamel,
-  throttle
-} from "../_utils/index";
+  throttle,
+} from '../_utils/index'
 
-import { defaultMenuOptions, MenuComponent } from "./MenuComponent";
+import {defaultMenuOptions, MenuComponent} from './MenuComponent'
 
 export interface ISearchOptions {
   minLength: number // Miniam text lenght to query search

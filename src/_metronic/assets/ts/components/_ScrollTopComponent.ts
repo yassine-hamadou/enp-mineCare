@@ -6,8 +6,8 @@ import {
   getScrollTop,
   getUniqueIdWithPrefix,
   stringSnakeToCamel,
-  throttle
-} from "../_utils/index";
+  throttle,
+} from '../_utils/index'
 
 export interface IScrollTopOptions {
   offset: number

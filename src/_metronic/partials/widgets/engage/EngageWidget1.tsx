@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React from "react";
-import { KTSVG, toAbsoluteUrl } from "../../../helpers";
+import React from 'react'
+import {KTSVG, toAbsoluteUrl} from '../../../helpers'
 // import { toAbsoluteUrl } from "../../../helpers";
 // import { KTSVG } from "../../../helpers";
 
@@ -46,7 +46,9 @@ const EngageWidget1: React.FC<Props> = ({
             />
             <input
               type='text'
-              className={`form-control border-0 fw-semibold ps-2 ${lg ? 'w-xxl-600px' : 'w-xxl-350px'}`}
+              className={`form-control border-0 fw-semibold ps-2 ${
+                lg ? 'w-xxl-600px' : 'w-xxl-350px'
+              }`}
               placeholder='Search Goods'
             />
           </form>

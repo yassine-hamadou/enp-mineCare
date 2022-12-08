@@ -1,6 +1,6 @@
-import { FC, useMemo } from "react";
-import { ID } from "../../../../../../_metronic/helpers";
-import { useListView } from "../../core/ListViewProvider";
+import {FC, useMemo} from 'react'
+import {ID} from '../../../../../../_metronic/helpers'
+import {useListView} from '../../core/ListViewProvider'
 
 type Props = {
   id: ID

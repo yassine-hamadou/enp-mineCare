@@ -1,6 +1,6 @@
-import React, { FC, useEffect, useRef, useState } from "react";
-import { SearchComponent } from "../../../assets/ts/components";
-import { KTSVG, toAbsoluteUrl } from "../../../helpers";
+import React, {FC, useEffect, useRef, useState} from 'react'
+import {SearchComponent} from '../../../assets/ts/components'
+import {KTSVG, toAbsoluteUrl} from '../../../helpers'
 
 const Search: FC = () => {
   const [menuState, setMenuState] = useState<'main' | 'advanced' | 'preferences'>('main')

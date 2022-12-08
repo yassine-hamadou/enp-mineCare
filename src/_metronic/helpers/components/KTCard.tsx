@@ -1,6 +1,6 @@
-import { FC } from "react";
-import clsx from "clsx";
-import { WithChildren } from "../react18MigrationHelpers";
+import {FC} from 'react'
+import clsx from 'clsx'
+import {WithChildren} from '../react18MigrationHelpers'
 
 // Wrapper on html card:
 // https://preview.keenthemes.com/metronic8/demo1/documentation/base/cards.html

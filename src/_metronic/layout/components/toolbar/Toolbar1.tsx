@@ -1,9 +1,9 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import clsx from "clsx";
-import { useState } from "react";
-import { CreateAppModal } from "../../../partials";
-import { useLayout } from "../../core";
-import { DefaultTitle } from "../header/page-title/DefaultTitle";
+import clsx from 'clsx'
+import {useState} from 'react'
+import {CreateAppModal} from '../../../partials'
+import {useLayout} from '../../core'
+import {DefaultTitle} from '../header/page-title/DefaultTitle'
 
 const Toolbar1 = () => {
   const {classes} = useLayout()

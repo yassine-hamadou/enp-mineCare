@@ -1,8 +1,8 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import clsx from "clsx";
-import { FC } from "react";
-import { User } from "../../core/_models";
-import { toAbsoluteUrl } from "../../../../../../../../_metronic/helpers";
+import clsx from 'clsx'
+import {FC} from 'react'
+import {User} from '../../core/_models'
+import {toAbsoluteUrl} from '../../../../../../../../_metronic/helpers'
 
 type Props = {
   user: User

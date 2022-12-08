@@ -8,9 +8,9 @@ import {
   ILayoutCSSVariables,
   ILayoutHTMLAttributes,
   IPageTitle,
-  IToolbar
-} from "./LayoutModels";
-import { DefaultLayoutConfig } from "./DefaultLayoutConfig";
+  IToolbar,
+} from './LayoutModels'
+import {DefaultLayoutConfig} from './DefaultLayoutConfig'
 
 const LAYOUT_CONFIG_KEY = process.env.REACT_APP_BASE_LAYOUT_CONFIG_KEY || 'LayoutConfig'
 

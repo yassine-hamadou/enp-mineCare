@@ -1,9 +1,9 @@
-import { Button, Form, Input, Modal, Radio, Select, Space, Table } from "antd";
-import { useEffect, useState } from "react";
-import axios from "axios";
-import { KTCardBody, KTSVG } from "../../../../../../_metronic/helpers";
-import { Link } from "react-router-dom";
-import { ENP_URL } from "../../../../../urls";
+import {Button, Form, Input, Modal, Radio, Select, Space, Table} from 'antd'
+import {useEffect, useState} from 'react'
+import axios from 'axios'
+import {KTCardBody, KTSVG} from '../../../../../../_metronic/helpers'
+import {Link} from 'react-router-dom'
+import {ENP_URL} from '../../../../../urls'
 
 const ServicesPage = () => {
   const [gridData, setGridData] = useState([])
@@ -151,14 +151,12 @@ const ServicesPage = () => {
     setGridData(filteredData)
   }
 
-
   const url = `${ENP_URL}/Services`
   const onFinish = async (values: any) => {
     setSubmitLoading(true)
     const data = {
       name: values.name,
       model: values.model,
-
     }
 
     try {
@@ -185,9 +183,8 @@ const ServicesPage = () => {
     >
       <KTCardBody className='py-4 '>
         <div className='table-responsive'>
-          
-          <Link to={"/setup/work-type"}>
-            <span  className='mb-3 btn btn-outline btn-outline-dashed btn-outline-primary btn-active-light-primary'>
+          <Link to={'/setup/work-type'}>
+            <span className='mb-3 btn btn-outline btn-outline-dashed btn-outline-primary btn-active-light-primary'>
               Back to Models
             </span>
           </Link>
@@ -235,7 +232,6 @@ const ServicesPage = () => {
                 htmlType='submit'
                 loading={submitLoading}
                 onClick={() => {
-             
                   form.submit()
                 }}
               >
@@ -260,12 +256,12 @@ const ServicesPage = () => {
                 <Input />
               </Form.Item> */}
               <Form.Item name='model' label='Model'>
-                <Select  placeholder="Search to Select">
+                <Select placeholder='Search to Select'>
                   {modeldData.map((item: any) => (
-                  <Option key={item.txmodel} value={item.txmodel}>
-                    {item.txmodel} 
-                  </Option>
-                ))}
+                    <Option key={item.txmodel} value={item.txmodel}>
+                      {item.txmodel}
+                    </Option>
+                  ))}
                 </Select>
               </Form.Item>
             </Form>

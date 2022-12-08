@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React from "react";
-import { KTSVG, toAbsoluteUrl } from "../../../helpers";
+import React from 'react'
+import {KTSVG, toAbsoluteUrl} from '../../../helpers'
 
 type Props = {
   className: string
@@ -232,7 +232,9 @@ const TablesWidget10: React.FC<Props> = ({className}) => {
                   <a href='#' className='text-dark fw-bold text-hover-primary d-block fs-6'>
                     RoadGee
                   </a>
-                  <span className='text-muted fw-semibold text-muted d-block fs-7'>Transportation</span>
+                  <span className='text-muted fw-semibold text-muted d-block fs-7'>
+                    Transportation
+                  </span>
                 </td>
                 <td className='text-end'>
                   <div className='d-flex flex-column w-100 me-2'>
@@ -372,7 +374,9 @@ const TablesWidget10: React.FC<Props> = ({className}) => {
                   <a href='#' className='text-dark fw-bold text-hover-primary d-block fs-6'>
                     RoadGee
                   </a>
-                  <span className='text-muted fw-semibold text-muted d-block fs-7'>Art Director</span>
+                  <span className='text-muted fw-semibold text-muted d-block fs-7'>
+                    Art Director
+                  </span>
                 </td>
                 <td className='text-end'>
                   <div className='d-flex flex-column w-100 me-2'>

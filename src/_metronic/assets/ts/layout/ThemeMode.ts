@@ -1,4 +1,4 @@
-import { EventHandlerUtil } from "../_utils";
+import {EventHandlerUtil} from '../_utils'
 
 type Mode = 'light' | 'dark' | 'system'
 
@@ -68,16 +68,16 @@ class ThemeMode {
       this.menu?.querySelector('[data-kt-element="mode"][data-kt-value="' + menuMode + '"]') || null
 
     // Enable switching state
-		this.element?.setAttribute("data-kt-theme-mode-switching", "true");
+    this.element?.setAttribute('data-kt-theme-mode-switching', 'true')
 
     // Set mode to the target element
-    this.element?.setAttribute('data-theme', mode);
+    this.element?.setAttribute('data-theme', mode)
 
     // Disable switching state
-    const self = this;
-		setTimeout(function() {
-			self.element?.removeAttribute("data-kt-theme-mode-switching");
-		}, 300);
+    const self = this
+    setTimeout(function () {
+      self.element?.removeAttribute('data-kt-theme-mode-switching')
+    }, 300)
 
     // Store mode value in storage
     if (localStorage) {

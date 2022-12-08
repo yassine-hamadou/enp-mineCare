@@ -1,9 +1,9 @@
-import { Button, Input, Space, Table } from "antd";
-import { useEffect, useState } from "react";
-import axios from "axios";
-import { KTCard, KTCardBody, KTSVG } from "../../../../_metronic/helpers";
-import { ENP_URL } from "../../../urls";
-import { useQuery } from "react-query";
+import {Button, Input, Space, Table} from 'antd'
+import {useEffect, useState} from 'react'
+import axios from 'axios'
+import {KTCard, KTCardBody, KTSVG} from '../../../../_metronic/helpers'
+import {ENP_URL} from '../../../urls'
+import {useQuery} from 'react-query'
 
 const DashboardTable = () => {
   const [gridData, setGridData] = useState([])
@@ -48,7 +48,7 @@ const DashboardTable = () => {
       sorter: (a: any, b: any) => a.vehicleNum - b.vehicleNum,
       render: (row: any) => {
         return countNumberOfEquipment(row.txmodel)
-      }
+      },
     },
     {
       title: 'Number of Down Time (Last 30 Days)',
@@ -77,7 +77,9 @@ const DashboardTable = () => {
     loadData()
   }, [])
 
-  const {data: listOfequipment} = useQuery('listOfEquipment', () => axios.get(`${ENP_URL}/VmequpsApi`))
+  const {data: listOfequipment} = useQuery('listOfEquipment', () =>
+    axios.get(`${ENP_URL}/VmequpsApi`)
+  )
   const countNumberOfEquipment = (model: any) => {
     //count number of model
     let count = 0

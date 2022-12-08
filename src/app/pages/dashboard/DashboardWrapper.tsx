@@ -1,11 +1,10 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import { FC } from "react";
-import { useIntl } from "react-intl";
-import { PageTitle } from "../../../_metronic/layout/core";
-import { MixedWidget11 } from "../../../_metronic/partials/widgets";
-import { BarChart } from "./BarChart";
-import { DashboardTable } from "./dashboardTable/CycleDetailsList";
-
+import {FC} from 'react'
+import {useIntl} from 'react-intl'
+import {PageTitle} from '../../../_metronic/layout/core'
+import {MixedWidget11} from '../../../_metronic/partials/widgets'
+import {BarChart} from './BarChart'
+import {DashboardTable} from './dashboardTable/CycleDetailsList'
 
 const DashboardPage: FC = () => (
   <>
@@ -33,7 +32,6 @@ const DashboardPage: FC = () => (
         <DashboardTable />
       </div>
     </div>
-
   </>
 )
 
