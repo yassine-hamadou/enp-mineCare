@@ -303,15 +303,61 @@ const FaultTable = () => {
     data,
     error,
   } = useMutation(
-    (values: any) => axios.patch(`${ENP_URL}/FaultEntriesApi/${values.entryId}`, values),
+    (values: any) => axios.patch(
+      `${ENP_URL}/FaultEntriesApi/${values.entryId}`,
+      [
+        {
+          "op": "replace",
+          "path": "/comment",
+          "value": values.comment
+        },
+        {
+          "op": "replace",
+          "path": "/downStatus",
+          "value": values.downStatus
+        },
+        {
+          "op": "replace",
+          "path": "/resolutionId",
+          "value": values.resolutionId
+        },
+        {
+          "op": "replace",
+          "path": "/resolutionType",
+          "value": values.resolutionType
+        },
+        {
+          "op": "replace",
+          "path": "/wtimeStart",
+          "value": values.wtimeStart
+        },
+        {
+          "op": "replace",
+          "path": "/wtimeEnd",
+          "value": values.wtimeEnd
+        },
+        {
+          "op": "replace",
+          "path": "/status",
+          "value": values.status
+        }
+      ],
+      {
+        headers: {
+          "Content-Type": "application/json-patch+json"
+        }
+      }
+    ),
     {
       onSuccess: () => {
         console.log('Solved', data)
         //invalidate the query to refetch the data
         QueryClient.invalidateQueries('faults')
+        message.success('Fault Solved Successfully!')
       },
       onError: () => {
         console.log('Error', error)
+        message.error('Error Solving Fault')
       },
     }
   )
