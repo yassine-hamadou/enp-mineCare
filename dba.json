@@ -210,6 +210,27 @@
       "entryId": 39,
       "vmModel": "null",
       "vmClass": "null"
+    },
+    {
+      "fleetId": "AD066       ",
+      "locationId": "DOZER ",
+      "timeStart": "2022-11-30T00:00:00.000Z",
+      "timeEnd": "2022-12-01T00:00:00.000Z",
+      "entryId": 40,
+      "vmModel": "null",
+      "vmClass": "null",
+      "responsible": "ALEXANDER   "
+    },
+    {
+      "fleetId": "AD065       ",
+      "locationId": "DRILL ",
+      "timeStart": "2022-12-02T00:00:00.000Z",
+      "timeEnd": "2022-12-03T00:00:00.000Z",
+      "entryId": 41,
+      "vmModel": "null",
+      "vmClass": "null",
+      "serviceTypeId": "Service PM-B",
+      "responsible": "ALEXANDER   "
     }
   ],
   "IclocsApi": [
@@ -3504,6 +3525,23 @@
       "status": 1,
       "resolutionType": "Unscheduled",
       "downStatus": "awaiting"
+    }
+  ],
+  "Services": [
+    {
+      "entryId": "04d1e3e6-0789-4fc9-a5d5-1e2d5fcb6ae9",
+      "name": "Service PM-A",
+      "model": "11725"
+    },
+    {
+      "entryId": "2a340d38-80a4-4688-b042-ecd90bf5d676",
+      "name": "Service PM-B",
+      "model": "14H/M"
+    },
+    {
+      "entryId": "41d81332-8a12-4956-8a63-e502f3852d0d",
+      "name": "Service PM-C",
+      "model": "432A"
     }
   ]
 }
