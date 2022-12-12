@@ -1,51 +1,14 @@
 import {Button, Input, Space, Table} from 'antd'
-import axios from 'axios'
-import {useEffect, useState} from 'react'
+import { useState} from 'react'
 import {KTSVG} from '../../../../../../_metronic/helpers'
 import { useQueryClient } from "react-query";
 import { dhm } from "../fault_d/FaultTable";
 
 const ResolutionTable = () => {
-  const [gridData, setGridData] = useState([])
-  const [loading, setLoading] = useState(false)
-  const [searchText, setSearchText] = useState('')
-  let [filteredData] = useState([])
-  // const loadData = async () => {
-  //   setLoading(true)
-  //   try {
-  //     const response = await axios.get(`${ENP_URL}/Resolution`)
-  //
-  //     //Formatting date to the received data
-  //     const dataReceivedfromAPI = {
-  //       /*
-  //        I am using the getter method to be able to read the object's own
-  //        properties since I wasn't able to read the object properties directly
-  //        without the getter method.
-  //       */
-  //       get withFormatDate() {
-  //         return response.data.map((item: any, index: number) => ({
-  //           ...item,
-  //           key: index,
-  //           //Calculating duration: Present Time - Time fault was reported
-  //           duration: `${dhm(new Date().getTime() - new Date(item.downtime).getTime())}`,
-  //           formattedDate: new Date(item.downtime).toLocaleString(),
-  //         }))
-  //       },
-  //     }
-  //     setGridData(dataReceivedfromAPI.withFormatDate)
-  //     setLoading(false)
-  //   } catch (error: any) {
-  //     setLoading(false)
-  //     return error.statusText
-  //   }
-  // }
+  let initialData: any = useQueryClient().getQueryData('faults')
+  const [gridData, setGridData] = useState(initialData?.data.filter((fault: any) => fault.status === 1))
+  const [loading] = useState(false)
 
-
-  const faultData: any = useQueryClient().getQueryData('faults')
-  useEffect(() => {
-    // loadData()
-    console.log('Inside use-effect', gridData)
-  }, [])
 
   const columns: any = [
     {
@@ -116,24 +79,25 @@ const ResolutionTable = () => {
     },
   ]
   const handleInputChange = (e: any) => {
-    setSearchText(e.target.value)
+    globalSearch(e.target.value)
     if (e.target.value === '') {
-      // loadData()
+      setGridData(initialData?.data.filter((fault: any) => fault.status === 1))
     }
   }
 
 
-  const globalSearch = () => {
-    // @ts-ignore
-    filteredData = dataWithVehicleNum.filter((value) => {
+  const globalSearch = (searchText: string) => {
+     let search = initialData?.data.filter((value: any) => {
       return (
-        value.faultCode.toLowerCase().includes(searchText.toLowerCase()) ||
-        value.faultDesc.toLowerCase().includes(searchText.toLowerCase())
+        value.fleetId.toLowerCase().includes(searchText.toLowerCase()) ||
+        value.vmModel.toLowerCase().includes(searchText.toLowerCase()) ||
+        value.vmClass.toLowerCase().includes(searchText.toLowerCase()) ||
+        value.downType.toLowerCase().includes(searchText.toLowerCase()) ||
+        value.custodian.toLowerCase().includes(searchText.toLowerCase())
       )
     })
-    setGridData(filteredData)
+    setGridData(search.filter((fault: any) => fault.status === 1))
   }
-console.log('faultData', faultData)
   return (
     <div>
       <div className='d-flex justify-content-between'>
@@ -143,7 +107,6 @@ console.log('faultData', faultData)
             onChange={handleInputChange}
             type='text'
             allowClear
-            value={searchText}
           />
           <Button type='primary'>Search</Button>
         </Space>
@@ -154,7 +117,8 @@ console.log('faultData', faultData)
           </button>
         </Space>
       </div>
-      <Table columns={columns} dataSource={faultData?.data.filter((fault: any) => fault.status === 1)} bordered loading={loading} rowKey={record => record.entryId} />
+      {/*@ts-ignore*/}
+      <Table columns={columns} dataSource={gridData} bordered loading={loading} rowKey={record => record.entryId} />
     </div>
   )
 }
