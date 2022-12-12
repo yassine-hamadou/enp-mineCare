@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React from "react";
-import { KTSVG, toAbsoluteUrl } from "../../../helpers";
-import { Dropdown1 } from "../../content/dropdown/Dropdown1";
+import React from 'react'
+import {KTSVG, toAbsoluteUrl} from '../../../helpers'
+import {Dropdown1} from '../../content/dropdown/Dropdown1'
 
 type Props = {
   className: string
@@ -186,7 +186,9 @@ const ListsWidget4: React.FC<Props> = ({className, items = 6}) => {
                 <a href='#' className='text-gray-800 text-hover-primary fs-6 fw-bold'>
                   Fox Broker App
                 </a>
-                <span className='text-muted fw-semibold d-block fs-7'>Finance, Corporate, Apps</span>
+                <span className='text-muted fw-semibold d-block fs-7'>
+                  Finance, Corporate, Apps
+                </span>
               </div>
               <span className='badge badge-light fw-bold my-2'>+4500$</span>
             </div>

@@ -1,56 +1,20 @@
-import { Button, Input, Space, Table } from "antd";
-import "antd/dist/antd.min.css";
-import axios from "axios";
-import { useEffect, useState } from "react";
-import { KTSVG } from "../../../../../../_metronic/helpers";
+import {Button, Input, Space, Table} from 'antd'
+import { useState} from 'react'
+import {KTSVG} from '../../../../../../_metronic/helpers'
+import { useQueryClient } from "react-query";
 import { dhm } from "../fault_d/FaultTable";
-import { ENP_URL } from "../../../../../urls";
 
 const ResolutionTable = () => {
-  const [gridData, setGridData] = useState([])
-  const [loading, setLoading] = useState(false)
-  const [searchText, setSearchText] = useState('')
-  let [filteredData] = useState([])
-  const loadData = async () => {
-    setLoading(true)
-    try {
-      const response = await axios.get(`${ENP_URL}/FaultEntriesApi`)
+  let initialData: any = useQueryClient().getQueryData('faults')
+  const [gridData, setGridData] = useState(initialData?.data.filter((fault: any) => fault.status === 1))
+  const [loading] = useState(false)
 
-      //Formatting date to the received data
-      const dataReceivedfromAPI = {
-        /*
-         I am using the getter method to be able to read the object's own
-         properties since I wasn't able to read the object properties directly
-         without the getter method.
-        */
-        get withFormatDate() {
-          return response.data.map((item: any, index: number) => ({
-            ...item,
-            key: index,
-            //Calculating duration: Present Time - Time fault was reported
-            duration: `${dhm(new Date().getTime() - new Date(item.downtime).getTime())}`,
-            formattedDate: new Date(item.downtime).toLocaleString(),
-          }))
-        },
-      }
-      setGridData(dataReceivedfromAPI.withFormatDate)
-      setLoading(false)
-    } catch (error: any) {
-      setLoading(false)
-      return error.statusText
-    }
-  }
-
-  useEffect(() => {
-    loadData()
-    console.log('Inside use-effect', gridData)
-  }, [])
 
   const columns: any = [
     {
       title: 'FleetID',
       dataIndex: 'fleetId',
-      key: 'key',
+      key: 'fleetId',
       sorter: (a: any, b: any) => {
         if (a.fleetId > b.fleetId) {
           return 1
@@ -70,52 +34,72 @@ const ResolutionTable = () => {
       dataIndex: 'vmClass',
     },
     {
-      title: 'Work Type',
+      title: 'Down Type',
+      dataIndex: 'downType',
+    },
+    {
+      title: 'Custodian',
+      dataIndex: 'custodian',
+    },
+    {
+      title: 'Location',
+      dataIndex: 'locationId',
+    },
+    {
+      title: 'Resolution Type',
+      dataIndex: 'resolutionType',
+    },
+    {
+      title: 'Down Status',
+      dataIndex: 'downStatus',
     },
     {
       title: 'Comment',
+      dataIndex: 'comment',
     },
     {
-      title: 'Time Start',
-      dataIndex: 'formattedDate',
-      defaultSortOrder: 'descend',
-      sorter: (a: any, b: any) => new Date(a.downtime).getTime() - new Date(b.downtime).getTime(),
+      title: 'Time Started',
+      dataIndex: 'wtimeStart',
+      render: (record: any) => {
+        return new Date(record).toLocaleString()
+      }
     },
     {
-      title: 'Time End',
+      title: 'Time Completed',
+      dataIndex: 'wtimeEnd',
+      render: (record: any) => {
+        return new Date(record).toLocaleString()
+      }
     },
     {
       title: 'Duration',
-      dataIndex: 'duration',
+      render: (record: any) => {
+        return dhm(new Date(record.wtimeEnd).getTime() - new Date(record.wtimeStart).getTime())
+      }
     },
   ]
   const handleInputChange = (e: any) => {
-    setSearchText(e.target.value)
+    globalSearch(e.target.value)
     if (e.target.value === '') {
-      loadData()
+      setGridData(initialData?.data.filter((fault: any) => fault.status === 1))
     }
   }
 
-  const globalSearch = () => {
-    // @ts-ignore
-    filteredData = dataWithVehicleNum.filter((value) => {
+
+  const globalSearch = (searchText: string) => {
+     let search = initialData?.data.filter((value: any) => {
       return (
-        value.faultCode.toLowerCase().includes(searchText.toLowerCase()) ||
-        value.faultDesc.toLowerCase().includes(searchText.toLowerCase())
+        value.fleetId.toLowerCase().includes(searchText.toLowerCase()) ||
+        value.vmModel.toLowerCase().includes(searchText.toLowerCase()) ||
+        value.vmClass.toLowerCase().includes(searchText.toLowerCase()) ||
+        value.downType.toLowerCase().includes(searchText.toLowerCase()) ||
+        value.custodian.toLowerCase().includes(searchText.toLowerCase())
       )
     })
-    setGridData(filteredData)
+    setGridData(search.filter((fault: any) => fault.status === 1))
   }
-
   return (
-    <div
-      style={{
-        backgroundColor: 'white',
-        padding: '20px',
-        borderRadius: '5px',
-        boxShadow: '2px 2px 15px rgba(0,0,0,0.08)',
-      }}
-    >
+    <div>
       <div className='d-flex justify-content-between'>
         <Space style={{marginBottom: 16}}>
           <Input
@@ -123,9 +107,7 @@ const ResolutionTable = () => {
             onChange={handleInputChange}
             type='text'
             allowClear
-            value={searchText}
           />
-          <Button type='primary'>Search</Button>
         </Space>
         <Space style={{marginBottom: 16}}>
           <button type='button' className='btn btn-primary me-3'>
@@ -134,7 +116,8 @@ const ResolutionTable = () => {
           </button>
         </Space>
       </div>
-      <Table columns={columns} dataSource={gridData} bordered loading={loading} />
+      {/*@ts-ignore*/}
+      <Table columns={columns} dataSource={gridData} bordered loading={loading} rowKey={record => record.entryId} />
     </div>
   )
 }

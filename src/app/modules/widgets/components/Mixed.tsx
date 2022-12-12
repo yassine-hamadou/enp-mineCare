@@ -1,4 +1,4 @@
-import React, { FC } from "react";
+import React, {FC} from 'react'
 import {
   MixedWidget1,
   MixedWidget10,
@@ -10,8 +10,8 @@ import {
   MixedWidget6,
   MixedWidget7,
   MixedWidget8,
-  MixedWidget9
-} from "../../../../_metronic/partials/widgets";
+  MixedWidget9,
+} from '../../../../_metronic/partials/widgets'
 
 const Mixed: FC = () => {
   return (

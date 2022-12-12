@@ -1,7 +1,7 @@
-import { Form, Input, Radio, RadioChangeEvent } from "antd";
-import { useEffect, useState } from "react";
-import axios from "axios";
-import { ENP_URL } from "../../../../../urls";
+import {Form, Input, Radio, RadioChangeEvent} from 'antd'
+import {useEffect, useState} from 'react'
+import axios from 'axios'
+import {ENP_URL} from '../../../../../urls'
 
 const AddGroupsForm = () => {
   const [dataSource, setDataSource] = useState([])

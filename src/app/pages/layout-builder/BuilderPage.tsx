@@ -1,8 +1,8 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import clsx from "clsx";
-import React, { useState } from "react";
-import { KTSVG } from "../../../_metronic/helpers";
-import { getLayout, ILayout, LayoutSetup, useLayout } from "../../../_metronic/layout/core";
+import clsx from 'clsx'
+import React, {useState} from 'react'
+import {KTSVG} from '../../../_metronic/helpers'
+import {getLayout, ILayout, LayoutSetup, useLayout} from '../../../_metronic/layout/core'
 
 const BuilderPage: React.FC = () => {
   const {setLayout} = useLayout()
@@ -59,10 +59,12 @@ const BuilderPage: React.FC = () => {
           <div className='ms-6'>
             <p className='list-unstyled text-gray-600 fw-bold fs-6 p-0 m-0'>
               The layout builder is to assist your set and configure your preferred project layout
-              specifications and preview it in real-time. 
+              specifications and preview it in real-time.
             </p>
             <p className='list-unstyled text-gray-600 fw-bold fs-6 p-0 m-0'>
-              Also, you can configurate the Layout in the code (<code>src/_metronic/layout/core/DefaultLayoutConfig.ts</code> file). Don't forget clear your local storage when you are changing DefaultLayoutConfig.
+              Also, you can configurate the Layout in the code (
+              <code>src/_metronic/layout/core/DefaultLayoutConfig.ts</code> file). Don't forget
+              clear your local storage when you are changing DefaultLayoutConfig.
             </p>
           </div>
           {/* end::Description */}

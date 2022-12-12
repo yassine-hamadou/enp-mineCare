@@ -5,12 +5,12 @@
  * components (e.g: `src/app/modules/Auth/pages/AuthPage`, `src/app/BasePage`).
  */
 
-import { FC } from "react";
-import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
-import { PrivateRoutes } from "./PrivateRoutes";
-import { ErrorsPage } from "../modules/errors/ErrorsPage";
-import { AuthPage, Logout, useAuth } from "../modules/auth";
-import { App } from "../App";
+import {FC} from 'react'
+import {BrowserRouter, Navigate, Route, Routes} from 'react-router-dom'
+import {PrivateRoutes} from './PrivateRoutes'
+import {ErrorsPage} from '../modules/errors/ErrorsPage'
+import {AuthPage, Logout, useAuth} from '../modules/auth'
+import {App} from '../App'
 
 /**
  * Base URL of the website.

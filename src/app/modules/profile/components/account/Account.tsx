@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React, { useState } from "react";
-import { defaultAccount, IAccount } from "./AccountModel";
+import React, {useState} from 'react'
+import {defaultAccount, IAccount} from './AccountModel'
 
 export function Account() {
   const [data, setData] = useState<IAccount>(defaultAccount)

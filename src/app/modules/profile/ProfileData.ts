@@ -1,4 +1,4 @@
-import { PageLink } from "../../../_metronic/layout/core";
+import {PageLink} from '../../../_metronic/layout/core'
 
 export const profileSubmenu: Array<PageLink> = [
   {

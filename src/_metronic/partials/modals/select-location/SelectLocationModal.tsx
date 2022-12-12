@@ -1,6 +1,6 @@
-import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
-import { Modal } from "react-bootstrap";
-import { KTSVG } from "../../../helpers";
+import React, {Dispatch, SetStateAction, useEffect, useState} from 'react'
+import {Modal} from 'react-bootstrap'
+import {KTSVG} from '../../../helpers'
 
 type Props = {
   data: {location: string; setLocation: Dispatch<SetStateAction<string>>}

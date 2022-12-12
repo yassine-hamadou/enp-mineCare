@@ -1,5 +1,5 @@
-import { useListView } from "../../core/ListViewProvider";
-import { UsersListSearchComponent } from "./UsersListSearchComponent";
+import {useListView} from '../../core/ListViewProvider'
+import {UsersListSearchComponent} from './UsersListSearchComponent'
 
 const DetailsListHeader = () => {
   const {selected} = useListView()

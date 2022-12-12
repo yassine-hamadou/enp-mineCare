@@ -1,5 +1,5 @@
-import React, { createContext, FC, useContext } from "react";
-import { WithChildren } from "../helpers";
+import React, {createContext, FC, useContext} from 'react'
+import {WithChildren} from '../helpers'
 
 const I18N_CONFIG_KEY = process.env.REACT_APP_I18N_CONFIG_KEY || 'i18nConfig'
 

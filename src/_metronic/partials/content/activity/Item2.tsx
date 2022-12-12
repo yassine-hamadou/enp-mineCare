@@ -1,5 +1,5 @@
-import { FC } from "react";
-import { KTSVG, toAbsoluteUrl } from "../../../helpers";
+import {FC} from 'react'
+import {KTSVG, toAbsoluteUrl} from '../../../helpers'
 
 const Item2: FC = () => {
   return (

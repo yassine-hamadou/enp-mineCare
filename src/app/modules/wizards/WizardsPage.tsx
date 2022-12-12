@@ -1,7 +1,7 @@
-import { Navigate, Outlet, Route, Routes } from "react-router-dom";
-import { PageLink, PageTitle } from "../../../_metronic/layout/core";
-import { Vertical } from "./components/Vertical";
-import { Horizontal } from "./components/Horizontal";
+import {Navigate, Outlet, Route, Routes} from 'react-router-dom'
+import {PageLink, PageTitle} from '../../../_metronic/layout/core'
+import {Vertical} from './components/Vertical'
+import {Horizontal} from './components/Horizontal'
 
 const wizardsBreadCrumbs: Array<PageLink> = [
   {

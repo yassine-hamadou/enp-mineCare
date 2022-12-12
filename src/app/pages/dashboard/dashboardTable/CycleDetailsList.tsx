@@ -1,8 +1,9 @@
-import { Button, Input, Space, Table } from "antd";
-import { useEffect, useState } from "react";
-import axios from "axios";
-import { KTSVG } from "../../../../_metronic/helpers";
-import { ENP_URL } from "../../../urls";
+import {Button, Input, Space, Table} from 'antd'
+import {useEffect, useState} from 'react'
+import axios from 'axios'
+import {KTCard, KTCardBody, KTSVG} from '../../../../_metronic/helpers'
+import {ENP_URL} from '../../../urls'
+import {useQuery} from 'react-query'
 
 const DashboardTable = () => {
   const [gridData, setGridData] = useState([])
@@ -11,12 +12,11 @@ const DashboardTable = () => {
   let [filteredData] = useState([])
 
   const columns: any = [
-    {
-      title: 'ID',
-      dataIndex: 'key',
-      defaultSortOrder: 'descend',
-      sorter: (a: any, b: any) => a.key - b.key,
-    },
+    // {
+    //   title: 'ID',
+    //   dataIndex: 'key',
+    //   sorter: (a: any, b: any) => a.key - b.key,
+    // },
     {
       title: 'Equipment Manufacturer',
       dataIndex: 'txmanf',
@@ -44,12 +44,14 @@ const DashboardTable = () => {
       },
     },
     {
-      title: 'Number of Equipments',
-      dataIndex: 'vehicleNum',
+      title: 'Number of Equipment',
       sorter: (a: any, b: any) => a.vehicleNum - b.vehicleNum,
+      render: (row: any) => {
+        return countNumberOfEquipment(row.txmodel)
+      },
     },
     {
-      title: 'Number of Down Time',
+      title: 'Number of Down Time (Last 30 Days)',
       dataIndex: 'downTime',
       sorter: (a: any, b: any) => a.downTime - b.downTime,
     },
@@ -75,11 +77,27 @@ const DashboardTable = () => {
     loadData()
   }, [])
 
+  const {data: listOfequipment} = useQuery('listOfEquipment', () =>
+    axios.get(`${ENP_URL}/VmequpsApi`)
+  )
+  const countNumberOfEquipment = (model: any) => {
+    //count number of model
+    let count = 0
+    listOfequipment?.data.forEach((item: any) => {
+      if (item.modlName === model) {
+        count++
+      }
+    })
+    return count
+  }
+
+  // @ts-ignore
   const dataWithVehicleNum = gridData.map((item: any, index) => ({
     ...item,
-    vehicleNum: Math.floor(Math.random() * 20) + 1,
-    downTime: `${Math.floor(Math.random() * 100) + 1}`,
-    numOfHrs: Math.floor(Math.random() * 20) + 1,
+    // downTime: `${Math.floor(Math.random() * 100) + 1}`,
+    // numOfHrs: Math.floor(Math.random() * 20) + 1,
+    downTime: 0,
+    numOfHrs: 0,
     key: index,
   }))
 
@@ -102,33 +120,35 @@ const DashboardTable = () => {
   }
 
   return (
-    <div>
-      <div className='d-flex justify-content-between'>
-        <Space style={{marginBottom: 16}}>
-          <Input
-            placeholder='Enter Search Text'
-            onChange={handleInputChange}
-            type='text'
-            allowClear
-            value={searchText}
-          />
-          <Button type='primary' onClick={globalSearch}>
-            Search
-          </Button>
-        </Space>
-        <Space style={{marginBottom: 16}}>
-          <button type='button' className='btn btn-light-primary me-3'>
-            <KTSVG path='/media/icons/duotune/arrows/arr078.svg' className='svg-icon-2' />
-            Upload
-          </button>
-          <button type='button' className='btn btn-light-primary me-3'>
-            <KTSVG path='/media/icons/duotune/arrows/arr078.svg' className='svg-icon-2' />
-            Export
-          </button>
-        </Space>
-      </div>
-      <Table columns={columns} dataSource={dataWithVehicleNum} bordered loading={loading} />
-    </div>
+    <KTCard>
+      <KTCardBody>
+        <div className='d-flex justify-content-between'>
+          <Space style={{marginBottom: 16}}>
+            <Input
+              placeholder='Enter Search Text'
+              onChange={handleInputChange}
+              type='text'
+              allowClear
+              value={searchText}
+            />
+            <Button type='primary' onClick={globalSearch}>
+              Search
+            </Button>
+          </Space>
+          <Space style={{marginBottom: 16}}>
+            <button type='button' className='btn btn-light-primary me-3'>
+              <KTSVG path='/media/icons/duotune/arrows/arr078.svg' className='svg-icon-2' />
+              Upload
+            </button>
+            <button type='button' className='btn btn-light-primary me-3'>
+              <KTSVG path='/media/icons/duotune/arrows/arr078.svg' className='svg-icon-2' />
+              Export
+            </button>
+          </Space>
+        </div>
+        <Table columns={columns} dataSource={dataWithVehicleNum} bordered loading={loading} />
+      </KTCardBody>
+    </KTCard>
   )
 }
 

@@ -1,12 +1,13 @@
-import { Button, Form, Input, Modal, Radio, Space, Table } from "antd";
-import { useEffect, useState } from "react";
-import axios from "axios";
-import { KTCardBody, KTSVG } from "../../../../../../_metronic/helpers";
-import { Link } from "react-router-dom";
-import { ENP_URL } from "../../../../../urls";
+import {Button, Form, Input, Modal, Radio, Select, Space, Table} from 'antd'
+import {useEffect, useState} from 'react'
+import axios from 'axios'
+import {KTCardBody, KTSVG} from '../../../../../../_metronic/helpers'
+import {Link} from 'react-router-dom'
+import {ENP_URL} from '../../../../../urls'
 
 const ServicesPage = () => {
   const [gridData, setGridData] = useState([])
+  const [modeldData, setModelData] = useState([])
   const [loading, setLoading] = useState(false)
   const [searchText, setSearchText] = useState('')
   let [filteredData] = useState([])
@@ -47,26 +48,26 @@ const ServicesPage = () => {
 
   const columns: any = [
     {
-      title: 'Model',
-      dataIndex: 'modelID',
-      sorter: (a: any, b: any) => {
-        if (a.modelID > b.modelID) {
-          return 1
-        }
-        if (b.modelID > a.modelID) {
-          return -1
-        }
-        return 0
-      },
-    },
-    {
-      title: 'Services',
+      title: 'Service Name',
       dataIndex: 'name',
       sorter: (a: any, b: any) => {
         if (a.name > b.name) {
           return 1
         }
         if (b.name > a.name) {
+          return -1
+        }
+        return 0
+      },
+    },
+    {
+      title: 'Model',
+      dataIndex: 'model',
+      sorter: (a: any, b: any) => {
+        if (a.model > b.model) {
+          return 1
+        }
+        if (b.model > a.model) {
           return -1
         }
         return 0
@@ -100,17 +101,31 @@ const ServicesPage = () => {
     setLoading(true)
     try {
       // const response = await axios.get('https://cors-anywhere.herokuapp.com/http://208.117.44.15/SmWebApi/api/VmfaltsApi')
-      const response = await axios.get(`${ENP_URL}/services`)
+      const response = await axios.get(`${ENP_URL}/Services`)
       setGridData(response.data)
-      // setGridData(dataSource)
+      setLoading(false)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+  const loadModel = async () => {
+    setLoading(true)
+    try {
+      // const response = await axios.get('https://cors-anywhere.herokuapp.com/http://208.117.44.15/SmWebApi/api/VmfaltsApi')
+      const response = await axios.get(`${ENP_URL}/VmmodlsApi`)
+      setModelData(response.data)
+      console.log(modeldData)
       setLoading(false)
     } catch (error) {
       console.log(error)
     }
   }
 
+  const {Option} = Select
+
   useEffect(() => {
     loadData()
+    loadModel()
   }, [])
 
   const dataWithVehicleNum = gridData.map((item: any, index) => ({
@@ -135,13 +150,13 @@ const ServicesPage = () => {
     })
     setGridData(filteredData)
   }
-  const url = `${ENP_URL}/services`
+
+  const url = `${ENP_URL}/Services`
   const onFinish = async (values: any) => {
     setSubmitLoading(true)
     const data = {
       name: values.name,
-      modelID: values.modelID,
-      status: values.status,
+      model: values.model,
     }
 
     try {
@@ -168,12 +183,11 @@ const ServicesPage = () => {
     >
       <KTCardBody className='py-4 '>
         <div className='table-responsive'>
-          <a
-            href='work-type'
-            className='mb-3 btn btn-outline btn-outline-dashed btn-outline-primary btn-active-light-primary'
-          >
-            Back to Models
-          </a>
+          <Link to={'/setup/work-type'}>
+            <span className='mb-3 btn btn-outline btn-outline-dashed btn-outline-primary btn-active-light-primary'>
+              Back to Models
+            </span>
+          </Link>
           <div className='d-flex justify-content-between'>
             <Space style={{marginBottom: 16}}>
               <Input
@@ -218,7 +232,6 @@ const ServicesPage = () => {
                 htmlType='submit'
                 loading={submitLoading}
                 onClick={() => {
-                  // eslint-disable-next-line @typescript-eslint/no-unused-expressions
                   form.submit()
                 }}
               >
@@ -239,14 +252,17 @@ const ServicesPage = () => {
               <Form.Item label='Name' name='name' rules={[{required: true}]}>
                 <Input />
               </Form.Item>
-              <Form.Item label='Model' name='modelID'>
+              {/* <Form.Item label='Model' name='modelID'>
                 <Input />
-              </Form.Item>
-              <Form.Item label='Status' name='status' rules={[{required: true}]}>
-                <Radio.Group>
-                  <Radio value={1}>Active</Radio>
-                  <Radio value={2}>InActive</Radio>
-                </Radio.Group>
+              </Form.Item> */}
+              <Form.Item name='model' label='Model'>
+                <Select placeholder='Search to Select'>
+                  {modeldData.map((item: any) => (
+                    <Option key={item.txmodel} value={item.txmodel}>
+                      {item.txmodel}
+                    </Option>
+                  ))}
+                </Select>
               </Form.Item>
             </Form>
           </Modal>

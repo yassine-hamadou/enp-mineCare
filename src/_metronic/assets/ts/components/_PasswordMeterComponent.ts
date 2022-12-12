@@ -1,6 +1,6 @@
 /* eslint-disable array-callback-return */
 /* eslint-disable no-useless-escape */
-import { DataUtil } from "../_utils/index";
+import {DataUtil} from '../_utils/index'
 
 export interface IPasswordMeterOptions {
   minLength: number
@@ -221,7 +221,7 @@ class PasswordMeterComponent {
   public static getInstance = (
     el: HTMLElement,
     componentName: string = defaultPasswordMeterQueires.componentName
-  ): PasswordMeterComponent | undefined  => {
+  ): PasswordMeterComponent | undefined => {
     const passwordMeter = DataUtil.get(el, componentName)
     if (passwordMeter) {
       return passwordMeter as PasswordMeterComponent

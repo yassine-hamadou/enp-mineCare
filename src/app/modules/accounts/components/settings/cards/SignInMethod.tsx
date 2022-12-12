@@ -1,9 +1,9 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React, { useState } from "react";
-import { KTSVG } from "../../../../../../_metronic/helpers";
-import * as Yup from "yup";
-import { useFormik } from "formik";
-import { IUpdateEmail, IUpdatePassword, updateEmail, updatePassword } from "../SettingsModel";
+import React, {useState} from 'react'
+import {KTSVG} from '../../../../../../_metronic/helpers'
+import * as Yup from 'yup'
+import {useFormik} from 'formik'
+import {IUpdateEmail, IUpdatePassword, updateEmail, updatePassword} from '../SettingsModel'
 
 const emailFormValidationSchema = Yup.object().shape({
   newEmail: Yup.string()

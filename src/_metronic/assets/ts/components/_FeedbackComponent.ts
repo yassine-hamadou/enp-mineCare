@@ -3,8 +3,8 @@ import {
   ElementStyleUtil,
   EventHandlerUtil,
   getAttributeValueByBreakpoint,
-  getUniqueIdWithPrefix
-} from "../_utils/index";
+  getUniqueIdWithPrefix,
+} from '../_utils/index'
 
 export interface FeedbackOptions {
   width?: number

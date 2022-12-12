@@ -1,8 +1,8 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React from "react";
-import { KTSVG, toAbsoluteUrl } from "../../../_metronic/helpers";
-import { Link, useLocation } from "react-router-dom";
-import { Dropdown1 } from "../../../_metronic/partials";
+import React from 'react'
+import {KTSVG, toAbsoluteUrl} from '../../../_metronic/helpers'
+import {Link, useLocation} from 'react-router-dom'
+import {Dropdown1} from '../../../_metronic/partials'
 
 const ProfileHeader: React.FC = () => {
   const location = useLocation()

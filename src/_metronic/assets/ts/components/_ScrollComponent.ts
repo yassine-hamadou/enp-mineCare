@@ -7,9 +7,9 @@ import {
   getViewPort,
   isVisibleElement,
   stringSnakeToCamel,
-  throttle
-} from "../_utils/index";
-import { CookieComponent } from "./_CookieComponent";
+  throttle,
+} from '../_utils/index'
+import {CookieComponent} from './_CookieComponent'
 
 export interface ScrollOptions {
   saveState?: boolean

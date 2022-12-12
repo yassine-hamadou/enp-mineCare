@@ -3,11 +3,11 @@
 //
 
 @mixin nouislider-size($height, $handle-width, $handle-height, $handle-pos-top) {
-    height: $height;
+  height: $height;
 
-    .noUi-handle {
-        width: $handle-width;
-        height: $handle-height;
-        top: -#{$handle-pos-top};
-    }
+  .noUi-handle {
+    width: $handle-width;
+    height: $handle-height;
+    top: -#{$handle-pos-top};
+  }
 }

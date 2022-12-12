@@ -1,10 +1,9 @@
-import { Input, Modal, Space, Table } from "antd";
-import { useEffect, useState } from "react";
-import axios from "axios";
-import { Link } from "react-router-dom";
-import { KTCardBody, KTSVG } from "../../../../../../_metronic/helpers";
-import { AddWorkTypeForm } from "./AddWorkTypeForm";
-import { ENP_URL } from "../../../../../urls";
+import {Button, Input, Modal, Space, Table} from 'antd'
+import {useEffect, useState} from 'react'
+import axios from 'axios'
+import {Link} from 'react-router-dom'
+import {KTCardBody, KTSVG} from '../../../../../../_metronic/helpers'
+import {ENP_URL} from '../../../../../urls'
 
 const WorkTypePage = () => {
   const [gridData, setGridData] = useState([])
@@ -27,17 +26,17 @@ const WorkTypePage = () => {
 
   const columns: any = [
     {
-      title: 'Name',
-      dataIndex: 'classCode',
-      key: 'classCode',
+      title: 'Manufacturer',
+      dataIndex: 'txmanf',
+      key: 'txmanf',
       onFilter: (value: any, record: any) => {
-        return String(record.classCode).toLowerCase().includes(value.toLowerCase())
+        return String(record.txmanf).toLowerCase().includes(value.toLowerCase())
       },
       sorter: (a: any, b: any) => {
-        if (a.classCode > b.classCode) {
+        if (a.txmanf > b.txmanf) {
           return 1
         }
-        if (b.classCode > a.classCode) {
+        if (b.txmanf > a.txmanf) {
           return -1
         }
         return 0
@@ -45,14 +44,14 @@ const WorkTypePage = () => {
     },
 
     {
-      title: 'Number of Vehicles',
-      dataIndex: 'classDesc',
-      key: 'classDesc',
+      title: 'Model',
+      dataIndex: 'txmodel',
+      key: 'txmodel',
       sorter: (a: any, b: any) => {
-        if (a.classCode > b.classCode) {
+        if (a.txmodel > b.txmodel) {
           return 1
         }
-        if (b.classCode > a.classCode) {
+        if (b.txmodel > a.txmodel) {
           return -1
         }
         return 0
@@ -89,7 +88,7 @@ const WorkTypePage = () => {
   const loadData = async () => {
     setLoading(true)
     try {
-      const response = await axios.get(`${ENP_URL}/VmclasApi`)
+      const response = await axios.get(`${ENP_URL}/VmmodlsApi`)
       setGridData(response.data)
       setLoading(false)
     } catch (error) {
@@ -101,20 +100,20 @@ const WorkTypePage = () => {
     loadData()
   }, [])
 
-  // const dataWithVehicleNum = gridData.map((item: any, index) => ({
-  //   ...item,
-  //   vehicleNum: Math.floor(Math.random() * 20) + 1,
-  //   downTime: `${Math.floor(Math.random() * 100) + 1}`,
-  //   numOfHrs: Math.floor(Math.random() * 20) + 1,
-  //   key: index,
-  // }))
+  const dataWithVehicleNum = gridData.map((item: any, index) => ({
+    ...item,
+    vehicleNum: Math.floor(Math.random() * 20) + 1,
+    downTime: `${Math.floor(Math.random() * 100) + 1}`,
+    numOfHrs: Math.floor(Math.random() * 20) + 1,
+    key: index,
+  }))
 
-  // const handleInputChange = (e: any) => {
-  //   setSearchText(e.target.value)
-  //   if (e.target.value === '') {
-  //     loadData()
-  //   }
-  // }
+  const handleInputChange = (e: any) => {
+    setSearchText(e.target.value)
+    if (e.target.value === '') {
+      loadData()
+    }
+  }
 
   // const globalSearch = () => {
   //   // @ts-ignore
@@ -140,43 +139,32 @@ const WorkTypePage = () => {
         <div className='table-responsive'>
           <div className='d-flex justify-content-between'>
             <Space style={{marginBottom: 16}}>
-              <Input.Search
+              <Input
                 placeholder='Search...'
-                onSearch={(value) => {
-                  setSearchText(value)
-                }}
-                onChange={(e) => {
-                  setSearchText(e.target.value)
-                  if (e.target.value === '') {
-                    loadData()
-                  }
-                }}
                 type='text'
 
                 // value={searchText}
               />
-              {/* <Button type='primary' onClick={globalSearch}>
-              Search
-            </Button> */}
+              <Button type='primary'>Search</Button>
             </Space>
             <Space style={{marginBottom: 16}}>
-              <button type='button' className='btn btn-primary me-3' onClick={showModal}>
+              {/* <button type='button' className='btn btn-primary me-3' onClick={showModal}>
                 <KTSVG path='/media/icons/duotune/arrows/arr075.svg' className='svg-icon-2' />
                 Add
-              </button>
-              <button type='button' className='btn btn-light-primary me-3'>
+              </button> */}
+              {/* <button type='button' className='btn btn-light-primary me-3'>
                 <KTSVG path='/media/icons/duotune/arrows/arr078.svg' className='svg-icon-2' />
                 Upload
-              </button>
+              </button> */}
               <button type='button' className='btn btn-light-primary me-3'>
                 <KTSVG path='/media/icons/duotune/arrows/arr078.svg' className='svg-icon-2' />
                 Export
               </button>
             </Space>
           </div>
-          <Table columns={columns} dataSource={gridData} loading={loading} />
+          <Table columns={columns} dataSource={dataWithVehicleNum} loading={loading} />
           <Modal title='Add Item' open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
-            <AddWorkTypeForm />
+            {/* <AddWorkTypeForm /> */}
           </Modal>
         </div>
       </KTCardBody>

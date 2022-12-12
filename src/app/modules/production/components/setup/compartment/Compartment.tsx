@@ -1,9 +1,7 @@
-import {Button, Form, Input, Modal, Radio, Select, Space, Table} from 'antd'
+import {Button, Form, Input, Modal, Space, Table} from 'antd'
 import {useState, useEffect} from 'react'
 import axios from 'axios'
-import { KTCard, KTCardBody, KTSVG } from '../../../../../../_metronic/helpers'
-import { ColumnsType } from 'antd/lib/table'
-import { Link } from 'react-router-dom'
+import { KTCardBody, KTSVG } from '../../../../../../_metronic/helpers'
 import { ENP_URL } from '../../../../../urls'
 
 
@@ -37,7 +35,7 @@ const CompartmentPage = () => {
     const deleteData = async (element: any) => {
       try {
           const response = await axios.delete(
-              `${ENP_URL}/services/${element.id}`
+              `${ENP_URL}/Compartment/${element.id}`
           )
           // update the local state so that react can refecth and re-render the table with the new data
           const newData = gridData.filter((item: any) => item.id !== element.id)
@@ -100,10 +98,8 @@ const CompartmentPage = () => {
   const loadData = async () => {
     setLoading(true)
     try {
-      // const response = await axios.get('https://cors-anywhere.herokuapp.com/http://208.117.44.15/SmWebApi/api/VmfaltsApi')
-      const response = await axios.get(`${ENP_URL}/compartment`)
+      const response = await axios.get(`${ENP_URL}/Compartment`)
       setGridData(response.data)
-      // setGridData(dataSource)
       setLoading(false)
     } catch (error) {
       console.log(error)
@@ -137,52 +133,11 @@ const CompartmentPage = () => {
     setGridData(filteredData)
   }
 
-  const compart =[
-    {
-      "id": 1,
-      "name": "Engine",
-      "model": "DE810",
-      "status": 1
-    },
-    {
-      "name": "Transmission",
-      "model": "DE810",
-      "status": 1,
-      "id": 2
-    },
-    {
-      "name": "Hydraulic tank - Impliment, Conv",
-      "model": "793D",
-      "status": 1,
-      "id": 3
-    },
-    {
-      "name": "Hydraulic tank - Steering",
-      "model": "DE810",
-      "status": 1,
-      "id": 4
-    },
-    {
-      "name": "Differential & final drives",
-      "model": "793D",
-      "status": 1,
-      "id": 5
-    },
-    {
-      "name": "Front Wheels (both)",
-      "model": "793D",
-      "status": 1,
-      "id": 6
-    }
-  ]
-  const url = `${ENP_URL}/compartment`
+  const url = `${ENP_URL}/Compartment`
     const onFinish = async (values: any) => {
         setSubmitLoading(true)
         const data = {
             name: values.name,
-            modelID: values.modelID,
-            status: values.status,
-            
         }
        
         try {
@@ -234,7 +189,7 @@ const CompartmentPage = () => {
             
           </Space>
         </div>
-        <Table columns={columns} dataSource={compart}/>
+        <Table columns={columns} dataSource={dataWithVehicleNum}/>
           <Modal title='Add Compartment' open={isModalOpen} onOk={handleOk} onCancel={handleCancel} 
           footer={[
             <Button key='back' onClick={handleCancel}>
@@ -264,7 +219,7 @@ const CompartmentPage = () => {
        <Form.Item label='Name' name='name' rules={[{required: true}]}>
         <Input />
       </Form.Item>
-      <Form.Item label='Model'>
+      {/* <Form.Item label='Model'>
         <Select 
         showSearch 
         placeholder="Search to Select"
@@ -289,13 +244,13 @@ const CompartmentPage = () => {
           
         ]}
         />
-        </Form.Item>
-      <Form.Item label='Status' name='status' rules={[{required: true}]}>
+        </Form.Item> */}
+      {/* <Form.Item label='Status' name='status' rules={[{required: true}]}>
         <Radio.Group >
           <Radio value={1}>Active</Radio>
           <Radio value={2}>InActive</Radio>
         </Radio.Group>
-      </Form.Item>
+      </Form.Item> */}
       
     </Form>
         </Modal>

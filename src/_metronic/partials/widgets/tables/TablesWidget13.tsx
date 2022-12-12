@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React from "react";
-import { KTSVG } from "../../../helpers";
+import React from 'react'
+import {KTSVG} from '../../../helpers'
 
 type Props = {
   className: string
@@ -283,7 +283,9 @@ const TablesWidget13: React.FC<Props> = ({className}) => {
                   <a href='#' className='text-dark fw-bold text-hover-primary d-block mb-1 fs-6'>
                     RoadGee
                   </a>
-                  <span className='text-muted fw-semibold text-muted d-block fs-7'>Transportation</span>
+                  <span className='text-muted fw-semibold text-muted d-block fs-7'>
+                    Transportation
+                  </span>
                 </td>
                 <td className='text-dark fw-bold text-hover-primary fs-6'>$8376</td>
                 <td>
@@ -385,7 +387,9 @@ const TablesWidget13: React.FC<Props> = ({className}) => {
                   <a href='#' className='text-dark fw-bold text-hover-primary d-block mb-1 fs-6'>
                     Phillipines
                   </a>
-                  <span className='text-muted fw-semibold text-muted d-block fs-7'>Transportation</span>
+                  <span className='text-muted fw-semibold text-muted d-block fs-7'>
+                    Transportation
+                  </span>
                 </td>
                 <td className='text-dark fw-bold text-hover-primary fs-6'>$8476</td>
                 <td>

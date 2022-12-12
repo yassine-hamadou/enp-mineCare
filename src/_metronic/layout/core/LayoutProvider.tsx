@@ -1,8 +1,18 @@
-import { createContext, FC, useContext, useEffect, useState } from "react";
-import { DefaultLayoutConfig } from "./DefaultLayoutConfig";
-import { getEmptyCssClasses, getEmptyCSSVariables, getEmptyHTMLAttributes, LayoutSetup } from "./LayoutSetup";
-import { ILayout, ILayoutCSSClasses, ILayoutCSSVariables, ILayoutHTMLAttributes } from "./LayoutModels";
-import { WithChildren } from "../../helpers";
+import {createContext, FC, useContext, useEffect, useState} from 'react'
+import {DefaultLayoutConfig} from './DefaultLayoutConfig'
+import {
+  getEmptyCssClasses,
+  getEmptyCSSVariables,
+  getEmptyHTMLAttributes,
+  LayoutSetup,
+} from './LayoutSetup'
+import {
+  ILayout,
+  ILayoutCSSClasses,
+  ILayoutCSSVariables,
+  ILayoutHTMLAttributes,
+} from './LayoutModels'
+import {WithChildren} from '../../helpers'
 
 export interface LayoutContextModel {
   config: ILayout

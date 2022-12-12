@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import {useEffect, useRef} from 'react'
 import {
   DrawerComponent,
   MenuComponent,
@@ -6,11 +6,11 @@ import {
   ScrollTopComponent,
   StickyComponent,
   SwapperComponent,
-  ToggleComponent
-} from "../assets/ts/components";
-import { ThemeModeComponent } from "../assets/ts/layout";
+  ToggleComponent,
+} from '../assets/ts/components'
+import {ThemeModeComponent} from '../assets/ts/layout'
 
-import { useLayout } from "./core";
+import {useLayout} from './core'
 
 export function MasterInit() {
   const {config} = useLayout()

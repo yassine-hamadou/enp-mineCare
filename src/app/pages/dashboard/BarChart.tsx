@@ -1,7 +1,7 @@
-import React, { useEffect, useRef } from "react";
-import { useThemeMode } from "../../../_metronic/partials";
-import ApexCharts, { ApexOptions } from "apexcharts";
-import { getCSSVariableValue } from "../../../_metronic/assets/ts/_utils";
+import React, {useEffect, useRef} from 'react'
+import {useThemeMode} from '../../../_metronic/partials'
+import ApexCharts, {ApexOptions} from 'apexcharts'
+import {getCSSVariableValue} from '../../../_metronic/assets/ts/_utils'
 
 type Props = {
   className: string
@@ -99,7 +99,20 @@ const chartOptions = (chartColor: string, chartHeight: string): ApexOptions => {
       colors: ['transparent'],
     },
     xaxis: {
-      categories: ['Dec', 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov'],
+      categories: [
+        'Dec',
+        'Jan',
+        'Feb',
+        'Mar',
+        'Apr',
+        'May',
+        'Jun',
+        'Jul',
+        'Aug',
+        'Sep',
+        'Oct',
+        'Nov',
+      ],
       axisBorder: {
         show: false,
       },
