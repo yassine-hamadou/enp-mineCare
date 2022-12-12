@@ -108,7 +108,6 @@ const ResolutionTable = () => {
             type='text'
             allowClear
           />
-          <Button type='primary'>Search</Button>
         </Space>
         <Space style={{marginBottom: 16}}>
           <button type='button' className='btn btn-primary me-3'>
