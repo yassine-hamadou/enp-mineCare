@@ -25,6 +25,8 @@ import { RefillPage } from './components/setup/refill/Refill'
 import { HoursPage } from './components/entries/hours/HoursTable'
 import { OilGradePage } from './components/setup/oilGrade/OilGrade'
 import { OilTypePage } from './components/setup/oilType/OilType'
+import HourlyReport from './components/report/hourly/HourlyReports'
+import FaultEntryReport from './components/report/faultEntry/FaultEntryReport'
 
 const accountBreadCrumbs: Array<PageLink> = []
 
@@ -232,6 +234,24 @@ const ProductionPage: React.FC = () => {
             <>
               <PageTitle breadcrumbs={accountBreadCrumbs}>Activity Statistics</PageTitle>
               <StatisticsTable />
+            </>
+          }
+        />
+        <Route
+          path='fault-entry-report'
+          element={
+            <>
+              <PageTitle breadcrumbs={accountBreadCrumbs}>Fault Entries Report</PageTitle>
+              <FaultEntryReport />
+            </>
+          }
+        />
+        <Route
+          path='hourly-report'
+          element={
+            <>
+              <PageTitle breadcrumbs={accountBreadCrumbs}>Hourly Report</PageTitle>
+              <HourlyReport />
             </>
           }
         />

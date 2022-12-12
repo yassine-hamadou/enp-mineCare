@@ -53,19 +53,19 @@ const CompartmentPage = () => {
 
     const columns: any =[
 
-    {
-        title: 'ID',
-        dataIndex: 'id',
-        sorter: (a: any, b: any) => {
-            if (a.id > b.id) {
-            return 1
-            }
-            if (b.id > a.id) {
-            return -1
-            }
-            return 0
-        },
-    },
+    // {
+    //     title: 'ID',
+    //     dataIndex: 'id',
+    //     sorter: (a: any, b: any) => {
+    //         if (a.id > b.id) {
+    //         return 1
+    //         }
+    //         if (b.id > a.id) {
+    //         return -1
+    //         }
+    //         return 0
+    //     },
+    // },
     {
       title: 'Name of Compartment',
       dataIndex: 'name',

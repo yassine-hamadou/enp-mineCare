@@ -16,13 +16,14 @@ interface DataType {
   createdAt: string
 }
 
-interface ExpandedDataType {
-  key: React.Key
-  date: string
-  name: string
-  pread: string
-  cread: string
-}
+// interface ExpandedDataType {
+//   // key: React.Key
+//   id: string
+//   date: string
+//   name: string
+//   pread: string
+//   cread: string
+// }
 
 const items = [
   {key: '1', label: 'Action 1'},
@@ -69,18 +70,28 @@ const HoursPage: React.FC = () => {
     })
     return count
   }
+  const getRelatedFleets = (model: any) => {
+    //count number of model
+    let count = null
+    equipData?.data.forEach((item: any) => {
+      if (item.modlName === model) {
+        // count++
+      }
+    })
+    return count
+  }
 
   
   const expandedRowRender = () => {
-    const columns: TableColumnsType<ExpandedDataType> = [
+    const columns= [
       // {title: 'ID', dataIndex: 'id', key: 'id'},
-      {title: 'FleetId', dataIndex: 'fleetID', key: 'fleetID'},
+      {title: 'FleetID', dataIndex: 'fleetId', key: 'fleetId'},
       {
         title: 'Date',
         dataIndex: 'date',
         key: 'date',
-        render: (text, record) => {
-          if (editingRow === record) {
+        render: (text:any, record:any) => {
+          if (editingRow === record.key) {
             return (
               <Form.Item name='date'>
                 <Input />
@@ -92,35 +103,35 @@ const HoursPage: React.FC = () => {
         },
       },
 
-      {
-        title: 'Prv. Reading',
-        dataIndex: 'previousReading',
-        key: 'previousReading',
-        render: (text, record) => {
-          if (editingRow === record.key.toString()) {
-            return (
-              <Form.Item name='previousReading'>
-                <Input />
-              </Form.Item>
-            )
-          } else {
-            return <p>{text}</p>
-          }
-        },
-      },
+      // {
+      //   title: 'Prv. Reading',
+      //   dataIndex: 'previousReading',
+      //   key: 'previousReading',
+      //   render: (text:any, record:any) => {
+      //     if (editingRow === record.key) {
+      //       return (
+      //         <Form.Item name='previousReading'>
+      //           <Input />
+      //         </Form.Item>
+      //       )
+      //     } else {
+      //       return <p>{text}</p>
+      //     }
+      //   },
+      // },
       {
         title: 'Cur. Reading',
         dataIndex: 'currentReading',
         key: 'currentReading',
-        render: (text, record) => {
-          if (editingRow === record.key.toString()) {
+        render: (text:any, record:any) => {
+          if (editingRow === record.key) {
             return (
               <Form.Item name='currentReading'>
                 <Input />
               </Form.Item>
             )
           } else {
-            return <p>{text}</p>
+            return <p> {text}</p>
           }
         },
       },
@@ -128,7 +139,7 @@ const HoursPage: React.FC = () => {
         title: 'Action',
         dataIndex: 'operation',
         key: 'operation',
-        render: (_, record: any) => (
+        render: (_:any, record: any) => (
           <Space>
             <Button
               onClick={() => {
@@ -142,7 +153,7 @@ const HoursPage: React.FC = () => {
             >
               Edit
             </Button>
-            <Button htmlType='submit' danger>
+            <Button  htmlType='submit' danger>
               Done
             </Button>
           </Space>
@@ -161,21 +172,24 @@ const HoursPage: React.FC = () => {
     //   })
     // }
     const onFinish = (values: any) => {
+      
       const updatedDataSource: any = [...allHours?.data]
       updatedDataSource.splice(editingRow, 1, {...values, key: editingRow})
       setDataSource(updatedDataSource)
+      console.log(updatedDataSource)
+
       setEditingRow(null)
     }
 
     return (
       <Form form={form} onFinish={onFinish}>
-        <Table columns={columns} rowKey='id' dataSource={allHours?.data} pagination={false} />
+        <Table columns={columns} rowKey="id" dataSource={allHours?.data} pagination={false} />
       </Form>
     )
   }
 
   const columns: any = [
-    {title: 'ID', dataIndex: 'id', key: 'id'},
+    // {title: 'ID', dataIndex: 'id', key: 'id'},
     {title: 'Manufacturer', dataIndex: 'txmanf', key: 'txmanf'},
     {title: 'Model', dataIndex: 'txmodel', key: 'txmodel'},
     {

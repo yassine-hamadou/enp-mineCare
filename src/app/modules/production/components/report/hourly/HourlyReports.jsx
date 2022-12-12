@@ -10,13 +10,10 @@ import "../../../../../../../node_modules/@devexpress/analytics-core/dist/css/dx
 class ReportViewer extends React.Component {
 constructor(props) {
     super(props);
-    this.reportUrl = ko.observable("FaultEntry");
+    this.reportUrl = ko.observable("HourlyReport");
     this.requestOptions = {
-    host: "https://localhost:5/",
-    // Use this line for the ASP.NET MVC backend.
-    //invokeAction: "/WebDocumentViewer/Invoke"
-    // Use this line for the ASP.NET Core backend
-    invokeAction: "DXXRDV"
+        host: "https://app.sipconsult.net/serverside/",
+        invokeAction: "DXXRDV"
     };
 }
 render() {
@@ -33,10 +30,9 @@ componentWillUnmount() {
 }
 };
 
-function DailyReport() {
+function HourlyReport() {
 return (<div style={{ width: "100%", height: "1000px" }}>
     <ReportViewer />
 </div>);
 }
-
-export default DailyReport;
+export default HourlyReport;
