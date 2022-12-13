@@ -190,6 +190,16 @@ const ProductionPage: React.FC = () => {
           }
         />
         <Route
+          path='work-type/:id'
+          element={
+            <>
+              <PageTitle breadcrumbs={accountBreadCrumbs}>All Work Types</PageTitle>
+              {/*<Overview />*/}
+              <WorkTypePage />
+            </>
+          }
+        />
+        <Route
           path='lube'
           element={
             <>

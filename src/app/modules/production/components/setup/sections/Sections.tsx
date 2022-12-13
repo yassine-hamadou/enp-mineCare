@@ -53,29 +53,9 @@ const SectionsPage = () => {
     deleteData(element)
   }
   const columns: any = [
-    // {
-    //   title: 'ID',
-    //   dataIndex: 'key',
-    //   defaultSortOrder: 'descend',
-    //   sorter: (a: any, b: any) => a.key - b.key,
-    // },
-    // {
-    //   title: 'Service Code',
-    //   dataIndex: 'service',
-    //   defaultSortOrder: 'descend',
-    //   sorter: (a: any, b: any) => {
-    //     if (a.service > b.service) {
-    //       return 1
-    //     }
-    //     if (b.service > a.service) {
-    //       return -1
-    //     }
-    //     return 0
-    //   },
-    // },
 
     {
-      title: 'Section',
+      title: 'Section Name',
       dataIndex: 'name',
       sorter: (a: any, b: any) => {
         if (a.name > b.name) {
@@ -150,10 +130,10 @@ const SectionsPage = () => {
     key: index,
   }))
 
- 
   const dataByID = dataWithIndex.filter((section:any) =>{
-    return section.model ===params.id
+    return section.serviceId.toString() ===params.id
   })
+  console.log(dataByID)
 
 
   const handleInputChange = (e: any) => {
@@ -182,11 +162,11 @@ const SectionsPage = () => {
       serviceId: params.id,
     }
 
-    console.log(data)
+  
 
     try {
       const response = await axios.post(url, data)
-      console.log(data)
+      
       setSubmitLoading(false)
       form.resetFields()
       setIsModalOpen(false)
@@ -217,7 +197,7 @@ const SectionsPage = () => {
             </span>
           </Link> */}
           {/* <p>{params.id}</p> */}
-          
+
           <div className='d-flex justify-content-between'>
             <Space style={{marginBottom: 16}}>
               <Input
@@ -246,10 +226,10 @@ const SectionsPage = () => {
               </button>
             </Space>
           </div>
-          <Table columns={columns} dataSource={dataByID} />
+          <Table columns={columns} dataSource={dataByID} loading={loading} />
 
           <Modal
-            title='Add Service'
+            title='Add Section'
             open={isModalOpen}
             onOk={handleOk}
             onCancel={handleCancel}
