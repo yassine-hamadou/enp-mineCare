@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React from "react";
-import { toAbsoluteUrl } from "../../../helpers";
+import React from 'react'
+import {toAbsoluteUrl} from '../../../helpers'
 
 type Props = {
   className: string

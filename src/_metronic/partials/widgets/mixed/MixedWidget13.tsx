@@ -1,9 +1,9 @@
 // @ts-nocheck
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React, { useEffect, useRef } from "react";
-import ApexCharts, { ApexOptions } from "apexcharts";
-import { getCSSVariableValue } from "../../../assets/ts/_utils";
-import { useThemeMode } from "../../layout/theme-mode/ThemeModeProvider";
+import React, {useEffect, useRef} from 'react'
+import ApexCharts, {ApexOptions} from 'apexcharts'
+import {getCSSVariableValue} from '../../../assets/ts/_utils'
+import {useThemeMode} from '../../layout/theme-mode/ThemeModeProvider'
 
 type Props = {
   className: string
@@ -36,11 +36,14 @@ const MixedWidget13: React.FC<Props> = ({className, backGroundColor, chartHeight
       chart.render()
     }
 
-    return chart;
+    return chart
   }
 
   return (
-    <div className={`card ${className} theme-dark-bg-body`} style={{backgroundColor: backGroundColor}}>
+    <div
+      className={`card ${className} theme-dark-bg-body`}
+      style={{backgroundColor: backGroundColor}}
+    >
       {/* begin::Body */}
       <div className='card-body d-flex flex-column'>
         {/* begin::Wrapper */}

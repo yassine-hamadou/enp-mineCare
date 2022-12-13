@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import { FC } from "react";
-import { useAuth } from "../../../../app/modules/auth";
-import { toAbsoluteUrl } from "../../../helpers";
+import {FC} from 'react'
+import {useAuth} from '../../../../app/modules/auth'
+import {toAbsoluteUrl} from '../../../helpers'
 
 const HeaderUserMenu: FC = () => {
   const {currentUser, logout} = useAuth()

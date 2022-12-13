@@ -1,11 +1,11 @@
-import { Navigate, Outlet, Route, Routes } from "react-router-dom";
-import { PageLink, PageTitle } from "../../../_metronic/layout/core";
-import { Charts } from "./components/Charts";
-import { Feeds } from "./components/Feeds";
-import { Lists } from "./components/Lists";
-import { Tables } from "./components/Tables";
-import { Mixed } from "./components/Mixed";
-import { Statistics } from "./components/Statistics";
+import {Navigate, Outlet, Route, Routes} from 'react-router-dom'
+import {PageLink, PageTitle} from '../../../_metronic/layout/core'
+import {Charts} from './components/Charts'
+import {Feeds} from './components/Feeds'
+import {Lists} from './components/Lists'
+import {Tables} from './components/Tables'
+import {Mixed} from './components/Mixed'
+import {Statistics} from './components/Statistics'
 
 const widgetsBreadCrumbs: Array<PageLink> = [
   {

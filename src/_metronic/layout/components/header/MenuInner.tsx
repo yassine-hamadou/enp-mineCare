@@ -1,5 +1,5 @@
-import { MenuItem } from "./MenuItem";
-import { useIntl } from "react-intl";
+import {MenuItem} from './MenuItem'
+import {useIntl} from 'react-intl'
 
 export function MenuInner() {
   const intl = useIntl()

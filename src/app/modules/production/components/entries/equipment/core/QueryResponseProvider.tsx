@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { FC, useContext, useEffect, useMemo, useState } from "react";
-import { useQuery } from "react-query";
+import {FC, useContext, useEffect, useMemo, useState} from 'react'
+import {useQuery} from 'react-query'
 import {
   createResponseContext,
   initialQueryResponse,
@@ -8,11 +8,11 @@ import {
   PaginationState,
   QUERIES,
   stringifyRequestQuery,
-  WithChildren
-} from "../../../../../../../_metronic/helpers";
-import { getUsers } from "./_requests";
-import { User } from "./_models";
-import { useQueryRequest } from "./QueryRequestProvider";
+  WithChildren,
+} from '../../../../../../../_metronic/helpers'
+import {getUsers} from './_requests'
+import {User} from './_models'
+import {useQueryRequest} from './QueryRequestProvider'
 
 const QueryResponseContext = createResponseContext<User>(initialQueryResponse)
 const QueryResponseProvider: FC<WithChildren> = ({children}) => {

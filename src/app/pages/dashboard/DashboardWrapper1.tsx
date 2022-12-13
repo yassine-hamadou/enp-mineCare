@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import { FC } from "react";
-import { useIntl } from "react-intl";
-import { PageTitle } from "../../../_metronic/layout/core";
+import {FC} from 'react'
+import {useIntl} from 'react-intl'
+import {PageTitle} from '../../../_metronic/layout/core'
 import {
   ListsWidget2,
   ListsWidget3,
@@ -13,8 +13,8 @@ import {
   MixedWidget2,
   MixedWidget8,
   TablesWidget10,
-  TablesWidget5
-} from "../../../_metronic/partials/widgets";
+  TablesWidget5,
+} from '../../../_metronic/partials/widgets'
 
 const DashboardPage: FC = () => (
   <>

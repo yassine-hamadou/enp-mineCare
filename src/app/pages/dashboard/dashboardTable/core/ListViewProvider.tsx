@@ -1,4 +1,4 @@
-import { createContext, FC, useContext, useMemo, useState } from "react";
+import {createContext, FC, useContext, useMemo, useState} from 'react'
 import {
   calculatedGroupingIsDisabled,
   calculateIsAllDataSelected,
@@ -7,9 +7,9 @@ import {
   ID,
   initialListView,
   ListViewContextProps,
-  WithChildren
-} from "../../../../../_metronic/helpers";
-import { useQueryResponse, useQueryResponseData } from "./QueryResponseProvider";
+  WithChildren,
+} from '../../../../../_metronic/helpers'
+import {useQueryResponse, useQueryResponseData} from './QueryResponseProvider'
 
 const ListViewContext = createContext<ListViewContextProps>(initialListView)
 

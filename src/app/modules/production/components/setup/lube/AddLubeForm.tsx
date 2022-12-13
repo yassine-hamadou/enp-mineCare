@@ -1,7 +1,7 @@
-import { Form, Input, InputNumber, Select } from "antd";
-import { useEffect, useState } from "react";
-import axios from "axios";
-import { ENP_URL } from "../../../../../urls";
+import {Form, Input, InputNumber, Select} from 'antd'
+import {useEffect, useState} from 'react'
+import axios from 'axios'
+import {ENP_URL} from '../../../../../urls'
 
 const AddLubeForm = () => {
   const [dataSource, setDataSource] = useState([])

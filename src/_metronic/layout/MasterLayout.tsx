@@ -1,15 +1,15 @@
-import { useEffect } from "react";
-import { Outlet, useLocation } from "react-router-dom";
-import { AsideDefault } from "./components/aside/AsideDefault";
+import {useEffect} from 'react'
+import {Outlet, useLocation} from 'react-router-dom'
+import {AsideDefault} from './components/aside/AsideDefault'
 // import {Footer} from './components/Footer'
-import { HeaderWrapper } from "./components/header/HeaderWrapper";
-import { Toolbar } from "./components/toolbar/Toolbar";
+import {HeaderWrapper} from './components/header/HeaderWrapper'
+import {Toolbar} from './components/toolbar/Toolbar'
 // import {RightToolbar} from '../partials/layout/RightToolbar'
-import { ScrollTop } from "./components/ScrollTop";
-import { Content } from "./components/Content";
-import { PageDataProvider } from "./core";
-import { ThemeModeProvider } from "../partials";
-import { MenuComponent } from "../assets/ts/components";
+import {ScrollTop} from './components/ScrollTop'
+import {Content} from './components/Content'
+import {PageDataProvider} from './core'
+import {ThemeModeProvider} from '../partials'
+import {MenuComponent} from '../assets/ts/components'
 
 const MasterLayout = () => {
   const location = useLocation()

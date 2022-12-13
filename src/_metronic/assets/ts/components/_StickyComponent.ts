@@ -9,8 +9,8 @@ import {
   getObjectPropertyValueByKey,
   getScrollTop,
   getUniqueIdWithPrefix,
-  stringSnakeToCamel
-} from "../_utils/index";
+  stringSnakeToCamel,
+} from '../_utils/index'
 
 export interface StickyOptions {
   offset: number

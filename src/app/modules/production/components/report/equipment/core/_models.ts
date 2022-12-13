@@ -1,4 +1,4 @@
-import { ID, Response } from "../../../../../../../_metronic/helpers";
+import {ID, Response} from '../../../../../../../_metronic/helpers'
 
 export type User = {
   id?: ID

@@ -1,13 +1,12 @@
 import {Button, Form, Input, Modal, Radio, Select, Space, Table} from 'antd'
 import {useState, useEffect} from 'react'
 import axios from 'axios'
+
 import { KTCard, KTCardBody, KTSVG } from '../../../../../../_metronic/helpers'
 import { ColumnsType } from 'antd/lib/table'
 import { Link } from 'react-router-dom'
 import { ENP_URL, fetchCompartments, fetchLubeBrands, fetchModels } from '../../../../../urls'
 import { useQuery } from 'react-query'
-
-
 
 const OilGradePage = () => {
   const [gridData, setGridData] = useState([])
@@ -19,45 +18,39 @@ const OilGradePage = () => {
   const [form] = Form.useForm()
 
   const {Option} = Select
-    // Modal functions
-    const [isModalOpen, setIsModalOpen] = useState(false)
+  // Modal functions
+  const [isModalOpen, setIsModalOpen] = useState(false)
 
-    const showModal = () => {
-      setIsModalOpen(true)
-    }
-  
-    const handleOk = () => {
-      setIsModalOpen(false)
-    }
-  
-    const handleCancel = () => {
-      form.resetFields()
-    setIsModalOpen(false)
-
-    }
-    // Modal functions end
-    const deleteData = async (element: any) => {
-      try {
-          const response = await axios.delete(
-              `${ENP_URL}/oilgrades/${element.id}`
-          )
-          // update the local state so that react can refecth and re-render the table with the new data
-          const newData = gridData.filter((item: any) => item.id !== element.id)
-          setGridData(newData)
-          return response.status
-      } catch (e) {
-          return e
-      }
+  const showModal = () => {
+    setIsModalOpen(true)
   }
 
+  const handleOk = () => {
+    setIsModalOpen(false)
+  }
+
+  const handleCancel = () => {
+    form.resetFields()
+    setIsModalOpen(false)
+  }
+  // Modal functions end
+  const deleteData = async (element: any) => {
+    try {
+      const response = await axios.delete(`${ENP_URL}/oilgrades/${element.id}`)
+      // update the local state so that react can refecth and re-render the table with the new data
+      const newData = gridData.filter((item: any) => item.id !== element.id)
+      setGridData(newData)
+      return response.status
+    } catch (e) {
+      return e
+    }
+  }
 
   function handleDelete(element: any) {
     deleteData(element)
   }
 
-    const columns: any =[
-
-    
+  const columns: any = [
     {
       title: 'Name',
       dataIndex: 'name',
@@ -86,20 +79,24 @@ const OilGradePage = () => {
     },
     {
       title: 'Action',
-      
+
       // dataIndex: 'faultDesc',
       // sorter: (a: any, b: any) => a.faultDesc - b.faultDesc,
       fixed: 'right',
       width: 100,
-      render: (_: any, record: any ) => (
-        <Space size="middle">
+      render: (_: any, record: any) => (
+        <Space size='middle'>
           {/* <a href="sections" className="btn btn-light-info btn-sm">Sections</a> */}
           {/* <Link to={`/setup/sections/${record.id}`}>
           <span  className="btn btn-light-info btn-sm">
           Sections
             </span></Link> */}
-          <a href="#" className="btn btn-light-warning btn-sm">Update</a>
-          <a onClick={() => handleDelete(record)} className="btn btn-light-danger btn-sm">Delete</a>
+          <a href='#' className='btn btn-light-warning btn-sm'>
+            Update
+          </a>
+          <a onClick={() => handleDelete(record)} className='btn btn-light-danger btn-sm'>
+            Delete
+          </a>
           {/* <a>Edit </a> */}
         </Space>
       ),
@@ -117,7 +114,6 @@ const OilGradePage = () => {
       console.log(error)
     }
   }
-
   useEffect(() => {
     loadData()
 
@@ -152,6 +148,7 @@ const OilGradePage = () => {
     })
     setGridData(filteredData)
   }
+
   const url = `${ENP_URL}/LubeGrades`
     const onFinish = async (values: any) => {
         setSubmitLoading(true)
@@ -173,12 +170,20 @@ const OilGradePage = () => {
             setSubmitLoading(false)
             return error.statusText
         }
-    }
+  }
 
   return (
-    <div style={{backgroundColor:'white', padding:'20px', borderRadius:'5px', boxShadow:'2px 2px 15px rgba(0,0,0,0.08)'}}>
+    <div
+      style={{
+        backgroundColor: 'white',
+        padding: '20px',
+        borderRadius: '5px',
+        boxShadow: '2px 2px 15px rgba(0,0,0,0.08)',
+      }}
+    >
       <KTCardBody className='py-4 '>
         <div className='table-responsive'>
+
            
         <div className='d-flex justify-content-between'>
           <Space style={{marginBottom: 16}}>
@@ -293,14 +298,11 @@ const OilGradePage = () => {
     </Form>
         </Modal>
       </div>
+
       </KTCardBody>
     </div>
   )
 }
 
-export {OilGradePage}
-
-function uuidv4() {
-  throw new Error('Function not implemented.')
-}
+export {OilGradePage};
 

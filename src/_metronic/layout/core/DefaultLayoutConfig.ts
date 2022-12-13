@@ -1,4 +1,4 @@
-import { ILayout } from "./LayoutModels";
+import {ILayout} from './LayoutModels'
 
 export const DefaultLayoutConfig: ILayout = {
   main: {

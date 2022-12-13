@@ -1,5 +1,5 @@
-import { Table } from "react-bootstrap";
-import { KTCard, KTCardBody } from "../../../../../../_metronic/helpers";
+import {Table} from 'react-bootstrap'
+import {KTCard, KTCardBody} from '../../../../../../_metronic/helpers'
 
 const carData = [
   {

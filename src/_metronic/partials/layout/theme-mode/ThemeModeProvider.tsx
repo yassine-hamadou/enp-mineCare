@@ -1,6 +1,6 @@
-import React, { createContext, useContext, useEffect, useState } from "react";
-import { ThemeModeComponent } from "../../../assets/ts/layout";
-import { toAbsoluteUrl } from "../../../helpers";
+import React, {createContext, useContext, useEffect, useState} from 'react'
+import {ThemeModeComponent} from '../../../assets/ts/layout'
+import {toAbsoluteUrl} from '../../../helpers'
 
 export type ThemeModeType = 'dark' | 'light' | 'system'
 const systemMode = ThemeModeComponent.getSystemMode() as 'light' | 'dark'

@@ -7,8 +7,8 @@ import {
   getObjectPropertyValueByKey,
   getUniqueIdWithPrefix,
   stringSnakeToCamel,
-  throttle
-} from "../_utils/index";
+  throttle,
+} from '../_utils/index'
 
 export class DrawerStore {
   static store: Map<string, DrawerComponent> = new Map()

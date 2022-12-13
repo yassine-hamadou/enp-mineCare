@@ -1,4 +1,4 @@
-import { createPopper, VirtualElement } from "@popperjs/core";
+import {createPopper, VirtualElement} from '@popperjs/core'
 import {
   DataUtil,
   DOMEventHandlerUtil,
@@ -12,8 +12,8 @@ import {
   insertAfterElement,
   slideDown,
   slideUp,
-  throttle
-} from "../_utils/index";
+  throttle,
+} from '../_utils/index'
 
 export interface MenuOptions {
   dropdown: {

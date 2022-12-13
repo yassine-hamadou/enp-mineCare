@@ -6,8 +6,6 @@ import {EquipmentTable} from './components/report/equipment/CycleDetailsList'
 import {StatisticsTable} from './components/report/activity/CycleDetailsList'
 import {ScheduleInfo} from './components/scheduleInfo/ScheduleInfo'
 import {EquipmentDetail} from './components/entries/equipment/CycleDetailsList'
-import {ResolutionTable} from './components/entries/resolution/ResolutionTable'
-import {FaultTable} from './components/entries/fault_d/FaultTable'
 import {WorkTypePage} from './components/setup/workType/WorkType'
 import {DownTypePage} from './components/setup/downType/DownType'
 import {CustodianPage} from './components/setup/custodian/Custodian'
@@ -20,6 +18,7 @@ import {SectionsPage} from './components/setup/sections/Sections'
 import {CheckListForm3} from './components/checkListForm/CheckListForm3'
 import {TabsTest} from './components/checkListForm/Tabs'
 import {LubePage} from './components/setup/lube/Lube'
+
 import { CompartmentPage } from './components/setup/compartment/Compartment'
 import { RefillPage } from './components/setup/refill/Refill'
 import { HoursPage } from './components/entries/hours/HoursTable'
@@ -27,6 +26,7 @@ import { OilGradePage } from './components/setup/oilGrade/OilGrade'
 import { OilTypePage } from './components/setup/oilType/OilType'
 import HourlyReport from './components/report/hourly/HourlyReports'
 import FaultEntryReport from './components/report/faultEntry/FaultEntryReport'
+import { FaultTable } from "./components/entries/fault_d/FaultTable";
 
 const accountBreadCrumbs: Array<PageLink> = []
 
@@ -70,15 +70,15 @@ const ProductionPage: React.FC = () => {
         >
           <Route path='' element={<FaultTable />} />
         </Route>
-        <Route
-          path='resolution'
-          element={
-            <>
-              <PageTitle breadcrumbs={accountBreadCrumbs}>All Resolution</PageTitle>
-              <ResolutionTable />
-            </>
-          }
-        />
+        {/*<Route*/}
+        {/*  path='resolution'*/}
+        {/*  element={*/}
+        {/*    <>*/}
+        {/*      <PageTitle breadcrumbs={accountBreadCrumbs}>All Resolution</PageTitle>*/}
+        {/*      <ResolutionTable />*/}
+        {/*    </>*/}
+        {/*  }*/}
+        {/*/>*/}
         <Route
           path='hours'
           element={
@@ -297,7 +297,7 @@ const ProductionPage: React.FC = () => {
         }
       >
         <Route
-          path='service'
+          path='service/:id'
           element={
             <>
               <PageTitle breadcrumbs={accountBreadCrumbs}>Services </PageTitle>
@@ -315,7 +315,7 @@ const ProductionPage: React.FC = () => {
           }
         />
         <Route
-          path='groups'
+          path='groups/:id'
           element={
             <>
               <PageTitle breadcrumbs={accountBreadCrumbs}>Groups </PageTitle>
@@ -324,7 +324,7 @@ const ProductionPage: React.FC = () => {
           }
         />
         <Route
-          path='items'
+          path='items/:id'
           element={
             <>
               <PageTitle breadcrumbs={accountBreadCrumbs}>Items </PageTitle>

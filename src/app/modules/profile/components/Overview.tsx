@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react'
 import {
   ChartsWidget1,
   FeedsWidget2,
@@ -7,8 +7,8 @@ import {
   FeedsWidget5,
   FeedsWidget6,
   ListsWidget2,
-  ListsWidget5
-} from "../../../../_metronic/partials/widgets";
+  ListsWidget5,
+} from '../../../../_metronic/partials/widgets'
 
 export function Overview() {
   return (

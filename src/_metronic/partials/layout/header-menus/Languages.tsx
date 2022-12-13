@@ -1,8 +1,8 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import clsx from "clsx";
-import { FC } from "react";
-import { toAbsoluteUrl } from "../../../helpers";
-import { setLanguage, useLang } from "../../../i18n/Metronici18n";
+import clsx from 'clsx'
+import {FC} from 'react'
+import {toAbsoluteUrl} from '../../../helpers'
+import {setLanguage, useLang} from '../../../i18n/Metronici18n'
 
 const languages = [
   {

@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React, { useRef, useState } from "react";
-import { Modal } from "react-bootstrap";
-import { KTSVG } from "../../helpers";
+import React, {useRef, useState} from 'react'
+import {Modal} from 'react-bootstrap'
+import {KTSVG} from '../../helpers'
 
 export type Props = {
   show: boolean

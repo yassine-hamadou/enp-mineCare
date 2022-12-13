@@ -1,8 +1,8 @@
-import { useEffect, useState } from "react";
-import { useQueryRequest } from "../../core/QueryRequestProvider";
-import { useQueryResponse } from "../../core/QueryResponseProvider";
-import { MenuComponent } from "../../../../../../../../_metronic/assets/ts/components";
-import { initialQueryState, KTSVG } from "../../../../../../../../_metronic/helpers";
+import {useEffect, useState} from 'react'
+import {useQueryRequest} from '../../core/QueryRequestProvider'
+import {useQueryResponse} from '../../core/QueryResponseProvider'
+import {MenuComponent} from '../../../../../../../../_metronic/assets/ts/components'
+import {initialQueryState, KTSVG} from '../../../../../../../../_metronic/helpers'
 
 const UsersListFilter = () => {
   const {updateState} = useQueryRequest()

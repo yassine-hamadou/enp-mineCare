@@ -107,17 +107,17 @@ const HoursPage: React.FC = () => {
       //   title: 'Prv. Reading',
       //   dataIndex: 'previousReading',
       //   key: 'previousReading',
-      //   render: (text:any, record:any) => {
-      //     if (editingRow === record.key) {
-      //       return (
-      //         <Form.Item name='previousReading'>
-      //           <Input />
-      //         </Form.Item>
-      //       )
-      //     } else {
-      //       return <p>{text}</p>
-      //     }
-      //   },
+      //   // render: (text:any, record:any) => {
+      //   //   if (editingRow === record.key) {
+      //   //     return (
+      //   //       <Form.Item name='previousReading'>
+      //   //         <Input />
+      //   //       </Form.Item>
+      //   //     )
+      //   //   } else {
+      //   //     return <p>{text}</p>
+      //   //   }
+      //   // },
       // },
       {
         title: 'Cur. Reading',

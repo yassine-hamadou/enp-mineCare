@@ -121,8 +121,8 @@ export function ScheduleInfo() {
                   className='form-control form-control-solid'
                   name='to'
                   value={
-                    scheduleToworkOn?.serviceType
-                      ? scheduleToworkOn?.serviceType
+                    scheduleToworkOn?.serviceTypeId
+                      ? scheduleToworkOn?.serviceTypeId
                       : 'No Service Type'
                   }
                   readOnly

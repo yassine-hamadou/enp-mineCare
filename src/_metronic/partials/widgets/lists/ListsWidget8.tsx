@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React from "react";
-import { KTSVG, toAbsoluteUrl } from "../../../helpers";
-import { Dropdown1 } from "../../content/dropdown/Dropdown1";
+import React from 'react'
+import {KTSVG, toAbsoluteUrl} from '../../../helpers'
+import {Dropdown1} from '../../content/dropdown/Dropdown1'
 
 type Props = {
   className: string
@@ -127,7 +127,9 @@ const ListsWidget8: React.FC<Props> = ({className}) => {
               <a href='#' className='text-gray-800 fw-bold text-hover-primary fs-6'>
                 Abstract Art
               </a>
-              <span className='text-muted fw-semibold d-block pt-1'>The will to capture readers</span>
+              <span className='text-muted fw-semibold d-block pt-1'>
+                The will to capture readers
+              </span>
             </div>
             {/* end::Title */}
             {/* begin::Section */}
