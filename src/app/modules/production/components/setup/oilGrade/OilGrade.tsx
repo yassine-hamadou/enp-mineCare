@@ -2,8 +2,6 @@ import {Button, Form, Input, Modal, Radio, Select, Space, Table} from 'antd'
 import {useState, useEffect} from 'react'
 import axios from 'axios'
 import {KTCard, KTCardBody, KTSVG} from '../../../../../../_metronic/helpers'
-import {ColumnsType} from 'antd/lib/table'
-import {Link} from 'react-router-dom'
 import {ENP_URL} from '../../../../../urls'
 
 const OilGradePage = () => {
