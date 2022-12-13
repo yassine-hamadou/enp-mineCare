@@ -31,7 +31,6 @@ import {
   updateSchedule
 } from "./requests";
 import { message } from "antd";
-import { useRef } from "react";
 
 /**
  *  Schedule editor custom fields sample
@@ -283,8 +282,8 @@ const Calendar = ({chosenLocationIdFromDropdown}) => {
           entryId: 0,
           vmModel: 'null',
           vmClass: 'null',
-          serviceTypeId: schedule.serviceType,
-          responsible: schedule.custodian,
+          serviceTypeId: schedule.serviceTypeId,
+          responsible: schedule.responsible,
         }
       })
       //Since format is an array, I need to change it to the format that the API will understand which is an object

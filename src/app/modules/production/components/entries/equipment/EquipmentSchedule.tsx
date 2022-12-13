@@ -1,7 +1,7 @@
 import {KTCard, KTCardBody, KTSVG} from '../../../../../../_metronic/helpers'
 import axios from 'axios'
 import {DropDownListComponent} from '@syncfusion/ej2-react-dropdowns'
-import {Calendar} from '../../calendar/Calendar'
+import {Calendar} from './calendar/Calendar'
 import {Button, Space} from 'antd'
 import {useNavigate} from 'react-router-dom'
 import {ENP_URL} from '../../../../../urls'
