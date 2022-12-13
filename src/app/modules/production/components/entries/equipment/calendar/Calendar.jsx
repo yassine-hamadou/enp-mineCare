@@ -185,16 +185,18 @@ const Calendar = ({chosenLocationIdFromDropdown}) => {
             <DropDownListComponent
               id='ServiceType'
               placeholder='Choose Service Type'
-              data-name='serviceType'
+              data-name='serviceTypeId'
               className='e-field'
               style={{width: '100%'}}
               dataSource={serviceTypes?.data.map((serviceType) => {
                 return {
                   text: `${serviceType.name}`,
-                  value: `${serviceType.id}`,
+                  value: serviceType.id,
                 }
               })}
               value={props?.serviceTypeId}
+              fields={{text: 'text', value: 'value'}}
+
             />
           </td>
         </tr>
@@ -204,7 +206,7 @@ const Calendar = ({chosenLocationIdFromDropdown}) => {
             <DropDownListComponent
               id='responsible'
               placeholder='Responsible'
-              data-name='custodian'
+              data-name='responsible'
               className='e-field'
               style={{width: '100%'}}
               dataSource={custodiansData?.data.map((custodian) => {
@@ -274,6 +276,7 @@ const Calendar = ({chosenLocationIdFromDropdown}) => {
       console.log('preparedData', preparedData)
       // map through the array and set each field to what the calendar will understand
       const formattedDataToPost = preparedData.map((schedule) => {
+        console.log('schedule', schedule)
         return {
           fleetId: schedule.fleetId,
           locationId: schedule.locationId,
