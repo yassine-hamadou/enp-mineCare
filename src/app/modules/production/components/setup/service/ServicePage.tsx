@@ -125,7 +125,13 @@ const ServicesPage = () => {
 
   const dataByID = dataWithIndex.filter((service:any) =>{
     return service.model ===routeParams.id
+  });
+
+  const modelName = modeldData.filter((service:any) =>{
+    return service.txmodel ===routeParams.id
   })
+
+  console.log(modelName)
 
 
   const handleInputChange = (e: any) => {

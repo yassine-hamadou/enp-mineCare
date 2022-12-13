@@ -32,40 +32,7 @@ const GroupsPage = () => {
     setIsModalOpen(false)
   }
   // Modal functions end
-  const dataSource: any = [
-    {
-      section: 'Section 1',
-      group: 'Engine',
-    },
-    {
-      section: 'Section 2',
-      group: 'Transmission',
-    },
-    {
-      section: 'Section 2',
-      group: 'Hydraulic',
-    },
-    {
-      section: 'Section 2',
-      group: 'Axles',
-    },
-    {
-      section: 'Section 3',
-      group: 'Body',
-    },
-    {
-      section: 'Section 3',
-      group: 'Frame',
-    },
-    {
-      section: 'PM-A',
-      group: 'Cap',
-    },
-    {
-      section: 'PM-A',
-      group: 'Operation',
-    },
-  ]
+
   const columns: any = [
     // {
     //   title: 'ID',
@@ -87,20 +54,6 @@ const GroupsPage = () => {
         return 0
       },
     },
-
-    // {
-    //   title: 'Group',
-    //   dataIndex: 'group',
-    //   sorter: (a: any, b: any) => {
-    //     if (a.group > b.group) {
-    //       return 1
-    //     }
-    //     if (b.group > a.group) {
-    //       return -1
-    //     }
-    //     return 0
-    //   },
-    // },
 
     {
       title: 'Action',

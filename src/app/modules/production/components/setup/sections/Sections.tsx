@@ -211,12 +211,13 @@ const SectionsPage = () => {
     
       <KTCardBody className='py-4 '>
         <div className='table-responsive'>
-          <Link to={`/setup/service/${params.id}`}>
+          {/* <Link to={`/setup/service/${params.id}`}>
             <span className='mb-3 btn btn-outline btn-outline-dashed btn-outline-primary btn-active-light-primary'>
               Back to Services
             </span>
-          </Link>
-          <p>{params.id}</p>
+          </Link> */}
+          {/* <p>{params.id}</p> */}
+          
           <div className='d-flex justify-content-between'>
             <Space style={{marginBottom: 16}}>
               <Input
