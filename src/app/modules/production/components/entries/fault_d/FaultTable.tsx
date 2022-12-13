@@ -150,14 +150,19 @@ const FaultTable = () => {
   // };
 
   const deleteData = async (element: any) => {
+    setLoading(true);
     try {
       const response = await axios.delete(`${ENP_URL}/FaultEntriesApi/${element.entryId}`);
       // update the local state so that react can refecth and re-render the table with the new data
       const newData = gridData.filter((item: any) => item.entryId !== element.entryId);
       setGridData(newData);
       QueryClient.invalidateQueries("faults");
+      message.success("Fault deleted successfully");
+      setLoading(false);
       return response.status;
     } catch (e) {
+      message.error("Error deleting fault, Please try again");
+      setLoading(false);
       return e;
     }
   };
@@ -298,9 +303,11 @@ const FaultTable = () => {
       setIsModalOpen(false);
       //invalidate the query to refetch the data
       QueryClient.invalidateQueries("faults");
+      message.success("Fault reported successfully");
       return response.statusText;
     } catch (error: any) {
       setSubmitLoading(false);
+      message.error("Error reporting fault, Please try again");
       return error.statusText;
     }
   };
@@ -409,8 +416,10 @@ const FaultTable = () => {
         return message.error("Sorry Time completed cannot be less than Time Started");
       }
       solveFault(data);
+
       console.log("Data, to repost in fault", data);
       console.log("Solve fault", solveFault);
+
       setSubmitSolveLoading(false);
       formSolve.resetFields();
       setIsSolveModalOpen(false);

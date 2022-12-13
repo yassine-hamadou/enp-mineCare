@@ -5,7 +5,7 @@ import {FuelReportTable} from './components/report/fuel/CycleDetailsList'
 import {EquipmentTable} from './components/report/equipment/CycleDetailsList'
 import {StatisticsTable} from './components/report/activity/CycleDetailsList'
 import {ScheduleInfo} from './components/scheduleInfo/ScheduleInfo'
-import {EquipmentDetail} from './components/entries/equipment/CycleDetailsList'
+import {EquipmentDetail} from './components/entries/equipment/EquipmentSchedule'
 import {WorkTypePage} from './components/setup/workType/WorkType'
 import {DownTypePage} from './components/setup/downType/DownType'
 import {CustodianPage} from './components/setup/custodian/Custodian'
@@ -293,7 +293,7 @@ const ProductionPage: React.FC = () => {
           }
         />
         <Route
-          path='groups'
+          path='groups/:id'
           element={
             <>
               <PageTitle breadcrumbs={accountBreadCrumbs}>Groups </PageTitle>
@@ -302,7 +302,7 @@ const ProductionPage: React.FC = () => {
           }
         />
         <Route
-          path='items'
+          path='items/:id'
           element={
             <>
               <PageTitle breadcrumbs={accountBreadCrumbs}>Items </PageTitle>
