@@ -1,27 +1,29 @@
 import {Divider} from 'antd'
-import {useEffect, useState} from 'react'
+import {useState} from 'react'
 import axios from 'axios'
 import {ENP_URL} from '../../../../urls'
 import {TabsTest} from '../checkListForm/Tabs'
 import {KTCard, KTCardBody} from '../../../../../_metronic/helpers'
+import { useQuery } from "react-query";
 
 export function ScheduleInfo() {
-  const [schedules, setSchedules] = useState<any>([])
   const [scheduleToworkOn, setScheduleToWorkOn] = useState<any>([])
 
-  const loadSchedules = async () => {
-    const response = await axios.get(`${ENP_URL}/FleetSchedulesApi`)
-    setSchedules(response.data)
-  }
+
+  const { data: loadSchedule }: any = useQuery("loadSchedule", () => {
+    return axios.get(`${ENP_URL}/FleetSchedulesApi`);
+  } );
+
+  const { data: serviceType }: any = useQuery("serviceType", () => {
+    return axios.get(`${ENP_URL}/Services`);
+  });
+
   const onSelect = (e: any) => {
     const entryID = parseInt(e.target.value)
-    const schedule = schedules.find((s: any) => s.entryId === entryID)
+    const schedule = loadSchedule?.data.find((s: any) => s.entryId === entryID)
     console.log('scheduleSelect', schedule)
     setScheduleToWorkOn(schedule)
   }
-  useEffect(() => {
-    loadSchedules()
-  }, [])
 
   return (
     <>
@@ -52,7 +54,7 @@ export function ScheduleInfo() {
                   onChange={onSelect}
                 >
                   <option value='Select Schedule'>Select Schedule</option>
-                  {schedules?.map((schedule: any) => (
+                  {loadSchedule?.data.map((schedule: any) => (
                     <option value={schedule.entryId} key={schedule.entryId}>
                       {schedule.fleetId}- {schedule.locationId} -{' '}
                       {new Date(schedule.timeStart).toUTCString()} -{' '}
@@ -122,7 +124,7 @@ export function ScheduleInfo() {
                   name='to'
                   value={
                     scheduleToworkOn?.serviceTypeId
-                      ? scheduleToworkOn?.serviceTypeId
+                      ? serviceType?.data.find((service: any) => service.id === scheduleToworkOn?.serviceTypeId)?.name
                       : 'No Service Type'
                   }
                   readOnly
