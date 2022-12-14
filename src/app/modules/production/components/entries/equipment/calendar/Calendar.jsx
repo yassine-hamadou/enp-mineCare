@@ -25,12 +25,13 @@ import {
   addSchedule,
   deleteSchedule,
   fetchCustodians,
-  fetchSchedules, fetchServiceTypes,
+  fetchSchedules,
+  fetchServiceTypes,
   fetchVmequps,
   localData,
-  updateSchedule
-} from "./requests";
-import { message } from "antd";
+  updateSchedule,
+} from './requests'
+import {message} from 'antd'
 
 /**
  *  Schedule editor custom fields sample
@@ -77,7 +78,7 @@ const Calendar = ({chosenLocationIdFromDropdown}) => {
       return message.success('Schedule added successfully')
     },
     onError: (error) => {
-      console.log("error adding schedule", error)
+      console.log('error adding schedule', error)
       return message.error('Error adding schedule')
     },
   })
@@ -88,7 +89,7 @@ const Calendar = ({chosenLocationIdFromDropdown}) => {
       return message.success('Schedule deleted successfully')
     },
     onError: (error) => {
-      console.log("error deleting schedule", error)
+      console.log('error deleting schedule', error)
       return message.error('Error deleting schedule')
     },
   })
@@ -99,7 +100,7 @@ const Calendar = ({chosenLocationIdFromDropdown}) => {
       return message.success('Schedule updated successfully')
     },
     onError: (error) => {
-      console.log("error updating schedule", error)
+      console.log('error updating schedule', error)
       return message.error('Error updating schedule')
     },
   })
@@ -160,10 +161,7 @@ const Calendar = ({chosenLocationIdFromDropdown}) => {
                   }
                 })}
                 fields={{text: 'text', value: 'value'}}
-                value={
-                  props && props.fleetId
-                    ? `${props.fleetId}` : null
-                }
+                value={props && props.fleetId ? `${props.fleetId}` : null}
               />
             </td>
           </tr>
@@ -234,12 +232,7 @@ const Calendar = ({chosenLocationIdFromDropdown}) => {
                 id='StartTime'
                 format='dd/MM/yy hh:mm a'
                 data-name='timeStart'
-                value={
-                  props && props.timeStart
-                    ? new Date(props?.timeStart)
-                    : props?.StartTime
-                }
-
+                value={props && props.timeStart ? new Date(props?.timeStart) : props?.StartTime}
                 className='e-field'
               ></DateTimePickerComponent>
             </td>
@@ -251,25 +244,19 @@ const Calendar = ({chosenLocationIdFromDropdown}) => {
                 id='EndTime'
                 format='dd/MM/yy hh:mm a'
                 data-name='timeEnd'
-                value={
-                  props && props.timeEnd
-                    ? new Date(props?.timeEnd)
-                    : props?.EndTime
-                }
+                value={props && props.timeEnd ? new Date(props?.timeEnd) : props?.EndTime}
                 className='e-field'
               ></DateTimePickerComponent>
             </td>
           </tr>
         </tbody>
       </table>
-    ) : message.error('Please select an event')
+    ) : (
+      message.error('Please select an event')
+    )
   }
 
   //on double click event
-
-
-
-
 
   // Fired before the editorTemplate closes.
   const onActionBegin = (args) => {

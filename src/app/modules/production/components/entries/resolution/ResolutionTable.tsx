@@ -1,14 +1,15 @@
 import {Button, Input, Space, Table} from 'antd'
-import { useState} from 'react'
+import {useState} from 'react'
 import {KTSVG} from '../../../../../../_metronic/helpers'
-import { useQueryClient } from "react-query";
-import { dhm } from "../fault_d/FaultTable";
+import {useQueryClient} from 'react-query'
+import {dhm} from '../fault_d/FaultTable'
 
 const ResolutionTable = () => {
   let initialData: any = useQueryClient().getQueryData('faults')
-  const [gridData, setGridData] = useState(initialData?.data.filter((fault: any) => fault.status === 1))
+  const [gridData, setGridData] = useState(
+    initialData?.data.filter((fault: any) => fault.status === 1)
+  )
   const [loading] = useState(false)
-
 
   const columns: any = [
     {
@@ -62,20 +63,20 @@ const ResolutionTable = () => {
       dataIndex: 'wtimeStart',
       render: (record: any) => {
         return new Date(record).toLocaleString()
-      }
+      },
     },
     {
       title: 'Time Completed',
       dataIndex: 'wtimeEnd',
       render: (record: any) => {
         return new Date(record).toLocaleString()
-      }
+      },
     },
     {
       title: 'Duration',
       render: (record: any) => {
         return dhm(new Date(record.wtimeEnd).getTime() - new Date(record.wtimeStart).getTime())
-      }
+      },
     },
   ]
   const handleInputChange = (e: any) => {
@@ -85,9 +86,8 @@ const ResolutionTable = () => {
     }
   }
 
-
   const globalSearch = (searchText: string) => {
-     let search = initialData?.data.filter((value: any) => {
+    let search = initialData?.data.filter((value: any) => {
       return (
         value.fleetId.toLowerCase().includes(searchText.toLowerCase()) ||
         value.vmModel.toLowerCase().includes(searchText.toLowerCase()) ||
@@ -117,7 +117,13 @@ const ResolutionTable = () => {
         </Space>
       </div>
       {/*@ts-ignore*/}
-      <Table columns={columns} dataSource={gridData} bordered loading={loading} rowKey={record => record.entryId} />
+      <Table
+        columns={columns}
+        dataSource={gridData}
+        bordered
+        loading={loading}
+        rowKey={(record) => record.entryId}
+      />
     </div>
   )
 }
