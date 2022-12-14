@@ -23,7 +23,7 @@ import {RefillPage} from './components/setup/refill/Refill'
 import {HoursPage} from './components/entries/hours/HoursTable'
 import {OilGradePage} from './components/setup/oilGrade/OilGrade'
 import {OilTypePage} from './components/setup/oilType/OilType'
-import { FaultTable } from "./components/entries/fault_d/FaultTable";
+import {FaultTable} from './components/entries/fault_d/FaultTable'
 const accountBreadCrumbs: Array<PageLink> = []
 
 const ProductionPage: React.FC = () => {
@@ -48,14 +48,24 @@ const ProductionPage: React.FC = () => {
           }
         />
         <Route
-          path='start-work'
+          path='start-work/*'
           element={
             <>
               <PageTitle breadcrumbs={accountBreadCrumbs}>Check List</PageTitle>
               <ScheduleInfo />
+              <Outlet />
             </>
           }
-        />
+        >
+          <Route
+            path=':id'
+            element={
+              <>
+                <TabsTest />
+              </>
+            }
+          />
+          </ Route>
         <Route
           path='fault/*'
           element={

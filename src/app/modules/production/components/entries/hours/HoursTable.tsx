@@ -2,7 +2,7 @@ import {Button, Input, TableColumnsType} from 'antd'
 import {Space, Table, Form} from 'antd'
 import axios from 'axios'
 import React, {useEffect, useState} from 'react'
-import { useQuery } from "react-query";
+import {useQuery} from 'react-query'
 import {KTSVG} from '../../../../../../_metronic/helpers'
 import {ENP_URL, fetchEquips, fetchHours, fetchModels} from '../../../../../urls'
 
@@ -57,8 +57,8 @@ const HoursPage: React.FC = () => {
     // form.resetFields()
     setIsModalOpen(false)
   }
-  const {data:allHours} = useQuery('hours', fetchHours, {cacheTime:5000})
-  const {data:equipData} = useQuery('equip-count', fetchEquips, {cacheTime:5000})
+  const {data: allHours} = useQuery('hours', fetchHours, {cacheTime: 5000})
+  const {data: equipData} = useQuery('equip-count', fetchEquips, {cacheTime: 5000})
   const countNumberOfEquipment = (model: any) => {
     //count number of model
     let count = 0
@@ -70,7 +70,6 @@ const HoursPage: React.FC = () => {
     return count
   }
 
-  
   const expandedRowRender = () => {
     const columns: TableColumnsType<ExpandedDataType> = [
       // {title: 'ID', dataIndex: 'id', key: 'id'},
@@ -136,7 +135,7 @@ const HoursPage: React.FC = () => {
                 form.setFieldsValue({
                   date: record.date,
                   previousReading: record.previousReading,
-                  currentReading: record.currentReading
+                  currentReading: record.currentReading,
                 })
               }}
             >
@@ -180,11 +179,11 @@ const HoursPage: React.FC = () => {
     {title: 'Model', dataIndex: 'txmodel', key: 'txmodel'},
     {
       title: 'Number of vehicles',
-      key:'txmodel', 
+      key: 'txmodel',
       render: (row: any) => {
         return countNumberOfEquipment(row.txmodel)
-      }
-    }
+      },
+    },
   ]
   // const loadData = async () => {
   //   setLoading(true)
@@ -206,7 +205,7 @@ const HoursPage: React.FC = () => {
   //     console.log(error)
   //   }
   // }
-  const {data:mainData} = useQuery('main-data', fetchModels, {cacheTime:5000})
+  const {data: mainData} = useQuery('main-data', fetchModels, {cacheTime: 5000})
   useEffect(() => {
     // loadData()
     // loadEquip()
