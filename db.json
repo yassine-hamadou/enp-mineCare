@@ -1,39 +1,40 @@
 {
+
   "hours": [
     {
-      "id": "1",
+      "id":1,
       "fleetID": "SD673",
-      "date": "02-12-2022",
-      "previousReading": "345",
-      "currentReading": "455"
+      "date":"02-12-2022",
+      "previousReading":"345",
+      "currentReading":"455"
     },
     {
-      "id": "2",
+      "id":2,
       "fleetID": "YUI12",
-      "date": "06-12-2022",
-      "previousReading": "234",
-      "currentReading": "255"
+      "date":"06-12-2022",
+      "previousReading":"234",
+      "currentReading":"255"
     },
     {
-      "id": "3",
+      "id":3,
       "fleetID": "JKI64",
-      "date": "03-12-2022",
-      "previousReading": "123",
-      "currentReading": "256"
+      "date":"03-12-2022",
+      "previousReading":"123",
+      "currentReading":"256"
     },
     {
-      "id": "4",
+      "id":4,
       "fleetID": "OPI53",
-      "date": "08-12-2022",
-      "previousReading": "222",
-      "currentReading": "234"
+      "date":"08-12-2022",
+      "previousReading":"222",
+      "currentReading":"234"
     },
     {
-      "id": "5",
+      "id":5,
       "fleetID": "RHI58",
-      "date": "01-12-2022",
-      "previousReading": "234",
-      "currentReading": "345"
+      "date":"01-12-2022",
+      "previousReading":"234",
+      "currentReading":"345"
     }
   ],
   "lubes": []

@@ -55,6 +55,16 @@ export function AsideMenuMain() {
           hasBullet={true}
         />
         <AsideMenuItem
+          to='/report/fault-entry-report'
+          title='Fault Entry Report'
+          hasBullet={true}
+        />
+        <AsideMenuItem
+          to='/report/hourly-report'
+          title='Hourly Report'
+          hasBullet={true}
+        />
+        <AsideMenuItem
           to='app/production/components/report/weekly'
           title='Weekly Schedule'
           hasBullet={true}

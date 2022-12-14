@@ -1,4 +1,4 @@
-import axios from 'axios'
+import axios from 'axios';
 /*
  Use this file to define your base URLs whether on localhost or on the ENP server
  */
@@ -7,15 +7,22 @@ import axios from 'axios'
 export const ENP_URL = 'http://208.117.44.15/SmWebApi/api'
 // export const ENP_URL = 'http://localhost:4192'
 
-export const fetchEquips = () => {
-  return axios.get(`${ENP_URL}/VmequpsApi`)
+
+export const fetchEquips= ()=>{
+    return axios.get(`${ENP_URL}/VmequpsApi`)
 }
-export const fetchModels = () => {
-  return axios.get(`${ENP_URL}/VmmodlsApi`)
+export const fetchModels= ()=>{
+    return axios.get(`${ENP_URL}/VmmodlsApi`)
 }
-export const fetchBrands = () => {
-  return axios.get(`${ENP_URL}/LubeBrands`)
+export const fetchBrands= ()=>{
+    return axios.get(`${ENP_URL}/LubeBrands`)
 }
-export const fetchHours = () => {
-  return axios.get(`http://localhost:4192/hours`)
+export const fetchHours= ()=>{
+    return axios.get(`${ENP_URL}/HoursEntry`)
+}
+export const fetchCompartments= ()=>{
+    return axios.get(`${ENP_URL}/Compartment`)
+}
+export const fetchLubeBrands= ()=>{
+    return axios.get(`${ENP_URL}/LubeBrands`)
 }
