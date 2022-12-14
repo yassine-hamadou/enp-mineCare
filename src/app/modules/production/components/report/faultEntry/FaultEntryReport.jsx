@@ -12,7 +12,7 @@ constructor(props) {
     super(props);
     this.reportUrl = ko.observable("FaultEntryReport");
     this.requestOptions = {
-        host: "https://app.sipconsult.net/serverside/",
+        host: "http://208.117.44.15/serverside/",
         invokeAction: "DXXRDV"
     };
 }
