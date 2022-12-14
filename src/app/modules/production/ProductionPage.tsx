@@ -18,17 +18,12 @@ import {SectionsPage} from './components/setup/sections/Sections'
 import {CheckListForm3} from './components/checkListForm/CheckListForm3'
 import {TabsTest} from './components/checkListForm/Tabs'
 import {LubePage} from './components/setup/lube/Lube'
-
-import { CompartmentPage } from './components/setup/compartment/Compartment'
-import { RefillPage } from './components/setup/refill/Refill'
-import { HoursPage } from './components/entries/hours/HoursTable'
-import { OilGradePage } from './components/setup/oilGrade/OilGrade'
-import { OilTypePage } from './components/setup/oilType/OilType'
-import HourlyReport from './components/report/hourly/HourlyReports'
-import FaultEntryReport from './components/report/faultEntry/FaultEntryReport'
-import { FaultTable } from "./components/entries/fault_d/FaultTable";
-import TestEdit from './components/setup/testEditRow/TestEdit'
-
+import {CompartmentPage} from './components/setup/compartment/Compartment'
+import {RefillPage} from './components/setup/refill/Refill'
+import {HoursPage} from './components/entries/hours/HoursTable'
+import {OilGradePage} from './components/setup/oilGrade/OilGrade'
+import {OilTypePage} from './components/setup/oilType/OilType'
+import {FaultTable} from './components/entries/fault_d/FaultTable'
 const accountBreadCrumbs: Array<PageLink> = []
 
 const ProductionPage: React.FC = () => {
@@ -53,14 +48,24 @@ const ProductionPage: React.FC = () => {
           }
         />
         <Route
-          path='start-work'
+          path='start-work/*'
           element={
             <>
               <PageTitle breadcrumbs={accountBreadCrumbs}>Check List</PageTitle>
               <ScheduleInfo />
+              <Outlet />
             </>
           }
-        />
+        >
+          <Route
+            path=':id'
+            element={
+              <>
+                <TabsTest />
+              </>
+            }
+          />
+          </ Route>
         <Route
           path='fault/*'
           element={
@@ -107,16 +112,6 @@ const ProductionPage: React.FC = () => {
               <PageTitle breadcrumbs={accountBreadCrumbs}>All Fleets</PageTitle>
               {/*<Overview />*/}
               <FleetPage />
-            </>
-          }
-        />
-        <Route
-          path='test'
-          element={
-            <>
-              <PageTitle breadcrumbs={accountBreadCrumbs}>Test Edit</PageTitle>
-
-              <TestEdit />
             </>
           }
         />
@@ -201,16 +196,6 @@ const ProductionPage: React.FC = () => {
           }
         />
         <Route
-          path='work-type/:id'
-          element={
-            <>
-              <PageTitle breadcrumbs={accountBreadCrumbs}>All Work Types</PageTitle>
-              {/*<Overview />*/}
-              <WorkTypePage />
-            </>
-          }
-        />
-        <Route
           path='lube'
           element={
             <>
@@ -258,24 +243,6 @@ const ProductionPage: React.FC = () => {
             </>
           }
         />
-        <Route
-          path='fault-entry-report'
-          element={
-            <>
-              <PageTitle breadcrumbs={accountBreadCrumbs}>Fault Entries Report</PageTitle>
-              <FaultEntryReport />
-            </>
-          }
-        />
-        <Route
-          path='hourly-report'
-          element={
-            <>
-              <PageTitle breadcrumbs={accountBreadCrumbs}>Hourly Report</PageTitle>
-              <HourlyReport />
-            </>
-          }
-        />
         <Route index element={<Navigate to='/dashboard' />} />
       </Route>
       <Route
@@ -318,7 +285,7 @@ const ProductionPage: React.FC = () => {
         }
       >
         <Route
-          path='service/:id'
+          path='service'
           element={
             <>
               <PageTitle breadcrumbs={accountBreadCrumbs}>Services </PageTitle>
