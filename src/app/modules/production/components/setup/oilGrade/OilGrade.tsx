@@ -79,18 +79,11 @@ const OilGradePage = () => {
     },
     {
       title: 'Action',
-
-      // dataIndex: 'faultDesc',
-      // sorter: (a: any, b: any) => a.faultDesc - b.faultDesc,
       fixed: 'right',
       width: 100,
       render: (_: any, record: any) => (
         <Space size='middle'>
-          {/* <a href="sections" className="btn btn-light-info btn-sm">Sections</a> */}
-          {/* <Link to={`/setup/sections/${record.id}`}>
-          <span  className="btn btn-light-info btn-sm">
-          Sections
-            </span></Link> */}
+          
           <a href='#' className='btn btn-light-warning btn-sm'>
             Update
           </a>
@@ -105,7 +98,7 @@ const OilGradePage = () => {
   const loadData = async () => {
     setLoading(true)
     try {
-      // const response = await axios.get('https://cors-anywhere.herokuapp.com/http://208.117.44.15/SmWebApi/api/VmfaltsApi')
+      
       const response = await axios.get(`${ENP_URL}/LubeGrades`)
       setGridData(response.data)
       // setGridData(dataSource)
@@ -236,7 +229,6 @@ const OilGradePage = () => {
                         Submit
                     </Button>,
           ]}>
-          {/* <AddServiceForm /> */}
           <Form 
           labelCol={{span: 7}} 
           wrapperCol={{span: 14}} 

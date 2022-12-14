@@ -27,6 +27,7 @@ import { OilTypePage } from './components/setup/oilType/OilType'
 import HourlyReport from './components/report/hourly/HourlyReports'
 import FaultEntryReport from './components/report/faultEntry/FaultEntryReport'
 import { FaultTable } from "./components/entries/fault_d/FaultTable";
+import TestEdit from './components/setup/testEditRow/TestEdit'
 
 const accountBreadCrumbs: Array<PageLink> = []
 
@@ -106,6 +107,16 @@ const ProductionPage: React.FC = () => {
               <PageTitle breadcrumbs={accountBreadCrumbs}>All Fleets</PageTitle>
               {/*<Overview />*/}
               <FleetPage />
+            </>
+          }
+        />
+        <Route
+          path='test'
+          element={
+            <>
+              <PageTitle breadcrumbs={accountBreadCrumbs}>Test Edit</PageTitle>
+
+              <TestEdit />
             </>
           }
         />
