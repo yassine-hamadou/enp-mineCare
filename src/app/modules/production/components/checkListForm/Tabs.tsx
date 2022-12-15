@@ -4,6 +4,13 @@ import {CheckListForm} from './CheckListForm'
 import {CheckListForm2} from './CheckListForm2'
 import {CheckListForm3} from './CheckListForm3'
 import {CheckListForm5} from './CheckListForm5'
+import { useParams } from "react-router-dom";
+import axios from "axios";
+import { useQuery } from "react-query";
+import { ENP_URL } from "../../../../urls";
+
+
+
 
 const tabList = [
   {
@@ -48,6 +55,19 @@ const contentList: Record<string, React.ReactNode> = {
 }
 
 const TabsTest: React.FC = () => {
+  //request
+  const {data: services}: any = useQuery('services', () => {
+    return axios.get(`${ENP_URL}/Sections`)
+  })
+  //generate the tabs dynamically
+  const tabs = services?.data.map((service: any) => {
+    return {
+      title: service.name,
+      content: <CheckListForm2 />,
+    }
+  })
+  const params = useParams()
+  const serviceId = params.serviceId
   const [activeTabKey1, setActiveTabKey1] = useState<string>('tab1')
 
   const onTab1Change = (key: string) => {

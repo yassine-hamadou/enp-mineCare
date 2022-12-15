@@ -58,7 +58,7 @@ const ProductionPage: React.FC = () => {
           }
         >
           <Route
-            path=':id'
+            path=':serviceId'
             element={
               <>
                 <TabsTest />
