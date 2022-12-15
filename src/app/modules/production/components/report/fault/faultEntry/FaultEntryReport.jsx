@@ -1,11 +1,11 @@
 import React from "react";
 import ko from "knockout";
 import "devexpress-reporting/dx-webdocumentviewer";
-import "../../../../../../../node_modules/jquery-ui/themes/base/all.css";
-import "../../../../../../../node_modules/devextreme/dist/css/dx.light.css";
-import "../../../../../../../node_modules/devexpress-reporting/dist/css/dx-webdocumentviewer.css";
-import "../../../../../../../node_modules/@devexpress/analytics-core/dist/css/dx-analytics.common.css";
-import "../../../../../../../node_modules/@devexpress/analytics-core/dist/css/dx-analytics.light.css";
+import "../../../../../../../../node_modules/jquery-ui/themes/base/all.css";
+import "../../../../../../../../node_modules/devextreme/dist/css/dx.light.css";
+import "../../../../../../../../node_modules/devexpress-reporting/dist/css/dx-webdocumentviewer.css";
+import "../../../../../../../../node_modules/@devexpress/analytics-core/dist/css/dx-analytics.common.css";
+import "../../../../../../../../node_modules/@devexpress/analytics-core/dist/css/dx-analytics.light.css";
 
 class ReportViewer extends React.Component {
 constructor(props) {

@@ -25,7 +25,10 @@ import {OilGradePage} from './components/setup/oilGrade/OilGrade'
 import {OilTypePage} from './components/setup/oilType/OilType'
 import {FaultTable} from './components/entries/fault_d/FaultTable'
 import HourlyReport from './components/report/hourly/HourlyReports'
-import FaultEntryReport from './components/report/faultEntry/FaultEntryReport'
+import FaultEntryReport from './components/report/fault/faultEntry/FaultEntryReport'
+import FaultEntryPendingReport from './components/report/fault/faultEntryPending/FaultEntryPendingReport'
+import FaultEntrySolvedReport from './components/report/fault/faultEntrySolved/FaultEntrySolvedReport'
+import FleetScheduleReport from './components/report/fleetSchedule/FleetScheduleReport'
 const accountBreadCrumbs: Array<PageLink> = []
 
 const ProductionPage: React.FC = () => {
@@ -218,7 +221,7 @@ const ProductionPage: React.FC = () => {
           </>
         }
       >
-        <Route
+        {/* <Route
           path='fuel-report'
           element={
             <>
@@ -226,8 +229,8 @@ const ProductionPage: React.FC = () => {
               <FuelReportTable />
             </>
           }
-        />
-        <Route
+        /> */}
+        {/* <Route
           path='equipment-kpi'
           element={
             <>
@@ -235,8 +238,8 @@ const ProductionPage: React.FC = () => {
               <EquipmentTable />
             </>
           }
-        />
-        <Route
+        /> */}
+        {/* <Route
           path='activity-statistics'
           element={
             <>
@@ -244,12 +247,12 @@ const ProductionPage: React.FC = () => {
               <StatisticsTable />
             </>
           }
-        />
+        /> */}
         <Route
           path='fault-entry-report'
           element={
             <>
-              <PageTitle breadcrumbs={accountBreadCrumbs}>Fault Entry Report</PageTitle>
+              <PageTitle breadcrumbs={accountBreadCrumbs}>All Fault Report</PageTitle>
               <FaultEntryReport />
             </>
           }
@@ -260,6 +263,33 @@ const ProductionPage: React.FC = () => {
             <>
               <PageTitle breadcrumbs={accountBreadCrumbs}>Hourly Report</PageTitle>
               <HourlyReport />
+            </>
+          }
+        />
+        <Route
+          path='solved-report'
+          element={
+            <>
+              <PageTitle breadcrumbs={accountBreadCrumbs}>Solved Fault Report</PageTitle>
+              <FaultEntrySolvedReport />
+            </>
+          }
+        />
+        <Route
+          path='pending-report'
+          element={
+            <>
+              <PageTitle breadcrumbs={accountBreadCrumbs}>Pending Fault Report</PageTitle>
+              <FaultEntryPendingReport />
+            </>
+          }
+        />
+        <Route
+          path='fleetschedule-report'
+          element={
+            <>
+              <PageTitle breadcrumbs={accountBreadCrumbs}>Fleet Schedule Report</PageTitle>
+              <FleetScheduleReport />
             </>
           }
         />
