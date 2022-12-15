@@ -44,31 +44,40 @@ export function AsideMenuMain() {
         fontIcon='bi-archive'
         icon='/media/icons/duotune/general/gen028.svg'
       >
-        <AsideMenuItem
-          to='app/production/components/report/daily'
-          title='Daily KPI'
-          hasBullet={true}
-        />
-        <AsideMenuItem
-          to='app/production/components/report/downtime'
-          title='Down Time'
-          hasBullet={true}
-        />
-        <AsideMenuItem
-          to='/report/fault-entry-report'
-          title='Fault Entry Report'
-          hasBullet={true}
-        />
-        <AsideMenuItem
-          to='/report/hourly-report'
-          title='Hourly Report'
-          hasBullet={true}
-        />
-        <AsideMenuItem
-          to='app/production/components/report/weekly'
-          title='Weekly Schedule'
-          hasBullet={true}
-        />
+        <AsideMenuItemWithSub to='#' title='Fault' hasBullet={true}>
+            
+            <AsideMenuItem
+              to='/report/fault-entry-report'
+              title='All Fault'
+              hasBullet={true}
+            />
+            <AsideMenuItem
+              to='/report/solved-report'
+              title='Solved'
+              hasBullet={true}
+            />
+            <AsideMenuItem
+              to='/report/pending-report'
+              title='Pending'
+              hasBullet={true}
+            />
+          </AsideMenuItemWithSub>
+          
+          <AsideMenuItem
+            to='/report/fleetschedule-report'
+            title='Fleet Schedule'
+            hasBullet={true}
+          />
+          <AsideMenuItem
+            to='/report/hourly-report'
+            title='Hourly'
+            hasBullet={true}
+          />
+          {/* <AsideMenuItem
+            to='app/production/components/report/weekly'
+            title='Weekly Schedule'
+            hasBullet={true}
+          /> */}
       </AsideMenuItemWithSub>
 
       <AsideMenuItemWithSub
