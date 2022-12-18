@@ -98,28 +98,6 @@ const OilTypePage = () => {
     },
   ]
 
-  // const OilType =[
-  //   {
-  //       "name": "SHELL",
-  //       "status": 1,
-  //       "id": 1
-  //     },
-  //     {
-  //       "name": "TOTAL",
-  //       "status": 1,
-  //       "id": 2
-  //     },
-  //     {
-  //       "name": "KOMATSU",
-  //       "status": 1,
-  //       "id": 3
-  //     }
-  // ]
-
-  // useEffect(() => {
-  //   loadData()
-  // }, [])
-
   const {data:allBrands} = useQuery('brands', fetchBrands, {cacheTime:5000})
 
   const dataWithVehicleNum = allBrands?.data.map((item: any, index:any ) => ({

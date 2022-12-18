@@ -16,13 +16,14 @@ interface DataType {
   createdAt: string
 }
 
-interface ExpandedDataType {
-  key: React.Key
-  date: string
-  name: string
-  pread: string
-  cread: string
-}
+// interface ExpandedDataType {
+//   // key: React.Key
+//   id: string
+//   date: string
+//   name: string
+//   pread: string
+//   cread: string
+// }
 
 const items = [
   {key: '1', label: 'Action 1'},
@@ -33,16 +34,27 @@ const HoursPage: React.FC = () => {
   const [searchText, setSearchText] = useState('')
   const [editingRow, setEditingRow] = useState(null)
   const [dataSource, setDataSource] = useState([])
-  const [edit, setEdit] = useState(false)
+  // const [edit, setEdit] = useState(false)
   const [form] = Form.useForm()
   const [loading, setLoading] = useState(false)
 
+  const [editingKey, setEditingKey] = useState('');
+  const isEditing = (record: any) => record.key === editingKey;
   const handleInputChange = (e: any) => {
     setSearchText(e.target.value)
     if (e.target.value === '') {
       // loadData()
     }
   }
+
+  const edit = (record:any & { key: React.Key }) => {
+    form.setFieldsValue({ name: '', age: '', address: '', ...record });
+    setEditingKey(record.key);
+  };
+
+  const cancel = () => {
+    setEditingKey('');
+  };
   const [isModalOpen, setIsModalOpen] = useState(false)
 
   const showModal = () => {
@@ -69,17 +81,28 @@ const HoursPage: React.FC = () => {
     })
     return count
   }
+  // const getRelatedFleets = (model: any) => {
+  //   //count number of model
+  //   let count = null
+  //   equipData?.data.forEach((item: any) => {
+  //     if (item.modlName === model) {
+  //       // count++
+  //     }
+  //   })
+  //   return count
+  // }
 
   
   const expandedRowRender = () => {
-    const columns: TableColumnsType<ExpandedDataType> = [
+    
+    const columns= [
       // {title: 'ID', dataIndex: 'id', key: 'id'},
-      {title: 'FleetId', dataIndex: 'fleetID', key: 'fleetID'},
+      {title: 'FleetID', dataIndex: 'fleetId', key: 'fleetId'},
       {
         title: 'Date',
         dataIndex: 'date',
         key: 'date',
-        render: (text, record) => {
+        render: (text:any, record:any) => {
           if (editingRow === record) {
             return (
               <Form.Item name='date'>
@@ -92,35 +115,35 @@ const HoursPage: React.FC = () => {
         },
       },
 
-      {
-        title: 'Prv. Reading',
-        dataIndex: 'previousReading',
-        key: 'previousReading',
-        render: (text, record) => {
-          if (editingRow === record.key.toString()) {
-            return (
-              <Form.Item name='previousReading'>
-                <Input />
-              </Form.Item>
-            )
-          } else {
-            return <p>{text}</p>
-          }
-        },
-      },
+      // {
+      //   title: 'Prv. Reading',
+      //   dataIndex: 'previousReading',
+      //   key: 'previousReading',
+      //   // render: (text:any, record:any) => {
+      //   //   if (editingRow === record.key) {
+      //   //     return (
+      //   //       <Form.Item name='previousReading'>
+      //   //         <Input />
+      //   //       </Form.Item>
+      //   //     )
+      //   //   } else {
+      //   //     return <p>{text}</p>
+      //   //   }
+      //   // },
+      // },
       {
         title: 'Cur. Reading',
         dataIndex: 'currentReading',
         key: 'currentReading',
-        render: (text, record) => {
-          if (editingRow === record.key.toString()) {
+        render: (text:any, record:any) => {
+          if (editingRow === record) {
             return (
               <Form.Item name='currentReading'>
                 <Input />
               </Form.Item>
             )
           } else {
-            return <p>{text}</p>
+            return <p> {text}</p>
           }
         },
       },
@@ -128,11 +151,11 @@ const HoursPage: React.FC = () => {
         title: 'Action',
         dataIndex: 'operation',
         key: 'operation',
-        render: (_, record: any) => (
+        render: (_:any, record: any) => (
           <Space>
             <Button
               onClick={() => {
-                setEditingRow(record.key)
+                setEditingRow(record)
                 form.setFieldsValue({
                   date: record.date,
                   previousReading: record.previousReading,
@@ -142,40 +165,58 @@ const HoursPage: React.FC = () => {
             >
               Edit
             </Button>
-            <Button htmlType='submit' danger>
+            <Button  htmlType='submit' danger>
               Done
             </Button>
           </Space>
         ),
       },
     ]
-
-    // const rowData:any = [];
-    // for (let i = 0; i < allHours?.data.lenght; ++i) {
-    //   allHours?.data.push({
-    //     key: allHours.data[i].id.toString(),
-    //     date: allHours.data[i].date,
-    //     fleetID: allHours.data[i].fleetID,
-    //     previousReading: allHours.data[i].previousReading,
-    //     currentReading: allHours.data[i].currentReading,
-    //   })
-    // }
+    const save =  (key:any) => {
+      try {
+        const row = (form.validateFields());
+  
+        const newData = [...allHours?.data];
+        const index = newData.findIndex((item) => key === item.key);
+        if (index > -1) {
+          const item = newData[index];
+          newData.splice(index, 1, {
+            ...item,
+            ...row,
+          });
+          console.log(newData)
+          setEditingKey('');
+        } else {
+          // newData.push(row);
+          // setData(newData);
+          setEditingKey('');
+        }
+      } catch (errInfo) {
+        console.log('Validate Failed:', errInfo);
+      }
+    };
+    
+    let rowData:any =[...allHours?.data]
     const onFinish = (values: any) => {
+      
       const updatedDataSource: any = [...allHours?.data]
       updatedDataSource.splice(editingRow, 1, {...values, key: editingRow})
-      setDataSource(updatedDataSource)
+      rowData= updatedDataSource
+      console.log(updatedDataSource)
       setEditingRow(null)
     }
 
+    // console.log(rowData)
+
     return (
-      <Form form={form} onFinish={onFinish}>
-        <Table columns={columns} rowKey='id' dataSource={allHours?.data} pagination={false} />
+      <Form form={form} onFinish={save}>
+        <Table columns={columns} rowKey="id" dataSource={allHours?.data} pagination={false} />
       </Form>
     )
   }
 
   const columns: any = [
-    {title: 'ID', dataIndex: 'id', key: 'id'},
+    // {title: 'ID', dataIndex: 'id', key: 'id'},
     {title: 'Manufacturer', dataIndex: 'txmanf', key: 'txmanf'},
     {title: 'Model', dataIndex: 'txmodel', key: 'txmodel'},
     {
@@ -186,31 +227,8 @@ const HoursPage: React.FC = () => {
       }
     }
   ]
-  // const loadData = async () => {
-  //   setLoading(true)
-  //   try {
-  //     const response = await axios.get(`${ENP_URL}/VmmodlsApi`)
-  //     setGridData(response.data)
-  //     setLoading(false)
-  //   } catch (error) {
-  //     console.log(error)
-  //   }
-  // }
-  // const loadEquip = async () => {
-  //   setLoading(true)
-  //   try {
-  //     const response = await axios.get(`${ENP_URL}/VmequpsApi`)
-  //     setEqipData(response.data)
-  //     setLoading(false)
-  //   } catch (error) {
-  //     console.log(error)
-  //   }
-  // }
+ 
   const {data:mainData} = useQuery('main-data', fetchModels, {cacheTime:5000})
-  useEffect(() => {
-    // loadData()
-    // loadEquip()
-  }, [])
 
   return (
     <>

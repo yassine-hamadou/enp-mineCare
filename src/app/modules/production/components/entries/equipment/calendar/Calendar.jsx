@@ -25,13 +25,13 @@ import {
   addSchedule,
   deleteSchedule,
   fetchCustodians,
-  fetchSchedules, fetchServiceTypes,
+  fetchSchedules,
+  fetchServiceTypes,
   fetchVmequps,
   localData,
-  updateSchedule
-} from "./requests";
-import { message } from "antd";
-import { useRef } from "react";
+  updateSchedule,
+} from './requests'
+import {message} from 'antd'
 
 /**
  *  Schedule editor custom fields sample
@@ -51,9 +51,7 @@ L10n.load({
 
 const Calendar = ({chosenLocationIdFromDropdown}) => {
   let scheduleObj
-  let scheduleQueryClient = useQueryClient()
-  // const [chosenLocationIdFromDropdown, setChosenLocationIdFromDropdown] = useState(null);
-
+  let scheduleQueryClient = useQueryClient() // for refetching the schedules
   // React Query
   //Get
   const {data: schedulesData} = useQuery('schedules', fetchSchedules, {
@@ -80,7 +78,7 @@ const Calendar = ({chosenLocationIdFromDropdown}) => {
       return message.success('Schedule added successfully')
     },
     onError: (error) => {
-      console.log("error adding schedule", error)
+      console.log('error adding schedule', error)
       return message.error('Error adding schedule')
     },
   })
@@ -88,12 +86,22 @@ const Calendar = ({chosenLocationIdFromDropdown}) => {
   const {mutate: deleteScheduleMutation} = useMutation(deleteSchedule, {
     onSuccess: () => {
       scheduleQueryClient.invalidateQueries('schedules')
+      return message.success('Schedule deleted successfully')
+    },
+    onError: (error) => {
+      console.log('error deleting schedule', error)
+      return message.error('Error deleting schedule')
     },
   })
   //put (update)
   const {mutate: updateScheduleMutation} = useMutation(updateSchedule, {
     onSuccess: () => {
       scheduleQueryClient.invalidateQueries('schedules')
+      return message.success('Schedule updated successfully')
+    },
+    onError: (error) => {
+      console.log('error updating schedule', error)
+      return message.error('Error updating schedule')
     },
   })
   //Access the same location query from cycle details component
@@ -137,132 +145,118 @@ const Calendar = ({chosenLocationIdFromDropdown}) => {
     return props !== undefined ? (
       <table className='custom-event-editor' style={{width: '100%'}} cellPadding={5}>
         <tbody>
-        <tr>
-          <td className='e-textlabel'>Fleet ID</td>
-          <td colSpan={4}>
-            <DropDownListComponent
-              id='Summary'
-              placeholder='Choose Equipment ID'
-              data-name='fleetId'
-              className='e-field'
-              style={{width: '100%'}}
-              dataSource={vmequps?.data.map((Vmequp) => {
-                return {
-                  text: `${Vmequp.fleetID}- ${Vmequp.modlName}- ${Vmequp.modlClass}`,
-                  value: `${Vmequp.fleetID}`,
-                }
-              })}
-              fields={{text: 'text', value: 'value'}}
-              value={
-                props && props.fleetId
-                  ? `${props.fleetId}` : null
-              }
-            />
-          </td>
-        </tr>
-        <tr>
-          <td className='e-textlabel'>Location</td>
-          <td colSpan={4}>
-            <DropDownListComponent
-              id='Location'
-              placeholder='Choose location'
-              data-name='locationId'
-              className='e-field'
-              style={{width: '100%'}}
-              dataSource={locationQuery?.data.map((location) => {
-                return {
-                  text: `${location.locationCode} - ${location.locationDesc}`,
-                  value: `${location.locationCode}`,
-                }
-              })}
-              fields={{text: 'text', value: 'value'}}
-              value={props?.locationId}
-            />
-          </td>
-        </tr>
-        <tr>
-          <td className='e-textlabel'>Service Type</td>
-          <td colSpan={4}>
-            <DropDownListComponent
-              id='ServiceType'
-              placeholder='Choose Service Type'
-              data-name='serviceType'
-              className='e-field'
-              style={{width: '100%'}}
-              dataSource={serviceTypes?.data.map((serviceType) => {
-                return {
-                  text: `${serviceType.name}`,
-                  value: `${serviceType.id}`,
-                }
-              })}
-              value={props?.serviceTypeId}
-            />
-          </td>
-        </tr>
-        <tr>
-          <td className='e-textlabel'>Responsible</td>
-          <td colSpan={4}>
-            <DropDownListComponent
-              id='responsible'
-              placeholder='Responsible'
-              data-name='custodian'
-              className='e-field'
-              style={{width: '100%'}}
-              dataSource={custodiansData?.data.map((custodian) => {
-                return {
-                  text: `${custodian.emplCode} - ${custodian.emplName}`,
-                  value: `${custodian.emplCode}`,
-                }
-              })}
-              fields={{text: 'text', value: 'value'}}
-              value={props?.responsible}
-            />
-          </td>
-        </tr>
-
-        <tr>
-          <td className='e-textlabel'>From</td>
-          <td colSpan={4}>
-            <DateTimePickerComponent
-              id='StartTime'
-              format='dd/MM/yy hh:mm a'
-              data-name='timeStart'
-              value={
-                props && props.timeStart
-                  ? new Date(props?.timeStart)
-                  : props?.StartTime
-              }
-
-              className='e-field'
-            ></DateTimePickerComponent>
-          </td>
-        </tr>
-        <tr>
-          <td className='e-textlabel'>To</td>
-          <td colSpan={4}>
-            <DateTimePickerComponent
-              id='EndTime'
-              format='dd/MM/yy hh:mm a'
-              data-name='timeEnd'
-              value={
-                props && props.timeEnd
-                  ? new Date(props?.timeEnd)
-                  : props?.EndTime
-              }
-              className='e-field'
-            ></DateTimePickerComponent>
-          </td>
-        </tr>
+          <tr>
+            <td className='e-textlabel'>Fleet ID</td>
+            <td colSpan={4}>
+              <DropDownListComponent
+                id='Summary'
+                placeholder='Choose Equipment ID'
+                data-name='fleetId'
+                className='e-field'
+                style={{width: '100%'}}
+                dataSource={vmequps?.data.map((Vmequp) => {
+                  return {
+                    text: `${Vmequp.fleetID}- ${Vmequp.modlName}- ${Vmequp.modlClass}`,
+                    value: `${Vmequp.fleetID}`,
+                  }
+                })}
+                fields={{text: 'text', value: 'value'}}
+                value={props && props.fleetId ? `${props.fleetId}` : null}
+              />
+            </td>
+          </tr>
+          <tr>
+            <td className='e-textlabel'>Location</td>
+            <td colSpan={4}>
+              <DropDownListComponent
+                id='Location'
+                placeholder='Choose location'
+                data-name='locationId'
+                className='e-field'
+                style={{width: '100%'}}
+                dataSource={locationQuery?.data.map((location) => {
+                  return {
+                    text: `${location.locationCode} - ${location.locationDesc}`,
+                    value: `${location.locationCode}`,
+                  }
+                })}
+                fields={{text: 'text', value: 'value'}}
+                value={props?.locationId}
+              />
+            </td>
+          </tr>
+          <tr>
+            <td className='e-textlabel'>Service Type</td>
+            <td colSpan={4}>
+              <DropDownListComponent
+                id='serviceTypeId'
+                placeholder='Choose Service Type'
+                data-name='serviceTypeId'
+                className='e-field'
+                style={{width: '100%'}}
+                dataSource={serviceTypes?.data.map((serviceType) => {
+                  return {
+                    text: `${serviceType.name}`,
+                    value: serviceType.id,
+                  }
+                })}
+                value={props?.serviceTypeId}
+                fields={{text: 'text', value: 'value'}}
+              />
+            </td>
+          </tr>
+          <tr>
+            <td className='e-textlabel'>Responsible</td>
+            <td colSpan={4}>
+              <DropDownListComponent
+                id='responsible'
+                placeholder='Responsible'
+                data-name='responsible'
+                className='e-field'
+                style={{width: '100%'}}
+                dataSource={custodiansData?.data.map((custodian) => {
+                  return {
+                    text: `${custodian.emplCode} - ${custodian.emplName}`,
+                    value: `${custodian.emplCode}`,
+                  }
+                })}
+                fields={{text: 'text', value: 'value'}}
+                value={props?.responsible}
+              />
+            </td>
+          </tr>
+          <tr>
+            <td className='e-textlabel'>From</td>
+            <td colSpan={4}>
+              <DateTimePickerComponent
+                id='StartTime'
+                format='dd/MM/yy hh:mm a'
+                data-name='timeStart'
+                value={props && props.timeStart ? new Date(props?.timeStart) : props?.StartTime}
+                className='e-field'
+              ></DateTimePickerComponent>
+            </td>
+          </tr>
+          <tr>
+            <td className='e-textlabel'>To</td>
+            <td colSpan={4}>
+              <DateTimePickerComponent
+                id='EndTime'
+                format='dd/MM/yy hh:mm a'
+                data-name='timeEnd'
+                value={props && props.timeEnd ? new Date(props?.timeEnd) : props?.EndTime}
+                className='e-field'
+              ></DateTimePickerComponent>
+            </td>
+          </tr>
         </tbody>
       </table>
-    ) : message.error('Please select an event')
+    ) : (
+      message.error('Please select an event')
+    )
   }
 
   //on double click event
-
-
-
-
 
   // Fired before the editorTemplate closes.
   const onActionBegin = (args) => {
@@ -275,6 +269,7 @@ const Calendar = ({chosenLocationIdFromDropdown}) => {
       console.log('preparedData', preparedData)
       // map through the array and set each field to what the calendar will understand
       const formattedDataToPost = preparedData.map((schedule) => {
+        console.log('schedule', schedule)
         return {
           fleetId: schedule.fleetId,
           locationId: schedule.locationId,
@@ -283,8 +278,8 @@ const Calendar = ({chosenLocationIdFromDropdown}) => {
           entryId: 0,
           vmModel: 'null',
           vmClass: 'null',
-          serviceTypeId: schedule.serviceType,
-          responsible: schedule.custodian,
+          serviceTypeId: schedule.serviceTypeId,
+          responsible: schedule.responsible,
         }
       })
       //Since format is an array, I need to change it to the format that the API will understand which is an object

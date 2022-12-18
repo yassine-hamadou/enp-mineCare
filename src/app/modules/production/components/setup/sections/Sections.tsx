@@ -2,13 +2,13 @@ import {Button, Form, Input, Modal, Select, Space, Table} from 'antd'
 import {useEffect, useState} from 'react'
 import {KTCardBody, KTSVG} from '../../../../../../_metronic/helpers'
 // import { AddWorkTypeForm } from './AddWorkTypeForm'
-import {Link} from 'react-router-dom'
+import {Link, useParams} from 'react-router-dom'
 import {AddSectionForm} from './AddSectionForm'
 import axios from 'axios'
 import {ENP_URL} from '../../../../../urls'
 
 const SectionsPage = () => {
-  const [gridData, setGridData] = useState([])
+  const [gridData, setGridData] = useState<any>([])
   const [serviceData, setServiceData] = useState([])
   const [loading, setLoading] = useState(false)
   const [searchText, setSearchText] = useState('')
@@ -16,6 +16,10 @@ const SectionsPage = () => {
   const [form] = Form.useForm()
   const [submitLoading, setSubmitLoading] = useState(false)
 
+  
+  const params:any  = useParams();
+  
+  console.log(params.id)
   // Modal functions
   const [isModalOpen, setIsModalOpen] = useState(false)
 
@@ -49,29 +53,9 @@ const SectionsPage = () => {
     deleteData(element)
   }
   const columns: any = [
-    // {
-    //   title: 'ID',
-    //   dataIndex: 'key',
-    //   defaultSortOrder: 'descend',
-    //   sorter: (a: any, b: any) => a.key - b.key,
-    // },
-    // {
-    //   title: 'Service Code',
-    //   dataIndex: 'service',
-    //   defaultSortOrder: 'descend',
-    //   sorter: (a: any, b: any) => {
-    //     if (a.service > b.service) {
-    //       return 1
-    //     }
-    //     if (b.service > a.service) {
-    //       return -1
-    //     }
-    //     return 0
-    //   },
-    // },
 
     {
-      title: 'Section',
+      title: 'Section Name',
       dataIndex: 'name',
       sorter: (a: any, b: any) => {
         if (a.name > b.name) {
@@ -93,7 +77,7 @@ const SectionsPage = () => {
       render: (_: any, record: any) => (
         <Space size='middle'>
           {/* <a href="groups" className="btn btn-light-info btn-sm">Groups</a> */}
-          <Link to={'/setup/groups'}>
+          <Link to={`/setup/groups/${record.id}`}>
             <span className='btn btn-light-info btn-sm'>Groups</span>
           </Link>
           <a href='#' className='btn btn-light-warning btn-sm '>
@@ -141,10 +125,16 @@ const SectionsPage = () => {
     loadService()
   }, [])
 
-  const dataWithVehicleNum = gridData.map((item: any, index) => ({
+  const dataWithIndex = gridData.map((item: any, index:any) => ({
     ...item,
     key: index,
   }))
+
+  const dataByID = dataWithIndex.filter((section:any) =>{
+    return section.serviceId.toString() ===params.id
+  })
+  console.log(dataByID)
+
 
   const handleInputChange = (e: any) => {
     setSearchText(e.target.value)
@@ -169,12 +159,14 @@ const SectionsPage = () => {
     setSubmitLoading(true)
     const data = {
       name: values.name,
-      serviceId: values.serviceId.toString(),
+      serviceId: params.id,
     }
+
+  
 
     try {
       const response = await axios.post(url, data)
-      console.log(data)
+      
       setSubmitLoading(false)
       form.resetFields()
       setIsModalOpen(false)
@@ -196,13 +188,16 @@ const SectionsPage = () => {
       }}
     >
       {/* <div style={{backgroundColor:'white'}}> */}
+    
       <KTCardBody className='py-4 '>
         <div className='table-responsive'>
-          <Link to={'/setup/service'}>
+          {/* <Link to={`/setup/service/${params.id}`}>
             <span className='mb-3 btn btn-outline btn-outline-dashed btn-outline-primary btn-active-light-primary'>
               Back to Services
             </span>
-          </Link>
+          </Link> */}
+          {/* <p>{params.id}</p> */}
+
           <div className='d-flex justify-content-between'>
             <Space style={{marginBottom: 16}}>
               <Input
@@ -231,10 +226,10 @@ const SectionsPage = () => {
               </button>
             </Space>
           </div>
-          <Table columns={columns} dataSource={dataWithVehicleNum} />
+          <Table columns={columns} dataSource={dataByID} loading={loading} />
 
           <Modal
-            title='Add Service'
+            title='Add Section'
             open={isModalOpen}
             onOk={handleOk}
             onCancel={handleCancel}
@@ -268,7 +263,7 @@ const SectionsPage = () => {
                 <Input />
               </Form.Item>
 
-              <Form.Item name='serviceId' label='Service'>
+              {/* <Form.Item name='serviceId' label='Service'>
                 <Select placeholder='Select'>
                   {serviceData.map((item: any) => (
                     <Option key={item.id} value={item.id}>
@@ -276,7 +271,7 @@ const SectionsPage = () => {
                     </Option>
                   ))}
                 </Select>
-              </Form.Item>
+              </Form.Item> */}
             </Form>
           </Modal>
         </div>

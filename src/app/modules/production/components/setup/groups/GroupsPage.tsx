@@ -1,8 +1,8 @@
 import {Button, Form, Input, Modal, Select, Space, Table} from 'antd'
 import {useEffect, useState} from 'react'
 import {KTCardBody, KTSVG} from '../../../../../../_metronic/helpers'
-import {AddGroupsForm} from './AddGroupForm'
-import {Link} from 'react-router-dom'
+
+import {Link, useParams} from 'react-router-dom'
 import axios from 'axios'
 import {ENP_URL} from '../../../../../urls'
 
@@ -14,7 +14,7 @@ const GroupsPage = () => {
   let [filteredData] = useState([])
   const [form] = Form.useForm()
   const [submitLoading, setSubmitLoading] = useState(false)
-
+  const params:any  = useParams();
   const {Option} = Select
 
   // Modal functions
@@ -32,47 +32,23 @@ const GroupsPage = () => {
     setIsModalOpen(false)
   }
   // Modal functions end
-  const dataSource: any = [
-    {
-      section: 'Section 1',
-      group: 'Engine',
-    },
-    {
-      section: 'Section 2',
-      group: 'Transmission',
-    },
-    {
-      section: 'Section 2',
-      group: 'Hydraulic',
-    },
-    {
-      section: 'Section 2',
-      group: 'Axles',
-    },
-    {
-      section: 'Section 3',
-      group: 'Body',
-    },
-    {
-      section: 'Section 3',
-      group: 'Frame',
-    },
-    {
-      section: 'PM-A',
-      group: 'Cap',
-    },
-    {
-      section: 'PM-A',
-      group: 'Operation',
-    },
-  ]
+
+  const deleteData = async (element: any) => {
+    try {
+      const response = await axios.delete(`${ENP_URL}/Groups/${element.id}`)
+      // update the local state so that react can refecth and re-render the table with the new data
+      const newData = gridData.filter((item: any) => item.id !== element.id)
+      setGridData(newData)
+      return response.status
+    } catch (e) {
+      return e
+    }
+  }
+
+  function handleDelete(element: any) {
+    deleteData(element)
+  }
   const columns: any = [
-    // {
-    //   title: 'ID',
-    //   dataIndex: 'key',
-    //   defaultSortOrder: 'descend',
-    //   sorter: (a: any, b: any) => a.key - b.key,
-    // },
     {
       title: 'Name',
       dataIndex: 'name',
@@ -88,38 +64,19 @@ const GroupsPage = () => {
       },
     },
 
-    // {
-    //   title: 'Group',
-    //   dataIndex: 'group',
-    //   sorter: (a: any, b: any) => {
-    //     if (a.group > b.group) {
-    //       return 1
-    //     }
-    //     if (b.group > a.group) {
-    //       return -1
-    //     }
-    //     return 0
-    //   },
-    // },
-
     {
       title: 'Action',
-
-      // dataIndex: 'faultDesc',
-      // sorter: (a: any, b: any) => a.faultDesc - b.faultDesc,
       fixed: 'right',
       width: 100,
       render: (_: any, record: any) => (
         <Space size='middle'>
-          {/* <a href="items" className="btn btn-light-info btn-sm">Items</a>
-           */}
-          <Link to={'/setup/items'}>
+          <Link to={`/setup/items/${record.id}`}>
             <span className='btn btn-light-info btn-sm'>Items</span>
           </Link>
           <a href='#' className='btn btn-light-warning btn-sm'>
             Update
           </a>
-          <a href='#' className='btn btn-light-danger btn-sm'>
+          <a onClick={() => handleDelete(record)}  className='btn btn-light-danger btn-sm'>
             Delete
           </a>
           {/* <a>Edit </a> */}
@@ -156,10 +113,14 @@ const GroupsPage = () => {
     loadSection()
   }, [])
 
-  const dataWithVehicleNum = gridData.map((item: any, index) => ({
+  const dataWithIndex = gridData.map((item: any, index) => ({
     ...item,
     key: index,
   }))
+  const dataByID = dataWithIndex.filter((section:any) =>{
+    return section.sectionId.toString() ===params.id
+  })
+  console.log(dataByID)
 
   const handleInputChange = (e: any) => {
     setSearchText(e.target.value)
@@ -184,7 +145,7 @@ const GroupsPage = () => {
     setSubmitLoading(true)
     const data = {
       name: values.name,
-      sectionId: values.sectionId.toString(),
+      sectionId: params.id,
     }
 
     try {
@@ -212,11 +173,11 @@ const GroupsPage = () => {
     >
       <KTCardBody className='py-4 '>
         <div className='table-responsive'>
-          <Link to={'/setup/sections'}>
+          {/* <Link to={'/setup/sections'}>
             <span className='mb-3 btn btn-outline btn-outline-dashed btn-outline-primary btn-active-light-primary'>
               Back to Sections
             </span>
-          </Link>
+          </Link> */}
 
           <div className='d-flex justify-content-between'>
             <Space style={{marginBottom: 16}}>
@@ -246,10 +207,8 @@ const GroupsPage = () => {
               </button>
             </Space>
           </div>
-          <Table columns={columns} dataSource={dataWithVehicleNum} loading={loading} />
-          {/* <Modal title='Add Group' open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
-        <AddGroupsForm />
-      </Modal> */}
+          <Table columns={columns} dataSource={dataByID} loading={loading} />
+          
 
           <Modal
             title='Add Group'
@@ -285,7 +244,7 @@ const GroupsPage = () => {
               <Form.Item label='Name' name='name' rules={[{required: true}]}>
                 <Input />
               </Form.Item>
-              <Form.Item name='sectionId' label='Section'>
+              {/* <Form.Item name='sectionId' label='Section'>
                 <Select placeholder='Select'>
                   {sectionData.map((item: any) => (
                     <Option key={item.id} value={item.id}>
@@ -293,7 +252,7 @@ const GroupsPage = () => {
                     </Option>
                   ))}
                 </Select>
-              </Form.Item>
+              </Form.Item> */}
             </Form>
           </Modal>
         </div>

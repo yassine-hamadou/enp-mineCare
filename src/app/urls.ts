@@ -18,5 +18,11 @@ export const fetchBrands= ()=>{
     return axios.get(`${ENP_URL}/LubeBrands`)
 }
 export const fetchHours= ()=>{
-    return axios.get(`http://localhost:4192/hours`)
+    return axios.get(`${ENP_URL}/HoursEntry`)
+}
+export const fetchCompartments= ()=>{
+    return axios.get(`${ENP_URL}/Compartment`)
+}
+export const fetchLubeBrands= ()=>{
+    return axios.get(`${ENP_URL}/LubeBrands`)
 }

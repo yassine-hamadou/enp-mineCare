@@ -2,11 +2,11 @@ import {Button, Form, Input, Modal, Radio, Select, Space, Table} from 'antd'
 import {useEffect, useState} from 'react'
 import axios from 'axios'
 import {KTCardBody, KTSVG} from '../../../../../../_metronic/helpers'
-import {Link} from 'react-router-dom'
+import {Link, useParams} from 'react-router-dom'
 import {ENP_URL} from '../../../../../urls'
 
 const ServicesPage = () => {
-  const [gridData, setGridData] = useState([])
+  const [gridData, setGridData] = useState<any>([])
   const [modeldData, setModelData] = useState([])
   const [loading, setLoading] = useState(false)
   const [searchText, setSearchText] = useState('')
@@ -14,6 +14,10 @@ const ServicesPage = () => {
   const [submitLoading, setSubmitLoading] = useState(false)
   const [form] = Form.useForm()
 
+  const routeParams:any  = useParams();
+
+
+  // console.log(routeParams)
   // Modal functions
   const [isModalOpen, setIsModalOpen] = useState(false)
 
@@ -42,6 +46,8 @@ const ServicesPage = () => {
     }
   }
 
+  
+
   function handleDelete(element: any) {
     deleteData(element)
   }
@@ -61,28 +67,12 @@ const ServicesPage = () => {
       },
     },
     {
-      title: 'Model',
-      dataIndex: 'model',
-      sorter: (a: any, b: any) => {
-        if (a.model > b.model) {
-          return 1
-        }
-        if (b.model > a.model) {
-          return -1
-        }
-        return 0
-      },
-    },
-    {
       title: 'Action',
-
-      // dataIndex: 'faultDesc',
-      // sorter: (a: any, b: any) => a.faultDesc - b.faultDesc,
       fixed: 'right',
       width: 100,
       render: (_: any, record: any) => (
         <Space size='middle'>
-          {/* <a href="sections" className="btn btn-light-info btn-sm">Sections</a> */}
+          
           <Link to={`/setup/sections/${record.id}`}>
             <span className='btn btn-light-info btn-sm'>Sections</span>
           </Link>
@@ -92,7 +82,7 @@ const ServicesPage = () => {
           <a onClick={() => handleDelete(record)} className='btn btn-light-danger btn-sm'>
             Delete
           </a>
-          {/* <a>Edit </a> */}
+         
         </Space>
       ),
     },
@@ -114,7 +104,6 @@ const ServicesPage = () => {
       // const response = await axios.get('https://cors-anywhere.herokuapp.com/http://208.117.44.15/SmWebApi/api/VmfaltsApi')
       const response = await axios.get(`${ENP_URL}/VmmodlsApi`)
       setModelData(response.data)
-      console.log(modeldData)
       setLoading(false)
     } catch (error) {
       console.log(error)
@@ -128,10 +117,22 @@ const ServicesPage = () => {
     loadModel()
   }, [])
 
-  const dataWithVehicleNum = gridData.map((item: any, index) => ({
+  const dataWithIndex = gridData.map((item: any, index:any) => ({
     ...item,
     key: index,
+
   }))
+
+  const dataByID = dataWithIndex.filter((service:any) =>{
+    return service.model ===routeParams.id
+  });
+
+  const modelName = modeldData.filter((service:any) =>{
+    return service.txmodel ===routeParams.id
+  })
+
+  console.log(modelName)
+
 
   const handleInputChange = (e: any) => {
     setSearchText(e.target.value)
@@ -142,7 +143,7 @@ const ServicesPage = () => {
 
   const globalSearch = () => {
     // @ts-ignore
-    filteredData = dataWithVehicleNum.filter((value) => {
+    filteredData = dataWithIndex.filter((value) => {
       return (
         value.faultCode.toLowerCase().includes(searchText.toLowerCase()) ||
         value.faultDesc.toLowerCase().includes(searchText.toLowerCase())
@@ -156,8 +157,9 @@ const ServicesPage = () => {
     setSubmitLoading(true)
     const data = {
       name: values.name,
-      model: values.model,
+      model: routeParams.id,
     }
+
 
     try {
       const response = await axios.post(url, data)
@@ -188,6 +190,7 @@ const ServicesPage = () => {
               Back to Models
             </span>
           </Link>
+          <p>{routeParams.txmodel}</p>
           <div className='d-flex justify-content-between'>
             <Space style={{marginBottom: 16}}>
               <Input
@@ -216,7 +219,7 @@ const ServicesPage = () => {
               </button>
             </Space>
           </div>
-          <Table columns={columns} dataSource={dataWithVehicleNum} />
+          <Table columns={columns} dataSource={dataByID} loading={loading} />
           <Modal
             title='Add Service'
             open={isModalOpen}
@@ -255,7 +258,7 @@ const ServicesPage = () => {
               {/* <Form.Item label='Model' name='modelID'>
                 <Input />
               </Form.Item> */}
-              <Form.Item name='model' label='Model'>
+              {/* <Form.Item name='model' label='Model'>
                 <Select placeholder='Search to Select'>
                   {modeldData.map((item: any) => (
                     <Option key={item.txmodel} value={item.txmodel}>
@@ -263,7 +266,7 @@ const ServicesPage = () => {
                     </Option>
                   ))}
                 </Select>
-              </Form.Item>
+              </Form.Item> */}
             </Form>
           </Modal>
         </div>

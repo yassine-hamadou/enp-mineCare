@@ -71,7 +71,7 @@ const WorkTypePage = () => {
       render: (_: any, record: any) => (
         <Space size='middle'>
           {/* <a href="service" className="btn btn-light-info btn-sm">Services</a> */}
-          <Link to={'/setup/service'}>
+          <Link to={`/setup/service/${record.txmodel}`}>
             <span className='btn btn-light-info btn-sm'>Service</span>
           </Link>
           <a href='#' className='btn btn-light-warning btn-sm '>
@@ -142,27 +142,19 @@ const WorkTypePage = () => {
               <Input
                 placeholder='Search...'
                 type='text'
-
                 // value={searchText}
               />
               <Button type='primary'>Search</Button>
             </Space>
             <Space style={{marginBottom: 16}}>
-              {/* <button type='button' className='btn btn-primary me-3' onClick={showModal}>
-                <KTSVG path='/media/icons/duotune/arrows/arr075.svg' className='svg-icon-2' />
-                Add
-              </button> */}
-              {/* <button type='button' className='btn btn-light-primary me-3'>
-                <KTSVG path='/media/icons/duotune/arrows/arr078.svg' className='svg-icon-2' />
-                Upload
-              </button> */}
+              
               <button type='button' className='btn btn-light-primary me-3'>
                 <KTSVG path='/media/icons/duotune/arrows/arr078.svg' className='svg-icon-2' />
                 Export
               </button>
             </Space>
           </div>
-          <Table columns={columns} dataSource={dataWithVehicleNum} loading={loading} />
+          <Table columns={columns} dataSource={dataWithVehicleNum} loading={loading} rowKey="index"/>
           <Modal title='Add Item' open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
             {/* <AddWorkTypeForm /> */}
           </Modal>

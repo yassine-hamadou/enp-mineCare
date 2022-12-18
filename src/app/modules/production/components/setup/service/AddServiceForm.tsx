@@ -21,7 +21,7 @@ const AddServiceForm = () => {
   const loadData = async () => {
     setLoading(true)
     try {
-      // const response = await axios.get('https://app.sipconsult.net/SmWebApi/api/VmequpsApi')
+     
       const response = await axios.get(`${ENP_URL}/VmequpsApi`)
       setDataSource(response.data)
       setLoading(false)

@@ -1,33 +1,48 @@
-import {Divider} from 'antd'
-import {useEffect, useState} from 'react'
+import {Divider, Form, Select} from 'antd'
+import {useState} from 'react'
 import axios from 'axios'
 import {ENP_URL} from '../../../../urls'
-import {TabsTest} from '../checkListForm/Tabs'
 import {KTCard, KTCardBody} from '../../../../../_metronic/helpers'
+import {useQuery} from 'react-query'
+import { useNavigate } from "react-router-dom";
 
 export function ScheduleInfo() {
-  const [schedules, setSchedules] = useState<any>([])
+  const navigate = useNavigate()
   const [scheduleToworkOn, setScheduleToWorkOn] = useState<any>([])
 
-  const loadSchedules = async () => {
-    const response = await axios.get(`${ENP_URL}/FleetSchedulesApi`)
-    setSchedules(response.data)
-  }
+  const {data: loadSchedule}: any = useQuery('loadSchedule', () => {
+    return axios.get(`${ENP_URL}/FleetSchedulesApi`)
+  })
+
+  const {data: serviceType}: any = useQuery('serviceType', () => {
+    return axios.get(`${ENP_URL}/Services`)
+  })
+
   const onSelect = (e: any) => {
     const entryID = parseInt(e.target.value)
-    const schedule = schedules.find((s: any) => s.entryId === entryID)
+    const schedule = loadSchedule?.data.find((s: any) => s.entryId === entryID)
     console.log('scheduleSelect', schedule)
     setScheduleToWorkOn(schedule)
+    if (schedule?.serviceTypeId === null || schedule?.serviceTypeId === undefined) {
+      navigate(`/entries/start-work`)
+    }
+    else {
+      navigate(`/entries/start-work/${schedule?.serviceTypeId}`)
+    }
   }
-  useEffect(() => {
-    loadSchedules()
-  }, [])
+
 
   return (
     <>
       <KTCard>
         <KTCardBody>
-          <form id='kt_modal_add_plan_form' className='form' noValidate>
+          <Form
+            id='kt_modal_add_plan_form'
+            className='form'
+            noValidate
+            name='basic'
+            initialValues={{remember: true}}
+          >
             {/* begin::Scroll */}
             <div className='d-flex justify-content-center'>
               <h2>
@@ -52,7 +67,7 @@ export function ScheduleInfo() {
                   onChange={onSelect}
                 >
                   <option value='Select Schedule'>Select Schedule</option>
-                  {schedules?.map((schedule: any) => (
+                  {loadSchedule?.data.map((schedule: any) => (
                     <option value={schedule.entryId} key={schedule.entryId}>
                       {schedule.fleetId}- {schedule.locationId} -{' '}
                       {new Date(schedule.timeStart).toUTCString()} -{' '}
@@ -122,7 +137,9 @@ export function ScheduleInfo() {
                   name='to'
                   value={
                     scheduleToworkOn?.serviceTypeId
-                      ? scheduleToworkOn?.serviceTypeId
+                      ? serviceType?.data.find(
+                          (service: any) => service.id === scheduleToworkOn?.serviceTypeId
+                        )?.name
                       : 'No Service Type'
                   }
                   readOnly
@@ -131,11 +148,9 @@ export function ScheduleInfo() {
             </div>
             {/* end::row */}
             <Divider dashed />
-          </form>
+          </Form>
         </KTCardBody>
-      </KTCard>
-      {/*</div>*/}
-      <TabsTest />
+      </KTCard>  {/*end::Card*/}
     </>
   )
 }

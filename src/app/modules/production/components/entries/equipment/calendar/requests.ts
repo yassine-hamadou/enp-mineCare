@@ -1,6 +1,6 @@
 // Functions to perform CRUD operations
 import axios from 'axios'
-import {ENP_URL} from '../../../../urls'
+import {ENP_URL} from '../../../../../../urls'
 
 export const fetchSchedules = () => {
   return axios.get(`${ENP_URL}/FleetSchedulesApi`)

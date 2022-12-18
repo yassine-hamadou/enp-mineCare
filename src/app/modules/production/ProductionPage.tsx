@@ -5,7 +5,7 @@ import {FuelReportTable} from './components/report/fuel/CycleDetailsList'
 import {EquipmentTable} from './components/report/equipment/CycleDetailsList'
 import {StatisticsTable} from './components/report/activity/CycleDetailsList'
 import {ScheduleInfo} from './components/scheduleInfo/ScheduleInfo'
-import {EquipmentDetail} from './components/entries/equipment/CycleDetailsList'
+import {EquipmentDetail} from './components/entries/equipment/EquipmentSchedule'
 import {WorkTypePage} from './components/setup/workType/WorkType'
 import {DownTypePage} from './components/setup/downType/DownType'
 import {CustodianPage} from './components/setup/custodian/Custodian'
@@ -23,7 +23,12 @@ import {RefillPage} from './components/setup/refill/Refill'
 import {HoursPage} from './components/entries/hours/HoursTable'
 import {OilGradePage} from './components/setup/oilGrade/OilGrade'
 import {OilTypePage} from './components/setup/oilType/OilType'
-import { FaultTable } from "./components/entries/fault_d/FaultTable";
+import {FaultTable} from './components/entries/fault_d/FaultTable'
+import HourlyReport from './components/report/hourly/HourlyReports'
+import FaultEntryReport from './components/report/fault/faultEntry/FaultEntryReport'
+import FaultEntryPendingReport from './components/report/fault/faultEntryPending/FaultEntryPendingReport'
+import FaultEntrySolvedReport from './components/report/fault/faultEntrySolved/FaultEntrySolvedReport'
+import FleetScheduleReport from './components/report/fleetSchedule/FleetScheduleReport'
 const accountBreadCrumbs: Array<PageLink> = []
 
 const ProductionPage: React.FC = () => {
@@ -48,14 +53,24 @@ const ProductionPage: React.FC = () => {
           }
         />
         <Route
-          path='start-work'
+          path='start-work/*'
           element={
             <>
               <PageTitle breadcrumbs={accountBreadCrumbs}>Check List</PageTitle>
               <ScheduleInfo />
+              <Outlet />
             </>
           }
-        />
+        >
+          <Route
+            path=':id'
+            element={
+              <>
+                <TabsTest />
+              </>
+            }
+          />
+          </ Route>
         <Route
           path='fault/*'
           element={
@@ -206,7 +221,7 @@ const ProductionPage: React.FC = () => {
           </>
         }
       >
-        <Route
+        {/* <Route
           path='fuel-report'
           element={
             <>
@@ -214,8 +229,8 @@ const ProductionPage: React.FC = () => {
               <FuelReportTable />
             </>
           }
-        />
-        <Route
+        /> */}
+        {/* <Route
           path='equipment-kpi'
           element={
             <>
@@ -223,13 +238,58 @@ const ProductionPage: React.FC = () => {
               <EquipmentTable />
             </>
           }
-        />
-        <Route
+        /> */}
+        {/* <Route
           path='activity-statistics'
           element={
             <>
               <PageTitle breadcrumbs={accountBreadCrumbs}>Activity Statistics</PageTitle>
               <StatisticsTable />
+            </>
+          }
+        /> */}
+        <Route
+          path='fault-entry-report'
+          element={
+            <>
+              <PageTitle breadcrumbs={accountBreadCrumbs}>All Fault Report</PageTitle>
+              <FaultEntryReport />
+            </>
+          }
+        />
+        <Route
+          path='hourly-report'
+          element={
+            <>
+              <PageTitle breadcrumbs={accountBreadCrumbs}>Hourly Report</PageTitle>
+              <HourlyReport />
+            </>
+          }
+        />
+        <Route
+          path='solved-report'
+          element={
+            <>
+              <PageTitle breadcrumbs={accountBreadCrumbs}>Solved Fault Report</PageTitle>
+              <FaultEntrySolvedReport />
+            </>
+          }
+        />
+        <Route
+          path='pending-report'
+          element={
+            <>
+              <PageTitle breadcrumbs={accountBreadCrumbs}>Pending Fault Report</PageTitle>
+              <FaultEntryPendingReport />
+            </>
+          }
+        />
+        <Route
+          path='fleetschedule-report'
+          element={
+            <>
+              <PageTitle breadcrumbs={accountBreadCrumbs}>Fleet Schedule Report</PageTitle>
+              <FleetScheduleReport />
             </>
           }
         />
@@ -275,7 +335,7 @@ const ProductionPage: React.FC = () => {
         }
       >
         <Route
-          path='service'
+          path='service/:id'
           element={
             <>
               <PageTitle breadcrumbs={accountBreadCrumbs}>Services </PageTitle>
@@ -293,7 +353,7 @@ const ProductionPage: React.FC = () => {
           }
         />
         <Route
-          path='groups'
+          path='groups/:id'
           element={
             <>
               <PageTitle breadcrumbs={accountBreadCrumbs}>Groups </PageTitle>
@@ -302,7 +362,7 @@ const ProductionPage: React.FC = () => {
           }
         />
         <Route
-          path='items'
+          path='items/:id'
           element={
             <>
               <PageTitle breadcrumbs={accountBreadCrumbs}>Items </PageTitle>
