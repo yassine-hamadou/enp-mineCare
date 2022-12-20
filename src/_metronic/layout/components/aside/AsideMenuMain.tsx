@@ -73,11 +73,7 @@ export function AsideMenuMain() {
             title='Hourly'
             hasBullet={true}
           />
-          {/* <AsideMenuItem
-            to='app/production/components/report/weekly'
-            title='Weekly Schedule'
-            hasBullet={true}
-          /> */}
+         
       </AsideMenuItemWithSub>
 
       <AsideMenuItemWithSub
@@ -94,8 +90,8 @@ export function AsideMenuMain() {
 
         <AsideMenuItemWithSub to='/setup/lube' title='Lube' hasBullet={true}>
           <AsideMenuItem to='/setup/compartment' title='Compartment' hasBullet={true} />
-          <AsideMenuItem to='/setup/oiltype' title='Brand' hasBullet={true} />
-          <AsideMenuItem to='/setup/oilgrade' title='Grade' hasBullet={true} />
+          <AsideMenuItem to='/setup/lube-brand' title='Brand' hasBullet={true} />
+          <AsideMenuItem to='/setup/lube-config' title='Lube Config' hasBullet={true} />
           <AsideMenuItem to='/setup/refill' title='Refill Type' hasBullet={true} />
         </AsideMenuItemWithSub>
       </AsideMenuItemWithSub>

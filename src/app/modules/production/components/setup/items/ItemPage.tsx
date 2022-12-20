@@ -1,7 +1,7 @@
 import {Button, Form, Input, Modal, Space, Table} from 'antd'
 import {useEffect, useState} from 'react'
 import {KTCard, KTCardBody, KTSVG} from '../../../../../../_metronic/helpers'
-import {Link, useParams} from 'react-router-dom'
+import {Link, useNavigate, useParams} from 'react-router-dom'
 import { ENP_URL } from '../../../../../urls'
 import axios from 'axios'
 
@@ -15,7 +15,7 @@ const ItemsPage = () => {
   const params:any  = useParams();
   // Modal functions
   const [isModalOpen, setIsModalOpen] = useState(false)
-
+  const navigate = useNavigate();
   const showModal = () => {
     setIsModalOpen(true)
   }
@@ -150,6 +150,9 @@ console.log(data)
               Back to Groups
             </span>
           </Link> */}
+
+        <button className='mb-3 btn btn-outline btn-outline-dashed btn-outline-primary btn-active-light-primary' onClick={() => navigate(-1)}>Back Groups</button>
+
           <div className='d-flex justify-content-between'>
             <Space style={{marginBottom: 16}}>
               <Input

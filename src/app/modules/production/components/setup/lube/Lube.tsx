@@ -15,7 +15,7 @@ import axios from 'axios'
 import {KTCard, KTCardBody, KTSVG} from '../../../../../../_metronic/helpers'
 import {ColumnsType} from 'antd/lib/table'
 import {Link} from 'react-router-dom'
-import {ENP_URL, fetchEquips} from '../../../../../urls'
+import {ENP_URL, fetchCompartments, fetchEquips, fetchLubeBrands, fetchRefillTypes} from '../../../../../urls'
 import {useQuery} from 'react-query'
 
 const LubePage = () => {
@@ -246,7 +246,9 @@ const LubePage = () => {
   }
 
   const {data: allEquips} = useQuery('equips', fetchEquips, {cacheTime: 5000})
-
+  const {data:allCompartment} = useQuery('compartment', fetchCompartments, {cacheTime:5000})
+  const {data:refilltypes} = useQuery('refillTypes', fetchRefillTypes, {cacheTime:5000})
+  const {data:brands} = useQuery('brands', fetchLubeBrands, {cacheTime:5000})
   const dataWithVehicleNum = gridData.map((item: any, index) => ({
     ...item,
     key: index,
@@ -258,6 +260,17 @@ const LubePage = () => {
       loadData()
     }
   }
+
+  // const onFleetIdChange = (fleetChosen: any) => {
+  //   dataSource.map((item: any) =>
+  //     item.fleetID === fleetChosen
+  //       ? form.setFieldsValue({
+  //           model: item.modlName,
+  //           desc: item.modlClass,
+  //         })
+  //       : null
+  //   )
+  // }
 
   const globalSearch = () => {
     // @ts-ignore
@@ -373,13 +386,13 @@ const LubePage = () => {
               <Form.Item name='fleetId' label='fleetId'>
                 <Select placeholder='Select'>
                   {allEquips?.data.map((item: any) => (
-                    <Option key={item.modlName} value={item.fleetID}>
-                      {item.modlName}
+                    <Option key={item.fleetID} value={item.fleetID}>
+                      {item.fleetID}
                     </Option>
                   ))}
                 </Select>
               </Form.Item>
-              <Form.Item label='Compartment' name='compartment'>
+              {/* <Form.Item label='Compartment' name='compartment'>
                 <Select
                   showSearch
                   placeholder='Search to Select'
@@ -413,15 +426,61 @@ const LubePage = () => {
                     },
                   ]}
                 />
-              </Form.Item>
+              </Form.Item> */}
 
+              <Form.Item label='Compartment' name='compartmentId' rules={[{required: true}]}>
+                <Select 
+                showSearch 
+                placeholder="Search to select"
+                optionFilterProp="children"
+                >
+                    {
+                        allCompartment?.data.map((compartment:any)=>(
+                            <Option key={compartment.id} value={compartment.id}>
+                                {compartment.name}
+                            </Option>    
+                        ))
+                    }
+                </Select>
+              </Form.Item>
               <Form.Item label='Change Interval' name='changeIn'>
                 <InputNumber disabled={true} />
               </Form.Item>
               <Form.Item label='Capacity' name='capacity'>
                 <InputNumber disabled={true} />
               </Form.Item>
-              <Form.Item label='Refill Type' name='refilType'>
+              <Form.Item label='Refill Type' name='refilType' rules={[{required: true}]}>
+                <Select 
+                showSearch 
+                placeholder="Search to select"
+                optionFilterProp="children"
+                >
+                    {
+                        refilltypes?.data.map((refillType:any)=>(
+                            <Option key={refillType.id} value={refillType.id}>
+                                {refillType.name}
+                            </Option>    
+                        ))
+                    }
+                </Select>
+              </Form.Item>
+              <Form.Item label='Brands' name='brandId' rules={[{required: true}]}>
+                <Select 
+                showSearch 
+                placeholder="Search to select"
+                optionFilterProp="children"
+                >
+                    {
+                        brands?.data.map((brand:any)=>(
+                            <Option key={brand.id} value={brand.id}>
+                                {brand.name}
+                            </Option>    
+                        ))
+                    }
+                </Select>
+              </Form.Item>
+              
+              {/* <Form.Item label='Brand' name='refilType'>
                 <Select
                   showSearch
                   placeholder='Search to Select'
@@ -434,18 +493,6 @@ const LubePage = () => {
                   }
                   options={[
                     {
-                      value: 'Top Up - Normal',
-                      label: 'Top Up - Normal',
-                    },
-                    {
-                      value: 'Top Up - Hose Burst',
-                      label: 'Top Up - Hose Burst',
-                    },
-                    {
-                      value: 'Component C/O',
-                      label: 'Component C/O',
-                    },
-                    {
                       value: '5',
                       label: 'PM Refill',
                     },
@@ -456,31 +503,7 @@ const LubePage = () => {
                     },
                   ]}
                 />
-              </Form.Item>
-              <Form.Item label='Brand' name='refilType'>
-                <Select
-                  showSearch
-                  placeholder='Search to Select'
-                  optionFilterProp='children'
-                  filterOption={(input, option) => (option?.label ?? '').includes(input)}
-                  filterSort={(optionA, optionB) =>
-                    (optionA?.label ?? '')
-                      .toLowerCase()
-                      .localeCompare((optionB?.label ?? '').toLowerCase())
-                  }
-                  options={[
-                    {
-                      value: '5',
-                      label: 'PM Refill',
-                    },
-
-                    {
-                      value: 'PM Refill',
-                      label: 'Refill',
-                    },
-                  ]}
-                />
-              </Form.Item>
+              </Form.Item> */}
               <Form.Item label='Grade' name='refilType'>
                 <Select
                   showSearch

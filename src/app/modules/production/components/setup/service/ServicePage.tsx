@@ -2,7 +2,7 @@ import {Button, Form, Input, Modal, Radio, Select, Space, Table} from 'antd'
 import {useEffect, useState} from 'react'
 import axios from 'axios'
 import {KTCardBody, KTSVG} from '../../../../../../_metronic/helpers'
-import {Link, useParams} from 'react-router-dom'
+import {Link, useNavigate, useParams} from 'react-router-dom'
 import {ENP_URL} from '../../../../../urls'
 
 const ServicesPage = () => {
@@ -15,7 +15,7 @@ const ServicesPage = () => {
   const [form] = Form.useForm()
 
   const routeParams:any  = useParams();
-
+  const navigate = useNavigate();
 
   // console.log(routeParams)
   // Modal functions
@@ -185,11 +185,12 @@ const ServicesPage = () => {
     >
       <KTCardBody className='py-4 '>
         <div className='table-responsive'>
-          <Link to={'/setup/work-type'}>
+          {/* <Link to={'/setup/work-type'}>
             <span className='mb-3 btn btn-outline btn-outline-dashed btn-outline-primary btn-active-light-primary'>
               Back to Models
             </span>
-          </Link>
+          </Link> */}
+          <button className='mb-3 btn btn-outline btn-outline-dashed btn-outline-primary btn-active-light-primary' onClick={() => navigate(-1)}>Back to Work Types</button>
           <p>{routeParams.txmodel}</p>
           <div className='d-flex justify-content-between'>
             <Space style={{marginBottom: 16}}>
