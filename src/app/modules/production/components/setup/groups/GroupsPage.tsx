@@ -119,6 +119,8 @@ const navigate = useNavigate();
     ...item,
     key: index,
   }))
+
+  
   const dataByID = dataWithIndex.filter((section:any) =>{
     return section.sectionId.toString() ===params.id
   })
