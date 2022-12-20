@@ -66,7 +66,9 @@ export function ScheduleInfo() {
                   className='form-select form-control form-control-solid mb-3'
                   onChange={onSelect}
                 >
-                  <option value='Select Schedule'>Select Schedule</option>
+                  <option defaultValue='Select Schedule'>
+                    Select Schedule
+                  </option>
                   {loadSchedule?.data.map((schedule: any) => (
                     <option value={schedule.entryId} key={schedule.entryId}>
                       {schedule.fleetId}- {schedule.locationId} -{' '}
