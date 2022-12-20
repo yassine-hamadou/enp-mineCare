@@ -15,7 +15,7 @@ import axios from 'axios'
 import {KTCard, KTCardBody, KTSVG} from '../../../../../../_metronic/helpers'
 import {ColumnsType} from 'antd/lib/table'
 import {Link} from 'react-router-dom'
-import {ENP_URL, fetchEquips} from '../../../../../urls'
+import {ENP_URL, fetchCompartments, fetchEquips, fetchLubeBrands, fetchLubeConfigs, fetchRefillTypes} from '../../../../../urls'
 import {useQuery} from 'react-query'
 
 const LubePage = () => {
@@ -246,8 +246,13 @@ const LubePage = () => {
   }
 
   const {data: allEquips} = useQuery('equips', fetchEquips, {cacheTime: 5000})
+  const {data:allCompartment} = useQuery('compartment', fetchCompartments, {cacheTime:5000})
+  const {data:refilltypes} = useQuery('refillTypes', fetchRefillTypes, {cacheTime:5000})
+  const {data:brands} = useQuery('brands', fetchLubeBrands, {cacheTime:5000})
+  const {data:lubeConfigs} = useQuery('lube-configs', fetchLubeConfigs, {cacheTime:5000})
 
-  const dataWithVehicleNum = gridData.map((item: any, index) => ({
+
+  const dataWithIndex = gridData.map((item: any, index) => ({
     ...item,
     key: index,
   }))
@@ -259,9 +264,33 @@ const LubePage = () => {
     }
   }
 
+  let newCompartData:any =null
+
+  const onFleetIdChange = (value:any) => {
+    newCompartData = lubeConfigs?.data.filter((item: any) =>
+      item.model.trim() === value
+    )
+
+    
+    return newCompartData
+}
+
+// console.log(onFleetIdChange("64M"))
+
+  const onCompartmentChange = (selected: any) => {
+    newCompartData?.data.map((item: any) =>
+      item.compartmentId === selected
+        ? form.setFieldsValue({
+            changeOutInterval:item.changeOutInterval,
+            capacity: item.capacity,
+          })
+        : null
+    )
+  }
+
   const globalSearch = () => {
     // @ts-ignore
-    filteredData = dataWithVehicleNum.filter((value) => {
+    filteredData = dataWithIndex.filter((value) => {
       return (
         value.faultCode.toLowerCase().includes(searchText.toLowerCase()) ||
         value.faultDesc.toLowerCase().includes(searchText.toLowerCase())
@@ -296,7 +325,6 @@ const LubePage = () => {
       return error.statusText
     }
   }
-
   return (
     <div
       style={{
@@ -336,7 +364,7 @@ const LubePage = () => {
               </button>
             </Space>
           </div>
-          <Table columns={columns} dataSource={dataWithVehicleNum} />
+          <Table columns={columns} dataSource={dataWithIndex} />
           <Modal
             title='Lube Entry'
             open={isModalOpen}
@@ -360,126 +388,76 @@ const LubePage = () => {
               </Button>,
             ]}
           >
-            {/* <AddServiceForm /> */}
             <Form
               labelCol={{span: 7}}
               wrapperCol={{span: 14}}
               layout='horizontal'
               form={form}
               name='control-hooks'
-              // title='Add Service'
               onFinish={onFinish}
             >
               <Form.Item name='fleetId' label='fleetId'>
                 <Select placeholder='Select'>
-                  {allEquips?.data.map((item: any) => (
-                    <Option key={item.modlName} value={item.fleetID}>
-                      {item.modlName}
+                  {lubeConfigs?.data.map((item: any) => (
+                    <Option key={item.id} value={item.model}>
+                      {item.model}
                     </Option>
                   ))}
                 </Select>
               </Form.Item>
-              <Form.Item label='Compartment' name='compartment'>
-                <Select
-                  showSearch
-                  placeholder='Search to Select'
-                  optionFilterProp='children'
-                  filterOption={(input, option) => (option?.label ?? '').includes(input)}
-                  filterSort={(optionA, optionB) =>
-                    (optionA?.label ?? '')
-                      .toLowerCase()
-                      .localeCompare((optionB?.label ?? '').toLowerCase())
-                  }
-                  options={[
+           
+              <Form.Item label='Compartment' name='compartmentId' rules={[{required: true}]}>
+                <Select 
+                showSearch 
+                placeholder="Search to select"
+                optionFilterProp="children"
+                onChange={onCompartmentChange}
+                >
                     {
-                      value: '1',
-                      label: 'Engine',
-                    },
-                    {
-                      value: '2',
-                      label: 'Transmission',
-                    },
-                    {
-                      value: '3',
-                      label: 'Hydraulic tank - Impliment, Conv',
-                    },
-                    {
-                      value: '4',
-                      label: 'Differential & final drives',
-                    },
-                    {
-                      value: '5',
-                      label: 'Front Wheels (both)',
-                    },
-                  ]}
-                />
+                        lubeConfigs?.data.map((item:any)=>(
+                          
+                            <Option key={item.id} value={item.compartmentId}>
+                                {item.model} - {item.compartment.name}
+                            </Option>    
+                        ))
+                    }
+                </Select>
               </Form.Item>
-
-              <Form.Item label='Change Interval' name='changeIn'>
+              <Form.Item label='Change Interval' name='changeOutInterval'>
                 <InputNumber disabled={true} />
               </Form.Item>
               <Form.Item label='Capacity' name='capacity'>
                 <InputNumber disabled={true} />
               </Form.Item>
-              <Form.Item label='Refill Type' name='refilType'>
-                <Select
-                  showSearch
-                  placeholder='Search to Select'
-                  optionFilterProp='children'
-                  filterOption={(input, option) => (option?.label ?? '').includes(input)}
-                  filterSort={(optionA, optionB) =>
-                    (optionA?.label ?? '')
-                      .toLowerCase()
-                      .localeCompare((optionB?.label ?? '').toLowerCase())
-                  }
-                  options={[
+              <Form.Item label='Refill Type' name='refilType' rules={[{required: true}]}>
+                <Select 
+                showSearch 
+                placeholder="Search to select"
+                optionFilterProp="children"
+                >
                     {
-                      value: 'Top Up - Normal',
-                      label: 'Top Up - Normal',
-                    },
-                    {
-                      value: 'Top Up - Hose Burst',
-                      label: 'Top Up - Hose Burst',
-                    },
-                    {
-                      value: 'Component C/O',
-                      label: 'Component C/O',
-                    },
-                    {
-                      value: '5',
-                      label: 'PM Refill',
-                    },
-
-                    {
-                      value: 'PM Refill',
-                      label: 'Refill',
-                    },
-                  ]}
-                />
+                        refilltypes?.data.map((refillType:any)=>(
+                            <Option key={refillType.id} value={refillType.id}>
+                                {refillType.name}
+                            </Option>    
+                        ))
+                    }
+                </Select>
               </Form.Item>
-              <Form.Item label='Brand' name='refilType'>
-                <Select
-                  showSearch
-                  placeholder='Search to Select'
-                  optionFilterProp='children'
-                  filterOption={(input, option) => (option?.label ?? '').includes(input)}
-                  filterSort={(optionA, optionB) =>
-                    (optionA?.label ?? '')
-                      .toLowerCase()
-                      .localeCompare((optionB?.label ?? '').toLowerCase())
-                  }
-                  options={[
+              <Form.Item label='Brands' name='brandId' rules={[{required: true}]}>
+                <Select 
+                showSearch 
+                placeholder="Search to select"
+                optionFilterProp="children"
+                >
                     {
-                      value: '5',
-                      label: 'PM Refill',
-                    },
-
-                    {
-                      value: 'PM Refill',
-                      label: 'Refill',
-                    },
-                  ]}
-                />
+                        brands?.data.map((brand:any)=>(
+                            <Option key={brand.id} value={brand.id}>
+                                {brand.name}
+                            </Option>    
+                        ))
+                    }
+                </Select>
               </Form.Item>
               <Form.Item label='Grade' name='refilType'>
                 <Select

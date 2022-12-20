@@ -32,7 +32,7 @@ const RefillPage = () => {
   // Modal functions end
   const deleteData = async (element: any) => {
     try {
-      const response = await axios.delete(`${ENP_URL}/refils/${element.id}`)
+      const response = await axios.delete(`${ENP_URL}/RefillType/${element.id}`)
       // update the local state so that react can refecth and re-render the table with the new data
       const newData = gridData.filter((item: any) => item.id !== element.id)
       setGridData(newData)
@@ -47,19 +47,19 @@ const RefillPage = () => {
   }
 
   const columns: any = [
-    {
-      title: 'ID',
-      dataIndex: 'id',
-      sorter: (a: any, b: any) => {
-        if (a.id > b.id) {
-          return 1
-        }
-        if (b.id > a.id) {
-          return -1
-        }
-        return 0
-      },
-    },
+    // {
+    //   title: 'ID',
+    //   dataIndex: 'id',
+    //   sorter: (a: any, b: any) => {
+    //     if (a.id > b.id) {
+    //       return 1
+    //     }
+    //     if (b.id > a.id) {
+    //       return -1
+    //     }
+    //     return 0
+    //   },
+    // },
     {
       title: 'Name',
       dataIndex: 'name',
@@ -102,52 +102,19 @@ const RefillPage = () => {
     setLoading(true)
     try {
       // const response = await axios.get('https://cors-anywhere.herokuapp.com/http://208.117.44.15/SmWebApi/api/VmfaltsApi')
-      const response = await axios.get(`${ENP_URL}/refils`)
+      const response = await axios.get(`${ENP_URL}/RefillType`)
       setGridData(response.data)
-      // setGridData(dataSource)
       setLoading(false)
     } catch (error) {
       console.log(error)
     }
   }
 
-  const Refills = [
-    {
-      id: 1,
-      name: 'Top Up - Normal',
-      status: 1,
-    },
-    {
-      name: 'Top Up - Oil Leaks',
-      status: 1,
-      id: 2,
-    },
-    {
-      name: 'Top Up - Hose Burst',
-      status: 1,
-      id: 3,
-    },
-    {
-      name: 'Component C/O',
-      status: 1,
-      id: 4,
-    },
-    {
-      name: 'PM Refill',
-      status: 1,
-      id: 5,
-    },
-    {
-      name: 'Refill',
-      status: 1,
-      id: 6,
-    },
-  ]
   useEffect(() => {
     loadData()
   }, [])
 
-  const dataWithVehicleNum = gridData.map((item: any, index) => ({
+  const dataWithIndex = gridData.map((item: any, index) => ({
     ...item,
     key: index,
   }))
@@ -161,7 +128,7 @@ const RefillPage = () => {
 
   const globalSearch = () => {
     // @ts-ignore
-    filteredData = dataWithVehicleNum.filter((value) => {
+    filteredData = dataWithIndex.filter((value) => {
       return (
         value.faultCode.toLowerCase().includes(searchText.toLowerCase()) ||
         value.faultDesc.toLowerCase().includes(searchText.toLowerCase())
@@ -169,13 +136,12 @@ const RefillPage = () => {
     })
     setGridData(filteredData)
   }
-  const url = `${ENP_URL}/refils`
+  const url = `${ENP_URL}/RefillType`
   const onFinish = async (values: any) => {
     setSubmitLoading(true)
     const data = {
       name: values.name,
-      modelID: values.modelID,
-      status: values.status,
+      
     }
 
     try {
@@ -230,7 +196,7 @@ const RefillPage = () => {
               </button>
             </Space>
           </div>
-          <Table columns={columns} dataSource={Refills} />
+          <Table columns={columns} dataSource={dataWithIndex} loading={loading}/>
           <Modal
             title='Add Refill Type'
             open={isModalOpen}
@@ -266,12 +232,6 @@ const RefillPage = () => {
             >
               <Form.Item label='Name' name='name' rules={[{required: true}]}>
                 <Input />
-              </Form.Item>
-              <Form.Item label='Status' name='status' rules={[{required: true}]}>
-                <Radio.Group>
-                  <Radio value={1}>Active</Radio>
-                  <Radio value={2}>InActive</Radio>
-                </Radio.Group>
               </Form.Item>
             </Form>
           </Modal>

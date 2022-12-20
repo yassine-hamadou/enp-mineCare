@@ -1,14 +1,14 @@
-import {Button, Form, Input, Modal, Radio, Select, Space, Table} from 'antd'
+import {Button, Form, Input, InputNumber, Modal, Radio, Select, Space, Table} from 'antd'
 import {useState, useEffect} from 'react'
 import axios from 'axios'
 import { KTCard, KTCardBody, KTSVG } from '../../../../../../_metronic/helpers'
 import { ColumnsType } from 'antd/lib/table'
-import { Link, useNavigate, useParams } from 'react-router-dom'
-import { ENP_URL, fetchCompartments, fetchHours, fetchLubeBrands, fetchLubeConfigs, fetchModels } from '../../../../../urls'
+import { Link } from 'react-router-dom'
+import { ENP_URL, fetchCompartments, fetchLubeBrands, fetchModels } from '../../../../../urls'
 import { useQuery } from 'react-query'
 
 
-const OilGradePage = () => {
+const LubeConfig = () => {
   const [gridData, setGridData] = useState([])
   const [typeData, setTypeData] = useState([])
   const [loading, setLoading] = useState(false)
@@ -16,10 +16,6 @@ const OilGradePage = () => {
   let [filteredData] = useState([])
   const [submitLoading, setSubmitLoading] = useState(false)
   const [form] = Form.useForm()
-
-
-  const params:any  = useParams();
-  const navigate = useNavigate();
 
   const {Option} = Select
   // Modal functions
@@ -37,10 +33,14 @@ const OilGradePage = () => {
     form.resetFields()
     setIsModalOpen(false)
   }
+
+
+
+
   // Modal functions end
   const deleteData = async (element: any) => {
     try {
-      const response = await axios.delete(`${ENP_URL}/LubeGrades/${element.id}`)
+      const response = await axios.delete(`${ENP_URL}/oilgrades/${element.id}`)
       // update the local state so that react can refecth and re-render the table with the new data
       const newData = gridData.filter((item: any) => item.id !== element.id)
       setGridData(newData)
@@ -56,29 +56,55 @@ const OilGradePage = () => {
 
   const columns: any = [
     {
-      title: 'Name',
-      dataIndex: 'name',
+      title: 'Model',
+      dataIndex: 'model',
       sorter: (a: any, b: any) => {
-        if (a.name > b.name) {
+        if (a.model > b.model) {
           return 1
         }
-        if (b.name > a.name) {
+        if (b.model > a.model) {
           return -1
         }
         return 0
       },
     },
     {
-      title: 'Brand',
-      key: 'brandId',
+      title: 'Compartment',
+      key:'compartmentId', 
       render: (row: any) => {
-        return getBrandName(row.brandId)
+        return getCompartmentName(row.compartmentId)
       },
       sorter: (a: any, b: any) => {
-        if (a.brandId > b.brandId) {
+        if (a.compartmentId > b.compartmentId) {
           return 1
         }
-        if (b.brandId > a.brandId) {
+        if (b.compartmentId > a.compartmentId) {
+          return -1
+        }
+        return 0
+      },
+    },
+    {
+      title: 'Change Out Interval',
+      dataIndex: 'changeOutInterval',
+      sorter: (a: any, b: any) => {
+        if (a.changeOutInterval > b.changeOutInterval) {
+          return 1
+        }
+        if (b.changeOutInterval > a.changeOutInterval) {
+          return -1
+        }
+        return 0
+      },
+    },
+    {
+      title: 'Capacity',
+      dataIndex: 'capacity',
+      sorter: (a: any, b: any) => {
+        if (a.capacity > b.capacity) {
+          return 1
+        }
+        if (b.capacity > a.capacity) {
           return -1
         }
         return 0
@@ -90,7 +116,9 @@ const OilGradePage = () => {
       width: 100,
       render: (_: any, record: any) => (
         <Space size='middle'>
-          
+          <Link to={`/setup/lube-grade/${record.id}`}>
+            <span className='btn btn-light-info btn-sm'>Grades</span>
+          </Link>
           <a href='#' className='btn btn-light-warning btn-sm'>
             Update
           </a>
@@ -106,7 +134,7 @@ const OilGradePage = () => {
     setLoading(true)
     try {
       
-      const response = await axios.get(`${ENP_URL}/LubeGrades`)
+      const response = await axios.get(`${ENP_URL}/LubeConfigs`)
       setGridData(response.data)
       setLoading(false)
     } catch (error) {
@@ -127,29 +155,26 @@ const OilGradePage = () => {
   const {data:allModel} = useQuery('models', fetchModels, {cacheTime:5000})
   const {data:allLubeBrands} = useQuery('lube-brands', fetchLubeBrands, {cacheTime:5000})
   const {data:allCompartment} = useQuery('compartment', fetchCompartments, {cacheTime:5000})
-  const {data:lubeConfigs} = useQuery('lubeConfigs', fetchLubeConfigs, {cacheTime:5000})
 
-  const dataByID = dataGradesId.filter((lubeConfig:any) =>{
-    return lubeConfig.lubeConfigId ===parseInt(params.id)
-  })
+  const getCompartmentName = (compartmentId: any) => {
+    //count number of model
+    let compartmentName = null
+    allCompartment?.data.map((item: any) => {
+      if (item.id === compartmentId) {
+       compartmentName=item.name
+      }
+    })
+    return compartmentName
+  }
 
-  console.log(dataByID)
+  
   const handleInputChange = (e: any) => {
     setSearchText(e.target.value)
     if (e.target.value === '') {
       loadData()
     }
   }
-  const getBrandName = (brandId: any) => {
-    //count number of model
-    let brandName = null
-    allLubeBrands?.data.map((item: any) => {
-      if (item.id === brandId) {
-       brandName=item.name
-      }
-    })
-    return brandName
-  }
+
   const globalSearch = () => {
     // @ts-ignore
     filteredData = dataGradesId.filter((value) => {
@@ -161,13 +186,14 @@ const OilGradePage = () => {
     setGridData(filteredData)
   }
 
-  const url = `${ENP_URL}/LubeGrades`
+  const url = `${ENP_URL}/LubeConfigs`
     const onFinish = async (values: any) => {
         setSubmitLoading(true)
         const data = {
-            name: values.name,
-            brandId: values.brandId,
-            lubeConfigId: parseInt(params.id)
+            model: values.model,
+            compartmentId: values.compartmentId,
+            changeOutInterval: values.changeOutInterval,
+            capacity: values.capacity
         }
        console.log(data)
         try {
@@ -195,7 +221,6 @@ const OilGradePage = () => {
       <KTCardBody className='py-4 '>
         <div className='table-responsive'>
 
-        <button className='mb-3 btn btn-outline btn-outline-dashed btn-outline-primary btn-active-light-primary' onClick={() => navigate(-1)}>Back to Configs</button>
            
         <div className='d-flex justify-content-between'>
           <Space style={{marginBottom: 16}}>
@@ -217,10 +242,10 @@ const OilGradePage = () => {
               <KTSVG path='/media/icons/duotune/arrows/arr075.svg' className='svg-icon-2' />
               Add
             </button>
-            <button type='button' className='btn btn-light-primary me-3'>
+            {/* <button type='button' className='btn btn-light-primary me-3'>
               <KTSVG path='/media/icons/duotune/arrows/arr078.svg' className='svg-icon-2' />
               Upload
-            </button>
+            </button> */}
             <button type='button' className='btn btn-light-primary me-3'>
               <KTSVG path='/media/icons/duotune/arrows/arr078.svg' className='svg-icon-2' />
               
@@ -229,7 +254,7 @@ const OilGradePage = () => {
             
           </Space>
         </div>
-        <Table columns={columns} dataSource={dataByID} loading={loading}/>
+        <Table columns={columns} dataSource={dataGradesId} loading={loading}/>
           <Modal title='Add Lube Grade' open={isModalOpen} onOk={handleOk} onCancel={handleCancel} 
           footer={[
             <Button key='back' onClick={handleCancel}>
@@ -249,31 +274,52 @@ const OilGradePage = () => {
                     </Button>,
           ]}>
           <Form 
-          labelCol={{span: 7}} 
+          labelCol={{span: 7}}  
           wrapperCol={{span: 14}} 
           layout='horizontal' 
           form={form}
           name='control-hooks' 
           title='Add Service' 
           onFinish={onFinish}>
-      <Form.Item label='Name' name='name' >
-        <Input />
-      </Form.Item>
-      <Form.Item label='Lube Brand' name='brandId' >
+      <Form.Item label='Model' name='model' >
         <Select 
         showSearch 
         placeholder="Search to select"
         optionFilterProp="children"
         >
             {
-                allLubeBrands?.data.map((brands:any)=>(
-                    <Option key={brands.id} value={brands.id}>
-                        {brands.name}
+                allModel?.data.map((model:any)=>(
+                    <Option key={model.txmodl} value={model.txmodel}>
+                        {model.txmodel}- {model.txmanf}
                     </Option>    
                 ))
             }
         </Select>
       </Form.Item>
+      <Form.Item label='Compartment' name='compartmentId' >
+        <Select 
+        showSearch 
+        placeholder="Search to select"
+        optionFilterProp="children"
+        >
+            {
+                allCompartment?.data.map((compartment:any)=>(
+                    <Option key={compartment.id} value={compartment.id}>
+                        {compartment.name}
+                    </Option>    
+                ))
+            }
+        </Select>
+      </Form.Item>
+      
+      <Form.Item label='Change Out Interval' name='changeOutInterval' >
+        <InputNumber />
+      </Form.Item>
+      <Form.Item label='Capacity' name='capacity' >
+        <InputNumber />
+      </Form.Item>
+      
+      
     </Form>
         </Modal>
       </div>
@@ -283,5 +329,5 @@ const OilGradePage = () => {
   )
 }
 
-export {OilGradePage};
+export {LubeConfig};
 
