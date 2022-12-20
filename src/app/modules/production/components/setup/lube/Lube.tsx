@@ -266,9 +266,9 @@ const LubePage = () => {
 
   let newCompartData:any =null
 
-  const onFleetIdChange = (value:any) => {
+  const onFleetIdChange = (selected:any) => {
     newCompartData = lubeConfigs?.data.filter((item: any) =>
-      item.model.trim() === value
+      item.model.trim() === selected.trim()
     )
 
     
@@ -278,7 +278,7 @@ const LubePage = () => {
 // console.log(onFleetIdChange("64M"))
 
   const onCompartmentChange = (selected: any) => {
-    newCompartData?.data.map((item: any) =>
+    newCompartData.map((item: any) =>
       item.compartmentId === selected
         ? form.setFieldsValue({
             changeOutInterval:item.changeOutInterval,
@@ -397,10 +397,10 @@ const LubePage = () => {
               onFinish={onFinish}
             >
               <Form.Item name='fleetId' label='fleetId'>
-                <Select placeholder='Select'>
-                  {lubeConfigs?.data.map((item: any) => (
-                    <Option key={item.id} value={item.model}>
-                      {item.model}
+                <Select placeholder='Select' onChange={onFleetIdChange}>
+                  {allEquips?.data.map((item: any) => (
+                    <Option key={item.fleetID} value={item.fleetID}>
+                      {item.fleetID}- {item.modlName}
                     </Option>
                   ))}
                 </Select>
@@ -414,8 +414,7 @@ const LubePage = () => {
                 onChange={onCompartmentChange}
                 >
                     {
-                        lubeConfigs?.data.map((item:any)=>(
-                          
+                        newCompartData?.map((item:any)=>(
                             <Option key={item.id} value={item.compartmentId}>
                                 {item.model} - {item.compartment.name}
                             </Option>    

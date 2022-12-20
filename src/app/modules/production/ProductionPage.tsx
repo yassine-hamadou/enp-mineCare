@@ -30,6 +30,7 @@ import FaultEntryPendingReport from './components/report/fault/faultEntryPending
 import FaultEntrySolvedReport from './components/report/fault/faultEntrySolved/FaultEntrySolvedReport'
 import FleetScheduleReport from './components/report/fleetSchedule/FleetScheduleReport'
 import { LubeConfig } from './components/setup/lubeConfig/LubeConfig'
+import FaultEntryFleetHistoryReport from './components/report/fault/faultFleetHistory/FaultEntryFleetHistoryReport'
 const accountBreadCrumbs: Array<PageLink> = []
 
 const ProductionPage: React.FC = () => {
@@ -234,7 +235,7 @@ const ProductionPage: React.FC = () => {
       >
         
         <Route
-          path='fault-entry-report'
+          path='fault-summary-report'
           element={
             <>
               <PageTitle breadcrumbs={accountBreadCrumbs}>All Fault Report</PageTitle>
@@ -275,6 +276,15 @@ const ProductionPage: React.FC = () => {
             <>
               <PageTitle breadcrumbs={accountBreadCrumbs}>Fleet Schedule Report</PageTitle>
               <FleetScheduleReport />
+            </>
+          }
+        />
+        <Route
+          path='fleet-history-report'
+          element={
+            <>
+              <PageTitle breadcrumbs={accountBreadCrumbs}>Fleet History Report</PageTitle>
+              <FaultEntryFleetHistoryReport />
             </>
           }
         />
