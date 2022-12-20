@@ -145,22 +145,29 @@ const Calendar = ({chosenLocationIdFromDropdown}) => {
   let vmQuery = useQueryClient()
 
   function editorTemplate(props) {
+    console.log('props', props)
+    if (props.serviceTypeId) {
+      const fleetModel = vmQuery.getQueryData('vmequps')?.data?.find((fleet) => fleet.fleetID.trimEnd() === props.fleetId.trimEnd())?.modlName
+      const serviceTypesOfSelectedModel = serviceTypes?.data?.filter((service) => service.model.trimEnd() === fleetModel.trimEnd())
+      console.log('fleetModel during props', fleetModel)
+      console.log('serviceTypesOfSelectedModel', serviceTypesOfSelectedModel)
+      // Setting Service Type dropdown values
+      dropDownListObject.dataSource = serviceTypesOfSelectedModel.map((service) => {
+        return { text: service.name, value: service.id }
+      })
+      dropDownListObject.dataBind() // refresh the dropdown list
+    }
   function getFleetModel(e) {
-    const fleetModel = vmQuery.getQueryData('vmequps')?.data?.find((fleet) => fleet.fleetID === e.itemData.value)?.modlName
-    const serviceTypesOfSelectedModel = serviceTypes?.data?.filter((service) => service.model.trimEnd() === fleetModel.trimEnd())
-    console.log('serviceTypesOfSelectedModel', serviceTypesOfSelectedModel)
-    dropDownListObject.dataSource = serviceTypesOfSelectedModel
-    dropDownListObject.dataBind()
-    //set dropdown value to fleet models service types
-    // setserviceTypeDropDownValues(serviceTypesOfSelectedModel)
-
+    if (e.itemData) {
+      const fleetModel = vmQuery.getQueryData('vmequps')?.data?.find((fleet) => fleet.fleetID.trimEnd() === e.itemData.value.trimEnd())?.modlName
+      const serviceTypesOfSelectedModel = serviceTypes?.data?.filter((service) => service.model.trimEnd() === fleetModel.trimEnd())
+      console.log('serviceTypesOfSelectedModel', serviceTypesOfSelectedModel)
+      dropDownListObject.dataSource = serviceTypesOfSelectedModel.map((service) => {
+        return { text: service.name, value: service.id }
+      })
+      dropDownListObject.dataBind() // refresh the dropdown list
+    }
   }
-  console.log('cropdown values', dropDownListObject)
-    // console.log('fleetModel', fleetModel)
-    // const modelRelatedTofleet = serviceTypes?.data.filter((serviceType) => serviceType.model === fleetModel)
-    // console.log('modelRelatedTofleet', modelRelatedTofleet)
-    console.log('props in editorTemplate', props) //props is the event object
-    //if props is not undefined then render the editor template
     return props !== undefined ? (
       <table className='custom-event-editor' style={{width: '100%'}} cellPadding={5}>
         <tbody>
@@ -214,15 +221,9 @@ const Calendar = ({chosenLocationIdFromDropdown}) => {
                 data-name='serviceTypeId'
                 className='e-field'
                 ref={(scope) => (dropDownListObject = scope)}
-                // dataSource={dropDownListObject.dataSource.map((serviceType) => {
-                //   return {
-                //     text: `${serviceType.name}`,
-                //     value: `${serviceType.id}`,
-                //   }
-                // })}
                 style={{width: '100%'}}
-                value={props?.serviceTypeId}
                 fields={{text: 'text', value: 'value'}}
+                value={props?.serviceTypeId}
               />
             </td>
           </tr>
