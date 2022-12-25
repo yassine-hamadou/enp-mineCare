@@ -15,7 +15,7 @@ import axios from 'axios'
 import {KTCard, KTCardBody, KTSVG} from '../../../../../../_metronic/helpers'
 import {ColumnsType} from 'antd/lib/table'
 import {Link} from 'react-router-dom'
-import {ENP_URL, fetchCompartments, fetchEquips, fetchLubeBrands, fetchLubeConfigs, fetchModels, fetchRefillTypes} from '../../../../../urls'
+import {ENP_URL, fetchCompartments, fetchEquips, fetchLubeBrands, fetchLubeConfigs, fetchLubeGrade, fetchModels, fetchRefillTypes} from '../../../../../urls'
 import {useQuery} from 'react-query'
 import Item from 'antd/es/list/Item'
 
@@ -247,11 +247,10 @@ const [newCompartData, setNewCompartData]= useState([])
   }
 
   const {data: allEquips} = useQuery('equips', fetchEquips, {cacheTime: 5000})
-  const {data:allCompartment} = useQuery('compartment', fetchCompartments, {cacheTime:5000})
   const {data:refilltypes} = useQuery('refillTypes', fetchRefillTypes, {cacheTime:5000})
-  const {data:brands} = useQuery('brands', fetchLubeBrands, {cacheTime:5000})
+  const {data:lubeBrands} = useQuery('lube-brands', fetchLubeBrands, {cacheTime:5000})
   const {data:lubeConfigs} = useQuery('lube-configs', fetchLubeConfigs, {cacheTime:5000})
-  const {data:models} = useQuery('models', fetchModels, {cacheTime:5000})
+  const {data:lubeGrades} = useQuery('lube-grades', fetchLubeGrade, {cacheTime:5000})
 
 
   const dataWithIndex = gridData.map((item: any, index) => ({
@@ -460,7 +459,7 @@ console.log(newCompartData)
                 optionFilterProp="children"
                 >
                     {
-                        brands?.data.map((brand:any)=>(
+                        lubeBrands?.data.map((brand:any)=>(
                             <Option key={brand.id} value={brand.id}>
                                 {brand.name}
                             </Option>    
@@ -468,32 +467,20 @@ console.log(newCompartData)
                     }
                 </Select>
               </Form.Item>
-              <Form.Item label='Grade' name='refilType'>
-                <Select
-                  showSearch
-                  placeholder='Search to Select'
-                  optionFilterProp='children'
-                  filterOption={(input, option) => (option?.label ?? '').includes(input)}
-                  filterSort={(optionA, optionB) =>
-                    (optionA?.label ?? '')
-                      .toLowerCase()
-                      .localeCompare((optionB?.label ?? '').toLowerCase())
-                  }
-                  options={[
+              <Form.Item label='Grade' name='gradeId'>
+                <Select 
+                  showSearch 
+                  placeholder="Search to select"
+                  optionFilterProp="children"
+                  >
                     {
-                      value: 'Top Up - Normal',
-                      label: 'Top Up - Normal',
-                    },
-                    {
-                      value: 'Top Up - Hose Burst',
-                      label: 'Top Up - Hose Burst',
-                    },
-                    {
-                      value: 'Component C/O',
-                      label: 'Component C/O',
-                    },
-                  ]}
-                />
+                      lubeGrades?.data.map((grade:any)=>(
+                          <Option key={grade.id} value={grade.id}>
+                              {grade.name}
+                          </Option>    
+                      ))
+                    }
+                </Select>
               </Form.Item>
               <Form.Item name='volume' label='Volume' rules={[{required: true}]}>
                 <InputNumber />
