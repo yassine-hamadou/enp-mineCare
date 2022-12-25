@@ -281,7 +281,7 @@ const [newCompartData, setNewCompartData]= useState([])
 
     // console.log(newCompartData)
     
-    return setNewCompartData(newCompartData)
+    return setNewCompartData(compartData)
 }
 
 console.log(newCompartData)
@@ -320,7 +320,7 @@ console.log(newCompartData)
       refillDate: values.refillDate,
       prevHour: values.prevHour,
       curHour: values.curHour,
-      refilType: values.refilType,
+      refillType: values.refilType,
     }
 
     try {
@@ -438,7 +438,7 @@ console.log(newCompartData)
               <Form.Item label='Capacity' name='capacity'>
                 <InputNumber disabled={true} />
               </Form.Item>
-              <Form.Item label='Refill Type' name='refilType' rules={[{required: true}]}>
+              <Form.Item label='Refill Type' name='refillType' rules={[{required: true}]}>
                 <Select 
                 showSearch 
                 placeholder="Search to select"
@@ -498,10 +498,10 @@ console.log(newCompartData)
               <Form.Item name='volume' label='Volume' rules={[{required: true}]}>
                 <InputNumber />
               </Form.Item>
-              <Form.Item name='prevHour' label='Previous Hours'>
+              <Form.Item name='previousHour' label='Previous Hours'>
                 <InputNumber disabled={true} />
               </Form.Item>
-              <Form.Item name='curHour' label='Current Hours' rules={[{required: true}]}>
+              <Form.Item name='currentHour' label='Current Hours' rules={[{required: true}]}>
                 <InputNumber />
               </Form.Item>
               <Form.Item name='refillDate' label='Refill Date' rules={[{required: true}]}>
