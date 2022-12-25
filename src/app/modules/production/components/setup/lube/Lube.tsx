@@ -15,8 +15,9 @@ import axios from 'axios'
 import {KTCard, KTCardBody, KTSVG} from '../../../../../../_metronic/helpers'
 import {ColumnsType} from 'antd/lib/table'
 import {Link} from 'react-router-dom'
-import {ENP_URL, fetchCompartments, fetchEquips, fetchLubeBrands, fetchLubeConfigs, fetchRefillTypes} from '../../../../../urls'
+import {ENP_URL, fetchCompartments, fetchEquips, fetchLubeBrands, fetchLubeConfigs, fetchModels, fetchRefillTypes} from '../../../../../urls'
 import {useQuery} from 'react-query'
+import Item from 'antd/es/list/Item'
 
 const LubePage = () => {
   const [gridData, setGridData] = useState([])
@@ -27,7 +28,7 @@ const LubePage = () => {
   const [submitLoading, setSubmitLoading] = useState(false)
   const [form] = Form.useForm()
   const [dataSource, setDataSource] = useState([])
-
+const [newCompartData, setNewCompartData]= useState([])
   const {Option} = Select
 
   // Modal functions
@@ -250,6 +251,7 @@ const LubePage = () => {
   const {data:refilltypes} = useQuery('refillTypes', fetchRefillTypes, {cacheTime:5000})
   const {data:brands} = useQuery('brands', fetchLubeBrands, {cacheTime:5000})
   const {data:lubeConfigs} = useQuery('lube-configs', fetchLubeConfigs, {cacheTime:5000})
+  const {data:models} = useQuery('models', fetchModels, {cacheTime:5000})
 
 
   const dataWithIndex = gridData.map((item: any, index) => ({
@@ -264,18 +266,26 @@ const LubePage = () => {
     }
   }
 
-  let newCompartData:any =null
-
+  let compartData:any =null
+  let model:any=""
+  // let newModel:any=null
   const onFleetIdChange = (selected:any) => {
-    newCompartData = lubeConfigs?.data.filter((item: any) =>
-      item.model.trim() === selected.trim()
+    model = allEquips?.data.find((item:any)=>
+      item.fleetID===selected
+    )
+    
+    compartData = lubeConfigs?.data.filter((item: any) =>
+      item.model.trim() === model.modlName.trim()
     )
 
+
+    // console.log(newCompartData)
     
-    return newCompartData
+    return setNewCompartData(newCompartData)
 }
 
-// console.log(onFleetIdChange("64M"))
+console.log(newCompartData)
+
 
   const onCompartmentChange = (selected: any) => {
     newCompartData.map((item: any) =>
@@ -414,7 +424,7 @@ const LubePage = () => {
                 onChange={onCompartmentChange}
                 >
                     {
-                        newCompartData?.map((item:any)=>(
+                        newCompartData.map((item:any)=>(
                             <Option key={item.id} value={item.compartmentId}>
                                 {item.model} - {item.compartment.name}
                             </Option>    
