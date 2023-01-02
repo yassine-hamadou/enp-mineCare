@@ -79,12 +79,15 @@ const [newCompartData, setNewCompartData]= useState([])
     },
     {
       title: 'Compartment',
-      dataIndex: 'compartment',
+      key: 'compartmentId',
+      render: (row: any) => {
+        return getCompartmentName(row.compartmentId)
+      },
       sorter: (a: any, b: any) => {
-        if (a.compartment > b.compartment) {
+        if (a.compartmentId > b.compartmentId) {
           return 1
         }
-        if (b.compartment > a.compartment) {
+        if (b.compartmentId > a.compartmentId) {
           return -1
         }
         return 0
@@ -92,12 +95,15 @@ const [newCompartData, setNewCompartData]= useState([])
     },
     {
       title: 'Brand',
-      dataIndex: 'brand',
+      key: 'brandId',
+      render: (row: any) => {
+        return getBrandName(row.brandId)
+      },
       sorter: (a: any, b: any) => {
-        if (a.brand > b.brand) {
+        if (a.brandId > b.brandId) {
           return 1
         }
-        if (b.brand > a.brand) {
+        if (b.brandId > a.brandId) {
           return -1
         }
         return 0
@@ -105,12 +111,15 @@ const [newCompartData, setNewCompartData]= useState([])
     },
     {
       title: 'Grade',
-      dataIndex: 'Grade',
+      key: 'gradeId',
+      render: (row: any) => {
+        return getGradeName(row.gradeId)
+      },
       sorter: (a: any, b: any) => {
-        if (a.Grade > b.Grade) {
+        if (a.gradeId > b.gradeId) {
           return 1
         }
-        if (b.Grade > a.Grade) {
+        if (b.gradeId > a.gradeId) {
           return -1
         }
         return 0
@@ -118,13 +127,13 @@ const [newCompartData, setNewCompartData]= useState([])
     },
 
     {
-      title: 'Change Out Interval',
-      dataIndex: 'changeIn',
+      title: 'Chan. Out Inter.',
+      dataIndex: 'changeOutInterval',
       sorter: (a: any, b: any) => {
-        if (a.changeIn > b.changeIn) {
+        if (a.changeOutInterval > b.changeOutInterval) {
           return 1
         }
-        if (b.changeIn > a.changeIn) {
+        if (b.changeOutInterval > a.changeOutInterval) {
           return -1
         }
         return 0
@@ -144,13 +153,16 @@ const [newCompartData, setNewCompartData]= useState([])
       },
     },
     {
-      title: 'Refill Type',
-      dataIndex: 'refilType',
+      title: 'Ref. Type',
+      key: 'refillTypeId',
+      render: (row: any) => {
+        return getGradeName(row.gradeId)
+      },
       sorter: (a: any, b: any) => {
-        if (a.refilType > b.refilType) {
+        if (a.refillTypeId > b.refillTypeId) {
           return 1
         }
-        if (b.refilType > a.refilType) {
+        if (b.refillTypeId > a.refillTypeId) {
           return -1
         }
         return 0
@@ -158,38 +170,38 @@ const [newCompartData, setNewCompartData]= useState([])
     },
     {
       title: 'Volume',
-      dataIndex: 'prevHour',
+      dataIndex: 'volume',
       sorter: (a: any, b: any) => {
-        if (a.prevHour > b.prevHour) {
+        if (a.volume > b.volume) {
           return 1
         }
-        if (b.prevHour > a.prevHour) {
+        if (b.volume > a.volume) {
           return -1
         }
         return 0
       },
     },
     {
-      title: 'Previous Hours',
-      dataIndex: 'prevHour',
+      title: 'Prev. Hours',
+      dataIndex: 'previousHour',
       sorter: (a: any, b: any) => {
-        if (a.prevHour > b.prevHour) {
+        if (a.previousHour > b.previousHour) {
           return 1
         }
-        if (b.prevHour > a.prevHour) {
+        if (b.previousHour > a.previousHour) {
           return -1
         }
         return 0
       },
     },
     {
-      title: 'Current Hours',
-      dataIndex: 'curHour',
+      title: 'Cur. Hours',
+      dataIndex: 'currentHour',
       sorter: (a: any, b: any) => {
-        if (a.curHour > b.curHour) {
+        if (a.currentHour > b.currentHour) {
           return 1
         }
-        if (b.curHour > a.curHour) {
+        if (b.currentHour > a.currentHour) {
           return -1
         }
         return 0
@@ -237,21 +249,55 @@ const [newCompartData, setNewCompartData]= useState([])
   const loadData = async () => {
     setLoading(true)
     try {
-      const response = await axios.get(`${ENP_URL}/lubes`)
+      const response = await axios.get(`${ENP_URL}/LubeEntry`)
       setGridData(response.data)
-      // setGridData(dataSource)
       setLoading(false)
     } catch (error) {
       console.log(error)
     }
   }
 
+  useEffect(()=>{
+    loadData()
+  },[])
   const {data: allEquips} = useQuery('equips', fetchEquips, {cacheTime: 5000})
   const {data:refilltypes} = useQuery('refillTypes', fetchRefillTypes, {cacheTime:5000})
   const {data:lubeBrands} = useQuery('lube-brands', fetchLubeBrands, {cacheTime:5000})
   const {data:lubeConfigs} = useQuery('lube-configs', fetchLubeConfigs, {cacheTime:5000})
   const {data:lubeGrades} = useQuery('lube-grades', fetchLubeGrade, {cacheTime:5000})
+  const {data:compartments} = useQuery('compartments', fetchCompartments, {cacheTime:5000})
 
+
+  const getBrandName = (brandId: any) => {
+    //count number of model
+    let brandName = null
+    lubeBrands?.data.map((item: any) => {
+      if (item.id === brandId) {
+       brandName=item.name
+      }
+    })
+    return brandName
+  }
+  const getGradeName = (gradeId: any) => {
+    //count number of model
+    let gradeName = null
+    lubeGrades?.data.map((item: any) => {
+      if (item.id === gradeId) {
+        gradeName=item.name
+      }
+    })
+    return gradeName
+  }
+  const getCompartmentName = (compartmentId: any) => {
+    //count number of compartment
+    let compartmentName = null
+    compartments?.data.map((item: any) => {
+      if (item.id === compartmentId) {
+        compartmentName=item.name
+      }
+    })
+    return compartmentName
+  }
 
   const dataWithIndex = gridData.map((item: any, index) => ({
     ...item,
@@ -267,7 +313,6 @@ const [newCompartData, setNewCompartData]= useState([])
 
   let compartData:any =null
   let model:any=""
-  // let newModel:any=null
   const onFleetIdChange = (selected:any) => {
     model = allEquips?.data.find((item:any)=>
       item.fleetID===selected
@@ -276,14 +321,11 @@ const [newCompartData, setNewCompartData]= useState([])
     compartData = lubeConfigs?.data.filter((item: any) =>
       item.model.trim() === model.modlName.trim()
     )
-
-
-    // console.log(newCompartData)
     
     return setNewCompartData(compartData)
 }
 
-console.log(newCompartData)
+// console.log(newCompartData)
 
 
   const onCompartmentChange = (selected: any) => {
@@ -307,20 +349,23 @@ console.log(newCompartData)
     })
     setGridData(filteredData)
   }
-  const url = 'http://localhost:3000/lubes'
+  const url = `${ENP_URL}/LubeEntry1`
   const onFinish = async (values: any) => {
     setSubmitLoading(true)
     const data = {
-      compartment: values.compartment,
       fleetId: values.fleetId,
-      status: values.status,
-      changeIn: values.changeIn,
+      compartmentId: values.compartmentId,
+      changeOutInterval: values.changeOutInterval,
       capacity: values.capacity,
+      brandId: values.brandId,
+      gradeId: values.gradeId,
+      volume: values.volume,
+      refillTypeId: values.refillTypeId,
+      previousHour: values.previousHour,
+      currentHour: values.currentHour,
       refillDate: values.refillDate,
-      prevHour: values.prevHour,
-      curHour: values.curHour,
-      refillType: values.refilType,
     }
+    console.log(data)
 
     try {
       const response = await axios.post(url, data)
@@ -373,7 +418,7 @@ console.log(newCompartData)
               </button>
             </Space>
           </div>
-          <Table columns={columns} dataSource={dataWithIndex} />
+          <Table columns={columns} dataSource={dataWithIndex} loading={loading}/>
           <Modal
             title='Lube Entry'
             open={isModalOpen}
@@ -437,7 +482,7 @@ console.log(newCompartData)
               <Form.Item label='Capacity' name='capacity'>
                 <InputNumber disabled={true} />
               </Form.Item>
-              <Form.Item label='Refill Type' name='refillType' rules={[{required: true}]}>
+              <Form.Item label='Refill Type' name='refillTypeId' rules={[{required: true}]}>
                 <Select 
                 showSearch 
                 placeholder="Search to select"
