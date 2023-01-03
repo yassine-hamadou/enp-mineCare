@@ -28,6 +28,7 @@ const LubePage = () => {
   const [submitLoading, setSubmitLoading] = useState(false)
   const [form] = Form.useForm()
   const [dataSource, setDataSource] = useState([])
+  const [capa, setCapa] = useState("")
 const [newCompartData, setNewCompartData]= useState([])
   const {Option} = Select
 
@@ -260,6 +261,7 @@ const [newCompartData, setNewCompartData]= useState([])
   useEffect(()=>{
     loadData()
   },[])
+
   const {data: allEquips} = useQuery('equips', fetchEquips, {cacheTime: 5000})
   const {data:refilltypes} = useQuery('refillTypes', fetchRefillTypes, {cacheTime:5000})
   const {data:lubeBrands} = useQuery('lube-brands', fetchLubeBrands, {cacheTime:5000})
@@ -330,13 +332,29 @@ const [newCompartData, setNewCompartData]= useState([])
 
   const onCompartmentChange = (selected: any) => {
     newCompartData.map((item: any) =>
+
+    
+
+
       item.compartmentId === selected
         ? form.setFieldsValue({
             changeOutInterval:item.changeOutInterval,
             capacity: item.capacity,
           })
         : null
+
+        
     )
+  }
+  const onVolumeChange = (values: any) => {
+    if(values.capacity>values.volume){
+      return console.log("This not accepted")
+    }
+    return console.log(`${values.capacity} is ok "Go ahead boy!"`)
+  }
+  const onCapacityChange = (values:any) => {
+    setCapa(values)
+    console.log(capa+" OK capacity")
   }
 
   const globalSearch = () => {
@@ -349,11 +367,11 @@ const [newCompartData, setNewCompartData]= useState([])
     })
     setGridData(filteredData)
   }
-  const url = `${ENP_URL}/LubeEntry1`
+  const url = `${ENP_URL}/LubeEntry`
   const onFinish = async (values: any) => {
     setSubmitLoading(true)
     const data = {
-      fleetId: values.fleetId,
+      fleetId: values.fleetId.trim(),
       compartmentId: values.compartmentId,
       changeOutInterval: values.changeOutInterval,
       capacity: values.capacity,
@@ -361,9 +379,9 @@ const [newCompartData, setNewCompartData]= useState([])
       gradeId: values.gradeId,
       volume: values.volume,
       refillTypeId: values.refillTypeId,
-      previousHour: values.previousHour,
+      previousHour: 0,
       currentHour: values.currentHour,
-      refillDate: values.refillDate,
+      refillDate: new Date().toISOString(),
     }
     console.log(data)
 
@@ -480,7 +498,7 @@ const [newCompartData, setNewCompartData]= useState([])
                 <InputNumber disabled={true} />
               </Form.Item>
               <Form.Item label='Capacity' name='capacity'>
-                <InputNumber disabled={true} />
+                <InputNumber onChange={onCapacityChange} disabled={true} />
               </Form.Item>
               <Form.Item label='Refill Type' name='refillTypeId' rules={[{required: true}]}>
                 <Select 
@@ -527,8 +545,8 @@ const [newCompartData, setNewCompartData]= useState([])
                     }
                 </Select>
               </Form.Item>
-              <Form.Item name='volume' label='Volume' rules={[{required: true}]}>
-                <InputNumber />
+              <Form.Item name='volume' label='Volume' rules={[{required: true}]} >
+                <InputNumber onChange={onVolumeChange}/>
               </Form.Item>
               <Form.Item name='previousHour' label='Previous Hours'>
                 <InputNumber disabled={true} />
