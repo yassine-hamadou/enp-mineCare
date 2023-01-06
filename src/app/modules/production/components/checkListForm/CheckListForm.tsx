@@ -11,10 +11,10 @@ interface TabPanelProps {
 }
 
 const CheckListForm = () => {
-  const [gridData, setGridData] = useState([])
-  const [loading, setLoading] = useState(false)
-  const [searchText, setSearchText] = useState('')
-  let [filteredData] = useState([])
+  // const [gridData, setGridData] = useState([])
+  // const [loading, setLoading] = useState(false)
+  // const [searchText, setSearchText] = useState('')
+  // let [filteredData] = useState([])
   const [value, setValue] = useState(0)
   const [agree, setAgree] = useState(false)
   const [value1, setValue1] = useState(1)

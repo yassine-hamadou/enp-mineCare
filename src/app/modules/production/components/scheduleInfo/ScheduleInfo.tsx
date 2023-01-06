@@ -51,7 +51,7 @@ export function ScheduleInfo() {
             </div>
             <div className='d-flex justify-content-center mb-7'>
               <span className='fst-itali fs-5 text-danger'>
-                Please select your work schedule you want to work on
+                Please select your work schedule you want to work on from the list below
               </span>
             </div>
             <div>

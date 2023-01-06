@@ -9,7 +9,10 @@ import axios from "axios";
 import { useQuery } from "react-query";
 import { ENP_URL } from "../../../../urls";
 
-
+// //call to the api to get the service type
+// const { data: serviceType }: any = useQuery("serviceType", () => {
+//   return axios.get(`${ENP_URL}/Services`);
+// } );
 
 
 const tabList = [
