@@ -1,34 +1,8 @@
-import {Card} from 'antd'
-import React, {useState} from 'react'
-import {CheckListForm} from './CheckListForm'
-import {CheckListForm2} from './CheckListForm2'
-import {CheckListForm3} from './CheckListForm3'
-import {CheckListForm5} from './CheckListForm5'
+import { Tabs } from "antd";
 import { useParams } from "react-router-dom";
 import { useQueryClient } from "react-query";
-
-const contentList: Record<string, React.ReactNode> = {
-  tab1: (
-    <>
-      <CheckListForm />
-    </>
-  ),
-  tab2: (
-    <>
-      <CheckListForm2 />
-    </>
-  ),
-  tab3: (
-    <>
-      <CheckListForm3 />
-    </>
-  ),
-  tab4: (
-    <>
-      <CheckListForm5 />
-    </>
-  ),
-}
+import { CheckListForm } from "./CheckListForm";
+import { KTCard, KTCardBody } from "../../../../../_metronic/helpers";
 
 const TabsTest: React.FC = () => {
   //Get the service type with useQueryClient
@@ -43,31 +17,23 @@ const TabsTest: React.FC = () => {
 
   const tabList = sections?.map((s: any, index: any) => {
     return {
-      key: `tab${index + 1}`,
-      tab: String(`${s.name}`).toUpperCase(),
+      label: String(`${s.name}`).toUpperCase(),
+      key: String(index),
+      children: <CheckListForm/>
     }
   })
 
-
-  const [activeTabKey1, setActiveTabKey1] = useState<string>('tab1')
-
-  const onTab1Change = (key: string) => {
-    setActiveTabKey1(key)
-  }
-
   return (
     <>
-      <Card
-        style={{width: '100%'}}
-        // title="Card title"
-        tabList={tabList}
-        activeTabKey={activeTabKey1}
-        onTabChange={(key) => {
-          onTab1Change(key)
-        }}
-      >
-        {contentList[activeTabKey1]}
-      </Card>
+      <KTCard>
+      <KTCardBody>
+
+        <Tabs
+          defaultActiveKey="1"
+          items={tabList}
+        />
+      </KTCardBody>
+      </KTCard>
     </>
   )
 }
