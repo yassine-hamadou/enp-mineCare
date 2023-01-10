@@ -30,7 +30,7 @@ const LubePage = () => {
   const [form] = Form.useForm()
   const [dataSource, setDataSource] = useState([])
   const [capa, setCapa] = useState("")
-const [newCompartData, setNewCompartData]= useState([])
+  const [newCompartData, setNewCompartData]= useState([])
   const {Option} = Select
   const [messageApi, contextHolder] = message.useMessage();
   const [warnApi, messageHolder] = message.useMessage();
@@ -328,6 +328,12 @@ const [newCompartData, setNewCompartData]= useState([])
     compartData = lubeConfigs?.data.filter((item: any) =>
       item.model.trim() === model.modlName.trim()
     )
+
+    form.setFieldsValue({
+      changeOutInterval: "",
+      capacity: "",
+      compartmentId:"",
+    })
     
     return setNewCompartData(compartData)
 }
@@ -338,9 +344,8 @@ const warnUser = () => {
     content: 'No fleetID selected or no compartment setup for the selected fleetID!',
     className: 'custom-class',
     style: {
-      marginTop: '20vh',
-    },
-    duration: 5
+      marginTop: '10vh',
+    }
   });
 };
 
