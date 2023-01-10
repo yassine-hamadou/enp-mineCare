@@ -10,11 +10,10 @@ interface TabPanelProps {
   value: number
 }
 
-const CheckListForm = () => {
-  // const [gridData, setGridData] = useState([])
-  // const [loading, setLoading] = useState(false)
-  // const [searchText, setSearchText] = useState('')
-  // let [filteredData] = useState([])
+
+//pass props to the component
+const CheckListForm = (props: any) => {
+  console.log('props', props.sections)
   const [value, setValue] = useState(0)
   const [agree, setAgree] = useState(false)
   const [value1, setValue1] = useState(1)
@@ -49,340 +48,57 @@ const CheckListForm = () => {
           {/* begin::Scroll */}
 
           <div className='d-flex justify-content-center'>
-            <h2>
-              <strong>SECTION '1' - ENGINE</strong>
-            </h2>
+            <h1>
+              <strong>{String(`${props.sections.name}`).toUpperCase()}</strong>
+            </h1>
           </div>
           <div className='d-flex justify-content-center mb-7'>
             <span className='fst-itali fs-5 text-danger'>
-              Please read each lable carefully and select the appropriate option
+              Please read each label carefully and select the appropriate option
             </span>
           </div>
-          <Divider />
-          {/* end::row */}
+          {props.sections.groups.map((group: any, index: any) => {
+            return props.sections.groups ? (
+              <>
+                <div>
+                  <h2 className='mt-5'>
+                    <b>{String(group.name).toUpperCase()}</b>
+                    <Divider />
+                  </h2>
 
-          <div className='row mb-7'>
-            <div className='col-4'>
-              <div className='form-control form-control-solid mb-3'>
-                <div>
-                  <label className='required fw-bold fs-6 mb-2'>
-                    Cut Open Filter (Show to Supervisor)
-                  </label>
                 </div>
-                <Radio.Group>
-                  <Radio value={1}>Ok</Radio>
-                  <Radio value={2}>Repair</Radio>
-                </Radio.Group>
-              </div>
-            </div>
-            <div className='col-4'>
-              <div className='form-control form-control-solid mb-3'>
-                <div>
-                  <label className='required fw-bold fs-6 mb-2'>Clean Primary Fuel filter</label>
+                <div className='row mb-0'>
+                  {/*map through the items*/}
+                  {group.items.map((item: any, index: any) => {
+                    return (
+                      <div className='col-4 mb-7'>
+                        <div className='form-control form-control-solid mb-3'>
+                          <div>
+                            <label className='required fw-bold fs-6 mb-2'>
+                              {item.name}
+                            </label>
+                          </div>
+                          <Radio.Group>
+                            <Radio value={1}>Ok</Radio>
+                            <Radio value={2}>Repair</Radio>
+                          </Radio.Group>
+                        </div>
+                      </div>
+                    )
+                  })}
                 </div>
-                <Radio.Group>
-                  <Radio value={1}>Ok</Radio>
-                  <Radio value={2}>Repair</Radio>
-                </Radio.Group>
-              </div>
-            </div>
-            <div className='col-4'>
-              <div className='form-control form-control-solid mb-3'>
-                <div>
-                  <label className='required fw-bold fs-6 mb-2'>
-                    Check condition of battery cables
-                  </label>
+              </>
+            ) : (
+              <>
+                <div className='row mb-7'>
+                  <h2>Kindly select a schedule</h2>
                 </div>
-                <Radio.Group>
-                  <Radio value={1}>Ok</Radio>
-                  <Radio value={2}>Repair</Radio>
-                </Radio.Group>
-              </div>
-            </div>
-          </div>
+              </>
+            )
+          })}
 
-          {/* end::row */}
-          <div className='row mb-7'>
-            <div className='col-4'>
-              <div className='form-control form-control-solid mb-3'>
-                <div>
-                  <label className='required fw-bold fs-6 mb-2'>
-                    Check condition of engine mounts
-                  </label>
-                </div>
-                <Radio.Group>
-                  <Radio value={1}>Ok</Radio>
-                  <Radio value={2}>Repair</Radio>
-                </Radio.Group>
-              </div>
-            </div>
-            <div className='col-4'>
-              <div className='form-control form-control-solid mb-3'>
-                <div>
-                  <label className='required fw-bold fs-6 mb-2'>
-                    Check cooling fan for cracks or damage
-                  </label>
-                </div>
-                <Radio.Group>
-                  <Radio value={1}>Ok</Radio>
-                  <Radio value={2}>Repair</Radio>
-                </Radio.Group>
-              </div>
-            </div>
-            <div className='col-4'>
-              <div className='form-control form-control-solid mb-3'>
-                <div>
-                  <label className='required fw-bold fs-6 mb-2'>
-                    Check Cooling system clamps & hoses
-                  </label>
-                </div>
-                <Radio.Group>
-                  <Radio value={1}>Ok</Radio>
-                  <Radio value={2}>Repair</Radio>
-                </Radio.Group>
-              </div>
-            </div>
-          </div>
-          {/* end::row */}
-          <div className='row mb-7'>
-            <div className='col-4'>
-              <div className='form-control form-control-solid mb-3'>
-                <div>
-                  <label className='required fw-bold fs-6 mb-2'>
-                    Check pulleys for excess bearing noise
-                  </label>
-                </div>
-                <Radio.Group>
-                  <Radio value={1}>Ok</Radio>
-                  <Radio value={2}>Repair</Radio>
-                </Radio.Group>
-              </div>
-            </div>
-            <div className='col-4'>
-              <div className='form-control form-control-solid mb-3'>
-                <div>
-                  <label className='required fw-bold fs-6 mb-2'>
-                    Clean Engine crankcase breather
-                  </label>
-                </div>
-                <Radio.Group>
-                  <Radio value={1}>Ok</Radio>
-                  <Radio value={2}>Repair</Radio>
-                </Radio.Group>
-              </div>
-            </div>
-            <div className='col-4'>
-              <div className='form-control form-control-solid mb-3'>
-                <div>
-                  <label className='required fw-bold fs-6 mb-2'>
-                    Condition & tension of all drive belts
-                  </label>
-                </div>
-                <Radio.Group>
-                  <Radio value={1}>Ok</Radio>
-                  <Radio value={2}>Repair</Radio>
-                </Radio.Group>
-              </div>
-            </div>
-          </div>
-          {/* end::row */}
-          <div className='row mb-7'>
-            <div className='col-4'>
-              <div className='form-control form-control-solid mb-3'>
-                <div>
-                  <label className='required fw-bold fs-6 mb-2'>
-                    Check for cracks on fan belts & tighten Bolts
-                  </label>
-                </div>
-                <Radio.Group>
-                  <Radio value={1}>Ok</Radio>
-                  <Radio value={2}>Repair</Radio>
-                </Radio.Group>
-              </div>
-            </div>
-            <div className='col-4'>
-              <div className='form-control form-control-solid mb-3'>
-                <div>
-                  <label className='required fw-bold fs-6 mb-2'>Drain fuel tank water trap</label>
-                </div>
-                <Radio.Group>
-                  <Radio value={1}>Ok</Radio>
-                  <Radio value={2}>Repair</Radio>
-                </Radio.Group>
-              </div>
-            </div>
-            <div className='col-4'>
-              <div className='form-control form-control-solid mb-3'>
-                <div>
-                  <label className='required fw-bold fs-6 mb-2'>
-                    Inspect radiator core. (Clean if needed)
-                  </label>
-                </div>
-                <Radio.Group>
-                  <Radio value={1}>Ok</Radio>
-                  <Radio value={2}>Repair</Radio>
-                </Radio.Group>
-              </div>
-            </div>
-          </div>
-          {/* end::row */}
-          <div className='row mb-7'>
-            <div className='col-4'>
-              <div className='form-control form-control-solid mb-3'>
-                <div>
-                  <label className='required fw-bold fs-6 mb-2'>
-                    Jump start receptacle cables if fitted
-                  </label>
-                </div>
-                <Radio.Group>
-                  <Radio value={1}>Ok</Radio>
-                  <Radio value={2}>Repair</Radio>
-                </Radio.Group>
-              </div>
-            </div>
-            <div className='col-4'>
-              <div className='form-control form-control-solid mb-3'>
-                <div>
-                  <label className='required fw-bold fs-6 mb-2'>
-                    Lubricate Fan hub & jockey pulley
-                  </label>
-                </div>
-                <Radio.Group>
-                  <Radio value={1}>Ok</Radio>
-                  <Radio value={2}>Repair</Radio>
-                </Radio.Group>
-              </div>
-            </div>
-            <div className='col-4'>
-              <div className='form-control form-control-solid mb-3'>
-                <div>
-                  <label className='required fw-bold fs-6 mb-2'>Test Air con system</label>
-                </div>
-                <Radio.Group>
-                  <Radio value={1}>Ok</Radio>
-                  <Radio value={2}>Repair</Radio>
-                </Radio.Group>
-              </div>
-            </div>
-          </div>
-          {/* end::row */}
-          <div className='row mb-7'>
-            <div className='col-4'>
-              <div className='form-control form-control-solid mb-3'>
-                <div>
-                  <label className='required fw-bold fs-6 mb-2'>Test Charging system </label>
-                </div>
-                <Radio.Group>
-                  <Radio value={1}>Ok</Radio>
-                  <Radio value={2}>Repair</Radio>
-                </Radio.Group>
-              </div>
-            </div>
-            <div className='col-4'>
-              <div className='form-control form-control-solid mb-3'>
-                <div>
-                  <label className='required fw-bold fs-6 mb-2'>Replace Primary Fuel filter</label>
-                </div>
-                <Radio.Group>
-                  <Radio value={1}>Ok</Radio>
-                  <Radio value={2}>Repair</Radio>
-                </Radio.Group>
-              </div>
-            </div>
-            <div className='col-4'>
-              <div className='form-control form-control-solid mb-3'>
-                <div>
-                  <label className='required fw-bold fs-6 mb-2'>
-                    Replace Secondary fuel filter
-                  </label>
-                </div>
-                <Radio.Group>
-                  <Radio value={1}>Ok</Radio>
-                  <Radio value={2}>Repair</Radio>
-                </Radio.Group>
-              </div>
-            </div>
-          </div>
-          {/* end::row */}
-          <div className='row mb-7'>
-            <div className='col-4'>
-              <div className='form-control form-control-solid mb-3'>
-                <div>
-                  <label className='required fw-bold fs-6 mb-2'>Replace Fuel Filter (ORS) </label>
-                </div>
-                <Radio.Group>
-                  <Radio value={1}>Ok</Radio>
-                  <Radio value={2}>Repair</Radio>
-                </Radio.Group>
-              </div>
-            </div>
-            <div className='col-4'>
-              <div className='form-control form-control-solid mb-3'>
-                <div>
-                  <label className='required fw-bold fs-6 mb-2'>Replace Engine oil filter</label>
-                </div>
-                <Radio.Group>
-                  <Radio value={1}>Ok</Radio>
-                  <Radio value={2}>Repair</Radio>
-                </Radio.Group>
-              </div>
-            </div>
-            <div className='col-4'>
-              <div className='form-control form-control-solid mb-3'>
-                <div>
-                  <label className='required fw-bold fs-6 mb-2'>
-                    Remove & clean starter silenser
-                  </label>
-                </div>
-                <Radio.Group>
-                  <Radio value={1}>Ok</Radio>
-                  <Radio value={2}>Repair</Radio>
-                </Radio.Group>
-              </div>
-            </div>
-          </div>
-          {/* end::row */}
-          <div className='row mb-7'>
-            <div className='col-4'>
-              <div className='form-control form-control-solid mb-3'>
-                <div>
-                  <label className='required fw-bold fs-6 mb-2'>
-                    Inspect pulleys for cracks & dirt build-up{' '}
-                  </label>
-                </div>
-                <Radio.Group>
-                  <Radio value={1}>Ok</Radio>
-                  <Radio value={2}>Repair</Radio>
-                </Radio.Group>
-              </div>
-            </div>
-            <div className='col-4'>
-              <div className='form-control form-control-solid mb-3'>
-                <div>
-                  <label className='required fw-bold fs-6 mb-2'>
-                    Inspect Fuel lines for leaks & damage
-                  </label>
-                </div>
-                <Radio.Group>
-                  <Radio value={1}>Ok</Radio>
-                  <Radio value={2}>Repair</Radio>
-                </Radio.Group>
-              </div>
-            </div>
-            <div className='col-4'>
-              <div className='form-control form-control-solid mb-3'>
-                <div>
-                  <label className='required fw-bold fs-6 mb-2'>
-                    Inspect Exhaust manifolds & lines for leaks
-                  </label>
-                </div>
-                <Radio.Group>
-                  <Radio value={1}>Ok</Radio>
-                  <Radio value={2}>Repair</Radio>
-                </Radio.Group>
-              </div>
-            </div>
-          </div>
+
+
           {/* end::row */}
           <div className='row mb-10'>
             <div className='col-4'>

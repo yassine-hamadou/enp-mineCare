@@ -19,20 +19,19 @@ const TabsTest: React.FC = () => {
     return {
       label: String(`${s.name}`).toUpperCase(),
       key: String(index),
-      children: <CheckListForm/>
+      children: <CheckListForm sections={s} />
     }
   })
 
   return (
     <>
       <KTCard>
-      <KTCardBody>
-
-        <Tabs
-          defaultActiveKey="1"
-          items={tabList}
-        />
-      </KTCardBody>
+        <KTCardBody>
+          <Tabs
+            defaultActiveKey="1"
+            items={tabList}
+          />
+        </KTCardBody>
       </KTCard>
     </>
   )
