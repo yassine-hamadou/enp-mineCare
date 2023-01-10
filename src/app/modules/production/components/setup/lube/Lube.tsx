@@ -18,6 +18,7 @@ import {Link} from 'react-router-dom'
 import {ENP_URL, fetchCompartments, fetchEquips, fetchLubeBrands, fetchLubeConfigs, fetchLubeGrade, fetchModels, fetchRefillTypes} from '../../../../../urls'
 import {useQuery} from 'react-query'
 import Item from 'antd/es/list/Item'
+import { message } from 'antd';
 
 const LubePage = () => {
   const [gridData, setGridData] = useState([])
@@ -31,6 +32,8 @@ const LubePage = () => {
   const [capa, setCapa] = useState("")
 const [newCompartData, setNewCompartData]= useState([])
   const {Option} = Select
+  const [messageApi, contextHolder] = message.useMessage();
+  const [warnApi, messageHolder] = message.useMessage();
 
   // Modal functions
   const [isModalOpen, setIsModalOpen] = useState(false)
@@ -50,7 +53,7 @@ const [newCompartData, setNewCompartData]= useState([])
   // Modal functions end
   const deleteData = async (element: any) => {
     try {
-      const response = await axios.delete(`${ENP_URL}/lubes/${element.id}`)
+      const response = await axios.delete(`${ENP_URL}/LubeEntry/${element.id}`)
       // update the local state so that react can refecth and re-render the table with the new data
       const newData = gridData.filter((item: any) => item.id !== element.id)
       setGridData(newData)
@@ -316,6 +319,8 @@ const [newCompartData, setNewCompartData]= useState([])
   let compartData:any =null
   let model:any=""
   const onFleetIdChange = (selected:any) => {
+
+    
     model = allEquips?.data.find((item:any)=>
       item.fleetID===selected
     )
@@ -327,34 +332,57 @@ const [newCompartData, setNewCompartData]= useState([])
     return setNewCompartData(compartData)
 }
 
-// console.log(newCompartData)
+const warnUser = () => {
+  warnApi.open({
+    type: 'error',
+    content: 'No fleetID selected or no compartment setup for the selected fleetID!',
+    className: 'custom-class',
+    style: {
+      marginTop: '20vh',
+    },
+    duration: 5
+  });
+};
 
+const checkCompartment = ()=>{
+  if(newCompartData.length===0){
+    warnUser()
+
+  }
+}
 
   const onCompartmentChange = (selected: any) => {
-    newCompartData.map((item: any) =>
+    newCompartData.map((item: any) =>{
 
-    
-
-
-      item.compartmentId === selected
-        ? form.setFieldsValue({
-            changeOutInterval:item.changeOutInterval,
-            capacity: item.capacity,
-          })
-        : null
-
-        
-    )
-  }
-  const onVolumeChange = (values: any) => {
-    if(values.capacity>values.volume){
-      return console.log("This not accepted")
+    if(item.compartmentId === selected){
+      form.setFieldsValue({
+        changeOutInterval: item.changeOutInterval,
+        capacity: item.capacity,
+      })
+      setCapa(item.capacity)
     }
-    return console.log(`${values.capacity} is ok "Go ahead boy!"`)
+      
+    else{
+      return ""
+    }
+
+      })
   }
-  const onCapacityChange = (values:any) => {
-    setCapa(values)
-    console.log(capa+" OK capacity")
+
+  const volumeCheck = () => {
+    messageApi.open({
+      type: 'warning',
+      content: 'Volume should not be more than capacity !!',
+      className: 'custom-class',
+      style: {
+        marginTop: '20vh',
+      },
+    });
+  };
+
+  const onVolumeChange = (values: any) => {
+    values>capa?volumeCheck():console.log("You go ahead ")
+
   }
 
   const globalSearch = () => {
@@ -383,7 +411,6 @@ const [newCompartData, setNewCompartData]= useState([])
       currentHour: values.currentHour,
       refillDate: new Date().toISOString(),
     }
-    console.log(data)
 
     try {
       const response = await axios.post(url, data)
@@ -391,6 +418,7 @@ const [newCompartData, setNewCompartData]= useState([])
       form.resetFields()
       setIsModalOpen(false)
       loadData()
+      setNewCompartData([])
       return response.statusText
     } catch (error: any) {
       setSubmitLoading(false)
@@ -468,6 +496,8 @@ const [newCompartData, setNewCompartData]= useState([])
               name='control-hooks'
               onFinish={onFinish}
             >
+               {contextHolder}
+               {messageHolder}
               <Form.Item name='fleetId' label='fleetId'>
                 <Select placeholder='Select' onChange={onFleetIdChange}>
                   {allEquips?.data.map((item: any) => (
@@ -479,11 +509,13 @@ const [newCompartData, setNewCompartData]= useState([])
               </Form.Item>
            
               <Form.Item label='Compartment' name='compartmentId' rules={[{required: true}]}>
+                {/* {messageHolder} */}
                 <Select 
                 showSearch 
                 placeholder="Search to select"
                 optionFilterProp="children"
                 onChange={onCompartmentChange}
+                onClick={checkCompartment}
                 >
                     {
                         newCompartData.map((item:any)=>(
@@ -498,7 +530,7 @@ const [newCompartData, setNewCompartData]= useState([])
                 <InputNumber disabled={true} />
               </Form.Item>
               <Form.Item label='Capacity' name='capacity'>
-                <InputNumber onChange={onCapacityChange} disabled={true} />
+                <InputNumber disabled={true} />
               </Form.Item>
               <Form.Item label='Refill Type' name='refillTypeId' rules={[{required: true}]}>
                 <Select 
@@ -546,6 +578,7 @@ const [newCompartData, setNewCompartData]= useState([])
                 </Select>
               </Form.Item>
               <Form.Item name='volume' label='Volume' rules={[{required: true}]} >
+             
                 <InputNumber onChange={onVolumeChange}/>
               </Form.Item>
               <Form.Item name='previousHour' label='Previous Hours'>

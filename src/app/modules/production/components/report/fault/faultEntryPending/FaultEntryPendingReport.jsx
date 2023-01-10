@@ -10,7 +10,7 @@ import "../../../../../../../../node_modules/@devexpress/analytics-core/dist/css
 class ReportViewer extends React.Component {
 constructor(props) {
     super(props);
-    this.reportUrl = ko.observable("FautEntryPendingReport");
+    this.reportUrl = ko.observable("FaultEntryPendingReport");
     this.requestOptions = {
         host: "http://208.117.44.15/serverside/",
         invokeAction: "DXXRDV"
