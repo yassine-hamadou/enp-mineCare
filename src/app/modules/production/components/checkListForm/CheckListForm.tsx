@@ -1,4 +1,4 @@
-import {Divider, Radio, RadioChangeEvent} from 'antd'
+import {Button, Divider, Empty, Radio, RadioChangeEvent} from 'antd'
 import {useState} from 'react'
 // import { Tabs } from 'antd';
 // import { TabContext } from '@mui/lab';
@@ -58,7 +58,7 @@ const CheckListForm = (props: any) => {
             </span>
           </div>
           {props.sections.groups.map((group: any, index: any) => {
-            return props.sections.groups ? (
+            return props.sections.groups.length > 0 ? (
               <>
                 <div>
                   <h2 className='mt-5'>
@@ -69,13 +69,13 @@ const CheckListForm = (props: any) => {
                 </div>
                 <div className='row mb-0'>
                   {/*map through the items*/}
-                  {group.items.map((item: any, index: any) => {
+                  {group.items.length > 0 ? group.items.map((item: any, index: any) => {
                     return (
                       <div className='col-4 mb-7'>
                         <div className='form-control form-control-solid mb-3'>
                           <div>
                             <label className='required fw-bold fs-6 mb-2'>
-                              {item.name}
+                              {item.name ? item.name : null}
                             </label>
                           </div>
                           <Radio.Group>
@@ -85,36 +85,31 @@ const CheckListForm = (props: any) => {
                         </div>
                       </div>
                     )
-                  })}
+                  }) : (
+                    <>
+                      <Empty
+                        image={Empty.PRESENTED_IMAGE_SIMPLE}
+                        imageStyle={{
+                          height: 60,
+                        }}
+                        description={
+                          <span>No items found. Kindly setup new items for the checklist.</span>
+                        }
+                      >
+                      </Empty>
+                    </>
+                  )}
                 </div>
               </>
             ) : (
               <>
                 <div className='row mb-7'>
-                  <h2>Kindly select a schedule</h2>
+                  <h2>No groups found!</h2>
                 </div>
               </>
             )
           })}
 
-
-
-          {/* end::row */}
-          <div className='row mb-10'>
-            <div className='col-4'>
-              <div className='form-control form-control-solid mb-3'>
-                <div>
-                  <label className='required fw-bold fs-6 mb-2'>
-                    Inspect Air induction system clamps & hoses
-                  </label>
-                </div>
-                <Radio.Group>
-                  <Radio value={1}>Ok</Radio>
-                  <Radio value={2}>Repair</Radio>
-                </Radio.Group>
-              </div>
-            </div>
-          </div>
           <div>
             <h3>
               <b>Check condition of all Cylinders</b>
