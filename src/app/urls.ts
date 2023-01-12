@@ -35,3 +35,15 @@ export const fetchLubeConfigs= ()=>{
 export const fetchLubeGrade= ()=>{
     return axios.get(`${ENP_URL}/LubeGrades`)
 }
+export const fetchSections= ()=>{
+    return axios.get(`${ENP_URL}/Sections`)
+}
+export const fetchServices= ()=>{
+    return axios.get(`${ENP_URL}/Services`)
+}
+export const fetchGroups= ()=>{
+    return axios.get(`${ENP_URL}/Groups`)
+}
+export const fetchItems= ()=>{
+    return axios.get(`${ENP_URL}/Items`)
+}

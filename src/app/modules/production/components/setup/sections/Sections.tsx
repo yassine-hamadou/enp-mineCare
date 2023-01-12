@@ -5,21 +5,30 @@ import {KTCardBody, KTSVG} from '../../../../../../_metronic/helpers'
 import {Link, useNavigate, useParams} from 'react-router-dom'
 import {AddSectionForm} from './AddSectionForm'
 import axios from 'axios'
-import {ENP_URL} from '../../../../../urls'
+import {ENP_URL, fetchSections, fetchServices} from '../../../../../urls'
+import { useQuery } from 'react-query'
+
+
+
+interface TestItems {
+  id: string,
+  name: string,
+}
 
 const SectionsPage = () => {
   const [gridData, setGridData] = useState<any>([])
-  const [serviceData, setServiceData] = useState([])
+  // const [serviceData, setServiceData] = useState([])
   const [loading, setLoading] = useState(false)
   const [searchText, setSearchText] = useState('')
   let [filteredData] = useState([])
+  let [itemName, setItemName] = useState<any>("")
   const [form] = Form.useForm()
   const [submitLoading, setSubmitLoading] = useState(false)
 
   
   const params:any  = useParams();
   const navigate = useNavigate();
-  console.log(params.id)
+  // console.log(params.id)
   // Modal functions
   const [isModalOpen, setIsModalOpen] = useState(false)
 
@@ -108,22 +117,7 @@ const SectionsPage = () => {
     }
   }
 
-  const loadService = async () => {
-    setLoading(true)
-    try {
-      // const response = await axios.get('https://cors-anywhere.herokuapp.com/http://208.117.44.15/SmWebApi/api/VmfaltsApi')
-      const response = await axios.get(`${ENP_URL}/Services`)
-      setServiceData(response.data)
-      setLoading(false)
-    } catch (error) {
-      console.log(error)
-    }
-  }
 
-  useEffect(() => {
-    loadData()
-    loadService()
-  }, [])
 
   const dataWithIndex = gridData.map((item: any, index:any) => ({
     ...item,
@@ -133,8 +127,23 @@ const SectionsPage = () => {
   const dataByID = dataWithIndex.filter((section:any) =>{
     return section.serviceId.toString() ===params.id
   })
-  console.log(dataByID)
+  // console.log(dataByID)
 
+
+  const {data: allServices} = useQuery('services', fetchServices, {cacheTime: 60000000})
+  const {data: allSections} = useQuery('sections', fetchSections, {cacheTime: 60000000})
+
+
+const getItemName= async (param:any) =>{
+
+    let newName=null
+  
+     const   itemTest = await allServices?.data.find((item:any) =>
+      item.id.toString()===param
+    )
+     newName = await itemTest
+    return newName
+ }
 
   const handleInputChange = (e: any) => {
     setSearchText(e.target.value)
@@ -142,7 +151,14 @@ const SectionsPage = () => {
       loadData()
     }
   }
+  useEffect(() => {
+    (async ()=>{
+      let res = await getItemName(params.id)
+      setItemName(res.name)
+    })();
 
+    loadData()
+  }, [])
   const globalSearch = () => {
     // @ts-ignore
     filteredData = dataWithVehicleNum.filter((value) => {
@@ -161,8 +177,6 @@ const SectionsPage = () => {
       name: values.name,
       serviceId: params.id,
     }
-
-  
 
     try {
       const response = await axios.post(url, data)
@@ -187,16 +201,11 @@ const SectionsPage = () => {
         boxShadow: '2px 2px 15px rgba(0,0,0,0.08)',
       }}
     >
-      {/* <div style={{backgroundColor:'white'}}> */}
-    
       <KTCardBody className='py-4 '>
         <div className='table-responsive'>
-          {/* <Link to={`/setup/service/${params.id}`}>
-            <span className='mb-3 btn btn-outline btn-outline-dashed btn-outline-primary btn-active-light-primary'>
-              Back to Services
-            </span>
-          </Link> */}
-          {/* <p>{params.id}</p> */}
+          
+          <h3 style={{fontWeight:"bolder"}}>{itemName}</h3>
+          <br></br>
           <button className='mb-3 btn btn-outline btn-outline-dashed btn-outline-primary btn-active-light-primary' onClick={() => navigate(-1)}>Back to Services</button>
           <div className='d-flex justify-content-between'>
             <Space style={{marginBottom: 16}}>
