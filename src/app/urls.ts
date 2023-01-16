@@ -26,3 +26,24 @@ export const fetchCompartments= ()=>{
 export const fetchLubeBrands= ()=>{
     return axios.get(`${ENP_URL}/LubeBrands`)
 }
+export const fetchRefillTypes= ()=>{
+    return axios.get(`${ENP_URL}/RefillType`)
+}
+export const fetchLubeConfigs= ()=>{
+    return axios.get(`${ENP_URL}/LubeConfigs`)
+}
+export const fetchLubeGrade= ()=>{
+    return axios.get(`${ENP_URL}/LubeGrades`)
+}
+export const fetchSections= ()=>{
+    return axios.get(`${ENP_URL}/Sections`)
+}
+export const fetchServices= ()=>{
+    return axios.get(`${ENP_URL}/Services`)
+}
+export const fetchGroups= ()=>{
+    return axios.get(`${ENP_URL}/Groups`)
+}
+export const fetchItems= ()=>{
+    return axios.get(`${ENP_URL}/Items`)
+}

@@ -51,7 +51,7 @@ export function ScheduleInfo() {
             </div>
             <div className='d-flex justify-content-center mb-7'>
               <span className='fst-itali fs-5 text-danger'>
-                Please select your work schedule you want to work on
+                Please select your work schedule you want to work on from the list below
               </span>
             </div>
             <div>
@@ -66,7 +66,9 @@ export function ScheduleInfo() {
                   className='form-select form-control form-control-solid mb-3'
                   onChange={onSelect}
                 >
-                  <option value='Select Schedule'>Select Schedule</option>
+                  <option defaultValue='Select Schedule'>
+                    Select Schedule
+                  </option>
                   {loadSchedule?.data.map((schedule: any) => (
                     <option value={schedule.entryId} key={schedule.entryId}>
                       {schedule.fleetId}- {schedule.locationId} -{' '}

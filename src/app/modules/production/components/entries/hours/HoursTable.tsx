@@ -165,7 +165,7 @@ const HoursPage: React.FC = () => {
             >
               Edit
             </Button>
-            <Button  htmlType='submit' danger>
+            <Button onClick={onDone} htmlType='submit' danger>
               Done
             </Button>
           </Space>
@@ -197,11 +197,10 @@ const HoursPage: React.FC = () => {
     };
     
     let rowData:any =[...allHours?.data]
-    const onFinish = (values: any) => {
+    const onDone = (values: any) => {
       
       const updatedDataSource: any = [...allHours?.data]
-      updatedDataSource.splice(editingRow, 1, {...values, key: editingRow})
-      rowData= updatedDataSource
+      updatedDataSource.splice(editingRow, 1, {...values, id: editingRow})
       console.log(updatedDataSource)
       setEditingRow(null)
     }
@@ -262,6 +261,7 @@ const HoursPage: React.FC = () => {
           columns={columns}
           expandable={{expandedRowRender, defaultExpandedRowKeys: ['txmodl']}}
           rowKey='txmodl'
+          loading={loading}
           dataSource={mainData?.data}
         />
       </div>

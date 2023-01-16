@@ -1,72 +1,51 @@
-import {Card} from 'antd'
-import React, {useState} from 'react'
-import {CheckListForm} from './CheckListForm'
-import {CheckListForm2} from './CheckListForm2'
-import {CheckListForm3} from './CheckListForm3'
-import {CheckListForm5} from './CheckListForm5'
-
-const tabList = [
-  {
-    key: 'tab1',
-    tab: String("Section '1' - ENGINE").toUpperCase(),
-  },
-  {
-    key: 'tab2',
-    tab: String("Section '2' - TRANSMISSION/HYDRAULIC/AXLES").toUpperCase(),
-  },
-  {
-    key: 'tab3',
-    tab: String("Section '3' - BODY/FRAME").toUpperCase(),
-  },
-  {
-    key: 'tab4',
-    tab: String("SECTION '5' - OPERATION/CAP").toUpperCase(),
-  },
-]
-
-const contentList: Record<string, React.ReactNode> = {
-  tab1: (
-    <>
-      <CheckListForm />
-    </>
-  ),
-  tab2: (
-    <>
-      <CheckListForm2 />
-    </>
-  ),
-  tab3: (
-    <>
-      <CheckListForm3 />
-    </>
-  ),
-  tab4: (
-    <>
-      <CheckListForm5 />
-    </>
-  ),
-}
+import { Empty, Tabs } from "antd";
+import { useParams } from "react-router-dom";
+import { useQueryClient } from "react-query";
+import { CheckListForm } from "./CheckListForm";
+import { KTCard, KTCardBody } from "../../../../../_metronic/helpers";
 
 const TabsTest: React.FC = () => {
-  const [activeTabKey1, setActiveTabKey1] = useState<string>('tab1')
+  //Get the service type with useQueryClient
+  const AllServiceTypes: any = useQueryClient().getQueryData("serviceType");
+  console.log("serviceType", AllServiceTypes);
+  //Get the service type id from the url
+  const params = useParams()
+  const serviceId: any = params.serviceId
+  //Get the service type name from the service type id
+  const serviceType = AllServiceTypes?.data.find((s: any) => s.id === parseInt(serviceId))
+  const sections = serviceType?.sections
+  console.log("sections", sections)
+  const tabList = sections?.map((s: any, index: any) => {
+    return {
+      label: String(`${s.name}`).toUpperCase(),
+      key: String(index),
+      children: <CheckListForm sections={s} />
+    }
+  })
 
-  const onTab1Change = (key: string) => {
-    setActiveTabKey1(key)
-  }
-
-  return (
+  return sections?.length > 0 ? (
     <>
-      <Card
-        style={{width: '100%'}}
-        // title="Card title"
-        tabList={tabList}
-        activeTabKey={activeTabKey1}
-        onTabChange={(key) => {
-          onTab1Change(key)
+      <KTCard>
+        <KTCardBody>
+          <Tabs
+            defaultActiveKey="1"
+            items={tabList}
+          />
+        </KTCardBody>
+      </KTCard>
+    </>
+  ) : (
+    <>
+      <Empty
+        image={Empty.PRESENTED_IMAGE_SIMPLE}
+        imageStyle={{
+          height: 60,
         }}
+        description={
+          <span><b>No sections found. Kindly setup new sections for the above service type.</b></span>
+        }
       >
-        {contentList[activeTabKey1]}
-      </Card>
+      </Empty>
     </>
   )
 }

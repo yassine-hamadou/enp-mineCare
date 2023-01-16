@@ -6,8 +6,8 @@ import {
   WorkWeek,
   Month,
   Agenda,
-  Inject,
-} from '@syncfusion/ej2-react-schedule'
+  Inject, dataBound
+} from "@syncfusion/ej2-react-schedule";
 import {DateTimePickerComponent} from '@syncfusion/ej2-react-calendars'
 import {DropDownListComponent} from '@syncfusion/ej2-react-dropdowns'
 import {useMutation, useQuery, useQueryClient} from 'react-query'
@@ -32,6 +32,7 @@ import {
   updateSchedule,
 } from './requests'
 import {message} from 'antd'
+import { useRef, useState } from "react";
 
 /**
  *  Schedule editor custom fields sample
@@ -50,6 +51,7 @@ L10n.load({
 })
 
 const Calendar = ({chosenLocationIdFromDropdown}) => {
+  const [serviceTypeDropDownValues, setserviceTypeDropDownValues] = useState([])
   let scheduleObj
   let scheduleQueryClient = useQueryClient() // for refetching the schedules
   // React Query
@@ -107,6 +109,7 @@ const Calendar = ({chosenLocationIdFromDropdown}) => {
   //Access the same location query from cycle details component
   const locationQuery = useQueryClient().getQueryData('Locations')
 
+    let dropDownListObject;
   function onEventRendered(args) {
     let categoryColor = {
       location1: '#1aaa55',
@@ -139,9 +142,32 @@ const Calendar = ({chosenLocationIdFromDropdown}) => {
     // }
   }
 
+  let vmQuery = useQueryClient()
+
   function editorTemplate(props) {
-    console.log('props in editorTemplate', props) //props is the event object
-    //if props is not undefined then render the editor template
+    console.log('props', props)
+    if (props.serviceTypeId) {
+      const fleetModel = vmQuery.getQueryData('vmequps')?.data?.find((fleet) => fleet.fleetID.trimEnd() === props.fleetId.trimEnd())?.modlName
+      const serviceTypesOfSelectedModel = serviceTypes?.data?.filter((service) => service.model.trimEnd() === fleetModel.trimEnd())
+      console.log('fleetModel during props', fleetModel)
+      console.log('serviceTypesOfSelectedModel', serviceTypesOfSelectedModel)
+      // Setting Service Type dropdown values
+      dropDownListObject.dataSource = serviceTypesOfSelectedModel.map((service) => {
+        return { text: service.name, value: service.id }
+      })
+      dropDownListObject.dataBind() // refresh the dropdown list
+    }
+  function getFleetModel(e) {
+    if (e.itemData) {
+      const fleetModel = vmQuery.getQueryData('vmequps')?.data?.find((fleet) => fleet.fleetID.trimEnd() === e.itemData.value.trimEnd())?.modlName
+      const serviceTypesOfSelectedModel = serviceTypes?.data?.filter((service) => service.model.trimEnd() === fleetModel.trimEnd())
+      console.log('serviceTypesOfSelectedModel', serviceTypesOfSelectedModel)
+      dropDownListObject.dataSource = serviceTypesOfSelectedModel.map((service) => {
+        return { text: service.name, value: service.id }
+      })
+      dropDownListObject.dataBind() // refresh the dropdown list
+    }
+  }
     return props !== undefined ? (
       <table className='custom-event-editor' style={{width: '100%'}} cellPadding={5}>
         <tbody>
@@ -157,11 +183,12 @@ const Calendar = ({chosenLocationIdFromDropdown}) => {
                 dataSource={vmequps?.data.map((Vmequp) => {
                   return {
                     text: `${Vmequp.fleetID}- ${Vmequp.modlName}- ${Vmequp.modlClass}`,
-                    value: `${Vmequp.fleetID}`,
+                    value: `${Vmequp.fleetID}`, //this is the value that will be sent to the backend
                   }
                 })}
                 fields={{text: 'text', value: 'value'}}
                 value={props && props.fleetId ? `${props.fleetId}` : null}
+                change={getFleetModel}
               />
             </td>
           </tr>
@@ -193,15 +220,10 @@ const Calendar = ({chosenLocationIdFromDropdown}) => {
                 placeholder='Choose Service Type'
                 data-name='serviceTypeId'
                 className='e-field'
+                ref={(scope) => (dropDownListObject = scope)}
                 style={{width: '100%'}}
-                dataSource={serviceTypes?.data.map((serviceType) => {
-                  return {
-                    text: `${serviceType.name}`,
-                    value: serviceType.id,
-                  }
-                })}
-                value={props?.serviceTypeId}
                 fields={{text: 'text', value: 'value'}}
+                value={props?.serviceTypeId}
               />
             </td>
           </tr>

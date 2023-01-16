@@ -2,9 +2,10 @@ import {Button, Form, Input, Modal, Select, Space, Table} from 'antd'
 import {useEffect, useState} from 'react'
 import {KTCardBody, KTSVG} from '../../../../../../_metronic/helpers'
 
-import {Link, useParams} from 'react-router-dom'
+import {Link, useNavigate, useParams} from 'react-router-dom'
 import axios from 'axios'
-import {ENP_URL} from '../../../../../urls'
+import {ENP_URL, fetchGroups, fetchSections} from '../../../../../urls'
+import { useQuery } from 'react-query'
 
 const GroupsPage = () => {
   const [gridData, setGridData] = useState([])
@@ -14,9 +15,12 @@ const GroupsPage = () => {
   let [filteredData] = useState([])
   const [form] = Form.useForm()
   const [submitLoading, setSubmitLoading] = useState(false)
+  let [itemName, setItemName] = useState<any>("")
+
   const params:any  = useParams();
   const {Option} = Select
-
+  
+  const navigate = useNavigate();
   // Modal functions
   const [isModalOpen, setIsModalOpen] = useState(false)
 
@@ -108,7 +112,22 @@ const GroupsPage = () => {
     }
   }
 
+  const getItemName= async (param:any) =>{
+
+    let newName=null
+  
+     const   itemTest = await allSections?.data.find((item:any) =>
+      item.id.toString()===param
+    )
+     newName = await itemTest
+    return newName
+ }
+
   useEffect(() => {
+    (async ()=>{
+      let res = await getItemName(params.id)
+      setItemName(res.name)
+    })();
     loadData()
     loadSection()
   }, [])
@@ -117,10 +136,24 @@ const GroupsPage = () => {
     ...item,
     key: index,
   }))
+
+  
   const dataByID = dataWithIndex.filter((section:any) =>{
     return section.sectionId.toString() ===params.id
   })
-  console.log(dataByID)
+  const {data: allSections} = useQuery('sections', fetchSections, {cacheTime: 60000000})
+  const {data: allGroups} = useQuery('groups', fetchGroups, {cacheTime: 60000000})
+
+  // const getItemName= (param:any) => {
+
+  //   let newName=null
+  //   const  itemTest = allSections?.data.find((item:any) =>
+  //       item.id.toString()===param
+  //     )
+  //     newName = itemTest
+  
+  //     return setItemName(newName)
+  //  }
 
   const handleInputChange = (e: any) => {
     setSearchText(e.target.value)
@@ -172,13 +205,11 @@ const GroupsPage = () => {
       }}
     >
       <KTCardBody className='py-4 '>
-        <div className='table-responsive'>
-          {/* <Link to={'/setup/sections'}>
-            <span className='mb-3 btn btn-outline btn-outline-dashed btn-outline-primary btn-active-light-primary'>
-              Back to Sections
-            </span>
-          </Link> */}
-
+    
+        <div className='table-responsive'>  
+        <h3 style={{fontWeight:"bolder"}}>{itemName}</h3>
+          <br></br>
+        <button className='mb-3 btn btn-outline btn-outline-dashed btn-outline-primary btn-active-light-primary' onClick={() => navigate(-1)}>Back to Sections</button>
           <div className='d-flex justify-content-between'>
             <Space style={{marginBottom: 16}}>
               <Input

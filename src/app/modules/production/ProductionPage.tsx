@@ -29,6 +29,8 @@ import FaultEntryReport from './components/report/fault/faultEntry/FaultEntryRep
 import FaultEntryPendingReport from './components/report/fault/faultEntryPending/FaultEntryPendingReport'
 import FaultEntrySolvedReport from './components/report/fault/faultEntrySolved/FaultEntrySolvedReport'
 import FleetScheduleReport from './components/report/fleetSchedule/FleetScheduleReport'
+import { LubeConfig } from './components/setup/lubeConfig/LubeConfig'
+import FaultEntryFleetHistoryReport from './components/report/fault/faultFleetHistory/FaultEntryFleetHistoryReport'
 const accountBreadCrumbs: Array<PageLink> = []
 
 const ProductionPage: React.FC = () => {
@@ -63,7 +65,7 @@ const ProductionPage: React.FC = () => {
           }
         >
           <Route
-            path=':id'
+            path=':serviceId'
             element={
               <>
                 <TabsTest />
@@ -171,7 +173,7 @@ const ProductionPage: React.FC = () => {
           }
         />
         <Route
-          path='oilgrade'
+          path='lube-grade/:id'
           element={
             <>
               <PageTitle breadcrumbs={accountBreadCrumbs}>All Grades</PageTitle>
@@ -181,7 +183,17 @@ const ProductionPage: React.FC = () => {
           }
         />
         <Route
-          path='oiltype'
+          path='lube-config'
+          element={
+            <>
+              <PageTitle breadcrumbs={accountBreadCrumbs}>Lube Configurations</PageTitle>
+              {/*<Overview />*/}
+              <LubeConfig />
+            </>
+          }
+        />
+        <Route
+          path='lube-brand'
           element={
             <>
               <PageTitle breadcrumbs={accountBreadCrumbs}>All Brands</PageTitle>
@@ -221,35 +233,9 @@ const ProductionPage: React.FC = () => {
           </>
         }
       >
-        {/* <Route
-          path='fuel-report'
-          element={
-            <>
-              <PageTitle breadcrumbs={accountBreadCrumbs}>Fuel Report</PageTitle>
-              <FuelReportTable />
-            </>
-          }
-        /> */}
-        {/* <Route
-          path='equipment-kpi'
-          element={
-            <>
-              <PageTitle breadcrumbs={accountBreadCrumbs}>Equipment KPI</PageTitle>
-              <EquipmentTable />
-            </>
-          }
-        /> */}
-        {/* <Route
-          path='activity-statistics'
-          element={
-            <>
-              <PageTitle breadcrumbs={accountBreadCrumbs}>Activity Statistics</PageTitle>
-              <StatisticsTable />
-            </>
-          }
-        /> */}
+        
         <Route
-          path='fault-entry-report'
+          path='fault-summary-report'
           element={
             <>
               <PageTitle breadcrumbs={accountBreadCrumbs}>All Fault Report</PageTitle>
@@ -290,6 +276,15 @@ const ProductionPage: React.FC = () => {
             <>
               <PageTitle breadcrumbs={accountBreadCrumbs}>Fleet Schedule Report</PageTitle>
               <FleetScheduleReport />
+            </>
+          }
+        />
+        <Route
+          path='fleet-history-report'
+          element={
+            <>
+              <PageTitle breadcrumbs={accountBreadCrumbs}>Fleet History Report</PageTitle>
+              <FaultEntryFleetHistoryReport />
             </>
           }
         />

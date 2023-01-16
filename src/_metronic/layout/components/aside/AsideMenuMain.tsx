@@ -47,8 +47,13 @@ export function AsideMenuMain() {
         <AsideMenuItemWithSub to='#' title='Fault' hasBullet={true}>
             
             <AsideMenuItem
-              to='/report/fault-entry-report'
-              title='All Fault'
+              to='/report/fault-summary-report'
+              title='Summary'
+              hasBullet={true}
+            />
+            <AsideMenuItem
+              to='/report/fleet-history-report'
+              title='Fleet History'
               hasBullet={true}
             />
             <AsideMenuItem
@@ -61,6 +66,7 @@ export function AsideMenuMain() {
               title='Pending'
               hasBullet={true}
             />
+            
           </AsideMenuItemWithSub>
           
           <AsideMenuItem
@@ -68,16 +74,12 @@ export function AsideMenuMain() {
             title='Fleet Schedule'
             hasBullet={true}
           />
-          <AsideMenuItem
+          {/* <AsideMenuItem
             to='/report/hourly-report'
             title='Hourly'
             hasBullet={true}
-          />
-          {/* <AsideMenuItem
-            to='app/production/components/report/weekly'
-            title='Weekly Schedule'
-            hasBullet={true}
           /> */}
+         
       </AsideMenuItemWithSub>
 
       <AsideMenuItemWithSub
@@ -94,8 +96,8 @@ export function AsideMenuMain() {
 
         <AsideMenuItemWithSub to='/setup/lube' title='Lube' hasBullet={true}>
           <AsideMenuItem to='/setup/compartment' title='Compartment' hasBullet={true} />
-          <AsideMenuItem to='/setup/oiltype' title='Brand' hasBullet={true} />
-          <AsideMenuItem to='/setup/oilgrade' title='Grade' hasBullet={true} />
+          <AsideMenuItem to='/setup/lube-brand' title='Brand' hasBullet={true} />
+          <AsideMenuItem to='/setup/lube-config' title='Lube Config' hasBullet={true} />
           <AsideMenuItem to='/setup/refill' title='Refill Type' hasBullet={true} />
         </AsideMenuItemWithSub>
       </AsideMenuItemWithSub>
