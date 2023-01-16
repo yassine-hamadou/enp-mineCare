@@ -670,7 +670,7 @@ const FaultTable = () => {
           <Form.Item name='DateTimereported' label='Time Reported' rules={[{required: true}]}>
             <DatePicker showTime />
           </Form.Item>
-          <Form.Item name='' label='Fault/Work Done details'>
+          <Form.Item name='' label='Fault details'>
             <TextArea />
           </Form.Item>
           <Form.Item name='mType' label='Maintenance Type' rules={[{required: true}]}>
