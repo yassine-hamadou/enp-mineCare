@@ -2,8 +2,9 @@ import {Button, Form, Input, Modal, Space, Table} from 'antd'
 import {useEffect, useState} from 'react'
 import {KTCard, KTCardBody, KTSVG} from '../../../../../../_metronic/helpers'
 import {Link, useNavigate, useParams} from 'react-router-dom'
-import { ENP_URL } from '../../../../../urls'
+import { ENP_URL, fetchGroups } from '../../../../../urls'
 import axios from 'axios'
+import { useQuery } from 'react-query'
 
 const ItemsPage = () => {
   const [gridData, setGridData] = useState([])
@@ -16,6 +17,9 @@ const ItemsPage = () => {
   // Modal functions
   const [isModalOpen, setIsModalOpen] = useState(false)
   const navigate = useNavigate();
+
+  let [itemName, setItemName] = useState<any>("")
+
   const showModal = () => {
     setIsModalOpen(true)
   }
@@ -90,13 +94,31 @@ const ItemsPage = () => {
   }
 
   useEffect(() => {
+    (async ()=>{
+      let res = await getItemName(params.id)
+      setItemName(res.name)
+    })();
     loadData()
+   
   }, [])
 
   const dataWithIndex = gridData.map((item: any, index) => ({
     ...item,
     key: index,
   }))
+
+  const {data: allGroups} = useQuery('groups', fetchGroups, {cacheTime: 60000000})
+
+  const getItemName= async (param:any) =>{
+
+    let newName=null
+  
+     const   itemTest = await allGroups?.data.find((item:any) =>
+      item.id.toString()===param
+    )
+     newName = await itemTest
+    return newName
+ }
   
   const dataByID = dataWithIndex.filter((section:any) =>{
     return section.groupId.toString() ===params.id
@@ -145,12 +167,9 @@ console.log(data)
     <KTCard>
       <KTCardBody className='py-4 '>
         <div className='table-responsive'>
-          {/* <Link to={'/setup/groups'}>
-            <span className='mb-3 btn btn-outline btn-outline-dashed btn-outline-primary btn-active-light-primary'>
-              Back to Groups
-            </span>
-          </Link> */}
-
+          <br></br>
+          <h3 style={{fontWeight:"bolder"}}>{itemName}</h3>
+          <br></br>
         <button className='mb-3 btn btn-outline btn-outline-dashed btn-outline-primary btn-active-light-primary' onClick={() => navigate(-1)}>Back Groups</button>
 
           <div className='d-flex justify-content-between'>

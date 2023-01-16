@@ -3,7 +3,8 @@ import {useEffect, useState} from 'react'
 import axios from 'axios'
 import {KTCardBody, KTSVG} from '../../../../../../_metronic/helpers'
 import {Link, useNavigate, useParams} from 'react-router-dom'
-import {ENP_URL} from '../../../../../urls'
+import {ENP_URL, fetchServices} from '../../../../../urls'
+import { useQuery } from 'react-query'
 
 const ServicesPage = () => {
   const [gridData, setGridData] = useState<any>([])
@@ -127,12 +128,8 @@ const ServicesPage = () => {
     return service.model ===routeParams.id
   });
 
-  const modelName = modeldData.filter((service:any) =>{
-    return service.txmodel ===routeParams.id
-  })
 
-  console.log(modelName)
-
+  const {data: allServices} = useQuery('services', fetchServices, {cacheTime: 60000000})
 
   const handleInputChange = (e: any) => {
     setSearchText(e.target.value)
@@ -190,8 +187,9 @@ const ServicesPage = () => {
               Back to Models
             </span>
           </Link> */}
+          <h3 style={{fontWeight:"bolder"}}>{routeParams.id}</h3>
+          <br></br>
           <button className='mb-3 btn btn-outline btn-outline-dashed btn-outline-primary btn-active-light-primary' onClick={() => navigate(-1)}>Back to Work Types</button>
-          <p>{routeParams.txmodel}</p>
           <div className='d-flex justify-content-between'>
             <Space style={{marginBottom: 16}}>
               <Input
