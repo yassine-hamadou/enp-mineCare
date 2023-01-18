@@ -1,12 +1,14 @@
-import { Divider, Empty, Form, Radio, RadioChangeEvent } from "antd";
+import { Divider, Empty, Radio, Form, Input } from "antd";
 import { useState } from "react";
 import { useForm } from "antd/es/form/Form";
-
+import React from "react";
 
 //pass props to the component
-const CheckListForm = (props: any) => {
+const CheckListForm = (props) => {
   console.log('props', props.sections)
-  const [value, setValue] = useState(0)
+  const [checkList, setCheckList] = useState({
+
+  });
   const [agree, setAgree] = useState(false)
   const checkboxHandler = () => {
     // if agree === true, it will be set to false
@@ -15,14 +17,32 @@ const CheckListForm = (props: any) => {
     // Don't miss the exclamation mark
   }
 
-  const onChange = (e: RadioChangeEvent) => {
+  const onChange = (e, itemName, groupName, propsSections) => {
     console.log('radio checked', e.target.value)
-    setValue(e.target.value)
+    console.log('itemName', itemName)
+    console.log('groupName', groupName)
+    console.log('propsSections', propsSections.name)
+    setCheckList({
+      ...checkList,
+      [propsSections.name]: {
+        [groupName]: {
+          [itemName]: e.target.value
+        }
+      }
+    })
+    console.log('checkList', {
+      [propsSections.name]: {
+        [groupName]: {
+          [itemName]: e.target.value
+        }
+      }
+    })
+    // setValue(e.target.value)
   }
 
   // When the button is clicked
   const btnHandler = () => {
-    console.log('form elements', checkListForm)
+    console.log('form elements', checkListForm.getFieldsValue())
   }
 
   const [checkListForm] = useForm()
@@ -38,10 +58,10 @@ const CheckListForm = (props: any) => {
         }}
       >
         <Form
-          form={checkListForm}
           id='kt_modal_add_plan_form'
           className='form'
           onFinish={btnHandler}
+          form={checkListForm}
           noValidate
         >
           {/* begin::Scroll */}
@@ -56,7 +76,7 @@ const CheckListForm = (props: any) => {
               Please read each label carefully and select the appropriate option
             </span>
           </div>
-          {props.sections.groups.map((group: any, index: any) => {
+          {props.sections.groups.map((group, index) => {
             return props.sections.groups.length > 0 ? (
               <>
                 <div>
@@ -66,9 +86,10 @@ const CheckListForm = (props: any) => {
                   </h2>
 
                 </div>
+                <Form.Item name={group.name}>
                 <div className='row mb-0'>
                   {/*map through the items*/}
-                  {group.items.length > 0 ? group.items.map((item: any, index: any) => {
+                  {group.items.length > 0 ? group.items.map((item, index) => {
                     return (
                       <div className='col-4 mb-7'>
                         <div className='form-control form-control-solid mb-3'>
@@ -77,7 +98,9 @@ const CheckListForm = (props: any) => {
                               {item.name ? item.name : null}
                             </label>
                           </div>
-                          <Radio.Group>
+                          <Radio.Group onChange={
+                            (e) => onChange(e, item.name, group.name, props.sections)
+                          }>
                             <Radio value={1}>Ok</Radio>
                             <Radio value={2}>Repair</Radio>
                           </Radio.Group>
@@ -99,6 +122,7 @@ const CheckListForm = (props: any) => {
                     </>
                   )}
                 </div>
+                </Form.Item>
               </>
             ) : (
               <>
