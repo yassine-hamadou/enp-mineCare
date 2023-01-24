@@ -1,4 +1,4 @@
-import { Tabs } from "antd";
+import { Empty, Tabs } from "antd";
 import { useParams } from "react-router-dom";
 import { useQueryClient } from "react-query";
 import { CheckListForm } from "./CheckListForm";
@@ -14,7 +14,7 @@ const TabsTest: React.FC = () => {
   //Get the service type name from the service type id
   const serviceType = AllServiceTypes?.data.find((s: any) => s.id === parseInt(serviceId))
   const sections = serviceType?.sections
-
+  console.log("sections", sections)
   const tabList = sections?.map((s: any, index: any) => {
     return {
       label: String(`${s.name}`).toUpperCase(),
@@ -23,7 +23,7 @@ const TabsTest: React.FC = () => {
     }
   })
 
-  return (
+  return sections?.length > 0 ? (
     <>
       <KTCard>
         <KTCardBody>
@@ -33,6 +33,19 @@ const TabsTest: React.FC = () => {
           />
         </KTCardBody>
       </KTCard>
+    </>
+  ) : (
+    <>
+      <Empty
+        image={Empty.PRESENTED_IMAGE_SIMPLE}
+        imageStyle={{
+          height: 60,
+        }}
+        description={
+          <span><b>No sections found. Kindly setup new sections for the above service type.</b></span>
+        }
+      >
+      </Empty>
     </>
   )
 }
