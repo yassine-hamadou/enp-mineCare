@@ -215,7 +215,6 @@ const HoursPage: React.FC = () => {
   }
 
   const columns: any = [
-    // {title: 'ID', dataIndex: 'id', key: 'id'},
     {title: 'Manufacturer', dataIndex: 'txmanf', key: 'txmanf'},
     {title: 'Model', dataIndex: 'txmodel', key: 'txmodel'},
     {

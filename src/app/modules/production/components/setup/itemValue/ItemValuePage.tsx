@@ -2,11 +2,11 @@ import {Button, Form, Input, Modal, Space, Table} from 'antd'
 import {useEffect, useState} from 'react'
 import {KTCard, KTCardBody, KTSVG} from '../../../../../../_metronic/helpers'
 import {Link, useNavigate, useParams} from 'react-router-dom'
-import { ENP_URL, fetchGroups } from '../../../../../urls'
+import { ENP_URL, fetchGroups, fetchItems } from '../../../../../urls'
 import axios from 'axios'
 import { useQuery } from 'react-query'
 
-const ItemsPage = () => {
+const ItemValuePage = () => {
   const [gridData, setGridData] = useState([])
   const [loading, setLoading] = useState(false)
   const [searchText, setSearchText] = useState('')
@@ -19,9 +19,10 @@ const ItemsPage = () => {
   const navigate = useNavigate();
 
   let [itemName, setItemName] = useState<any>("")
-  let [modelName, setModelName] = useState<any>("")
-  let [serviceName, setServiceName] = useState<any>("")
+  let [groupName, setGroupName] = useState<any>("")
   let [sectionName, setSectionName] = useState<any>("")
+  let [serviceName, setServiceName] = useState<any>("")
+  let [modelName, setModelName] = useState<any>("")
 
   const showModal = () => {
     setIsModalOpen(true)
@@ -37,7 +38,7 @@ const ItemsPage = () => {
   // Modal functions end
   const deleteData = async (element: any) => {
     try {
-      const response = await axios.delete(`${ENP_URL}/Items/${element.id}`)
+      const response = await axios.delete(`${ENP_URL}/ItemValue/${element.id}`)
       // update the local state so that react can refecth and re-render the table with the new data
       const newData = gridData.filter((item: any) => item.id !== element.id)
       setGridData(newData)
@@ -52,7 +53,7 @@ const ItemsPage = () => {
   }
   const columns: any = [
     {
-      title: 'Group Items',
+      title: 'Name',
       dataIndex: 'name',
       sorter: (a: any, b: any) => {
         if (a.name > b.name) {
@@ -70,9 +71,6 @@ const ItemsPage = () => {
       width: 100,
       render: (_: any, record: any) => (
         <Space size='middle'>
-          <Link to={`/setup/itemValue/${record.id}`}>
-            <span className='btn btn-light-info btn-sm'>Values</span>
-          </Link>
           <a href='#' className='btn btn-light-warning btn-sm'>
             Update
           </a>
@@ -90,7 +88,7 @@ const ItemsPage = () => {
   const loadData = async () => {
     setLoading(true)
     try {
-      const response = await axios.get(`${ENP_URL}/Items`)
+      const response = await axios.get(`${ENP_URL}/ItemValue`)
       setGridData(response.data)
       // setGridData(dataSource)
       setLoading(false)
@@ -106,15 +104,19 @@ const ItemsPage = () => {
     })();
     (async ()=>{
       let res = await getModel()
-      setModelName(res.section.service.model)
+      setGroupName(res.group.name)
     })();
     (async ()=>{
       let res = await getModel()
-      setServiceName(res.section.service.name)
+      setSectionName(res.group.section.name)
     })();
     (async ()=>{
       let res = await getModel()
-      setSectionName(res.section.name)
+      setServiceName(res.group.section.service.name)
+    })();
+    (async ()=>{
+      let res = await getModel()
+      setModelName(res.group.section.service.model)
     })();
     loadData()
    
@@ -125,29 +127,32 @@ const ItemsPage = () => {
     key: index,
   }))
 
-  const {data: allGroups} = useQuery('groups', fetchGroups, {cacheTime: 60000000})
+  const {data: allItems} = useQuery('items', fetchItems, {cacheTime: 60000000})
 
-  const getModel=  () =>{
-    let newName=null
-     const   itemTest =  allGroups?.data.find((item:any) =>
-      item.id.toString()===params.id
-    )
-     newName =  itemTest
-    return newName
- }
- console.log(getModel())
   const getItemName= async (param:any) =>{
 
     let newName=null
-     const   itemTest = await allGroups?.data.find((item:any) =>
+  
+     const   itemTest = await allItems?.data.find((item:any) =>
       item.id.toString()===param
     )
      newName = await itemTest
     return newName
  }
+
+ const getModel =  () =>{
+  let newName=null
+   const   itemTest =  allItems?.data.find((item:any) =>
+    item.id.toString()===params.id
+  )
+   newName =  itemTest
+  return newName
+}
+
+console.log(getModel())
   
-  const dataByID = dataWithIndex.filter((section:any) =>{
-    return section.groupId.toString() ===params.id
+  const dataByID = dataWithIndex.filter((item:any) =>{
+    return item.itemId.toString() ===params.id
   })
   console.log(dataByID)
   const handleInputChange = (e: any) => {
@@ -156,17 +161,17 @@ const ItemsPage = () => {
       loadData()
     }
   }
-  const url = `${ENP_URL}/Items`
+  const url = `${ENP_URL}/ItemValue`
   const onFinish = async (values: any) => {
     setSubmitLoading(true)
     const data = {
       name: values.name,
-      groupId: params.id,
+      itemId: params.id,
     }
-console.log(data)
+
     try {
       const response = await axios.post(url, data)
-      console.log(data)
+      // console.log(data)
       setSubmitLoading(false)
       form.resetFields()
       setIsModalOpen(false)
@@ -194,17 +199,22 @@ console.log(data)
       <KTCardBody className='py-4 '>
         <div className='table-responsive'>
           <br></br>
+          
           <h3 style={{fontWeight:"bolder"}}>
             {modelName}
             <span style={{color: "blue", fontSize:"22px", fontWeight:"normal"}}> &gt; </span> 
             {serviceName}
-            <span style={{color: "blue", fontSize:"22px", fontWeight:"normal"}}> &gt; </span> 
+            <span style={{color: "blue", fontSize:"22px", fontWeight:"normal"}}> &gt; </span>
             {sectionName}
-            <span style={{color: "blue", fontSize:"22px", fontWeight:"normal"}}> &gt; </span> 
-            {itemName}
+            <span style={{color: "blue", fontSize:"22px", fontWeight:"normal"}}> &gt; </span>
+            {groupName}
+            <span style={{color: "blue", fontSize:"22px", fontWeight:"normal"}}> &gt; </span>
+            {itemName} 
+            
+
             </h3>
           <br></br>
-        <button className='mb-3 btn btn-outline btn-outline-dashed btn-outline-primary btn-active-light-primary' onClick={() => navigate(-1)}>Back Groups</button>
+        <button className='mb-3 btn btn-outline btn-outline-dashed btn-outline-primary btn-active-light-primary' onClick={() => navigate(-1)}>Back Items</button>
 
           <div className='d-flex justify-content-between'>
             <Space style={{marginBottom: 16}}>
@@ -233,7 +243,7 @@ console.log(data)
           </div>
           <Table columns={columns} dataSource={dataByID} loading={loading} />
           <Modal
-            title='Add Items'
+            title='Add ItemValue'
             open={isModalOpen}
             onOk={handleOk}
             onCancel={handleCancel}
@@ -260,7 +270,7 @@ console.log(data)
               layout='horizontal'
               form={form}
               name='control-hooks'
-              title='Add items'
+              title='Add itemValue'
               onFinish={onFinish}
             >
               <Form.Item label='Name' name='name' rules={[{required: true}]}>
@@ -275,4 +285,4 @@ console.log(data)
   )
 }
 
-export {ItemsPage}
+export {ItemValuePage}

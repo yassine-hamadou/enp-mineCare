@@ -31,6 +31,7 @@ import FaultEntrySolvedReport from './components/report/fault/faultEntrySolved/F
 import FleetScheduleReport from './components/report/fleetSchedule/FleetScheduleReport'
 import { LubeConfig } from './components/setup/lubeConfig/LubeConfig'
 import FaultEntryFleetHistoryReport from './components/report/fault/faultFleetHistory/FaultEntryFleetHistoryReport'
+import { ItemValuePage } from './components/setup/itemValue/ItemValuePage'
 const accountBreadCrumbs: Array<PageLink> = []
 
 const ProductionPage: React.FC = () => {
@@ -362,6 +363,15 @@ const ProductionPage: React.FC = () => {
             <>
               <PageTitle breadcrumbs={accountBreadCrumbs}>Items </PageTitle>
               <ItemsPage />
+            </>
+          }
+        />
+        <Route
+          path='itemValue/:id'
+          element={
+            <>
+              <PageTitle breadcrumbs={accountBreadCrumbs}>ItemValue </PageTitle>
+              <ItemValuePage />
             </>
           }
         />
