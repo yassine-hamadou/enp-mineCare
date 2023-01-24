@@ -67,7 +67,7 @@ const EquipmentDetail = () => {
             }}
           >
             <KTSVG path='/media/icons/duotune/technology/teh005.svg' className='svg-icon-2' />
-            Start Work
+            PM
           </button>
         </Space>
       </div>

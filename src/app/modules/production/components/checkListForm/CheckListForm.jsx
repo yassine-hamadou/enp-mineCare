@@ -1,14 +1,12 @@
 import { Divider, Empty, Radio, Form, Input } from "antd";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "antd/es/form/Form";
 import React from "react";
 
 //pass props to the component
 const CheckListForm = (props) => {
   console.log('props', props.sections)
-  const [checkList, setCheckList] = useState({
-
-  });
+  const [checkList, setCheckList] = useState([]);
   const [agree, setAgree] = useState(false)
   const checkboxHandler = () => {
     // if agree === true, it will be set to false
@@ -18,28 +16,18 @@ const CheckListForm = (props) => {
   }
 
   const onChange = (e, itemName, groupName, propsSections) => {
-    console.log('radio checked', e.target.value)
-    console.log('itemName', itemName)
-    console.log('groupName', groupName)
-    console.log('propsSections', propsSections.name)
-    setCheckList({
-      ...checkList,
-      [propsSections.name]: {
-        [groupName]: {
-          [itemName]: e.target.value
-        }
-      }
-    })
-    console.log('checkList', {
-      [propsSections.name]: {
-        [groupName]: {
-          [itemName]: e.target.value
-        }
-      }
-    })
-    // setValue(e.target.value)
+    setCheckList(
+      [
+        ...checkList,
+        e.target.value
+      ]
+    )
   }
 
+  useEffect(() => {
+    console.log('checkList', checkList)
+    console.log('form elements', checkListForm.getFieldsValue())
+  }, [checkList])
   // When the button is clicked
   const btnHandler = () => {
     console.log('form elements', checkListForm.getFieldsValue())
@@ -87,41 +75,55 @@ const CheckListForm = (props) => {
 
                 </div>
                 <Form.Item name={group.name}>
-                <div className='row mb-0'>
-                  {/*map through the items*/}
-                  {group.items.length > 0 ? group.items.map((item, index) => {
-                    return (
-                      <div className='col-4 mb-7'>
-                        <div className='form-control form-control-solid mb-3'>
-                          <div>
-                            <label className='required fw-bold fs-6 mb-2'>
-                              {item.name ? item.name : null}
-                            </label>
-                          </div>
-                          <Radio.Group onChange={
-                            (e) => onChange(e, item.name, group.name, props.sections)
-                          }>
-                            <Radio value={1}>Ok</Radio>
-                            <Radio value={2}>Repair</Radio>
-                          </Radio.Group>
+                  <div className='row mb-0'>
+                    {/*map through the items*/}
+                    {group.items.length > 0 ? group.items.map((item, index) => {
+                      return (
+                        <div className='col-4 mb-7'>
+                          <label className='required fw-bold fs-6 mb-2'>
+                            {item.name ? item.name : null}
+                          </label>
+                          <select
+                            className='form-select form-control form-control-solid mb-3'
+                            onChange={
+                              (e) => onChange(e, item.name, group.name, props.sections)
+                            }
+                          >
+                            <option defaultValue='Select one option'>Select one option</option>
+                            <option value={JSON.stringify({
+                              [props.sections.name]: {
+                                [group.name]: {
+                                  [item.name]: 'Okkk'
+                                }
+                              }
+                            })}>Ok</option>
+                            <option value={
+                              JSON.stringify({
+                                [props.sections.name]: {
+                                  [group.name]: {
+                                    [item.name]: 'Repairrrr'
+                                  }
+                                }
+                              })
+                            }>Repair</option>
+                          </select>
                         </div>
-                      </div>
-                    )
-                  }) : (
-                    <>
-                      <Empty
-                        image={Empty.PRESENTED_IMAGE_SIMPLE}
-                        imageStyle={{
-                          height: 60,
-                        }}
-                        description={
-                          <span>No items found. Kindly setup new items for the checklist.</span>
-                        }
-                      >
-                      </Empty>
-                    </>
-                  )}
-                </div>
+                      )
+                    }) : (
+                      <>
+                        <Empty
+                          image={Empty.PRESENTED_IMAGE_SIMPLE}
+                          imageStyle={{
+                            height: 60,
+                          }}
+                          description={
+                            <span>No items found. Kindly setup new items for the checklist.</span>
+                          }
+                        >
+                        </Empty>
+                      </>
+                    )}
+                  </div>
                 </Form.Item>
               </>
             ) : (
@@ -212,4 +214,4 @@ const CheckListForm = (props) => {
   )
 }
 
-export {CheckListForm}
+export { CheckListForm }

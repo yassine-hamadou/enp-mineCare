@@ -28,7 +28,6 @@ const TabsTest: React.FC = () => {
       <KTCard>
         <KTCardBody>
           <Tabs
-            defaultActiveKey="1"
             items={tabList}
           />
         </KTCardBody>
