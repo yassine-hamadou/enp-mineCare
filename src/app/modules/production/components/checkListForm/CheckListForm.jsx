@@ -53,7 +53,6 @@ const CheckListForm = (props) => {
           noValidate
         >
           {/* begin::Scroll */}
-
           <div className='d-flex justify-content-center'>
             <h1>
               <strong>{String(`${props.sections.name}`).toUpperCase()}</strong>
@@ -64,7 +63,7 @@ const CheckListForm = (props) => {
               Please read each label carefully and select the appropriate option
             </span>
           </div>
-          {props.sections.groups.map((group, index) => {
+          {props.sections.groups.map((group) => {
             return props.sections.groups.length > 0 ? (
               <>
                 <div>
@@ -74,7 +73,7 @@ const CheckListForm = (props) => {
                   </h2>
 
                 </div>
-                <Form.Item name={group.name}>
+                <Form.Item name={props.sections.name}>
                   <div className='row mb-0'>
                     {/*map through the items*/}
                     {group.items.length > 0 ? group.items.map((item, index) => {
@@ -90,22 +89,25 @@ const CheckListForm = (props) => {
                             }
                           >
                             <option defaultValue='Select one option'>Select one option</option>
-                            <option value={JSON.stringify({
-                              [props.sections.name]: {
-                                [group.name]: {
-                                  [item.name]: 'Okkk'
-                                }
-                              }
-                            })}>Ok</option>
-                            <option value={
-                              JSON.stringify({
-                                [props.sections.name]: {
-                                  [group.name]: {
-                                    [item.name]: 'Repairrrr'
+                            {item.itemValues.length > 0 ? item.itemValues.map((itemValue, index) => {
+                              return (
+                                <option key={index} value={JSON.stringify({
+                                  [props.sections.name]: {
+                                    [group.name]: {
+                                      [item.name]: itemValue.name ? itemValue.name : 'Ok'
+                                    }
                                   }
-                                }
-                              })
-                            }>Repair</option>
+                                })}>{itemValue.name ? itemValue.name : 'Default Ok'}</option>
+                              )
+                            }) :
+                               <option key={index} value={JSON.stringify({
+                                  [props.sections.name]: {
+                                    [group.name]: {
+                                      [item.name]: 'Default Ok'
+                                    }
+                                  }
+                                })}>Default Ok</option>
+                            }
                           </select>
                         </div>
                       )
@@ -134,61 +136,6 @@ const CheckListForm = (props) => {
               </>
             )
           })}
-
-          {/*<div>*/}
-          {/*  <h3>*/}
-          {/*    <b>Check condition of all Cylinders</b>*/}
-          {/*  </h3>*/}
-          {/*  <Divider />*/}
-          {/*</div>*/}
-          {/* end::row */}
-          {/*<div className='row mb-4'>*/}
-          {/*  <div className='col-3'>*/}
-          {/*    <label className='required fw-bold fs-6 mb-2'>LH Hoist Cylinder & hoses</label>*/}
-          {/*    <select className='form-select form-control form-control-solid mb-3'>*/}
-          {/*      <option selected>Select one option</option>*/}
-          {/*      <option value='1'>Ok</option>*/}
-          {/*      <option value='2'>Chrome Damage</option>*/}
-          {/*      <option value='3'>Weeping</option>*/}
-          {/*      <option value='4'>Leaking</option>*/}
-          {/*      <option value='4'>Leaking & Chrome Damage</option>*/}
-          {/*    </select>*/}
-          {/*  </div>*/}
-          {/*  <div className='col-3'>*/}
-          {/*    <label className='required fw-bold fs-6 mb-2'>LH Steering Cylinder & hoses</label>*/}
-          {/*    <select className='form-select form-control form-control-solid mb-3'>*/}
-          {/*      <option selected>Select one option</option>*/}
-          {/*      <option value='1'>Ok</option>*/}
-          {/*      <option value='2'>Chrome Damage</option>*/}
-          {/*      <option value='3'>Weeping</option>*/}
-          {/*      <option value='4'>Leaking</option>*/}
-          {/*      <option value='4'>Leaking & Chrome Damage</option>*/}
-          {/*    </select>*/}
-          {/*  </div>*/}
-          {/*  <div className='col-3'>*/}
-          {/*    <label className='required fw-bold fs-6 mb-2'>RH Steering Cylinder & hoses</label>*/}
-          {/*    <select className='form-select form-control form-control-solid mb-3'>*/}
-          {/*      <option selected>Select one option</option>*/}
-          {/*      <option value='1'>Ok</option>*/}
-          {/*      <option value='2'>Chrome Damage</option>*/}
-          {/*      <option value='3'>Weeping</option>*/}
-          {/*      <option value='4'>Leaking</option>*/}
-          {/*      <option value='4'>Leaking & Chrome Damage</option>*/}
-          {/*    </select>*/}
-          {/*  </div>*/}
-          {/*  <div className='col-3'>*/}
-          {/*    <label className='required fw-bold fs-6 mb-2'>RH Hoist Cylinder & hoses</label>*/}
-          {/*    <select className='form-select form-control form-control-solid mb-3'>*/}
-          {/*      <option selected>Select one option</option>*/}
-          {/*      <option value='1'>Ok</option>*/}
-          {/*      <option value='2'>Chrome Damage</option>*/}
-          {/*      <option value='3'>Weeping</option>*/}
-          {/*      <option value='4'>Leaking</option>*/}
-          {/*      <option value='4'>Leaking & Chrome Damage</option>*/}
-          {/*    </select>*/}
-          {/*  </div>*/}
-          {/*</div>*/}
-          {/*<Divider dashed />*/}
 
           <div className='row mb-5'>
             <div className='mb-4'>
