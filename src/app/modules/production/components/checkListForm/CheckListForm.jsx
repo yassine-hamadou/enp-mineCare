@@ -51,6 +51,7 @@ const CheckListForm = (props) => {
           onFinish={btnHandler}
           form={checkListForm}
           noValidate
+          name={props.sections.name}
         >
           {/* begin::Scroll */}
           <div className='d-flex justify-content-center'>

@@ -12,7 +12,6 @@ import {ServicesPage} from './components/setup/service/ServicePage'
 import {GroupsPage} from './components/setup/groups/GroupsPage'
 import {ItemsPage} from './components/setup/items/ItemPage'
 import {SectionsPage} from './components/setup/sections/Sections'
-import {CheckListForm3} from './components/checkListForm/CheckListForm3'
 import {TabsTest} from './components/checkListForm/Tabs'
 import {LubePage} from './components/setup/lube/Lube'
 import {CompartmentPage} from './components/setup/compartment/Compartment'
@@ -297,15 +296,15 @@ const ProductionPage: React.FC = () => {
           </>
         }
       >
-        <Route
-          path='checkList'
-          element={
-            <>
-              <PageTitle breadcrumbs={accountBreadCrumbs}>Check List</PageTitle>
-              <CheckListForm3 />
-            </>
-          }
-        />
+        {/*<Route*/}
+        {/*  path='checkList'*/}
+        {/*  element={*/}
+        {/*    <>*/}
+        {/*      <PageTitle breadcrumbs={accountBreadCrumbs}>Check List</PageTitle>*/}
+        {/*      <CheckListForm3 />*/}
+        {/*    </>*/}
+        {/*  }*/}
+        {/*/>*/}
         <Route
           path='tabs'
           element={
