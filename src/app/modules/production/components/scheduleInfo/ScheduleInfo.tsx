@@ -149,7 +149,6 @@ export function ScheduleInfo() {
               </div>
             </div>
             {/* end::row */}
-            <Divider dashed />
           </Form>
         </KTCardBody>
       </KTCard>  {/*end::Card*/}

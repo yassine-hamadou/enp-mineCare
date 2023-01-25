@@ -57,6 +57,7 @@ const ProductionPage: React.FC = () => {
             <>
               <PageTitle breadcrumbs={accountBreadCrumbs}>Check List</PageTitle>
               <ScheduleInfo />
+              <br/>
               <Outlet />
             </>
           }

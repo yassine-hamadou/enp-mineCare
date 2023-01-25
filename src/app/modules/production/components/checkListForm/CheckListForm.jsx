@@ -40,9 +40,9 @@ const CheckListForm = (props) => {
       <div
         style={{
           backgroundColor: 'white',
-          padding: '20px',
-          borderRadius: '5px',
-          boxShadow: '2px 2px 15px rgba(0,0,0,0.08)',
+          // padding: '20px',
+          // borderRadius: '5px',
+          // boxShadow: '2px 2px 15px rgba(0,0,0,0.08)',
         }}
       >
         <Form
@@ -138,24 +138,24 @@ const CheckListForm = (props) => {
             )
           })}
 
-          <div className='row mb-5'>
-            <div className='mb-4'>
-              <input type='checkbox' id='agree' onChange={checkboxHandler} />
-              <label htmlFor='agree'>
-                I have completed <b>the above maintenance and inspections</b>
-              </label>
-            </div>
-            <div>
-              <button
-                disabled={!agree}
-                className='btn btn-primary'
-                data-kt-plans-modal-action='submit'
-                onClick={btnHandler}
-              >
-                Continue
-              </button>
-            </div>
-          </div>
+          {/*// <div className='row mb-5'>*/}
+          {/*//   <div className='mb-4'>*/}
+          {/*//     <input type='checkbox' id='agree' onChange={checkboxHandler} />*/}
+          {/*//     <label htmlFor='agree'>*/}
+          {/*//       I have completed <b>the above maintenance and inspections</b>*/}
+          {/*//     </label>*/}
+          {/*//   </div>*/}
+          {/*//   <div>*/}
+          {/*    <button*/}
+          {/*      disabled={!agree}*/}
+          {/*      className='btn btn-primary'*/}
+          {/*      data-kt-plans-modal-action='submit'*/}
+          {/*      onClick={btnHandler}*/}
+          {/*    >*/}
+          {/*      Continue*/}
+          {/*    </button>*/}
+          {/*  </div>*/}
+          {/*</div>*/}
         </Form>
       </div>
     </>

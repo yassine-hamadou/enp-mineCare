@@ -2,22 +2,9 @@ import { Empty, Button, message, Steps, theme } from "antd";
 import { useParams } from "react-router-dom";
 import { useQueryClient } from "react-query";
 import { KTCard, KTCardBody } from "../../../../../_metronic/helpers";
-import { CSSProperties, useState } from "react";
-import { CheckListForm } from "./CheckList";
-const steps = [
-  {
-    title: 'First',
-    content: 'First-content',
-  },
-  {
-    title: 'Second',
-    content: 'Second-content',
-  },
-  {
-    title: 'Last',
-    content: 'Last-content',
-  },
-];
+import React, { CSSProperties, useState } from "react";
+import { CheckListForm } from "./CheckListForm";
+
 
 const TabsTest: React.FC = () => {
   //Get the service type with useQueryClient
@@ -30,13 +17,12 @@ const TabsTest: React.FC = () => {
   const serviceType = AllServiceTypes?.data.find((s: any) => s.id === parseInt(serviceId))
   const sections = serviceType?.sections
   console.log("sections", sections)
-  // const tabList = sections?.map((s: any, index: any) => {
-  //   return {
-  //     label: String(`${s.name}`).toUpperCase(),
-  //     key: String(index),
-  //     children: <CheckListForm sections={s} />,
-  //   }
-  // })
+  const steps = sections?.map((s: any, index: any) => {
+    return {
+      title: String(`${s.name}`).toUpperCase(),
+      content: <CheckListForm sections={s} />,
+    }
+  })
 
 
 
@@ -48,18 +34,17 @@ const TabsTest: React.FC = () => {
   const prev = () => {
     setCurrent(current - 1);
   };
-  const items = steps.map((item) => ({
-    key: item.title,
-    title: item.title,
+  const items = steps.map((step: any) => ({
+    key: step.title,
   }));
   const contentStyle: CSSProperties = {
     lineHeight: '260px',
-    textAlign: 'center',
     color: token.colorTextTertiary,
-    backgroundColor: token.colorFillAlter,
-    borderRadius: token.borderRadiusLG,
-    border: `1px dashed ${token.colorBorder}`,
-    marginTop: 16,
+    // backgroundColor: token.colorFillAlter,
+    // borderRadius: token.borderRadiusLG,
+    // borderTop: `1px dashed ${token.colorBorder}`,
+    paddingTop: 20,
+    marginTop: 20,
   };
   return sections?.length > 0 ? (
     <>
