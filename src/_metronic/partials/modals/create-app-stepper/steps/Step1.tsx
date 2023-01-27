@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import {KTSVG} from '../../../../../_metronic/helpers'
+import {KTSVG} from "../../../../helpers"
 import {StepProps} from '../IAppModels'
 
 const Step1 = ({data, updateData, hasError}: StepProps) => {

@@ -91,7 +91,7 @@ const ServicesPage = () => {
   const loadData = async () => {
     setLoading(true)
     try {
-      // const response = await axios.get('https://cors-anywhere.herokuapp.com/http://208.117.44.15/SmWebApi/api/VmfaltsApi')
+      
       const response = await axios.get(`${ENP_URL}/Services`)
       setGridData(response.data)
       setLoading(false)
@@ -102,7 +102,7 @@ const ServicesPage = () => {
   const loadModel = async () => {
     setLoading(true)
     try {
-      // const response = await axios.get('https://cors-anywhere.herokuapp.com/http://208.117.44.15/SmWebApi/api/VmfaltsApi')
+      
       const response = await axios.get(`${ENP_URL}/VmmodlsApi`)
       setModelData(response.data)
       setLoading(false)
@@ -127,6 +127,8 @@ const ServicesPage = () => {
   const dataByID = dataWithIndex.filter((service:any) =>{
     return service.model ===routeParams.id
   });
+
+  console.log(dataByID)
 
 
   const {data: allServices} = useQuery('services', fetchServices, {cacheTime: 60000000})

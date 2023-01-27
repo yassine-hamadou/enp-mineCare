@@ -1,9 +1,6 @@
 import React from 'react'
 import {Navigate, Outlet, Route, Routes} from 'react-router-dom'
 import {PageLink, PageTitle} from '../../../_metronic/layout/core'
-import {FuelReportTable} from './components/report/fuel/CycleDetailsList'
-import {EquipmentTable} from './components/report/equipment/CycleDetailsList'
-import {StatisticsTable} from './components/report/activity/CycleDetailsList'
 import {ScheduleInfo} from './components/scheduleInfo/ScheduleInfo'
 import {EquipmentDetail} from './components/entries/equipment/EquipmentSchedule'
 import {WorkTypePage} from './components/setup/workType/WorkType'
@@ -15,7 +12,6 @@ import {ServicesPage} from './components/setup/service/ServicePage'
 import {GroupsPage} from './components/setup/groups/GroupsPage'
 import {ItemsPage} from './components/setup/items/ItemPage'
 import {SectionsPage} from './components/setup/sections/Sections'
-import {CheckListForm3} from './components/checkListForm/CheckListForm3'
 import {TabsTest} from './components/checkListForm/Tabs'
 import {LubePage} from './components/setup/lube/Lube'
 import {CompartmentPage} from './components/setup/compartment/Compartment'
@@ -31,6 +27,7 @@ import FaultEntrySolvedReport from './components/report/fault/faultEntrySolved/F
 import FleetScheduleReport from './components/report/fleetSchedule/FleetScheduleReport'
 import { LubeConfig } from './components/setup/lubeConfig/LubeConfig'
 import FaultEntryFleetHistoryReport from './components/report/fault/faultFleetHistory/FaultEntryFleetHistoryReport'
+import { ItemValuePage } from './components/setup/itemValue/ItemValuePage'
 const accountBreadCrumbs: Array<PageLink> = []
 
 const ProductionPage: React.FC = () => {
@@ -60,6 +57,7 @@ const ProductionPage: React.FC = () => {
             <>
               <PageTitle breadcrumbs={accountBreadCrumbs}>Check List</PageTitle>
               <ScheduleInfo />
+              <br/>
               <Outlet />
             </>
           }
@@ -299,15 +297,15 @@ const ProductionPage: React.FC = () => {
           </>
         }
       >
-        <Route
-          path='checkList'
-          element={
-            <>
-              <PageTitle breadcrumbs={accountBreadCrumbs}>Check List</PageTitle>
-              <CheckListForm3 />
-            </>
-          }
-        />
+        {/*<Route*/}
+        {/*  path='checkList'*/}
+        {/*  element={*/}
+        {/*    <>*/}
+        {/*      <PageTitle breadcrumbs={accountBreadCrumbs}>Check List</PageTitle>*/}
+        {/*      <CheckListForm3 />*/}
+        {/*    </>*/}
+        {/*  }*/}
+        {/*/>*/}
         <Route
           path='tabs'
           element={
@@ -362,6 +360,15 @@ const ProductionPage: React.FC = () => {
             <>
               <PageTitle breadcrumbs={accountBreadCrumbs}>Items </PageTitle>
               <ItemsPage />
+            </>
+          }
+        />
+        <Route
+          path='itemValue/:id'
+          element={
+            <>
+              <PageTitle breadcrumbs={accountBreadCrumbs}>ItemValue </PageTitle>
+              <ItemValuePage />
             </>
           }
         />

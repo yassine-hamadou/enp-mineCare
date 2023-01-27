@@ -47,3 +47,6 @@ export const fetchGroups= ()=>{
 export const fetchItems= ()=>{
     return axios.get(`${ENP_URL}/Items`)
 }
+export const fetchItemValue= ()=>{
+    return axios.get(`${ENP_URL}/ItemValue`)
+}

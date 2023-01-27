@@ -51,7 +51,7 @@ L10n.load({
 })
 
 const Calendar = ({chosenLocationIdFromDropdown}) => {
-  const [serviceTypeDropDownValues, setserviceTypeDropDownValues] = useState([])
+  // const [serviceTypeDropDownValues, setserviceTypeDropDownValues] = useState([])
   let scheduleObj
   let scheduleQueryClient = useQueryClient() // for refetching the schedules
   // React Query
@@ -420,6 +420,7 @@ const Calendar = ({chosenLocationIdFromDropdown}) => {
                   : schedulesData.data
               )
             }
+            currentView='Month'
             eventRendered={onEventRendered}
             editorTemplate={editorTemplate}
             actionBegin={onActionBegin}
@@ -430,7 +431,7 @@ const Calendar = ({chosenLocationIdFromDropdown}) => {
             //     footer: footerTemplate.bind(this)
             // }}
           >
-            <Inject services={[Day, Week, WorkWeek, Month, Agenda]} />
+            <Inject services={[Day, Week, Month, Agenda]} />
           </ScheduleComponent>
         </div>
       </div>

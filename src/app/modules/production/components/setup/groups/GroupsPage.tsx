@@ -16,6 +16,8 @@ const GroupsPage = () => {
   const [form] = Form.useForm()
   const [submitLoading, setSubmitLoading] = useState(false)
   let [itemName, setItemName] = useState<any>("")
+  let [modelName, setModelName] = useState<any>("")
+  let [sectionName, setSectionName] = useState<any>("")
 
   const params:any  = useParams();
   const {Option} = Select
@@ -128,6 +130,15 @@ const GroupsPage = () => {
       let res = await getItemName(params.id)
       setItemName(res.name)
     })();
+
+    (async ()=>{
+      let res = await getModel()
+      setSectionName(res.service.name)
+    })();
+    (async ()=>{
+      let res = await getModel()
+      setModelName(res.service.model)
+    })();
     loadData()
     loadSection()
   }, [])
@@ -144,16 +155,15 @@ const GroupsPage = () => {
   const {data: allSections} = useQuery('sections', fetchSections, {cacheTime: 60000000})
   const {data: allGroups} = useQuery('groups', fetchGroups, {cacheTime: 60000000})
 
-  // const getItemName= (param:any) => {
-
-  //   let newName=null
-  //   const  itemTest = allSections?.data.find((item:any) =>
-  //       item.id.toString()===param
-  //     )
-  //     newName = itemTest
-  
-  //     return setItemName(newName)
-  //  }
+  const getModel=  () =>{
+    let newName=null
+     const   itemTest =  allSections?.data.find((item:any) =>
+      item.id.toString()===params.id
+    )
+     newName =  itemTest
+    return newName
+ }
+ console.log(getModel())
 
   const handleInputChange = (e: any) => {
     setSearchText(e.target.value)
@@ -205,9 +215,13 @@ const GroupsPage = () => {
       }}
     >
       <KTCardBody className='py-4 '>
-    
         <div className='table-responsive'>  
-        <h3 style={{fontWeight:"bolder"}}>{itemName}</h3>
+        <h3 style={{fontWeight:"bolder"}}>
+          {modelName} 
+          <span style={{color: "blue", fontSize:"22px", fontWeight:"normal"}}> &gt; </span> 
+          {sectionName} <span style={{color: "blue", fontSize:"22px", fontWeight:"normal"}}> &gt; </span>  
+          {itemName}
+          </h3>
           <br></br>
         <button className='mb-3 btn btn-outline btn-outline-dashed btn-outline-primary btn-active-light-primary' onClick={() => navigate(-1)}>Back to Sections</button>
           <div className='d-flex justify-content-between'>

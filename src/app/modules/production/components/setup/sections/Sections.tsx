@@ -3,7 +3,6 @@ import {useEffect, useState} from 'react'
 import {KTCardBody, KTSVG} from '../../../../../../_metronic/helpers'
 // import { AddWorkTypeForm } from './AddWorkTypeForm'
 import {Link, useNavigate, useParams} from 'react-router-dom'
-import {AddSectionForm} from './AddSectionForm'
 import axios from 'axios'
 import {ENP_URL, fetchSections, fetchServices} from '../../../../../urls'
 import { useQuery } from 'react-query'
@@ -22,6 +21,7 @@ const SectionsPage = () => {
   const [searchText, setSearchText] = useState('')
   let [filteredData] = useState([])
   let [itemName, setItemName] = useState<any>("")
+  let [modelName, setModelName] = useState<any>("")
   const [form] = Form.useForm()
   const [submitLoading, setSubmitLoading] = useState(false)
 
@@ -127,7 +127,6 @@ const SectionsPage = () => {
   const dataByID = dataWithIndex.filter((section:any) =>{
     return section.serviceId.toString() ===params.id
   })
-  // console.log(dataByID)
 
 
   const {data: allServices} = useQuery('services', fetchServices, {cacheTime: 60000000})
@@ -145,6 +144,18 @@ const getItemName= async (param:any) =>{
     return newName
  }
 
+
+const getModel=  () =>{
+    let newName=null
+     const   itemTest =  allServices?.data.find((item:any) =>
+      item.id.toString()===params.id
+    )
+     newName =  itemTest
+    return newName
+ }
+
+ 
+
   const handleInputChange = (e: any) => {
     setSearchText(e.target.value)
     if (e.target.value === '') {
@@ -155,6 +166,11 @@ const getItemName= async (param:any) =>{
     (async ()=>{
       let res = await getItemName(params.id)
       setItemName(res.name)
+    })();
+
+    (async ()=>{
+      let res = await getModel()
+      setModelName(res.model)
     })();
 
     loadData()
@@ -204,7 +220,7 @@ const getItemName= async (param:any) =>{
       <KTCardBody className='py-4 '>
         <div className='table-responsive'>
           
-          <h3 style={{fontWeight:"bolder"}}>{itemName}</h3>
+          <h3 style={{fontWeight:"bolder"}}>{modelName} <span style={{color: "blue", fontSize:"22px", fontWeight:"normal"}}> &gt; </span>  {itemName}</h3>
           <br></br>
           <button className='mb-3 btn btn-outline btn-outline-dashed btn-outline-primary btn-active-light-primary' onClick={() => navigate(-1)}>Back to Services</button>
           <div className='d-flex justify-content-between'>
@@ -271,16 +287,6 @@ const getItemName= async (param:any) =>{
               <Form.Item label='Name' name='name' rules={[{required: true}]}>
                 <Input />
               </Form.Item>
-
-              {/* <Form.Item name='serviceId' label='Service'>
-                <Select placeholder='Select'>
-                  {serviceData.map((item: any) => (
-                    <Option key={item.id} value={item.id}>
-                      {item.name}
-                    </Option>
-                  ))}
-                </Select>
-              </Form.Item> */}
             </Form>
           </Modal>
         </div>
