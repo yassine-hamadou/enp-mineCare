@@ -157,7 +157,7 @@ const Calendar = ({chosenLocationIdFromDropdown}) => {
       })
       dropDownListObject.dataBind() // refresh the dropdown list
     }
-  function getFleetModel(e) {
+    function getFleetModel(e) {
     if (e.itemData) {
       const fleetModel = vmQuery.getQueryData('vmequps')?.data?.find((fleet) => fleet.fleetID.trimEnd() === e.itemData.value.trimEnd())?.modlName
       const serviceTypesOfSelectedModel = serviceTypes?.data?.filter((service) => service.model.trimEnd() === fleetModel.trimEnd())
