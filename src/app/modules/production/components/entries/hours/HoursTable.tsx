@@ -1,10 +1,9 @@
 import {Button, Input, TableColumnsType} from 'antd'
 import {Space, Table, Form} from 'antd'
-import axios from 'axios'
 import React, {useEffect, useState} from 'react'
 import { useQuery } from "react-query";
 import {KTSVG} from '../../../../../../_metronic/helpers'
-import {ENP_URL, fetchEquips, fetchHours, fetchModels} from '../../../../../urls'
+import {fetchEquips, fetchHours, fetchModels} from '../../../../../urls'
 
 interface DataType {
   key: React.Key
