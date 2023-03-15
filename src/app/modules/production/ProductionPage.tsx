@@ -70,7 +70,7 @@ const ProductionPage: React.FC = () => {
               </>
             }
           />
-          </ Route>
+        </ Route>
         <Route
           path='fault/*'
           element={
