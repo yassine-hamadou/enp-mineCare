@@ -25,7 +25,8 @@ export function AsideMenuMain() {
           <span className='menu-title'>{intl.formatMessage({id: 'MENU.DASHBOARD'})}</span>
         </Link>
       </div>
-
+      <AsideMenuItem to={'equipment-register'} title={'Equipment Register'} fontIcon='bi-archive'
+                     icon='/media/icons/duotune/general/gen012.svg' />
       <AsideMenuItemWithSub
         to='#'
         title='Entries'
@@ -35,7 +36,10 @@ export function AsideMenuMain() {
         <AsideMenuItem to='entries/schedule' hasBullet={true} title='Equipment Schedule' />
         <AsideMenuItem to='entries/fault' hasBullet={true} title='Fault' />
         <AsideMenuItem to='entries/hours' hasBullet={true} title='Hours' />
-        <AsideMenuItem to='/setup/lube' title='Lube' hasBullet={true} />
+        <AsideMenuItemWithSub to='#' title={'Changeout'} hasBullet={true}>
+          <AsideMenuItem to='/entries/changeout/lube' title='Lube' hasBullet={true} />
+          <AsideMenuItem to='/entries/changeout/get' title='GET' hasBullet={true} />
+    </AsideMenuItemWithSub>
       </AsideMenuItemWithSub>
 
       <AsideMenuItemWithSub
@@ -88,12 +92,15 @@ export function AsideMenuMain() {
         fontIcon='bi-archive'
         icon='/media/icons/duotune/coding/cod009.svg'
       >
+        <AsideMenuItemWithSub to='#' title='Equipment' hasBullet={true}>
+          <AsideMenuItem to='/setup/equipment/model-class' title='Model Class' hasBullet={true} />
+          <AsideMenuItem to='/setup/equipment/manufacturer' title='Manufacturer' hasBullet={true} />
+        </AsideMenuItemWithSub>
         <AsideMenuItem to='/setup/fleet' title='Fleet' hasBullet={true} />
         <AsideMenuItem to='/setup/down-type' title='Down Type' hasBullet={true} />
         <AsideMenuItem to='/setup/custodian' title='Custodian' hasBullet={true} />
         <AsideMenuItem to='/setup/location' title='Location' hasBullet={true} />
         <AsideMenuItem to='/setup/work-type' title='Work Type' hasBullet={true} />
-
         <AsideMenuItemWithSub to='/setup/lube' title='Lube' hasBullet={true}>
           <AsideMenuItem to='/setup/compartment' title='Compartment' hasBullet={true} />
           <AsideMenuItem to='/setup/lube-brand' title='Brand' hasBullet={true} />
