@@ -3,13 +3,30 @@ import {useEffect, useState} from 'react'
 import axios from 'axios'
 import {KTCard, KTCardBody, KTSVG} from '../../../../_metronic/helpers'
 import {ENP_URL} from '../../../urls'
-import {useQuery} from 'react-query'
+import {useQuery, useQueryClient} from 'react-query'
 
 const DashboardTable = () => {
   const [gridData, setGridData] = useState([])
   const [loading, setLoading] = useState(false)
   const [searchText, setSearchText] = useState('')
   let [filteredData] = useState([])
+
+
+  const {data: listOfequipment} = useQuery('listOfEquipment', () =>
+    axios.get(`${ENP_URL}/equipments`)
+  )
+
+  const {data: listOfequipmentModel} = useQuery('listOfEquipmentModel', () =>
+    axios.get(`${ENP_URL}/models`)
+  )
+
+  const {data: listOfequipmentManufacturer} = useQuery('listOfEquipmentManufacturer', () =>
+    axios.get(`${ENP_URL}/manufacturers`)
+  )
+
+  const {data: listOfFaults} = useQuery('listOfFaults', () =>
+    axios.get(`${ENP_URL}/faultentriesapi`)
+  )
 
   const columns: any = [
     // {
@@ -19,12 +36,14 @@ const DashboardTable = () => {
     // },
     {
       title: 'Equipment Manufacturer',
-      dataIndex: 'txmanf',
+      render: (apiData: any) => {
+        return getEquipmentManufacturer(apiData.manufacturerId)
+      },
       sorter: (a: any, b: any) => {
-        if (a.txmanf > b.txmanf) {
+        if (a.name > b.name) {
           return 1
         }
-        if (b.txmanf > a.txmanf) {
+        if (b.name > a.name) {
           return -1
         }
         return 0
@@ -32,12 +51,12 @@ const DashboardTable = () => {
     },
     {
       title: 'Model',
-      dataIndex: 'txmodel',
+      dataIndex: 'name',
       sorter: (a: any, b: any) => {
-        if (a.txmodel > b.txmodel) {
+        if (a.name > b.name) {
           return 1
         }
-        if (a.txmodel < b.txmodel) {
+        if (a.name < b.name) {
           return -1
         }
         return 0
@@ -45,50 +64,63 @@ const DashboardTable = () => {
     },
     {
       title: 'Number of Equipment',
-      sorter: (a: any, b: any) => a.vehicleNum - b.vehicleNum,
-      render: (row: any) => {
-        return countNumberOfEquipment(row.txmodel)
+      sorter: (a: any, b: any) => a.modelId - b.modelId,
+      render: (apiData: any) => {
+        return countNumberOfEquipment(apiData.modelId)
       },
     },
     {
       title: 'Number of Down Time (Last 30 Days)',
-      dataIndex: 'downTime',
-      sorter: (a: any, b: any) => a.downTime - b.downTime,
+      sorter: (a: any, b: any) => a.modelId - b.modelId,
+      render: (apiData: any) => {
+        return countNumberOfDownTime(apiData.modelId)
+      },
     },
     {
       title: 'Number of Hours',
-      dataIndex: 'numOfHrs',
+      //default data 0
       sorter: (a: any, b: any) => a.numOfHrs - b.numOfHrs,
+      render: (apiData: any) => {
+        return 0
+      }
     },
   ]
+  const queryClient = useQueryClient()
 
-  const loadData = async () => {
-    setLoading(true)
-    try {
-      const response = await axios.get(`${ENP_URL}/VmmodlsApi`)
-      setGridData(response.data)
-      setLoading(false)
-    } catch (error) {
-      console.log(error)
-    }
+  const getEquipmentManufacturer = (manufacturerId: any) => {
+   const manufacturer = listOfequipmentManufacturer?.data?.find((manufacturer: any) => manufacturer.manufacturerId === manufacturerId)
+    return manufacturer?.name
   }
-
-  useEffect(() => {
-    loadData()
-  }, [])
-
-  const {data: listOfequipment} = useQuery('listOfEquipment', () =>
-    axios.get(`${ENP_URL}/VmequpsApi`)
-  )
-  const countNumberOfEquipment = (model: any) => {
-    //count number of model
+  const countNumberOfEquipment = (modelId: any) => {
+    //count number of equipment
     let count = 0
-    listOfequipment?.data.forEach((item: any) => {
-      if (item.modlName === model) {
+    listOfequipment?.data.forEach((equipment: any) => {
+      if (equipment.modelId === modelId) {
         count++
       }
     })
     return count
+  }
+  const countNumberOfDownTime = (modelId: any) => {
+    //count number of down time from fault entries for this particular equipment
+    //@ts-ignore
+    const modelName = queryClient.getQueryData('listOfEquipmentModel')?.data?.find((model: any) => model.modelId == modelId).name
+    console.log("modelName", modelName)
+
+    let numberOfDowntime = 0
+    const faults = listOfFaults?.data?.forEach((fault: any) => {
+      console.log("fault.vmModel", fault.vmModel)
+      console.log('modelName', modelName)
+
+      // Triming these two fucking strings because they made me debug for 2hours without identifying what the hell
+      // was wrong with my code. I really know how those trailing space got stored in the databases like that. What a mess!
+      // Finally!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+      if (fault.vmModel.trimEnd() === modelName.trimEnd()) {
+        console.log('fault model ', fault.vmModel)
+        numberOfDowntime++
+      }
+    })
+    return numberOfDowntime
   }
 
   // @ts-ignore
@@ -104,7 +136,6 @@ const DashboardTable = () => {
   const handleInputChange = (e: any) => {
     setSearchText(e.target.value)
     if (e.target.value === '') {
-      loadData()
     }
   }
 
@@ -146,7 +177,7 @@ const DashboardTable = () => {
             </button>
           </Space>
         </div>
-        <Table columns={columns} dataSource={dataWithVehicleNum} bordered loading={loading} />
+        <Table columns={columns} dataSource={listOfequipmentModel?.data} bordered loading={loading} />
       </KTCardBody>
     </KTCard>
   )

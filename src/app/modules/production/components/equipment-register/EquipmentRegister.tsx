@@ -38,28 +38,42 @@ const EquipmentRegister = () => {
   const {manufacturerCode} = useParams();
   const columns = [
     {
-      title: 'Fleet ID',
+      title: 'Equipment ID',
       dataIndex: 'fleetId',
+      sorter: (a: any, b: any) => a.fleetId - b.fleetId,
     },
     {
       title: 'Serial Number',
-      dataIndex: 'serial'
+      dataIndex: 'serial',
+      sorter: (a: any, b: any) => a.serial - b.serial,
     },
     {
-      title: 'Manufacturer',
+      title: 'Manufactured Date',
       dataIndex: 'manufacturer',
+      sorter: (a: any, b: any) => a.manufacturer - b.manufacturer,
     },
     {
         title: 'Model',
         dataIndex: 'model',
+        sorter: (a: any, b: any) => a.model - b.model,
     },
     {
         title: 'Model Class',
         dataIndex: 'modelClass',
+        sorter: (a: any, b: any) => a.modelClass - b.modelClass,
     },
     {
         title: 'Description',
         dataIndex: 'description',
+        sorter: (a: any, b: any) => a.description - b.description,
+    },
+    {
+        title: 'Fixed Assets Code',
+        sorter: (a: any, b: any) => a.fixedAssetsCode - b.fixedAssetsCode,
+    },
+    {
+        title: 'Purchase Date',
+        sorter: (a: any, b: any) => a.purchaseDate - b.purchaseDate,
     },
     {
       title: 'Action',
@@ -94,30 +108,6 @@ const EquipmentRegister = () => {
   }
 
   return <>
-    {/*<Modal*/}
-    {/*  title='Add Equipment'*/}
-    {/*  open={isModalOpen}*/}
-    {/*  onCancel={handleCancel}*/}
-    {/*  closable={true}*/}
-    {/*  footer={[*/}
-    {/*    <Button key='back' onClick={handleCancel}>*/}
-    {/*      Cancel*/}
-    {/*    </Button>,*/}
-    {/*    <Button*/}
-    {/*      key='submit'*/}
-    {/*      type='primary'*/}
-    {/*      htmlType='submit'*/}
-    {/*      loading={submitLoading}*/}
-    {/*      onClick={() => {*/}
-    {/*        form.submit()*/}
-    {/*      }}*/}
-    {/*    >*/}
-    {/*      Submit*/}
-    {/*    </Button>,*/}
-    {/*  ]}*/}
-    {/*>*/}
-    {/*  */}
-    {/*</Modal>*/}
     <KTCard>
       <KTCardBody>
         <div className='d-flex justify-content-between'>
@@ -128,6 +118,9 @@ const EquipmentRegister = () => {
               type='text'
               allowClear
             />
+            <Button type='primary'>
+                Search
+            </Button>
           </Space>
           <Space style={{marginBottom: 16}}>
             <Link to={'add'}>

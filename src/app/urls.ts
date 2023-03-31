@@ -4,8 +4,8 @@ import axios from 'axios';
  */
 // export const ENP_URL = 'http://localhost:3001'
 // export const ENP_URL = 'https://cors-anywhere.herokuapp.com/http://208.117.44.15/SmWebApi/api'
-export const ENP_URL = 'http://208.117.44.15/SmWebApi/api'
-// export const ENP_URL = 'http://localhost:4192'
+// export const ENP_URL = 'http://208.117.44.15/SmWebApi/api'
+export const ENP_URL = 'https://localhost:7144/api'
 
 
 export const fetchEquips= ()=>{
