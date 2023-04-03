@@ -1,87 +1,109 @@
 import {Button, Form, Input, Modal, Space, Table} from "antd";
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {Link, useParams} from "react-router-dom";
 import {KTCard, KTCardBody, KTSVG} from "../../../../../_metronic/helpers";
+import {useQuery} from "react-query";
+import axios from "axios";
+import {ENP_URL} from "../../../../urls";
 
-
-
-const data = [
-    {
-        key: '001',
-        fleetId: '001',
-        manufacturer: 'Toyota',
-        model: '14HM',
-        serial: 'AXT334d',
-        modelClass: '14HM',
-        description: '14HM',
-    },
-    {
-        key: '002',
-        fleetId: '002',
-        manufacturer: 'Toyota',
-        model: '12HM',
-        serial: 'AX3FG',
-        modelClass: '12HM',
-        description: '12HM',
-    },
-    {
-        key: '003',
-        fleetId: '003',
-        manufacturer: 'Mercedes',
-        model: '14HM',
-        serial: 'GGDT3',
-        modelClass: '14HM',
-        description: '14HM',
-    }
-]
 const EquipmentRegister = () => {
   const {manufacturerCode} = useParams();
+
+  const {data: listOfEquipments, isLoading} = useQuery('equipments', () =>
+    axios.get(`${ENP_URL}/equipments`)
+  )
+
+  const {data: models} = useQuery('listOfEquipmentModel', () =>
+    axios.get(`${ENP_URL}/models`)
+  )
+
+  const {data: modelClasses} = useQuery('listOfModelClass', () => axios.get(`${ENP_URL}/modelClasses`))
   const columns = [
     {
       title: 'Equipment ID',
-      dataIndex: 'fleetId',
-      sorter: (a: any, b: any) => a.fleetId - b.fleetId,
+      dataIndex: 'equipmentId',
+      width: 200,
+      sorter: (a: any, b: any) => a.equipmentId - b.equipmentId,
     },
     {
       title: 'Serial Number',
-      dataIndex: 'serial',
-      sorter: (a: any, b: any) => a.serial - b.serial,
+      dataIndex: 'universalCode',
+      width: 200,
+      sorter: (a: any, b: any) => a.universalCode - b.universalCode,
+    },
+    {
+      title: 'Model Name',
+      dataIndex: 'model',
+      width: 200,
+      sorter: (a: any, b: any) => a.model - b.model,
+      render: (_: any, record: any) => {
+        function getModelName(record: any) {
+          console.log(models?.data)
+          return models?.data?.find((model: any) => model.modelId === record.modelId).name
+        }
+        return getModelName(record)
+      }
+    },
+    {
+      title: 'Model Class',
+      // dataIndex: 'modelClass',
+      width: 200,
+      sorter: (a: any, b: any) => a.modelClass - b.modelClass,
+      render: (record: any) => {
+        function getModelClass(record: any) {
+          const modelClassId = models?.data?.find((model: any) => model.modelId === record.modelId).modelClassId
+          console.log('modelClassId', modelClassId)
+          return modelClasses?.data.find((modelClass: any) => modelClass.modelClassId === modelClassId).name
+        }
+
+        return getModelClass(record)
+      }
+    },
+    {
+      title: 'Description',
+      dataIndex: 'description',
+      width: 200,
+      sorter: (a: any, b: any) => a.description - b.description,
     },
     {
       title: 'Manufactured Date',
-      dataIndex: 'manufacturer',
-      sorter: (a: any, b: any) => a.manufacturer - b.manufacturer,
-    },
-    {
-        title: 'Model',
-        dataIndex: 'model',
-        sorter: (a: any, b: any) => a.model - b.model,
-    },
-    {
-        title: 'Model Class',
-        dataIndex: 'modelClass',
-        sorter: (a: any, b: any) => a.modelClass - b.modelClass,
-    },
-    {
-        title: 'Description',
-        dataIndex: 'description',
-        sorter: (a: any, b: any) => a.description - b.description,
+      dataIndex: 'manufactureDate',
+        width: 200,
+      sorter: (a: any, b: any) => a.manufactureDate - b.manufactureDate,
     },
     {
         title: 'Fixed Assets Code',
+        dataIndex: 'facode',
+        width: 200,
         sorter: (a: any, b: any) => a.fixedAssetsCode - b.fixedAssetsCode,
     },
     {
-        title: 'Purchase Date',
-        sorter: (a: any, b: any) => a.purchaseDate - b.purchaseDate,
+      title: 'Purchase Date',
+      dataIndex: 'purchaseDate',
+        width: 200,
+      sorter: (a: any, b: any) => a.purchaseDate - b.purchaseDate,
+    },
+    {
+      title: 'End Of Life Date',
+      dataIndex: 'endOfLifeDate',
+      width: 200
+    },
+    {
+      title: 'Note',
+      dataIndex: 'note',
+      width: 200
     },
     {
       title: 'Action',
+      fixed: 'right',
+      width: 200,
       render: (_: any, record: any) => (
         <Space size='middle'>
-          <Button type='primary' ghost>
-            Update
-          </Button>
+            <Link to={`edit/${record.equipmentId}`}>
+                <Button type='primary' ghost>
+                Update
+              </Button>
+            </Link>
           <Button type='primary'>
             Details
           </Button>
@@ -92,12 +114,12 @@ const EquipmentRegister = () => {
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [submitLoading, setSubmitLoading] = useState(false);
+  const [gridData, setGridData] = useState()
   const [form] = Form.useForm();
 
     const handleCancel = () => {
         setIsModalOpen(false);
     }
-
 
   function onFinish() {
     setSubmitLoading(true);
@@ -106,6 +128,10 @@ const EquipmentRegister = () => {
       setIsModalOpen(false);
     }, 2000);
   }
+
+  useEffect(() => {
+    setGridData(listOfEquipments?.data)
+  }, [listOfEquipments?.data])
 
   return <>
     <KTCard>
@@ -132,9 +158,12 @@ const EquipmentRegister = () => {
           </Space>
         </div>
         <Table
+          // @ts-ignore
           columns={columns}
           bordered
-          dataSource={data}
+          dataSource={gridData}
+          loading={isLoading}
+          scroll={{x: 1500}}
         />
       </KTCardBody>
     </KTCard>

@@ -84,7 +84,7 @@ export function ScheduleInfo() {
                   type='text'
                   className='form-control form-control-solid'
                   name='fleetId'
-                  value={scheduleToworkOn?.fleetId ? scheduleToworkOn?.fleetId : 'Select Schedule'}
+                  value={scheduleToworkOn?.fleetId ? scheduleToworkOn?.fleetId : ''}
                   readOnly
                 />
               </div>
@@ -95,7 +95,7 @@ export function ScheduleInfo() {
                   className='form-control form-control-solid'
                   name='location'
                   value={
-                    scheduleToworkOn?.locationId ? scheduleToworkOn?.locationId : 'Select Schedule'
+                    scheduleToworkOn?.locationId ? scheduleToworkOn?.locationId : ''
                   }
                   readOnly
                 />
@@ -112,7 +112,7 @@ export function ScheduleInfo() {
                   value={
                     scheduleToworkOn?.timeStart
                       ? new Date(scheduleToworkOn?.timeStart).toUTCString()
-                      : 'Select Schedule'
+                      : ''
                   }
                   readOnly
                 />
@@ -126,7 +126,7 @@ export function ScheduleInfo() {
                   value={
                     scheduleToworkOn?.timeEnd
                       ? new Date(scheduleToworkOn?.timeEnd).toUTCString()
-                      : 'Select Schedule'
+                      : ''
                   }
                   readOnly
                 />
@@ -142,7 +142,7 @@ export function ScheduleInfo() {
                       ? serviceType?.data.find(
                           (service: any) => service.id === scheduleToworkOn?.serviceTypeId
                         )?.name
-                      : 'No Service Type'
+                      : ''
                   }
                   readOnly
                 />

@@ -31,7 +31,7 @@ import {
   localData,
   updateSchedule,
 } from './requests'
-import {message} from 'antd'
+import {message, Space, Spin} from 'antd'
 import { useRef, useState } from "react";
 
 /**
@@ -401,7 +401,7 @@ const Calendar = ({chosenLocationIdFromDropdown}) => {
   //     );
   // }
 
-  return (
+  return schedulesData !== undefined ? (
     <div className='schedule-control-section'>
       <div className='col-lg-12 control-section'>
         <div className='control-wrapper'>
@@ -436,6 +436,10 @@ const Calendar = ({chosenLocationIdFromDropdown}) => {
         </div>
       </div>
     </div>
+  ) : (
+      <Space size='middle'>
+        <Spin size='large' />
+      </Space>
   )
 }
 export {Calendar}

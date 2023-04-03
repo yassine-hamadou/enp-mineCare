@@ -33,6 +33,7 @@ import Manufacturer from "./components/setup/equipment/Manufacturer";
 import ModelsForManufacturer from "./components/setup/equipment/ModelsForManufacturer";
 import EquipmentRegister from "./components/equipment-register/EquipmentRegister";
 import AddEquipRegister from "./components/equipment-register/Add";
+import UpdateRegister from './components/equipment-register/UpdateRegister'
 const accountBreadCrumbs: Array<PageLink> = []
 
 const ProductionPage: React.FC = () => {
@@ -55,12 +56,21 @@ const ProductionPage: React.FC = () => {
         </>
         }
       />
+      <Route
+        path='add'
+        element={
+          <>
+            <PageTitle breadcrumbs={accountBreadCrumbs}>Add Equipment</PageTitle>
+            <AddEquipRegister />
+          </>
+        }
+      />
         <Route
-          path='add'
+          path='edit/:equipmentId'
           element={
             <>
-              <PageTitle breadcrumbs={accountBreadCrumbs}>Add Equipment</PageTitle>
-              <AddEquipRegister />
+                <PageTitle breadcrumbs={accountBreadCrumbs}>Update Equipment</PageTitle>
+                <UpdateRegister />
             </>
           }
         />
