@@ -32,7 +32,7 @@ import {
   updateSchedule,
 } from './requests'
 import {message, Space, Spin} from 'antd'
-import { useRef, useState } from "react";
+import React from "react";
 
 /**
  *  Schedule editor custom fields sample
@@ -228,11 +228,11 @@ const Calendar = ({chosenLocationIdFromDropdown}) => {
             </td>
           </tr>
           <tr>
-            <td className='e-textlabel'>Responsible</td>
+            <td className='e-textlabel'>Custodian</td>
             <td colSpan={4}>
               <DropDownListComponent
                 id='responsible'
-                placeholder='Responsible'
+                placeholder='Custodian'
                 data-name='responsible'
                 className='e-field'
                 style={{width: '100%'}}
@@ -437,9 +437,11 @@ const Calendar = ({chosenLocationIdFromDropdown}) => {
       </div>
     </div>
   ) : (
-      <Space size='middle'>
-        <Spin size='large' />
-      </Space>
+      <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
+        <Space size="middle">
+          <Spin size="large" />
+        </Space>
+      </div>
   )
 }
 export {Calendar}

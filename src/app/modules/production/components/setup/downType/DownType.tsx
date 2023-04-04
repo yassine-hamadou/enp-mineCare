@@ -13,7 +13,7 @@ const DownTypePage = () => {
   const columns: any = [
     {
       title: 'Code',
-      dataIndex: 'classCode',
+      dataIndex: 'faultCode',
       sorter: (a: any, b: any) => {
         if (a.classCode > b.classCode) {
           return 1
@@ -27,7 +27,7 @@ const DownTypePage = () => {
 
     {
       title: 'Name',
-      dataIndex: 'classDesc',
+      dataIndex: 'faultDesc',
       sorter: (a: any, b: any) => a.classDesc - b.classDesc,
     },
   ]
@@ -35,7 +35,7 @@ const DownTypePage = () => {
   const loadData = async () => {
     setLoading(true)
     try {
-      const response = await axios.get(`${ENP_URL}/VmclasApi`)
+      const response = await axios.get(`${ENP_URL}/vmfaltsapi`)
 
       setGridData(response.data)
       setLoading(false)

@@ -1,4 +1,6 @@
 import {
+  Avatar,
+  Badge,
   Button,
   DatePicker,
   Form,
@@ -21,6 +23,7 @@ import {ENP_URL} from '../../../../../urls'
 import {disableCursor, enableCursor} from '@fullcalendar/react'
 import {useMutation, useQuery, useQueryClient} from 'react-query'
 import {ResolutionTable} from '../resolution/ResolutionTable'
+import {PresetColorTypes} from "antd/es/_util/colors";
 
 export function dhm(t: any) {
   var cd = 24 * 60 * 60 * 1000,
@@ -542,6 +545,8 @@ const FaultTable = () => {
         : null
     )
   }
+  const faults = gridData.filter((fault: any) => fault.status === 0)
+  const solvedFaults = gridData.filter((fault: any) => fault.status === 1)
   return (
     <div
       style={{
@@ -555,7 +560,7 @@ const FaultTable = () => {
         defaultActiveKey='1'
         items={[
           {
-            label: `All Faults`,
+            label: <Badge count={faults.length}><span className='me-4'>All Faults</span></Badge>,
             key: '1',
             children: (
               <>
@@ -585,7 +590,7 @@ const FaultTable = () => {
                 </div>
                 <Table
                   columns={columns}
-                  dataSource={gridData.filter((fault: any) => fault.status === 0)}
+                  dataSource={faults}
                   bordered
                   loading={isSolveLoading ? isSolveLoading : loading}
                   rowKey={(record: any) => record.entryId}
@@ -594,7 +599,7 @@ const FaultTable = () => {
             ),
           },
           {
-            label: `Resolution`,
+            label: <Badge style={{ backgroundColor: '#52c41a' }} count={solvedFaults.length}><span className='me-4'>Resolved Faults</span></Badge>,
             key: '2',
             children: (
               <>

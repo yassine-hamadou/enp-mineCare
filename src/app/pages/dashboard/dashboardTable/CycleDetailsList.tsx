@@ -64,7 +64,7 @@ const DashboardTable = () => {
       },
     },
     {
-      title: 'Number of Equipment',
+      title: 'Equipment Count',
       sorter: (a: any, b: any) => a.modelId - b.modelId,
       render: (apiData: any) => {
         return countNumberOfEquipment(apiData.modelId)

@@ -8,7 +8,7 @@ import {ENP_URL} from '../../../../../urls'
 import {useQuery} from 'react-query'
 import {useState} from 'react'
 
-const EquipmentDetail = () => {
+function EquipmentSchedule() {
   let dropDownListObj: any
   const [chosenLocationIdFromDropdown, setChosenLocationIdFromDropdown] = useState(null)
   const navigate = useNavigate()
@@ -82,4 +82,4 @@ const EquipmentDetail = () => {
   )
 }
 
-export {EquipmentDetail}
+export default EquipmentSchedule

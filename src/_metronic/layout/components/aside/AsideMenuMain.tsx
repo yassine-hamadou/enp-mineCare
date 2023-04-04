@@ -42,50 +42,63 @@ export function AsideMenuMain() {
     </AsideMenuItemWithSub>
       </AsideMenuItemWithSub>
 
-      <AsideMenuItemWithSub
-        to='#'
-        title='Report'
-        fontIcon='bi-archive'
-        icon='/media/icons/duotune/general/gen028.svg'
-      >
-        <AsideMenuItemWithSub to='#' title='Fault' hasBullet={true}>
-            
-            <AsideMenuItem
-              to='/report/fault-summary-report'
-              title='Summary'
-              hasBullet={true}
-            />
-            <AsideMenuItem
-              to='/report/fleet-history-report'
-              title='Fleet History'
-              hasBullet={true}
-            />
-            <AsideMenuItem
-              to='/report/solved-report'
-              title='Solved'
-              hasBullet={true}
-            />
-            <AsideMenuItem
-              to='/report/pending-report'
-              title='Pending'
-              hasBullet={true}
-            />
-            
-          </AsideMenuItemWithSub>
-          
-          <AsideMenuItem
-            to='/report/fleetschedule-report'
-            title='Fleet Schedule'
-            hasBullet={true}
-          />
-          {/* <AsideMenuItem
-            to='/report/hourly-report'
-            title='Hourly'
-            hasBullet={true}
-          /> */}
-         
-      </AsideMenuItemWithSub>
-
+      {/*<AsideMenuItemWithSub*/}
+      {/*  to='#'*/}
+      {/*  title='Report'*/}
+      {/*  fontIcon='bi-archive'*/}
+      {/*  icon='/media/icons/duotune/general/gen028.svg'*/}
+      {/*>*/}
+      {/*  <AsideMenuItemWithSub to='#' title='Fault' hasBullet={true}>*/}
+      {/*      */}
+      {/*      <AsideMenuItem*/}
+      {/*        to='/report/fault-summary-report'*/}
+      {/*        title='Summary'*/}
+      {/*        hasBullet={true}*/}
+      {/*      />*/}
+      {/*      <AsideMenuItem*/}
+      {/*        to='/report/fleet-history-report'*/}
+      {/*        title='Fleet History'*/}
+      {/*        hasBullet={true}*/}
+      {/*      />*/}
+      {/*      <AsideMenuItem*/}
+      {/*        to='/report/solved-report'*/}
+      {/*        title='Solved'*/}
+      {/*        hasBullet={true}*/}
+      {/*      />*/}
+      {/*      <AsideMenuItem*/}
+      {/*        to='/report/pending-report'*/}
+      {/*        title='Pending'*/}
+      {/*        hasBullet={true}*/}
+      {/*      />*/}
+      {/*      */}
+      {/*    </AsideMenuItemWithSub>*/}
+      {/*  <AsideMenuItem*/}
+      {/*    to='/report/'*/}
+      {/*    title='Fleet Schedule'*/}
+      {/*    hasBullet={true}*/}
+      {/*  />*/}
+      {/*    <AsideMenuItem*/}
+      {/*      to='/report/daily-hme'*/}
+      {/*      title='Daily HME'*/}
+      {/*      hasBullet={true}*/}
+      {/*    />*/}
+      {/*  <AsideMenuItem*/}
+      {/*      to='/report/member-list'*/}
+      {/*      title='Member List'*/}
+      {/*      hasBullet={true}*/}
+      {/*    />*/}
+      {/*    <AsideMenuItem*/}
+      {/*      to='/report/CarperManufacturerReport'*/}
+      {/*      title='Number Of Carper Manufacturer'*/}
+      {/*      hasBullet={true}*/}
+      {/*    />*/}
+      {/*   */}
+      {/*</AsideMenuItemWithSub>*/}
+        <AsideMenuItem
+          to='/report/all'
+          title='Report'
+          icon='/media/icons/duotune/general/gen028.svg'
+        />
       <AsideMenuItemWithSub
         to='#'
         title='Setup'
@@ -100,7 +113,7 @@ export function AsideMenuMain() {
         <AsideMenuItem to='/setup/down-type' title='Down Type' hasBullet={true} />
         <AsideMenuItem to='/setup/custodian' title='Custodian' hasBullet={true} />
         <AsideMenuItem to='/setup/location' title='Location' hasBullet={true} />
-        <AsideMenuItem to='/setup/work-type' title='Work Type' hasBullet={true} />
+        <AsideMenuItem to='/setup/work-type' title='Service Type' hasBullet={true} />
         <AsideMenuItemWithSub to='/setup/lube' title='Lube' hasBullet={true}>
           <AsideMenuItem to='/setup/compartment' title='Compartment' hasBullet={true} />
           <AsideMenuItem to='/setup/lube-brand' title='Brand' hasBullet={true} />

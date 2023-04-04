@@ -1,8 +1,7 @@
-import React from 'react'
+import React, {lazy, Suspense} from 'react'
 import {Navigate, Outlet, Route, Routes} from 'react-router-dom'
 import {PageLink, PageTitle} from '../../../_metronic/layout/core'
 import {ScheduleInfo} from './components/scheduleInfo/ScheduleInfo'
-import {EquipmentDetail} from './components/entries/equipment/EquipmentSchedule'
 import {WorkTypePage} from './components/setup/workType/WorkType'
 import {DownTypePage} from './components/setup/downType/DownType'
 import {CustodianPage} from './components/setup/custodian/Custodian'
@@ -34,7 +33,14 @@ import ModelsForManufacturer from "./components/setup/equipment/ModelsForManufac
 import EquipmentRegister from "./components/equipment-register/EquipmentRegister";
 import AddEquipRegister from "./components/equipment-register/Add";
 import UpdateRegister from './components/equipment-register/UpdateRegister'
+import EquipmentSchedule from "./components/entries/equipment/EquipmentSchedule";
+import ReportNew from "./components/report/DailyHMEReport/DailyaHMEReport";
+import MemberListReport from "./components/report/Memberlist/MemberListReport";
+import NumberOfCarperManufacturerReport
+  from "./components/report/CarperManufacturerReport/NumberOfCarperManufacturerReport";
+import { AllReportPage } from './components/report/AllReportPage'
 const accountBreadCrumbs: Array<PageLink> = []
+
 
 const ProductionPage: React.FC = () => {
   return (
@@ -51,8 +57,8 @@ const ProductionPage: React.FC = () => {
         path=''
         element={
         <>
-        <PageTitle breadcrumbs={accountBreadCrumbs}>Equipment Register</PageTitle>
-        <EquipmentRegister />
+          <PageTitle breadcrumbs={accountBreadCrumbs}>Equipment Register</PageTitle>
+          <EquipmentRegister />
         </>
         }
       />
@@ -87,9 +93,9 @@ const ProductionPage: React.FC = () => {
           path='schedule'
           element={
             <>
-              <PageTitle breadcrumbs={accountBreadCrumbs}>Equipment Schedule</PageTitle>
-              {/*<Overview />*/}
-              <EquipmentDetail />
+                <PageTitle breadcrumbs={accountBreadCrumbs}>Equipment Schedule</PageTitle>
+                {/*<Overview />*/}
+                <EquipmentSchedule />
             </>
           }
         />
@@ -289,7 +295,7 @@ const ProductionPage: React.FC = () => {
           path='work-type'
           element={
             <>
-              <PageTitle breadcrumbs={accountBreadCrumbs}>All Work Types</PageTitle>
+              <PageTitle breadcrumbs={accountBreadCrumbs}>All Service Types</PageTitle>
               {/*<Overview />*/}
               <WorkTypePage />
             </>
@@ -308,11 +314,47 @@ const ProductionPage: React.FC = () => {
       >
         
         <Route
+          path='all'
+          element={
+            <>
+              <PageTitle breadcrumbs={accountBreadCrumbs}>All Reports</PageTitle>
+              <AllReportPage />
+            </>
+          }
+        />
+        <Route
           path='fault-summary-report'
           element={
             <>
               <PageTitle breadcrumbs={accountBreadCrumbs}>All Fault Report</PageTitle>
               <FaultEntryReport />
+            </>
+          }
+        />
+        <Route
+          path='daily-hme'
+          element={
+            <>
+              <PageTitle breadcrumbs={accountBreadCrumbs}>Daily HME Report</PageTitle>
+              <ReportNew />
+            </>
+          }
+        />
+        <Route
+          path='member-list'
+          element={
+            <>
+              <PageTitle breadcrumbs={accountBreadCrumbs}>Member List Report</PageTitle>
+                  <MemberListReport />
+            </>
+          }
+        />
+        <Route
+          path='CarperManufacturerReport'
+          element={
+            <>
+              <PageTitle breadcrumbs={accountBreadCrumbs}>Number Of Carper Manufacturer Report</PageTitle>
+                <NumberOfCarperManufacturerReport />
             </>
           }
         />

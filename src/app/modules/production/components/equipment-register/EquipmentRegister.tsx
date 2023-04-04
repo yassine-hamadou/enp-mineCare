@@ -22,20 +22,64 @@ const EquipmentRegister = () => {
     {
       title: 'Equipment ID',
       dataIndex: 'equipmentId',
-      width: 200,
-      sorter: (a: any, b: any) => a.equipmentId - b.equipmentId,
+      width: 135,
+      sorter: (a: any, b: any) => {
+        if (a.equipmentId > b.equipmentId) {
+          return 1
+        }
+        if (b.equipmentId > a.equipmentId) {
+            return -1
+        }
+        return 0
+      },
     },
     {
       title: 'Serial Number',
       dataIndex: 'universalCode',
+      width: 150,
+      sorter: (a: any, b: any) => {
+        if (a.universalCode > b.universalCode) {
+          return 1
+        }
+        if (b.universalCode > a.universalCode) {
+          return -1
+        }
+        return 0
+      },
+    },
+    {
+      title: 'Description',
+      dataIndex: 'description',
       width: 200,
-      sorter: (a: any, b: any) => a.universalCode - b.universalCode,
+      sorter: (a: any, b: any) => {
+        if (a.description > b.description) {
+          return 1
+        }
+        if (b.description > a.description) {
+          return -1
+        }
+        return 0
+      },
+    },
+    {
+      title: 'Manufacturer',
+      dataIndex: '',
+      width: 135,
+      sorter: (a: any, b: any) => a.equipmentId - b.equipmentId,
     },
     {
       title: 'Model Name',
       dataIndex: 'model',
-      width: 200,
-      sorter: (a: any, b: any) => a.model - b.model,
+      width: 150,
+      sorter: (a: any, b: any) => {
+        if (a.model > b.model) {
+          return 1
+        }
+        if (b.model > a.model) {
+          return -1
+        }
+        return 0
+      },
       render: (_: any, record: any) => {
         function getModelName(record: any) {
           console.log(models?.data)
@@ -60,27 +104,15 @@ const EquipmentRegister = () => {
       }
     },
     {
-      title: 'Description',
-      dataIndex: 'description',
-      width: 200,
-      sorter: (a: any, b: any) => a.description - b.description,
-    },
-    {
       title: 'Manufactured Date',
       dataIndex: 'manufactureDate',
         width: 200,
       sorter: (a: any, b: any) => a.manufactureDate - b.manufactureDate,
     },
     {
-        title: 'Fixed Assets Code',
-        dataIndex: 'facode',
-        width: 200,
-        sorter: (a: any, b: any) => a.fixedAssetsCode - b.fixedAssetsCode,
-    },
-    {
-      title: 'Purchase Date',
+      title: 'Purchased Date',
       dataIndex: 'purchaseDate',
-        width: 200,
+      width: 200,
       sorter: (a: any, b: any) => a.purchaseDate - b.purchaseDate,
     },
     {
@@ -88,6 +120,14 @@ const EquipmentRegister = () => {
       dataIndex: 'endOfLifeDate',
       width: 200
     },
+    {
+        title: 'Fixed Assets Code',
+        dataIndex: 'facode',
+        width: 200,
+        sorter: (a: any, b: any) => a.fixedAssetsCode - b.fixedAssetsCode,
+    },
+
+
     {
       title: 'Note',
       dataIndex: 'note',
