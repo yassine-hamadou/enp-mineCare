@@ -1,6 +1,6 @@
 import {useParams} from "react-router-dom";
 import {KTCard, KTCardBody} from "../../../../../_metronic/helpers";
-import {Button, Form, Input, Modal, Space, Table, Tabs} from "antd";
+import {Button, Form, Input, Modal, Select, Space, Table, Tabs} from "antd";
 import React, {useState} from "react";
 
 const UpdateRegister = () => {
@@ -8,10 +8,10 @@ const UpdateRegister = () => {
     let [form] = Form.useForm();
 
   let [showModal, setShowModal] = useState(false);
-  let columns: any = [
-    {
-        title: 'equipmentId',
-    },
+  const handleCancel = () => {
+    setShowModal(false);
+  }
+  let componentColumns: any = [
     {
         title: 'Serial Number',
     },
@@ -158,7 +158,7 @@ const UpdateRegister = () => {
                           <Form.Item name='Warranty Start Date' label='Warranty Start Date' rules={[ {required: true} ]}>
                             <Input
                               placeholder='Enter Warranty Start Date'
-                              type='text'
+                              type='date'
                               className='form-control form-control-solid'
                             />
                           </Form.Item>
@@ -169,7 +169,7 @@ const UpdateRegister = () => {
                           <Form.Item name='Warranty End Date' label='Warranty End Date' rules={[ {required: true} ]}>
                             <Input
                               placeholder='Enter Warranty End Date'
-                              type='text'
+                              type='date'
                               className='form-control form-control-solid'
                             />
                           </Form.Item>
@@ -187,11 +187,14 @@ const UpdateRegister = () => {
                       <div className='row mb-0'>
                         <div className='col-6 mb-7'>
                           <Form.Item name='Meter Type' label='Meter Type (Hours, Km)' rules={[ {required: true} ]}>
-                            <Input
-                              placeholder='Enter Meter Type'
-                              type='text'
-                              className='form-control form-control-solid'
-                            />
+                            <Select
+                                placeholder='Select Meter Type'
+                                className='form-control form-control-solid'
+                                style={{width: '100%'}}
+                            >
+                              <Select.Option value='Hours'>Hours</Select.Option>
+                              <Select.Option value='KiloMeter'>KiloMeter (Km)</Select.Option>
+                            </Select>
                           </Form.Item>
                         </div>
                       </div>
@@ -213,54 +216,20 @@ const UpdateRegister = () => {
                   <>
                     <div className='d-flex justify-content-between'>
                       <Space style={{ marginBottom: 16 }}>
-                        <Input.Search
-                            placeholder='Search Component'
-                            onSearch={value => console.log(value)}
-                            // style={{ width: 200 }}
-                        />
+                        {/*<Input.Search*/}
+                        {/*    placeholder='Search Component'*/}
+                        {/*    onSearch={value => console.log(value)}*/}
+                        {/*    // style={{ width: 200 }}*/}
+                        {/*/>*/}
                       </Space>
                       <Space style={{ marginBottom: 16 }}>
                         <Button type={"primary"} onClick={() => setShowModal(true)}>Add Component</Button>
                       </Space>
                     </div>
                     <Table
-                        columns={columns}
+                        columns={componentColumns}
                         // dataSource={data}
                     />
-                    <Modal
-                        title='Add Component'
-                        open={showModal}
-                        // onCancel={handleCancel}
-                        closable={true}
-                        footer={null}
-                    >
-                    <Form
-                      layout={'vertical'}
-                      // form={generalInfo}
-                      // onFinish={onfinish}
-                      labelCol={{span: 8}}
-                      wrapperCol={{span: 24}}
-                      title='Add Component'
-                    >
-                      <div className='row mb-0'>
-                        <div className='col-6 mb-7'>
-                          <Form.Item name='Component' label='Component' rules={[ {required: true} ]}>
-                            <Input
-                              placeholder='Enter Component'
-                              type='text'
-                              className='form-control form-control-solid'
-                            />
-                          </Form.Item>
-                        </div>
-                      </div>
-                      <Button
-                        type='primary'
-                        htmlType='submit'
-                      >
-                        Submit
-                      </Button>
-                    </Form>
-                    </Modal>
                   </>
                 ),
               },
@@ -285,42 +254,6 @@ const UpdateRegister = () => {
                       columns={metersColumns}
                       // dataSource={data}
                     />
-                    <Modal
-                      title='Add Component'
-                      open={showModal}
-                      // onCancel={handleCancel}
-                      closable={true}
-                      footer={null}
-                    >
-                      <Form
-                        name={'general-info'}
-                        layout={'vertical'}
-                        // form={generalInfo}
-                        // onFinish={onfinish}
-                        labelCol={{span: 8}}
-                        wrapperCol={{span: 24}}
-                        title='Add Meters'
-                      >
-                        <div className='row mb-0'>
-                          <div className='col-6 mb-7'>
-                            <Form.Item name='Meters' label='Meters' rules={[ {required: true} ]}>
-                              <Input
-                                placeholder='Enter Meters'
-                                type='text'
-                                className='form-control form-control-solid'
-                              />
-                            </Form.Item>
-                          </div>
-                        </div>
-                        <Button
-                          type='primary'
-                          htmlType='submit'
-                        >
-                          Submit
-                        </Button>
-                      </Form>
-                    </Modal>
-
                   </>
                 ),
               },
@@ -396,8 +329,53 @@ const UpdateRegister = () => {
               },
             ]}
           />
+          <Modal
+            title='Add Component'
+            open={showModal}
+            onCancel={handleCancel}
+            closable={true}
+            footer={null}
+          >
+            <Form
+              layout={'vertical'}
+              // form={generalInfo}
+              // onFinish={onfinish}
+              labelCol={{span: 8}}
+              wrapperCol={{span: 24}}
+              title='Add Component'
+            >
+              <Form.Item name='Serial Number' label='Serial Number' rules={[ {required: true} ]}>
+                <Input
+                  placeholder='Enter Serial Number'
+                  type='text'
+                  className='form-control form-control-solid'
+                />
+              </Form.Item>
+              <Form.Item name='Description' label='Description' rules={[ {required: true} ]}>
+                <Input
+                  placeholder='Enter Description'
+                  type='text'
+                  className='form-control form-control-solid'
+                />
+              </Form.Item>
+              <Form.Item name='Quantity' label='Quantity' rules={[ {required: true} ]}>
+                <Input
+                  placeholder='Enter Quantity'
+                  type='number'
+                  className='form-control form-control-solid'
+                />
+              </Form.Item>
+              <Button
+                type='primary'
+                htmlType='submit'
+              >
+                Submit
+              </Button>
+            </Form>
+          </Modal>
         </KTCardBody>
       </KTCard>
+
     </>
 }
 

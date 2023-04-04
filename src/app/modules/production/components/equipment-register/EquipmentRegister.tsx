@@ -18,7 +18,7 @@ const EquipmentRegister = () => {
   )
 
   const {data: modelClasses} = useQuery('listOfModelClass', () => axios.get(`${ENP_URL}/modelClasses`))
-  const columns = [
+  const  columns = [
     {
       title: 'Equipment ID',
       dataIndex: 'equipmentId',
@@ -34,7 +34,7 @@ const EquipmentRegister = () => {
       },
     },
     {
-      title: 'Serial Number',
+      title: 'Serial/Part Number',
       dataIndex: 'universalCode',
       width: 150,
       sorter: (a: any, b: any) => {
