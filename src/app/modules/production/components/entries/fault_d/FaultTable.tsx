@@ -19,11 +19,9 @@ import axios from 'axios'
 import React, {useEffect, useState} from 'react'
 import {v4 as uuidv4} from 'uuid'
 import {KTSVG} from '../../../../../../_metronic/helpers'
-import {ENP_URL} from '../../../../../urls'
-import {disableCursor, enableCursor} from '@fullcalendar/react'
+import {ENP_URL} from '../../../../../urls' 
 import {useMutation, useQuery, useQueryClient} from 'react-query'
 import {ResolutionTable} from '../resolution/ResolutionTable'
-import {PresetColorTypes} from "antd/es/_util/colors";
 
 export function dhm(t: any) {
   var cd = 24 * 60 * 60 * 1000,
@@ -601,7 +599,7 @@ const FaultTable = () => {
           {
             label: <Badge style={{ backgroundColor: '#52c41a' }} count={solvedFaults.length}><span className='me-4'>Resolved Faults</span></Badge>,
             key: '2',
-            children: (
+            children:(
               <>
                 <ResolutionTable />
               </>
