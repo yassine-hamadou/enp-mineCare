@@ -1,7 +1,7 @@
 import {Button, Input, TableColumnsType} from 'antd'
 import {Space, Table, Form} from 'antd'
 import React, {useEffect, useState} from 'react'
-import { useQuery } from "react-query";
+import {useQuery} from "react-query";
 import {KTSVG} from '../../../../../../_metronic/helpers'
 import {fetchEquips, fetchHours, fetchModels} from '../../../../../urls'
 
@@ -14,20 +14,6 @@ interface DataType {
   creator: string
   createdAt: string
 }
-
-// interface ExpandedDataType {
-//   // key: React.Key
-//   id: string
-//   date: string
-//   name: string
-//   pread: string
-//   cread: string
-// }
-
-const items = [
-  {key: '1', label: 'Action 1'},
-  {key: '2', label: 'Action 2'},
-]
 
 const HoursPage: React.FC = () => {
   const [searchText, setSearchText] = useState('')
@@ -46,8 +32,8 @@ const HoursPage: React.FC = () => {
     }
   }
 
-  const edit = (record:any & { key: React.Key }) => {
-    form.setFieldsValue({ name: '', age: '', address: '', ...record });
+  const edit = (record: any & { key: React.Key }) => {
+    form.setFieldsValue({name: '', age: '', address: '', ...record});
     setEditingKey(record.key);
   };
 
@@ -68,18 +54,18 @@ const HoursPage: React.FC = () => {
     // form.resetFields()
     setIsModalOpen(false)
   }
-  const {data:allHours} = useQuery('hours', fetchHours, {cacheTime:5000})
-  const {data:equipData} = useQuery('equip-count', fetchEquips, {cacheTime:5000})
-  const countNumberOfEquipment = (model: any) => {
-    //count number of model
-    let count = 0
-    equipData?.data.forEach((item: any) => {
-      if (item.modlName === model) {
-        count++
-      }
-    })
-    return count
-  }
+  const {data: allHours} = useQuery('hours', fetchHours, {cacheTime: 5000})
+  const {data: equipData} = useQuery('equip-count', fetchEquips, {cacheTime: 5000})
+  // const countNumberOfEquipment = (model: any) => {
+  //   //count number of model
+  //   let count = 0
+  //   equipData?.data.forEach((item: any) => {
+  //     if (item.modlName === model) {
+  //       count++
+  //     }
+  //   })
+  //   return count
+  // }
   // const getRelatedFleets = (model: any) => {
   //   //count number of model
   //   let count = null
@@ -91,21 +77,21 @@ const HoursPage: React.FC = () => {
   //   return count
   // }
 
-  
-  const expandedRowRender = () => {
-    
-    const columns= [
+
+  const ExpandedRowRender = () => {
+
+    const columns = [
       // {title: 'ID', dataIndex: 'id', key: 'id'},
       {title: 'FleetID', dataIndex: 'fleetId', key: 'fleetId'},
       {
         title: 'Date',
         dataIndex: 'date',
         key: 'date',
-        render: (text:any, record:any) => {
+        render: (text: any, record: any) => {
           if (editingRow === record) {
             return (
               <Form.Item name='date'>
-                <Input />
+                <Input/>
               </Form.Item>
             )
           } else {
@@ -134,11 +120,11 @@ const HoursPage: React.FC = () => {
         title: 'Cur. Reading',
         dataIndex: 'currentReading',
         key: 'currentReading',
-        render: (text:any, record:any) => {
+        render: (text: any, record: any) => {
           if (editingRow === record) {
             return (
               <Form.Item name='currentReading'>
-                <Input />
+                <Input/>
               </Form.Item>
             )
           } else {
@@ -150,7 +136,7 @@ const HoursPage: React.FC = () => {
         title: 'Action',
         dataIndex: 'operation',
         key: 'operation',
-        render: (_:any, record: any) => (
+        render: (_: any, record: any) => (
           <Space>
             <Button
               onClick={() => {
@@ -171,10 +157,10 @@ const HoursPage: React.FC = () => {
         ),
       },
     ]
-    const save =  (key:any) => {
+    const save = (key: any) => {
       try {
         const row = (form.validateFields());
-  
+
         const newData = [...allHours?.data];
         const index = newData.findIndex((item) => key === item.key);
         if (index > -1) {
@@ -194,10 +180,10 @@ const HoursPage: React.FC = () => {
         console.log('Validate Failed:', errInfo);
       }
     };
-    
-    let rowData:any =[...allHours?.data]
+
+    // let rowData: any = [...allHours?.data]
     const onDone = (values: any) => {
-      
+
       const updatedDataSource: any = [...allHours?.data]
       updatedDataSource.splice(editingRow, 1, {...values, id: editingRow})
       console.log(updatedDataSource)
@@ -208,30 +194,35 @@ const HoursPage: React.FC = () => {
 
     return (
       <Form form={form} onFinish={save}>
-        <Table columns={columns} rowKey="id" dataSource={allHours?.data} pagination={false} />
+        <Table columns={columns} dataSource={allHours?.data} pagination={false}/>
       </Form>
     )
   }
 
-  const columns: any = [
-    {
-      title: 'Manufacturer',
-      dataIndex: 'txmanf',
-      key: 'txmanf',
-      sorter: (a: any, b: any) => a.txmanf.localeCompare(b.txmanf)
-    },
-    {title: 'Model', dataIndex: 'txmodel', key: 'txmodel', sorter: (a: any, b: any) => a.txmodel.localeCompare(b.txmodel)},
-    {
-      title: 'Number of vehicles',
-      key:'txmodel',
-      sorter: (a: any, b: any) => a.txmodel.localeCompare(b.txmodel),
-      render: (row: any) => {
-        return countNumberOfEquipment(row.txmodel)
-      }
-    }
-  ]
- 
-  const {data:mainData} = useQuery('main-data', fetchModels, {cacheTime:5000})
+  // const columns: any = [
+  //   {
+  //     title: 'Manufacturer',
+  //     dataIndex: 'txmanf',
+  //     key: 'txmanf',
+  //     sorter: (a: any, b: any) => a.txmanf.localeCompare(b.txmanf)
+  //   },
+  //   {
+  //     title: 'Model',
+  //     dataIndex: 'txmodel',
+  //     key: 'txmodel',
+  //     sorter: (a: any, b: any) => a.txmodel.localeCompare(b.txmodel)
+  //   },
+  //   {
+  //     title: 'Number of vehicles',
+  //     key: 'txmodel',
+  //     sorter: (a: any, b: any) => a.txmodel.localeCompare(b.txmodel),
+  //     render: (row: any) => {
+  //       return countNumberOfEquipment(row.txmodel)
+  //     }
+  //   }
+  // ]
+
+  // const {data: mainData} = useQuery('main-data', fetchModels, {cacheTime: 5000})
 
   return (
     <>
@@ -256,18 +247,12 @@ const HoursPage: React.FC = () => {
           </Space>
           <Space style={{marginBottom: 16}}>
             <button type='button' className='btn btn-light-primary me-3'>
-              <KTSVG path='/media/icons/duotune/arrows/arr078.svg' className='svg-icon-2' />
+              <KTSVG path='/media/icons/duotune/arrows/arr078.svg' className='svg-icon-2'/>
               Export
             </button>
           </Space>
         </div>
-        <Table
-          columns={columns}
-          expandable={{expandedRowRender, defaultExpandedRowKeys: ['txmodl']}}
-          rowKey='txmodl'
-          loading={loading}
-          dataSource={mainData?.data}
-        />
+        <ExpandedRowRender/>
       </div>
     </>
   )

@@ -4,7 +4,7 @@ import ApexCharts, {ApexOptions} from 'apexcharts'
 import {getCSSVariableValue} from '../../../_metronic/assets/ts/_utils'
 import {useQuery} from "react-query";
 import axios from "axios";
-import { ENP_URL } from '../../urls';
+import {ENP_URL} from '../../urls';
 import {dataSource} from "devexpress-reporting/designer/controls/metadata/properties/metadata";
 
 type Props = {
@@ -13,9 +13,9 @@ type Props = {
   chartHeight: string
 }
 
-    const data: any = []
-    const categories: any = []
-    const monthArray = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+const data: any = []
+const categories: any = []
+const monthArray = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
 const BarChart: React.FC<Props> = ({className, chartColor, chartHeight}) => {
   const chartRef = useRef<HTMLDivElement | null>(null)
   const {mode} = useThemeMode()
@@ -32,8 +32,9 @@ const BarChart: React.FC<Props> = ({className, chartColor, chartHeight}) => {
   // })
 
 
-    console.log('data', data)
-    console.log('categories', categories)
+  console.log('data', data)
+  console.log('categories', categories)
+  console.log('slice', data.slice(-12))
   const chartOptions = (chartColor: string, chartHeight: string): ApexOptions => {
     const labelColor = getCSSVariableValue('--kt-gray-500')
     const borderColor = getCSSVariableValue('--kt-gray-200')
@@ -44,7 +45,7 @@ const BarChart: React.FC<Props> = ({className, chartColor, chartHeight}) => {
       series: [
         {
           name: 'Total',
-          data: data,
+          data: data?.slice(-12)
         },
       ],
       chart: {
@@ -74,7 +75,7 @@ const BarChart: React.FC<Props> = ({className, chartColor, chartHeight}) => {
         colors: ['transparent'],
       },
       xaxis: {
-        categories: categories,
+        categories: categories?.slice(-12),
         axisBorder: {
           show: false,
         },
@@ -168,7 +169,7 @@ const BarChart: React.FC<Props> = ({className, chartColor, chartHeight}) => {
       const monthString = month < 10 ? `0${month}` : month
       const dateString = `${year}-${monthString}`
       // setCategories([...categories, monthArray[new Date(dateString).getMonth()]])
-        categories.push(monthArray[new Date(dateString).getMonth()])
+      categories.push(monthArray[new Date(dateString).getMonth()])
       const faultDuringTheMonth = listOfFaults?.data.filter((item: any) => {
         if (item.status === 1 && item.downtime?.includes(dateString)) {
           return item
@@ -191,6 +192,7 @@ const BarChart: React.FC<Props> = ({className, chartColor, chartHeight}) => {
   }, [chartRef, mode])
   const todayDate = new Date()
   const lastDate = new Date()
+  lastDate.setMonth(todayDate.getMonth() - 11)
 
   return (
     <div className={`card ${className}`}>
@@ -201,7 +203,8 @@ const BarChart: React.FC<Props> = ({className, chartColor, chartHeight}) => {
           <div className='me-2'>
             <span className='fw-bold text-gray-800 d-block fs-3'>Monthly Downtime</span>
 
-            <span className='text-gray-400 fw-semibold'>{monthArray[todayDate.getMonth()]} {todayDate.getFullYear()} - {monthArray[lastDate.getMonth()]} {lastDate.getFullYear()}</span>
+            <span
+              className='text-gray-400 fw-semibold'><strong>{monthArray[todayDate.getMonth()]} {todayDate.getFullYear()}</strong> back to <strong>{monthArray[lastDate.getMonth()]} {lastDate.getFullYear()}</strong></span>
           </div>
 
           <div className={`fw-bold fs-3 text-${chartColor}`}>{
@@ -216,7 +219,6 @@ const BarChart: React.FC<Props> = ({className, chartColor, chartHeight}) => {
     </div>
   )
 }
-
 
 
 export {BarChart}

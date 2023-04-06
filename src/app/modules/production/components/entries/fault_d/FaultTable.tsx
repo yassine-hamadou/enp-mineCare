@@ -537,9 +537,9 @@ const FaultTable = () => {
     dataSource.map((item: any) =>
       item.fleetID === fleetChosen
         ? form.setFieldsValue({
-            model: item.modlName,
-            desc: item.modlClass,
-          })
+          model: item.modlName,
+          desc: item.modlClass,
+        })
         : null
     )
   }
@@ -573,15 +573,15 @@ const FaultTable = () => {
                   </Space>
                   <Space style={{marginBottom: 16}}>
                     <button type='button' className='btn btn-primary me-3' onClick={showModal}>
-                      <KTSVG path='/media/icons/duotune/arrows/arr075.svg' className='svg-icon-2' />
+                      <KTSVG path='/media/icons/duotune/arrows/arr075.svg' className='svg-icon-2'/>
                       Add
                     </button>
                     <button type='button' className='btn btn-light-primary me-3'>
-                      <KTSVG path='/media/icons/duotune/arrows/arr078.svg' className='svg-icon-2' />
+                      <KTSVG path='/media/icons/duotune/arrows/arr078.svg' className='svg-icon-2'/>
                       Upload
                     </button>
                     <button type='button' className='btn btn-light-primary me-3'>
-                      <KTSVG path='/media/icons/duotune/arrows/arr078.svg' className='svg-icon-2' />
+                      <KTSVG path='/media/icons/duotune/arrows/arr078.svg' className='svg-icon-2'/>
                       Export
                     </button>
                   </Space>
@@ -597,11 +597,11 @@ const FaultTable = () => {
             ),
           },
           {
-            label: <Badge style={{ backgroundColor: '#52c41a' }} count={solvedFaults.length}><span className='me-4'>Resolved Faults</span></Badge>,
+            label: <Badge style={{backgroundColor: '#52c41a'}} count={solvedFaults.length}><span className='me-4'>Resolved Faults</span></Badge>,
             key: '2',
-            children:(
+            children: (
               <>
-                <ResolutionTable />
+                <ResolutionTable/>
               </>
             ),
           },
@@ -650,13 +650,13 @@ const FaultTable = () => {
             </Select>
           </Form.Item>
           <Form.Item name='model' label='Model'>
-            <Input disabled style={{color: 'black'}} />
+            <Input disabled style={{color: 'black'}}/>
           </Form.Item>
           <Form.Item name='desc' label='Description'>
-            <Input disabled style={{color: 'black'}} />
+            <Input disabled style={{color: 'black'}}/>
           </Form.Item>
           <Form.Item name='hours' label='Fleet Hours' rules={[{required: true}]}>
-            <InputNumber min={1} />
+            <InputNumber min={1}/>
           </Form.Item>
           <Form.Item name='dType' label='Down Type' rules={[{required: true}]}>
             <Select placeholder='Select Down Type'>
@@ -668,13 +668,13 @@ const FaultTable = () => {
             </Select>
           </Form.Item>
           <Form.Item name='DateTime' label='Down Date and Time' rules={[{required: true}]}>
-            <DatePicker showTime />
+            <DatePicker showTime/>
           </Form.Item>
           <Form.Item name='DateTimereported' label='Time Reported' rules={[{required: true}]}>
-            <DatePicker showTime />
+            <DatePicker showTime/>
           </Form.Item>
           <Form.Item name='' label='Fault details'>
-            <TextArea />
+            <TextArea/>
           </Form.Item>
           <Form.Item name='mType' label='Maintenance Type' rules={[{required: true}]}>
             <Select placeholder='Maintenance Type'>
@@ -764,29 +764,29 @@ const FaultTable = () => {
           onFinish={onSolveFinish}
         >
           <Form.Item name='fleetId' label='fleetID'>
-            <Input disabled style={{color: 'black'}} />
+            <Input disabled style={{color: 'black'}}/>
           </Form.Item>
           <Form.Item name='entryId' label='EntryID' hidden>
-            <Input disabled />
+            <Input disabled/>
           </Form.Item>
           <Form.Item name='model' label='Model'>
-            <Input disabled style={{color: 'black'}} />
+            <Input disabled style={{color: 'black'}}/>
           </Form.Item>
           <Form.Item name='desc' label='Description'>
-            <Input disabled style={{color: 'black'}} />
+            <Input disabled style={{color: 'black'}}/>
           </Form.Item>
 
           <Form.Item name='dType' label='Down Type'>
-            <Input disabled style={{color: 'black'}} />
+            <Input disabled style={{color: 'black'}}/>
           </Form.Item>
           <Form.Item name='dtime' label='Duration'>
-            <Input disabled style={{color: 'black'}} />
+            <Input disabled style={{color: 'black'}}/>
           </Form.Item>
           <Form.Item label='Custodian' name='custodian'>
-            <Input disabled style={{color: 'black'}} />
+            <Input disabled style={{color: 'black'}}/>
           </Form.Item>
           <Form.Item label='Location' name='location'>
-            <Input disabled style={{color: 'black'}} />
+            <Input disabled style={{color: 'black'}}/>
           </Form.Item>
           <Form.Item
             name='resolutionType'
@@ -820,7 +820,7 @@ const FaultTable = () => {
             </Select>
           </Form.Item>
           <Form.Item name='comment' label='Comment' rules={[{required: true}]}>
-            <TextArea />
+            <TextArea/>
           </Form.Item>
           <Form.Item
             id='SolveTimeStarted'
@@ -828,7 +828,7 @@ const FaultTable = () => {
             label='Time Started'
             rules={[{required: true}]}
           >
-            <DatePicker showTime />
+            <DatePicker showTime/>
           </Form.Item>
           <Form.Item
             id='solveTimeCompleted'
@@ -836,7 +836,7 @@ const FaultTable = () => {
             label='Time Completed'
             rules={[{required: true}]}
           >
-            <DatePicker showTime />
+            <DatePicker showTime/>
           </Form.Item>
         </Form>
       </Modal>
@@ -875,16 +875,16 @@ const FaultTable = () => {
           onFinish={onDefectFinish}
         >
           <Form.Item name='fleetId' label='Fleet ID' rules={[{required: true}]}>
-            <Input disabled style={{color: 'black'}} />
+            <Input disabled style={{color: 'black'}}/>
           </Form.Item>
           <Form.Item name='Defect Date' label='Expected Date' rules={[{required: true}]}>
-            <DatePicker showTime />
+            <DatePicker showTime/>
           </Form.Item>
           <Form.Item name='Item' label='Item' rules={[{required: true}]}>
-            <TextArea />
+            <TextArea/>
           </Form.Item>
           <Form.Item name='Comment' label='Comment' rules={[{required: true}]}>
-            <TextArea />
+            <TextArea/>
           </Form.Item>
         </Form>
       </Modal>

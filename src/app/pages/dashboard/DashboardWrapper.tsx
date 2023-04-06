@@ -4,8 +4,9 @@ import {useIntl} from 'react-intl'
 import {PageTitle} from '../../../_metronic/layout/core'
 import {MixedWidget11} from '../../../_metronic/partials/widgets'
 import {DashboardTable} from './dashboardTable/CycleDetailsList'
-import { Column } from "@ant-design/plots";
+import {Column} from "@ant-design/plots";
 import {KTCard, KTCardBody} from "../../../_metronic/helpers";
+import {BarChart} from "./BarChart";
 
 const ColumnChart = () => {
   const data = [
@@ -40,52 +41,52 @@ const ColumnChart = () => {
     {
       type: 'Sep',
       sales: 38,
-    },{
+    }, {
       type: 'Oct',
       sales: 382,
-    },{
+    }, {
       type: 'Nov',
       sales: 38,
-    },{
+    }, {
       type: 'Dec',
       sales: 38,
-    },{
+    }, {
       type: 'Jan',
       sales: 38,
-    },{
+    }, {
       type: 'Feb',
       sales: 82,
-    },{
+    }, {
       type: 'Mar',
       sales: 40,
     },
   ];
   const config = {
-  data,
-  xField: 'type',
-  yField: 'sales',
-  label: {
-    position: 'middle',
-    style: {
-      fill: '#FFFFFF',
-      opacity: 0.6,
-    },
-  },
-  xAxis: {
+    data,
+    xField: 'type',
+    yField: 'sales',
     label: {
-      autoHide: true,
-      autoRotate: false,
+      position: 'middle',
+      style: {
+        fill: '#FFFFFF',
+        opacity: 0.6,
+      },
     },
-  },
-  meta: {
-    type: {
-      alias: '类别',
+    xAxis: {
+      label: {
+        autoHide: true,
+        autoRotate: false,
+      },
     },
-    sales: {
-      alias: '销售额',
+    meta: {
+      type: {
+        alias: '类别',
+      },
+      sales: {
+        alias: '销售额',
+      },
     },
-  },
-};
+  };
   //@ts-ignore
   return <Column {...config} />;
 }
@@ -95,11 +96,11 @@ const DashboardPage = () => (
     {/* begin::Row */}
     <div className='row gy-5 g-xl-8'>
       <div className='col-xl-6 card-xxl-stretch mb-5 mb-xl-8'>
-        <KTCard>
-          <KTCardBody>
-            <ColumnChart />
-            </KTCardBody>
-        </KTCard>
+        <BarChart
+          className='card-xxl-stretch mb-5 mb-xl-8'
+          chartColor='primary'
+          chartHeight='200px'
+        />
       </div>
       <div className='col-xl-6'>
         <MixedWidget11
@@ -113,7 +114,7 @@ const DashboardPage = () => (
     <div className='row gy-5 g-xl-8'>
       <div className='col-xl-12'>
         {/*card-xxl-stretch mb-5 mb-xl-8*/}
-        <DashboardTable />
+        <DashboardTable/>
       </div>
     </div>
   </>
@@ -124,7 +125,7 @@ const DashboardWrapper: FC = () => {
   return (
     <>
       <PageTitle breadcrumbs={[]}>{intl.formatMessage({id: 'MENU.DASHBOARD'})}</PageTitle>
-      <DashboardPage />
+      <DashboardPage/>
     </>
   )
 }

@@ -5,10 +5,10 @@ import {KTCard, KTCardBody, KTSVG} from '../../../../_metronic/helpers'
 import {ENP_URL} from '../../../urls'
 import {useQuery, useQueryClient} from 'react-query'
 import {BarChart} from "../BarChart";
+import {uuid} from "@ant-design/plots/es/utils";
 
 const DashboardTable = () => {
   const [gridData, setGridData] = useState([])
-  const [loading, setLoading] = useState(false)
   const [searchText, setSearchText] = useState('')
   let [filteredData] = useState([])
 
@@ -106,18 +106,18 @@ const DashboardTable = () => {
     //count number of down time from fault entries for this particular equipment
     //@ts-ignore
     const modelName = queryClient.getQueryData('listOfEquipmentModel')?.data?.find((model: any) => model.modelId == modelId).name
-    console.log("modelName", modelName)
+    // console.log("modelName", modelName)
 
     let numberOfDowntime = 0
-    const faults = listOfFaults?.data?.forEach((fault: any) => {
-      console.log("fault.vmModel", fault.vmModel)
-      console.log('modelName', modelName)
+    listOfFaults?.data?.forEach((fault: any) => {
+      // console.log("fault.vmModel", fault.vmModel)
+      // console.log('modelName', modelName)
 
       // Triming these two fucking strings because they made me debug for 2hours without identifying what the hell
       // was wrong with my code. I really know how those trailing space got stored in the databases like that. What a mess!
       // Finally!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
       if (fault.vmModel.trimEnd() === modelName.trimEnd()) {
-        console.log('fault model ', fault.vmModel)
+        // console.log('fault model ', fault.vmModel)
         numberOfDowntime++
       }
     })
@@ -181,7 +181,7 @@ const DashboardTable = () => {
                 </button>
               </Space>
             </div>
-            <Table columns={columns} dataSource={listOfequipmentModel?.data} bordered loading={isLoading} />
+            <Table columns={columns} dataSource={listOfequipmentModel?.data} bordered loading={isLoading} rowKey={() => uuid()} />
           </KTCardBody>
         </KTCard>
       </div>
@@ -253,7 +253,9 @@ const DashboardTable = () => {
                   return countNumberOfEquipment(apiData.modelId)
                 },
               },
-            ]} bordered loading={isLoading} />
+            ]} bordered loading={isLoading} rowKey={
+                () => uuid()
+            } />
           </KTCardBody>
         </KTCard>
       </div>

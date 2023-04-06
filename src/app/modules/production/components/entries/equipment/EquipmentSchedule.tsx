@@ -75,7 +75,7 @@ function EquipmentSchedule() {
       {/*Todo: Add a calendar component that takes a vehicle type as a prop and displays the vehicle's schedule*/}
       <KTCard>
         <KTCardBody className='py-5 px-2'>
-          <Calendar chosenLocationIdFromDropdown={chosenLocationIdFromDropdown} />
+        <Calendar chosenLocationIdFromDropdown={chosenLocationIdFromDropdown} />
         </KTCardBody>
       </KTCard>
     </>

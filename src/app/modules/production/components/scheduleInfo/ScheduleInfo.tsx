@@ -4,7 +4,7 @@ import axios from 'axios'
 import {ENP_URL} from '../../../../urls'
 import {KTCard, KTCardBody} from '../../../../../_metronic/helpers'
 import {useQuery} from 'react-query'
-import { useNavigate } from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 
 export function ScheduleInfo() {
   const navigate = useNavigate()
@@ -25,9 +25,8 @@ export function ScheduleInfo() {
     setScheduleToWorkOn(schedule)
     if (schedule?.serviceTypeId === null || schedule?.serviceTypeId === undefined) {
       navigate(`/entries/start-work`)
-    }
-    else {
-      navigate(`/entries/start-work/${schedule?.serviceTypeId}`)
+    } else {
+      navigate(`/entries/start-work/${schedule?.serviceTypeId}/${schedule?.fleetId}`)
     }
   }
 
@@ -55,7 +54,7 @@ export function ScheduleInfo() {
               </span>
             </div>
             <div>
-              <Divider />
+              <Divider/>
             </div>
             {/* end::row */}
             {/* start::row */}
@@ -140,8 +139,8 @@ export function ScheduleInfo() {
                   value={
                     scheduleToworkOn?.serviceTypeId
                       ? serviceType?.data.find(
-                          (service: any) => service.id === scheduleToworkOn?.serviceTypeId
-                        )?.name
+                        (service: any) => service.id === scheduleToworkOn?.serviceTypeId
+                      )?.name
                       : ''
                   }
                   readOnly
@@ -151,7 +150,7 @@ export function ScheduleInfo() {
             {/* end::row */}
           </Form>
         </KTCardBody>
-      </KTCard>  {/*end::Card*/}
+      </KTCard> {/*end::Card*/}
     </>
   )
 }

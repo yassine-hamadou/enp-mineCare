@@ -2,7 +2,7 @@ import {Button, Form, Input, Modal, Space, Table} from "antd";
 import React, {useEffect, useState} from "react";
 import {Link, useParams} from "react-router-dom";
 import {KTCard, KTCardBody, KTSVG} from "../../../../../_metronic/helpers";
-import {useQuery} from "react-query";
+import {useQuery, useQueryClient} from "react-query";
 import axios from "axios";
 import {ENP_URL} from "../../../../urls";
 
@@ -69,7 +69,7 @@ const EquipmentRegister = () => {
     },
     {
       title: 'Model Name',
-      dataIndex: 'model',
+      dataIndex: 'modelName',
       width: 150,
       sorter: (a: any, b: any) => {
         if (a.model > b.model) {
@@ -80,28 +80,29 @@ const EquipmentRegister = () => {
         }
         return 0
       },
-      render: (_: any, record: any) => {
-        function getModelName(record: any) {
-          console.log(models?.data)
-          return models?.data?.find((model: any) => model.modelId === record.modelId).name
-        }
-        return getModelName(record)
-      }
+      // render: (_: any, record: any) => {
+      //   function getModelName(record: any) {
+      //     console.log(models?.data)
+      //     return models?.data?.find((model: any) => model.modelId === record.modelId).name
+      //   }
+      //   return getModelName(record)
+      // }
     },
     {
       title: 'Model Class',
+      dataIndex: 'modelClassName',
       // dataIndex: 'modelClass',
       width: 200,
       sorter: (a: any, b: any) => a.modelClass - b.modelClass,
-      render: (record: any) => {
-        function getModelClass(record: any) {
-          const modelClassId = models?.data?.find((model: any) => model.modelId === record.modelId).modelClassId
-          console.log('modelClassId', modelClassId)
-          return modelClasses?.data.find((modelClass: any) => modelClass.modelClassId === modelClassId).name
-        }
-
-        return getModelClass(record)
-      }
+      // render: (record: any) => {
+      //   function getModelClass(record: any) {
+      //     const modelClassId = models?.data?.find((model: any) => model.modelId === record.modelId).modelClassId
+      //     console.log('modelClassId', modelClassId)
+      //     return modelClasses?.data.find((modelClass: any) => modelClass.modelClassId === modelClassId).name
+      //   }
+      //
+      //   return getModelClass(record)
+      // }
     },
     {
       title: 'Manufactured Date',
@@ -139,7 +140,26 @@ const EquipmentRegister = () => {
       width: 200,
       render: (_: any, record: any) => (
         <Space size='middle'>
-            <Link to={`edit/${record.equipmentId}`}>
+            <Link
+              state={
+                {
+                  equipmentId: record.equipmentId,
+                  serialNumber: record.serialNumber,
+                  description: record.description,
+                  manufactureDate: record.manufactureDate,
+                  purchaseDate: record.purchaseDate,
+                  endOfLifeDate: record.endOfLifeDate,
+                  fixedAssetsCode: record.facode,
+                  note: record.note,
+                  warrantyStartDate: record.warrantyStartDate,
+                  warrantyEndDate: record.warrantyEndDate,
+                  universalCode: record.universalCode,
+                  meterType: record.meterType,
+                  modelName: record.modelName,
+                  modelClassName: record.modelClassName,
+                }
+              }
+              to={`edit/${record.equipmentId}`}>
                 <Button type='primary' ghost>
                 Update
               </Button>
@@ -168,10 +188,21 @@ const EquipmentRegister = () => {
       setIsModalOpen(false);
     }, 2000);
   }
-
+  const listOfequipmentManufacturerQueryClient: any = useQueryClient()
   useEffect(() => {
-    setGridData(listOfEquipments?.data)
-  }, [listOfEquipments?.data])
+    const data = listOfEquipments?.data?.map((equipment: any) => {
+        const {name, manufacturerId, modelClassId} = models?.data?.find((model: any) => model.modelId === equipment.modelId)
+        const {name: modelClassName} = modelClasses?.data?.find((modelClass: any) => modelClass.modelClassId === modelClassId)
+      // const manufacturer = listOfequipmentManufacturerQueryClient?.getQueryData('listOfequipmentManufacturer')?.data?.find((manufacturer: any) => manufacturer.manufacturerId === manufacturerId)
+        return {
+            ...equipment,
+            modelName: name,
+            modelClassName: modelClassName,
+        }
+    })
+    console.log('data', data)
+    setGridData(data)
+  }, [listOfEquipments?.data, models?.data, modelClasses?.data])
 
   return <>
     <KTCard>
@@ -200,6 +231,7 @@ const EquipmentRegister = () => {
         <Table
           // @ts-ignore
           columns={columns}
+          rowKey={(record: any) => record.equipmentId}
           bordered
           dataSource={gridData}
           loading={isLoading}

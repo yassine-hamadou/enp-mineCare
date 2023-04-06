@@ -24,9 +24,9 @@ import FaultEntryReport from './components/report/fault/faultEntry/FaultEntryRep
 import FaultEntryPendingReport from './components/report/fault/faultEntryPending/FaultEntryPendingReport'
 import FaultEntrySolvedReport from './components/report/fault/faultEntrySolved/FaultEntrySolvedReport'
 import FleetScheduleReport from './components/report/fleetSchedule/FleetScheduleReport'
-import { LubeConfig } from './components/setup/lubeConfig/LubeConfig'
+import {LubeConfig} from './components/setup/lubeConfig/LubeConfig'
 import FaultEntryFleetHistoryReport from './components/report/fault/faultFleetHistory/FaultEntryFleetHistoryReport'
-import { ItemValuePage } from './components/setup/itemValue/ItemValuePage'
+import {ItemValuePage} from './components/setup/itemValue/ItemValuePage'
 import ModelClass from "./components/setup/equipment/ModelClass";
 import Manufacturer from "./components/setup/equipment/Manufacturer";
 import ModelsForManufacturer from "./components/setup/equipment/ModelsForManufacturer";
@@ -38,7 +38,9 @@ import ReportNew from "./components/report/DailyHMEReport/DailyaHMEReport";
 import MemberListReport from "./components/report/Memberlist/MemberListReport";
 import NumberOfCarperManufacturerReport
   from "./components/report/CarperManufacturerReport/NumberOfCarperManufacturerReport";
-import { AllReportPage } from './components/report/AllReportPage'
+import {AllReportPage} from './components/report/AllReportPage'
+import {CategorySetup} from './components/setup/category/CategorySetup'
+
 const accountBreadCrumbs: Array<PageLink> = []
 
 
@@ -48,35 +50,35 @@ const ProductionPage: React.FC = () => {
       <Route
         path='/equipment-register/*'
         element={
-            <>
-                <Outlet />
-            </>
-        }
-      >
-      <Route
-        path=''
-        element={
-        <>
-          <PageTitle breadcrumbs={accountBreadCrumbs}>Equipment Register</PageTitle>
-          <EquipmentRegister />
-        </>
-        }
-      />
-      <Route
-        path='add'
-        element={
           <>
-            <PageTitle breadcrumbs={accountBreadCrumbs}>Add Equipment</PageTitle>
-            <AddEquipRegister />
+            <Outlet/>
           </>
         }
-      />
+      >
+        <Route
+          path=''
+          element={
+            <>
+              <PageTitle breadcrumbs={accountBreadCrumbs}>Equipment Register</PageTitle>
+              <EquipmentRegister/>
+            </>
+          }
+        />
+        <Route
+          path='add'
+          element={
+            <>
+              <PageTitle breadcrumbs={accountBreadCrumbs}>Add Equipment</PageTitle>
+              <AddEquipRegister/>
+            </>
+          }
+        />
         <Route
           path='edit/:equipmentId'
           element={
             <>
-                <PageTitle breadcrumbs={accountBreadCrumbs}>Update Equipment</PageTitle>
-                <UpdateRegister />
+              <PageTitle breadcrumbs={accountBreadCrumbs}>Update Equipment</PageTitle>
+              <UpdateRegister/>
             </>
           }
         />
@@ -85,7 +87,7 @@ const ProductionPage: React.FC = () => {
         path='/entries/*'
         element={
           <>
-            <Outlet />
+            <Outlet/>
           </>
         }
       >
@@ -93,37 +95,37 @@ const ProductionPage: React.FC = () => {
           path='schedule'
           element={
             <>
-                <PageTitle breadcrumbs={accountBreadCrumbs}>Equipment Schedule</PageTitle>
-                {/*<Overview />*/}
-                <EquipmentSchedule />
+              <PageTitle breadcrumbs={accountBreadCrumbs}>Equipment Schedule</PageTitle>
+              {/*<Overview />*/}
+              <EquipmentSchedule/>
             </>
           }
         />
         <Route
-            path='changeout/lube'
-            element={
-                <>
-                    <PageTitle breadcrumbs={accountBreadCrumbs}>Change Out</PageTitle>
-                    <LubePage />
-                </>
-            }
+          path='changeout/lube'
+          element={
+            <>
+              <PageTitle breadcrumbs={accountBreadCrumbs}>Change Out</PageTitle>
+              <LubePage/>
+            </>
+          }
         />
         <Route
           path='start-work/*'
           element={
             <>
               <PageTitle breadcrumbs={accountBreadCrumbs}>Check List</PageTitle>
-              <ScheduleInfo />
+              <ScheduleInfo/>
               <br/>
-              <Outlet />
+              <Outlet/>
             </>
           }
         >
           <Route
-            path=':serviceId'
+            path=':serviceId/:fleetId'
             element={
               <>
-                <TabsTest />
+                <TabsTest/>
               </>
             }
           />
@@ -132,11 +134,16 @@ const ProductionPage: React.FC = () => {
           path='fault/*'
           element={
             <>
-              <Outlet />
+              <Outlet/>
             </>
           }
         >
-          <Route path='' element={<FaultTable />} />
+          <Route path='' element={
+            <>
+              <PageTitle breadcrumbs={accountBreadCrumbs}>Fault/Resolution</PageTitle>
+              <FaultTable/>
+            </>
+          }/>
         </Route>
         {/*<Route*/}
         {/*  path='resolution'*/}
@@ -152,54 +159,54 @@ const ProductionPage: React.FC = () => {
           element={
             <>
               <PageTitle breadcrumbs={accountBreadCrumbs}>All Hours</PageTitle>
-              <HoursPage />
+              <HoursPage/>
             </>
           }
         />
-        <Route index element={<Navigate to='/dashboard' />} />
+        <Route index element={<Navigate to='/dashboard'/>}/>
       </Route>
       <Route
         path='/setup/*'
         element={
           <>
             {/*<ProductionHeader />*/}
-            <Outlet />
+            <Outlet/>
           </>
         }
       >
         <Route
-            path='equipment/model-class'
-            element={
-                <>
-                    <PageTitle breadcrumbs={accountBreadCrumbs}>All Model Class</PageTitle>
-                    <ModelClass />
-                  {/*<FleetPage />*/}
-                </>
-            }
+          path='equipment/model-class'
+          element={
+            <>
+              <PageTitle breadcrumbs={accountBreadCrumbs}>All Model Class</PageTitle>
+              <ModelClass/>
+              {/*<FleetPage />*/}
+            </>
+          }
         />
         <Route
           path='equipment/manufacturer'
           element={
             <>
-              <Outlet />
+              <Outlet/>
             </>
           }
         >
-<Route path='' element={
-    <>
-  <PageTitle breadcrumbs={accountBreadCrumbs}>All Manufacturers</PageTitle>
-  <Manufacturer />
-  </>
-} />
+          <Route path='' element={
+            <>
+              <PageTitle breadcrumbs={accountBreadCrumbs}>All Manufacturers</PageTitle>
+              <Manufacturer/>
+            </>
+          }/>
           <Route
             path='model/:manufacturerCode'
             element={
-                <>
-                    <PageTitle breadcrumbs={accountBreadCrumbs}>Model</PageTitle>
-                    <ModelsForManufacturer />
-                </>
+              <>
+                <PageTitle breadcrumbs={accountBreadCrumbs}>Model</PageTitle>
+                <ModelsForManufacturer/>
+              </>
             }
-            />
+          />
         </Route>
         <Route
           path='fleet'
@@ -207,7 +214,7 @@ const ProductionPage: React.FC = () => {
             <>
               <PageTitle breadcrumbs={accountBreadCrumbs}>All Fleets</PageTitle>
               {/*<Overview />*/}
-              <FleetPage />
+              <FleetPage/>
             </>
           }
         />
@@ -217,7 +224,7 @@ const ProductionPage: React.FC = () => {
             <>
               <PageTitle breadcrumbs={accountBreadCrumbs}>All Down Type</PageTitle>
               {/*<Overview />*/}
-              <DownTypePage />
+              <DownTypePage/>
             </>
           }
         />
@@ -227,7 +234,7 @@ const ProductionPage: React.FC = () => {
             <>
               <PageTitle breadcrumbs={accountBreadCrumbs}>All Custodians</PageTitle>
               {/*<Overview />*/}
-              <CustodianPage />
+              <CustodianPage/>
             </>
           }
         />
@@ -237,7 +244,7 @@ const ProductionPage: React.FC = () => {
             <>
               <PageTitle breadcrumbs={accountBreadCrumbs}>All Locations</PageTitle>
               {/*<Overview />*/}
-              <LocationPage />
+              <LocationPage/>
             </>
           }
         />
@@ -247,7 +254,17 @@ const ProductionPage: React.FC = () => {
             <>
               <PageTitle breadcrumbs={accountBreadCrumbs}>All Compartment</PageTitle>
               {/*<Overview />*/}
-              <CompartmentPage />
+              <CompartmentPage/>
+            </>
+          }
+        />
+        <Route
+          path='category'
+          element={
+            <>
+              <PageTitle breadcrumbs={accountBreadCrumbs}>All Categories</PageTitle>
+              {/*<Overview />*/}
+              <CategorySetup/>
             </>
           }
         />
@@ -257,7 +274,7 @@ const ProductionPage: React.FC = () => {
             <>
               <PageTitle breadcrumbs={accountBreadCrumbs}>All RefillTypes</PageTitle>
               {/*<Overview />*/}
-              <RefillPage />
+              <RefillPage/>
             </>
           }
         />
@@ -267,7 +284,7 @@ const ProductionPage: React.FC = () => {
             <>
               <PageTitle breadcrumbs={accountBreadCrumbs}>All Grades</PageTitle>
               {/*<Overview />*/}
-              <OilGradePage />
+              <OilGradePage/>
             </>
           }
         />
@@ -277,7 +294,7 @@ const ProductionPage: React.FC = () => {
             <>
               <PageTitle breadcrumbs={accountBreadCrumbs}>Lube Configurations</PageTitle>
               {/*<Overview />*/}
-              <LubeConfig />
+              <LubeConfig/>
             </>
           }
         />
@@ -287,7 +304,7 @@ const ProductionPage: React.FC = () => {
             <>
               <PageTitle breadcrumbs={accountBreadCrumbs}>All Brands</PageTitle>
               {/*<Overview />*/}
-              <OilTypePage />
+              <OilTypePage/>
             </>
           }
         />
@@ -297,28 +314,28 @@ const ProductionPage: React.FC = () => {
             <>
               <PageTitle breadcrumbs={accountBreadCrumbs}>All Service Types</PageTitle>
               {/*<Overview />*/}
-              <WorkTypePage />
+              <WorkTypePage/>
             </>
           }
         />
-        <Route index element={<Navigate to='/dashboard' />} />
+        <Route index element={<Navigate to='/dashboard'/>}/>
       </Route>
       <Route
         path='/report/*'
         element={
           <>
             {/*<ProductionHeader />*/}
-            <Outlet />
+            <Outlet/>
           </>
         }
       >
-        
+
         <Route
           path='all'
           element={
             <>
               <PageTitle breadcrumbs={accountBreadCrumbs}>All Reports</PageTitle>
-              <AllReportPage />
+              <AllReportPage/>
             </>
           }
         />
@@ -327,7 +344,7 @@ const ProductionPage: React.FC = () => {
           element={
             <>
               <PageTitle breadcrumbs={accountBreadCrumbs}>All Fault Report</PageTitle>
-              <FaultEntryReport />
+              <FaultEntryReport/>
             </>
           }
         />
@@ -336,7 +353,7 @@ const ProductionPage: React.FC = () => {
           element={
             <>
               <PageTitle breadcrumbs={accountBreadCrumbs}>Daily HME Report</PageTitle>
-              <ReportNew />
+              <ReportNew/>
             </>
           }
         />
@@ -345,7 +362,7 @@ const ProductionPage: React.FC = () => {
           element={
             <>
               <PageTitle breadcrumbs={accountBreadCrumbs}>Member List Report</PageTitle>
-                  <MemberListReport />
+              <MemberListReport/>
             </>
           }
         />
@@ -354,7 +371,7 @@ const ProductionPage: React.FC = () => {
           element={
             <>
               <PageTitle breadcrumbs={accountBreadCrumbs}>Number Of Carper Manufacturer Report</PageTitle>
-                <NumberOfCarperManufacturerReport />
+              <NumberOfCarperManufacturerReport/>
             </>
           }
         />
@@ -363,7 +380,7 @@ const ProductionPage: React.FC = () => {
           element={
             <>
               <PageTitle breadcrumbs={accountBreadCrumbs}>Hourly Report</PageTitle>
-              <HourlyReport />
+              <HourlyReport/>
             </>
           }
         />
@@ -372,7 +389,7 @@ const ProductionPage: React.FC = () => {
           element={
             <>
               <PageTitle breadcrumbs={accountBreadCrumbs}>Solved Fault Report</PageTitle>
-              <FaultEntrySolvedReport />
+              <FaultEntrySolvedReport/>
             </>
           }
         />
@@ -381,7 +398,7 @@ const ProductionPage: React.FC = () => {
           element={
             <>
               <PageTitle breadcrumbs={accountBreadCrumbs}>Pending Fault Report</PageTitle>
-              <FaultEntryPendingReport />
+              <FaultEntryPendingReport/>
             </>
           }
         />
@@ -390,7 +407,7 @@ const ProductionPage: React.FC = () => {
           element={
             <>
               <PageTitle breadcrumbs={accountBreadCrumbs}>Fleet Schedule Report</PageTitle>
-              <FleetScheduleReport />
+              <FleetScheduleReport/>
             </>
           }
         />
@@ -399,18 +416,18 @@ const ProductionPage: React.FC = () => {
           element={
             <>
               <PageTitle breadcrumbs={accountBreadCrumbs}>Fleet History Report</PageTitle>
-              <FaultEntryFleetHistoryReport />
+              <FaultEntryFleetHistoryReport/>
             </>
           }
         />
-        <Route index element={<Navigate to='/dashboard' />} />
+        <Route index element={<Navigate to='/dashboard'/>}/>
       </Route>
       <Route
         path='/checkListForm/*'
         element={
           <>
             {/*<ProductionHeader />*/}
-            <Outlet />
+            <Outlet/>
           </>
         }
       >
@@ -428,19 +445,19 @@ const ProductionPage: React.FC = () => {
           element={
             <>
               <PageTitle breadcrumbs={accountBreadCrumbs}>Tabs</PageTitle>
-              <TabsTest />
+              <TabsTest/>
             </>
           }
         />
 
-        <Route index element={<Navigate to='/dashboard' />} />
+        <Route index element={<Navigate to='/dashboard'/>}/>
       </Route>
       <Route
         path='setup/*'
         element={
           <>
             {/*<ProductionHeader />*/}
-            <Outlet />
+            <Outlet/>
           </>
         }
       >
@@ -449,7 +466,7 @@ const ProductionPage: React.FC = () => {
           element={
             <>
               <PageTitle breadcrumbs={accountBreadCrumbs}>Services </PageTitle>
-              <ServicesPage />
+              <ServicesPage/>
             </>
           }
         />
@@ -458,7 +475,7 @@ const ProductionPage: React.FC = () => {
           element={
             <>
               <PageTitle breadcrumbs={accountBreadCrumbs}>Sections </PageTitle>
-              <SectionsPage />
+              <SectionsPage/>
             </>
           }
         />
@@ -467,7 +484,7 @@ const ProductionPage: React.FC = () => {
           element={
             <>
               <PageTitle breadcrumbs={accountBreadCrumbs}>Groups </PageTitle>
-              <GroupsPage />
+              <GroupsPage/>
             </>
           }
         />
@@ -476,7 +493,7 @@ const ProductionPage: React.FC = () => {
           element={
             <>
               <PageTitle breadcrumbs={accountBreadCrumbs}>Items </PageTitle>
-              <ItemsPage />
+              <ItemsPage/>
             </>
           }
         />
@@ -485,11 +502,11 @@ const ProductionPage: React.FC = () => {
           element={
             <>
               <PageTitle breadcrumbs={accountBreadCrumbs}>ItemValue </PageTitle>
-              <ItemValuePage />
+              <ItemValuePage/>
             </>
           }
         />
-        <Route index element={<Navigate to='/dashboard' />} />
+        <Route index element={<Navigate to='/dashboard'/>}/>
       </Route>
     </Routes>
   )
