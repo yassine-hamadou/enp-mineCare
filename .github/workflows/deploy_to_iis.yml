@@ -14,17 +14,11 @@ jobs:
         with:
           node-version: '18.x'
 
-      - name: Install yarn
-        run: npm install --global yarn
-
       - name: Install dependencies
-        run: yarn install
-
-      - name: Yarn version
-        run: yarn --version
+        run: npm install
 
       - name: Build
-        run: yarn run build
+        run: npm run build
 
       - name: GitHub Actions WebDeploy
         uses: cschleiden/webdeploy-action@v1.1.0
