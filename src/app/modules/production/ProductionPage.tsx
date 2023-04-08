@@ -62,6 +62,7 @@ const ProductionPage: React.FC = () => {
             <>
               <PageTitle breadcrumbs={accountBreadCrumbs}>Equipment Register</PageTitle>
               <EquipmentRegister/>
+              {/*dfs*/}
             </>
           }
         />
