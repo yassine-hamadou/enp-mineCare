@@ -26,8 +26,8 @@ jobs:
       - name: Build
         run: yarn run build
 
-      - name: Deploy
-        uses: SamKirkland/IIS-web-app-deploy@v2
+      - name: GitHub Actions WebDeploy
+        uses: cschleiden/webdeploy-action@v1.1.0
         with:
           server: ${{ secrets.IIS_SERVER }}
           siteName: 'mine-care'
