@@ -7,35 +7,35 @@ import "../../../../../../../node_modules/devexpress-reporting/dist/css/dx-webdo
 import "../../../../../../../node_modules/@devexpress/analytics-core/dist/css/dx-analytics.common.css";
 
 class ReportViewer extends React.Component {
-  constructor(props) {
-    super(props);
-    this.reportUrl = ko.observable("Daily_HME_KPIReport");
-    this.requestOptions = {
-      host: "http://208.117.44.15/serverside/",
-      invokeAction: "DXXRDV"
-    };
-  }
+    constructor(props) {
+        super(props);
+        this.reportUrl = ko.observable("ServiceTypeReport");
+        this.requestOptions = {
+            host: "http://208.117.44.15/serverside/",
+            invokeAction: "DXXRDV"
+        };
+    }
 
-  render() {
-    return (<div ref="viewer" data-bind="dxReportViewer: $data"></div>);
-  }
+    render() {
+        return (<div ref="viewer" data-bind="dxReportViewer: $data"></div>);
+    }
 
-  componentDidMount() {
-    ko.applyBindings({
-      reportUrl: this.reportUrl,
-      requestOptions: this.requestOptions
-    }, this.refs.viewer);
-  }
+    componentDidMount() {
+        ko.applyBindings({
+            reportUrl: this.reportUrl,
+            requestOptions: this.requestOptions
+        }, this.refs.viewer);
+    }
 
-  componentWillUnmount() {
-    ko.cleanNode(this.refs.viewer);
-  }
+    componentWillUnmount() {
+        ko.cleanNode(this.refs.viewer);
+    }
 };
 
 function ServiceTypeReport() {
-  return (<div style={{width: "100%", height: "1000px"}}>
-    <ReportViewer/>
-  </div>);
+    return (<div style={{width: "100%", height: "1000px"}}>
+        <ReportViewer/>
+    </div>);
 }
 
 export default ServiceTypeReport;

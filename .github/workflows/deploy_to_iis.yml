@@ -1,0 +1,38 @@
+name: Deploy to IIS
+
+on: [ push ]
+
+jobs:
+  build-and-deploy:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18.x'
+
+      - name: Install yarn
+        run: npm install --global yarn
+
+      - name: Install dependencies
+        run: yarn install
+
+      - name: Yarn version
+        run: yarn --version
+
+      - name: Build
+        run: yarn run build
+
+      - name: Deploy
+        uses: SamKirkland/IIS-web-app-deploy@v2
+        with:
+          server: ${{ secrets.IIS_SERVER }}
+          siteName: 'mine-care'
+          username: ${{ secrets.USERNAME }}
+          password: ${{ secrets.IIS_PASSWORD }}
+          physicalPath: 'C:\inetpub\wwwroot\mine-care'
+          package: 'build.zip'
+

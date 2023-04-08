@@ -4,7 +4,6 @@ import axios from 'axios'
 import {KTCard, KTCardBody, KTSVG} from '../../../../_metronic/helpers'
 import {ENP_URL} from '../../../urls'
 import {useQuery, useQueryClient} from 'react-query'
-import {BarChart} from "../BarChart";
 import {uuid} from "@ant-design/plots/es/utils";
 
 const DashboardTable = () => {
@@ -89,7 +88,7 @@ const DashboardTable = () => {
   const queryClient = useQueryClient()
 
   const getEquipmentManufacturer = (manufacturerId: any) => {
-   const manufacturer = listOfequipmentManufacturer?.data?.find((manufacturer: any) => manufacturer.manufacturerId === manufacturerId)
+    const manufacturer = listOfequipmentManufacturer?.data?.find((manufacturer: any) => manufacturer.manufacturerId === manufacturerId)
     return manufacturer?.name
   }
   const countNumberOfEquipment = (modelId: any) => {
@@ -154,112 +153,113 @@ const DashboardTable = () => {
   return (
     <>
       <div className='row gy-5 g-xl-8'>
-      <div className='col-xl-6'>
-        <KTCard>
-          <KTCardBody>
-            <div className='d-flex justify-content-between'>
-              <Space style={{marginBottom: 16}}>
-                <Input
-                  placeholder='Enter Search Text'
-                  onChange={handleInputChange}
-                  type='text'
-                  allowClear
-                  value={searchText}
-                />
-                <Button type='primary' onClick={globalSearch}>
-                  Search
-                </Button>
-              </Space>
-              <Space style={{marginBottom: 16}}>
-                <button type='button' className='btn btn-light-primary me-3'>
-                  <KTSVG path='/media/icons/duotune/arrows/arr078.svg' className='svg-icon-2' />
-                  Upload
-                </button>
-                <button type='button' className='btn btn-light-primary me-3'>
-                  <KTSVG path='/media/icons/duotune/arrows/arr078.svg' className='svg-icon-2' />
-                  Export
-                </button>
-              </Space>
-            </div>
-            <Table columns={columns} dataSource={listOfequipmentModel?.data} bordered loading={isLoading} rowKey={() => uuid()} />
-          </KTCardBody>
-        </KTCard>
-      </div>
-      <div className='col-xl-6'>
-        <KTCard>
-          <KTCardBody>
-            <div className='d-flex justify-content-between'>
-              <Space style={{marginBottom: 16}}>
-                <Input
-                  placeholder='Enter Search Text'
-                  onChange={handleInputChange}
-                  type='text'
-                  allowClear
-                  value={searchText}
-                />
-                <Button type='primary' onClick={globalSearch}>
-                  Search
-                </Button>
-              </Space>
-              <Space style={{marginBottom: 16}}>
-                <button type='button' className='btn btn-light-primary me-3'>
-                  <KTSVG path='/media/icons/duotune/arrows/arr078.svg' className='svg-icon-2' />
-                  Upload
-                </button>
-                <button type='button' className='btn btn-light-primary me-3'>
-                  <KTSVG path='/media/icons/duotune/arrows/arr078.svg' className='svg-icon-2' />
-                  Export
-                </button>
-              </Space>
-            </div>
-            <Table columns={[
-              // {
-              //   title: 'ID',
-              //   dataIndex: 'key',
-              //   sorter: (a: any, b: any) => a.key - b.key,
-              // },
-              {
-                title: 'Equipment Manufacturer',
-                render: (apiData: any) => {
-                  return getEquipmentManufacturer(apiData.manufacturerId)
-                },
-                sorter: (a: any, b: any) => {
-                  if (a.name > b.name) {
-                    return 1
-                  }
-                  if (b.name > a.name) {
-                    return -1
-                  }
-                  return 0
-                },
-              },
-              {
-                title: 'Model',
-                dataIndex: 'name',
-                sorter: (a: any, b: any) => {
-                  if (a.name > b.name) {
-                    return 1
-                  }
-                  if (a.name < b.name) {
-                    return -1
-                  }
-                  return 0
-                },
-              },
-              {
-                title: 'Fault',
-                sorter: (a: any, b: any) => a.modelId - b.modelId,
-                render: (apiData: any) => {
-                  return countNumberOfEquipment(apiData.modelId)
-                },
-              },
-            ]} bordered loading={isLoading} rowKey={
-                () => uuid()
-            } />
-          </KTCardBody>
-        </KTCard>
-      </div>
+        <div className='col-xl-6'>
+          <KTCard>
+            <KTCardBody>
+              <div className='d-flex justify-content-between'>
+                <Space style={{marginBottom: 16}}>
+                  <Input
+                    placeholder='Enter Search Text'
+                    onChange={handleInputChange}
+                    type='text'
+                    allowClear
+                    value={searchText}
+                  />
+                  <Button type='primary' onClick={globalSearch}>
+                    Search
+                  </Button>
+                </Space>
+                <Space style={{marginBottom: 16}}>
+                  <button type='button' className='btn btn-light-primary me-3'>
+                    <KTSVG path='/media/icons/duotune/arrows/arr078.svg' className='svg-icon-2'/>
+                    Upload
+                  </button>
+                  <button type='button' className='btn btn-light-primary me-3'>
+                    <KTSVG path='/media/icons/duotune/arrows/arr078.svg' className='svg-icon-2'/>
+                    Export
+                  </button>
+                </Space>
+              </div>
+              <Table columns={columns} dataSource={listOfequipmentModel?.data} bordered loading={isLoading}
+                     rowKey={() => uuid()}/>
+            </KTCardBody>
+          </KTCard>
         </div>
+        <div className='col-xl-6'>
+          <KTCard>
+            <KTCardBody>
+              <div className='d-flex justify-content-between'>
+                <Space style={{marginBottom: 16}}>
+                  <Input
+                    placeholder='Enter Search Text'
+                    onChange={handleInputChange}
+                    type='text'
+                    allowClear
+                    value={searchText}
+                  />
+                  <Button type='primary' onClick={globalSearch}>
+                    Search
+                  </Button>
+                </Space>
+                <Space style={{marginBottom: 16}}>
+                  <button type='button' className='btn btn-light-primary me-3'>
+                    <KTSVG path='/media/icons/duotune/arrows/arr078.svg' className='svg-icon-2'/>
+                    Upload
+                  </button>
+                  <button type='button' className='btn btn-light-primary me-3'>
+                    <KTSVG path='/media/icons/duotune/arrows/arr078.svg' className='svg-icon-2'/>
+                    Export
+                  </button>
+                </Space>
+              </div>
+              <Table columns={[
+                // {
+                //   title: 'ID',
+                //   dataIndex: 'key',
+                //   sorter: (a: any, b: any) => a.key - b.key,
+                // },
+                {
+                  title: 'Equipment Manufacturer',
+                  render: (apiData: any) => {
+                    return getEquipmentManufacturer(apiData.manufacturerId)
+                  },
+                  sorter: (a: any, b: any) => {
+                    if (a.name > b.name) {
+                      return 1
+                    }
+                    if (b.name > a.name) {
+                      return -1
+                    }
+                    return 0
+                  },
+                },
+                {
+                  title: 'Model',
+                  dataIndex: 'name',
+                  sorter: (a: any, b: any) => {
+                    if (a.name > b.name) {
+                      return 1
+                    }
+                    if (a.name < b.name) {
+                      return -1
+                    }
+                    return 0
+                  },
+                },
+                {
+                  title: 'Fault',
+                  sorter: (a: any, b: any) => a.modelId - b.modelId,
+                  render: (apiData: any) => {
+                    return countNumberOfEquipment(apiData.modelId)
+                  },
+                },
+              ]} bordered loading={isLoading} rowKey={
+                () => uuid()
+              }/>
+            </KTCardBody>
+          </KTCard>
+        </div>
+      </div>
     </>
   )
 }

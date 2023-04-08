@@ -35,11 +35,12 @@ import AddEquipRegister from "./components/equipment-register/Add";
 import UpdateRegister from './components/equipment-register/UpdateRegister'
 import EquipmentSchedule from "./components/entries/equipment/EquipmentSchedule";
 import ReportNew from "./components/report/DailyHMEReport/DailyaHMEReport";
-import MemberListReport from "./components/report/Memberlist/MemberListReport";
 import NumberOfCarperManufacturerReport
   from "./components/report/CarperManufacturerReport/NumberOfCarperManufacturerReport";
 import {AllReportPage} from './components/report/AllReportPage'
 import {CategorySetup} from './components/setup/category/CategorySetup'
+import ServiceTypeReport from "./components/report/ServiceTypeReport/ServiceTypeReport";
+import WarrantyEndOfLifeReport from './components/report/warrantyEndOfLifeReport/WarrantyEndOfLife'
 
 const accountBreadCrumbs: Array<PageLink> = []
 
@@ -349,7 +350,7 @@ const ProductionPage: React.FC = () => {
           }
         />
         <Route
-          path='daily-hme'
+          path='daily-hme-report'
           element={
             <>
               <PageTitle breadcrumbs={accountBreadCrumbs}>Daily HME Report</PageTitle>
@@ -358,11 +359,20 @@ const ProductionPage: React.FC = () => {
           }
         />
         <Route
-          path='member-list'
+          path='service-type'
           element={
             <>
-              <PageTitle breadcrumbs={accountBreadCrumbs}>Member List Report</PageTitle>
-              <MemberListReport/>
+              <PageTitle breadcrumbs={accountBreadCrumbs}>Service Type Report</PageTitle>
+              <ServiceTypeReport/>
+            </>
+          }
+        />
+        <Route
+          path='warranty-life'
+          element={
+            <>
+              <PageTitle>Warranty End Of Life Report</PageTitle>
+              <WarrantyEndOfLifeReport/>
             </>
           }
         />
@@ -370,7 +380,7 @@ const ProductionPage: React.FC = () => {
           path='CarperManufacturerReport'
           element={
             <>
-              <PageTitle breadcrumbs={accountBreadCrumbs}>Number Of Carper Manufacturer Report</PageTitle>
+              <PageTitle breadcrumbs={accountBreadCrumbs}>Number Of Equipment Per Manufacturer</PageTitle>
               <NumberOfCarperManufacturerReport/>
             </>
           }

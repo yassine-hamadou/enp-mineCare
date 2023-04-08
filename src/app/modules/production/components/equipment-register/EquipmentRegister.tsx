@@ -1,8 +1,8 @@
-import {Button, Form, Input, Modal, Space, Table} from "antd";
+import {Button, Form, Input, Space, Table} from "antd";
 import React, {useEffect, useState} from "react";
 import {Link, useParams} from "react-router-dom";
 import {KTCard, KTCardBody, KTSVG} from "../../../../../_metronic/helpers";
-import {useQuery, useQueryClient} from "react-query";
+import {useQuery} from "react-query";
 import axios from "axios";
 import {ENP_URL} from "../../../../urls";
 
@@ -18,7 +18,8 @@ const EquipmentRegister = () => {
   )
 
   const {data: modelClasses} = useQuery('listOfModelClass', () => axios.get(`${ENP_URL}/modelClasses`))
-  const  columns = [
+  const {data: manufacturers} = useQuery('listOfEquipmentManufacturer', () => axios.get(`${ENP_URL}/manufacturers`))
+  const columns = [
     {
       title: 'Equipment ID',
       dataIndex: 'equipmentId',
@@ -28,7 +29,7 @@ const EquipmentRegister = () => {
           return 1
         }
         if (b.equipmentId > a.equipmentId) {
-            return -1
+          return -1
         }
         return 0
       },
@@ -63,19 +64,28 @@ const EquipmentRegister = () => {
     },
     {
       title: 'Manufacturer',
-      dataIndex: '',
+      dataIndex: 'manufacturer',
       width: 135,
-      sorter: (a: any, b: any) => a.equipmentId - b.equipmentId,
+      sorter: (a: any, b: any) => {
+        if (a.manufacturer > b.manufacturer) {
+          return 1
+
+        }
+        if (b.manufacturer > a.manufacturer) {
+          return -1
+        }
+        return 0
+      },
     },
     {
       title: 'Model Name',
       dataIndex: 'modelName',
       width: 150,
       sorter: (a: any, b: any) => {
-        if (a.model > b.model) {
+        if (a.modelName > b.modelName) {
           return 1
         }
-        if (b.model > a.model) {
+        if (b.modelName > a.modelName) {
           return -1
         }
         return 0
@@ -93,7 +103,15 @@ const EquipmentRegister = () => {
       dataIndex: 'modelClassName',
       // dataIndex: 'modelClass',
       width: 200,
-      sorter: (a: any, b: any) => a.modelClass - b.modelClass,
+      sorter: (a: any, b: any) => {
+        if (a.modelClassName > b.modelClassName) {
+          return 1
+        }
+        if (b.modelClassName > a.modelClassName) {
+          return -1
+        }
+        return 0
+      }
       // render: (record: any) => {
       //   function getModelClass(record: any) {
       //     const modelClassId = models?.data?.find((model: any) => model.modelId === record.modelId).modelClassId
@@ -107,63 +125,114 @@ const EquipmentRegister = () => {
     {
       title: 'Manufactured Date',
       dataIndex: 'manufactureDate',
-        width: 200,
-      sorter: (a: any, b: any) => a.manufactureDate - b.manufactureDate,
+      width: 200,
+      render: (record: any) => {
+        return new Date(record).toDateString()
+      },
+      sorter: (a: any, b: any) => {
+        if (a.manufactureDate > b.manufactureDate) {
+          return 1
+        }
+        if (b.manufactureDate > a.manufactureDate) {
+          return -1
+        }
+        return 0
+      },
     },
     {
       title: 'Purchased Date',
       dataIndex: 'purchaseDate',
+      render: (record: any) => {
+        return new Date(record).toDateString()
+      },
       width: 200,
-      sorter: (a: any, b: any) => a.purchaseDate - b.purchaseDate,
+      sorter: (a: any, b: any) => {
+        if (a.purchaseDate > b.purchaseDate) {
+          return 1
+        }
+        if (b.purchaseDate > a.purchaseDate) {
+          return -1
+        }
+        return 0
+      }
     },
     {
       title: 'End Of Life Date',
       dataIndex: 'endOfLifeDate',
-      width: 200
+      width: 200,
+      sorter: (a: any, b: any) => {
+        if (a.endOfLifeDate > b.endOfLifeDate) {
+          return 1
+
+        }
+        if (b.endOfLifeDate > a.endOfLifeDate) {
+          return -1
+        }
+        return 0
+      },
+      render: (record: any) => {
+        return new Date(record).toDateString()
+      }
     },
     {
-        title: 'Fixed Assets Code',
-        dataIndex: 'facode',
-        width: 200,
-        sorter: (a: any, b: any) => a.fixedAssetsCode - b.fixedAssetsCode,
+      title: 'Fixed Assets Code',
+      dataIndex: 'facode',
+      width: 200,
+      sorter: (a: any, b: any) => {
+        if (a.facode > b.facode) {
+          return 1
+        }
+        if (b.facode > a.facode) {
+          return -1
+        }
+        return 0
+      }
     },
-
-
     {
       title: 'Note',
       dataIndex: 'note',
-      width: 200
+      width: 200,
+      sorter: (a: any, b: any) => {
+        if (a.note > b.note) {
+          return 1
+        }
+        if (b.note > a.note) {
+          return -1
+        }
+        return 0
+      }
     },
     {
       title: 'Action',
-      fixed: 'right',
       width: 200,
+      fixed: 'left',
       render: (_: any, record: any) => (
-        <Space size='middle'>
-            <Link
-              state={
-                {
-                  equipmentId: record.equipmentId,
-                  serialNumber: record.serialNumber,
-                  description: record.description,
-                  manufactureDate: record.manufactureDate,
-                  purchaseDate: record.purchaseDate,
-                  endOfLifeDate: record.endOfLifeDate,
-                  fixedAssetsCode: record.facode,
-                  note: record.note,
-                  warrantyStartDate: record.warrantyStartDate,
-                  warrantyEndDate: record.warrantyEndDate,
-                  universalCode: record.universalCode,
-                  meterType: record.meterType,
-                  modelName: record.modelName,
-                  modelClassName: record.modelClassName,
-                }
+        <Space>
+          <Link
+            state={
+              {
+                equipmentId: record.equipmentId,
+                serialNumber: record.serialNumber,
+                description: record.description,
+                manufactureDate: record.manufactureDate,
+                purchaseDate: record.purchaseDate,
+                endOfLifeDate: record.endOfLifeDate,
+                fixedAssetsCode: record.facode,
+                note: record.note,
+                warrantyStartDate: record.warrantyStartDate,
+                warrantyEndDate: record.warrantyEndDate,
+                universalCode: record.universalCode,
+                meterType: record.meterType,
+                modelName: record.modelName,
+                modelClassName: record.modelClassName,
+                manufacturer: record.manufacturer,
               }
-              to={`edit/${record.equipmentId}`}>
-                <Button type='primary' ghost>
-                Update
-              </Button>
-            </Link>
+            }
+            to={`edit/${record.equipmentId}`}>
+            <Button type='primary' ghost>
+              Update
+            </Button>
+          </Link>
           <Button type='primary'>
             Details
           </Button>
@@ -174,12 +243,12 @@ const EquipmentRegister = () => {
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [submitLoading, setSubmitLoading] = useState(false);
-  const [gridData, setGridData] = useState()
+  // const [gridData, setGridData] = useState()
   const [form] = Form.useForm();
 
-    const handleCancel = () => {
-        setIsModalOpen(false);
-    }
+  const handleCancel = () => {
+    setIsModalOpen(false);
+  }
 
   function onFinish() {
     setSubmitLoading(true);
@@ -188,21 +257,81 @@ const EquipmentRegister = () => {
       setIsModalOpen(false);
     }, 2000);
   }
-  const listOfequipmentManufacturerQueryClient: any = useQueryClient()
+
+  // const data = listOfEquipments?.data?.map((equipment: any) => {
+  //   const {
+  //     name,
+  //     manufacturerId,
+  //     modelClassId
+  //   } = models?.data?.find((model: any) => model.modelId === equipment.modelId)
+  //   const {name: modelClassName} = modelClasses?.data?.find((modelClass: any) => modelClass.modelClassId === modelClassId)
+  //   const {name: manufacturer} = manufacturers?.data?.find((manufacturer: any) => manufacturer.manufacturerId === manufacturerId)
+  //   // console.log('manufacturer', manufacturer)
+  //   // const manufacturer = listOfequipmentManufacturerQueryClient?.getQueryData('listOfequipmentManufacturer')?.data?.find((manufacturer: any) => manufacturer.manufacturerId === manufacturerId)
+  //   return {
+  //     ...equipment,
+  //     modelName: name,
+  //     modelClassName: modelClassName,
+  //     manufacturer: manufacturer
+  //   }
+  // })
+  const [gridData, setGridData] = useState([])
+  const [beforeSearch, setBeforeSearch] = useState([])
   useEffect(() => {
     const data = listOfEquipments?.data?.map((equipment: any) => {
-        const {name, manufacturerId, modelClassId} = models?.data?.find((model: any) => model.modelId === equipment.modelId)
-        const {name: modelClassName} = modelClasses?.data?.find((modelClass: any) => modelClass.modelClassId === modelClassId)
+      const {
+        name,
+        manufacturerId,
+        modelClassId
+      } = models?.data?.find((model: any) => model.modelId === equipment.modelId)
+      const {name: modelClassName} = modelClasses?.data?.find((modelClass: any) => modelClass.modelClassId === modelClassId)
+      const {name: manufacturer} = manufacturers?.data?.find((manufacturer: any) => manufacturer.manufacturerId === manufacturerId)
+      // console.log('manufacturer', manufacturer)
       // const manufacturer = listOfequipmentManufacturerQueryClient?.getQueryData('listOfequipmentManufacturer')?.data?.find((manufacturer: any) => manufacturer.manufacturerId === manufacturerId)
-        return {
-            ...equipment,
-            modelName: name,
-            modelClassName: modelClassName,
-        }
+      return {
+        ...equipment,
+        modelName: name,
+        modelClassName: modelClassName,
+        manufacturer: manufacturer
+      }
     })
     console.log('data', data)
     setGridData(data)
-  }, [listOfEquipments?.data, models?.data, modelClasses?.data])
+    setBeforeSearch(data)
+  }, [listOfEquipments, models, modelClasses, manufacturers])
+
+  const globalSearch = (searchValue: string) => {
+    //searchValue is the value of the search input
+    const searchResult = beforeSearch?.filter((item: any) => {
+      console.log('item', item)
+      return (
+        item.description?.toLowerCase().includes(searchValue?.toLowerCase()) ||
+        item.equipmentId?.toLowerCase().includes(searchValue?.toLowerCase()) ||
+        item.serialNumber?.toLowerCase().includes(searchValue?.toLowerCase()) ||
+        item.manufactureDate?.toLowerCase().includes(searchValue?.toLowerCase()) ||
+        item.purchaseDate?.toLowerCase().includes(searchValue?.toLowerCase()) ||
+        item.endOfLifeDate?.toLowerCase().includes(searchValue?.toLowerCase()) ||
+        item.facode?.toLowerCase().includes(searchValue?.toLowerCase()) ||
+        item.note?.toLowerCase().includes(searchValue.toLowerCase()) ||
+        item.warrantyStartDate?.toLowerCase().includes(searchValue.toLowerCase()) ||
+        item.warrantyEndDate?.toLowerCase().includes(searchValue.toLowerCase()) ||
+        item.universalCode?.toLowerCase().includes(searchValue.toLowerCase()) ||
+        item.meterType?.toLowerCase().includes(searchValue.toLowerCase()) ||
+        item.modelName?.toLowerCase().includes(searchValue.toLowerCase()) ||
+        item.modelClassName?.toLowerCase().includes(searchValue.toLowerCase()) ||
+        item.manufacturer?.toLowerCase().includes(searchValue.toLowerCase())
+      )
+    })//search the grid data
+    console.log('searchResult', searchResult)
+    setGridData(searchResult) //set the grid data to the search result
+  }
+  const handleInputChange = (e: any) => {
+    console.log('e.target.value', e.target.value)
+    globalSearch(e.target.value)
+    if (e.target.value === '') {
+      setGridData(beforeSearch)
+    }
+  }
 
   return <>
     <KTCard>
@@ -211,20 +340,17 @@ const EquipmentRegister = () => {
           <Space style={{marginBottom: 16}}>
             <Input
               placeholder='Enter Search Text'
-              // onChange={handleInputChange}
+              onChange={handleInputChange}
               type='text'
               allowClear
             />
-            <Button type='primary'>
-                Search
-            </Button>
           </Space>
           <Space style={{marginBottom: 16}}>
             <Link to={'add'}>
               <button type='button' className='btn btn-primary me-3'>
-              <KTSVG path='/media/icons/duotune/arrows/arr075.svg' className='svg-icon-2' />
-              Add
-            </button>
+                <KTSVG path='/media/icons/duotune/arrows/arr075.svg' className='svg-icon-2'/>
+                Add
+              </button>
             </Link>
           </Space>
         </div>
@@ -239,7 +365,7 @@ const EquipmentRegister = () => {
         />
       </KTCardBody>
     </KTCard>
-    </>
+  </>
 }
 
 export default EquipmentRegister

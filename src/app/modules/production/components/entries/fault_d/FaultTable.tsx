@@ -56,7 +56,6 @@ const FaultTable = () => {
   const [form] = Form.useForm()
   const [formSolve] = Form.useForm()
   const [formDefect] = Form.useForm()
-  const [selectedRowForSolve, setSelectedRowForSolve] = useState<any>()
   const [loading, setLoading] = useState(true)
   const [submitLoading, setSubmitLoading] = useState(false)
   const [submitSolveLoading, setSubmitSolveLoading] = useState(false)
@@ -178,7 +177,7 @@ const FaultTable = () => {
   // @ts-ignore
   const columns: any = [
     {
-      title: 'FleetId',
+      title: 'Equipment ID',
       dataIndex: 'fleetId',
       key: 'key',
       sorter: (a: any, b: any) => {
@@ -544,7 +543,10 @@ const FaultTable = () => {
     )
   }
   const faults = gridData.filter((fault: any) => fault.status === 0)
-  const solvedFaults = gridData.filter((fault: any) => fault.status === 1)
+
+  // Solved less  7 days ago
+  const solvedFaults = gridData.filter((fault: any) => fault.status === 1 && new Date(fault.wtimeEnd).getTime() >
+    new Date().getTime() - 7 * 24 * 60 * 60 * 1000)
   return (
     <div
       style={{
@@ -640,8 +642,8 @@ const FaultTable = () => {
           title='Add Fault'
           onFinish={onFinish}
         >
-          <Form.Item name='fleetId' label='fleetID' rules={[{required: true}]}>
-            <Select placeholder='Select a fleetID' onChange={onFleetIdChange}>
+          <Form.Item name='fleetId' label='Equipment ID' rules={[{required: true}]}>
+            <Select placeholder='Select an Equipment' onChange={onFleetIdChange}>
               {dataSource.map((item: any) => (
                 <Option key={item.fleetID} value={item.fleetID}>
                   {item.fleetID} - {item.modlName} - {item.modlClass}
@@ -655,7 +657,7 @@ const FaultTable = () => {
           <Form.Item name='desc' label='Description'>
             <Input disabled style={{color: 'black'}}/>
           </Form.Item>
-          <Form.Item name='hours' label='Fleet Hours' rules={[{required: true}]}>
+          <Form.Item name='hours' label='Equipment Hours' rules={[{required: true}]}>
             <InputNumber min={1}/>
           </Form.Item>
           <Form.Item name='dType' label='Down Type' rules={[{required: true}]}>
@@ -763,7 +765,7 @@ const FaultTable = () => {
           title='Solve'
           onFinish={onSolveFinish}
         >
-          <Form.Item name='fleetId' label='fleetID'>
+          <Form.Item name='fleetId' label='Equipment ID'>
             <Input disabled style={{color: 'black'}}/>
           </Form.Item>
           <Form.Item name='entryId' label='EntryID' hidden>
@@ -874,7 +876,7 @@ const FaultTable = () => {
           title='Defect'
           onFinish={onDefectFinish}
         >
-          <Form.Item name='fleetId' label='Fleet ID' rules={[{required: true}]}>
+          <Form.Item name='fleetId' label='Equipment ID' rules={[{required: true}]}>
             <Input disabled style={{color: 'black'}}/>
           </Form.Item>
           <Form.Item name='Defect Date' label='Expected Date' rules={[{required: true}]}>
