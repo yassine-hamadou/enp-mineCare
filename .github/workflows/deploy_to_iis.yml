@@ -24,7 +24,7 @@ jobs:
         uses: cschleiden/webdeploy-action@v1.1.0
         with:
           server: ${{ secrets.IIS_SERVER }}
-          siteName: 'mine-care'
+          webSiteName: 'mine-care'
           username: ${{ secrets.USERNAME }}
           password: ${{ secrets.IIS_PASSWORD }}
           physicalPath: 'C:\inetpub\wwwroot\mine-care'
