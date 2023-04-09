@@ -18,7 +18,7 @@ jobs:
         run: npm install --legacy-peer-deps
 
       - name: Build
-        run: npm run build
+        run: npm run ciBuild
 
       - name: Remove the existing website files except for web.config file
         run: Remove-Item -Recurse -Force 'C:\inetpub\wwwroot\mine-care\*' -Exclude 'web.config'
