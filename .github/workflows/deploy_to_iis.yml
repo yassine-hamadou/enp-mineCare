@@ -1,6 +1,13 @@
-name: Deploy to IIS
-
-on: [ push ]
+name: Run self hosted server and deploy to IIS folder
+# This workflow allows me to controls when the action will run. Triggers the workflow on push to the master branch
+# or manually from the Actions tab
+# Author: Yassine Hamadou Mounkaila
+on:
+  push:
+    branches:
+      - master
+  workflow_dispatch: # Allows you to run this workflow manually from the Actions tab
+  # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 
 jobs:
   build-and-deploy:
@@ -13,9 +20,27 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: '18.x'
+      
+      #      install dependencies only if package.json has changed
+      - name: Cache node modules
+        id: cache-nodemodules
+        uses: actions/cache@v2
+        env:
+          cache-name: cache-node-modules
+        with:
+        path: '**/node_modules'
+        key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: |
+          ${{ runner.os }}-build-${{ env.cache-name }}-
+          ${{ runner.os }}-build-
+          ${{ runner.os }}-
 
-      - name: Install dependencies
-        run: npm install --legacy-peer-deps
+
+        # Checking if the cache hit is not true, if it is true then the dependencies are already installed otherwise we
+        # install the dependencies
+      - name: Install Dependencies
+        if: steps.cache-nodemodules.outputs.cache-hit != 'true'
+        run: npm ci
 
       - name: Build
         run: npm run ciBuild
@@ -24,7 +49,7 @@ jobs:
         run: Remove-Item -Recurse -Force 'C:\inetpub\wwwroot\mine-care\*' -Exclude 'web.config'
 
       - name: Copy build folder to the website folder
-        run: Copy-Item -Recurse -Force 'build' 'C:\inetpub\wwwroot\mine-care'
+        run: Copy-Item -Recurse -Force 'build\*' 'C:\inetpub\wwwroot\mine-care'
 
       - name: Verifying that the website is running
         run: $response = Invoke-WebRequest -Uri 'http://localhost/mine-care' -UseBasicParsing
