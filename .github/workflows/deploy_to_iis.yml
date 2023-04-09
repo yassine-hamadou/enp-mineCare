@@ -5,7 +5,7 @@ name: Run self hosted server and deploy to IIS folder
 on:
   push:
     branches:
-      - master
+      - production
   workflow_dispatch: # Allows you to run this workflow manually from the Actions tab
   # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 
@@ -28,8 +28,8 @@ jobs:
         env:
           cache-name: cache-node-modules
         with:
-        # npm cache files on windows
-        path: 'C:\\Users\\Administrator\\AppData\\Local\\npm-cache'
+        path:
+          - '**/node_modules'
         key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
         restore-keys: |
           ${{ runner.os }}-build-${{ env.cache-name }}-
