@@ -18,7 +18,7 @@ jobs:
         run: npm install --legacy-peer-deps
 
       - name: Build
-        run: npm run build
+        run: npm run ciBuild
 
       - name: GitHub Actions WebDeploy
         uses: cschleiden/webdeploy-action@v1.1.0
