@@ -28,5 +28,5 @@ jobs:
           username: ${{ secrets.USERNAME }}
           password: ${{ secrets.IIS_PASSWORD }}
           physicalPath: 'C:\inetpub\wwwroot\mine-care'
-          package: 'build.zip'
+          package: ''
 
