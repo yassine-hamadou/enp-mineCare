@@ -28,7 +28,8 @@ jobs:
         env:
           cache-name: cache-node-modules
         with:
-        path: node_modules
+        # npm cache files on windows
+        path: C:\Users\Administrator\AppData\Local\npm-cache
         key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
         restore-keys: |
           ${{ runner.os }}-build-${{ env.cache-name }}-
