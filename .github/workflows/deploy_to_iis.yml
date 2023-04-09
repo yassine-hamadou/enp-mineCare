@@ -4,7 +4,7 @@ on: [ push ]
 
 jobs:
   build-and-deploy:
-    runs-on: windows-latest
+    runs-on: self-hosted
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -18,15 +18,18 @@ jobs:
         run: npm install --legacy-peer-deps
 
       - name: Build
-        run: npm run ciBuild
+        run: npm run build
 
-      - name: GitHub Actions WebDeploy
-        uses: cschleiden/webdeploy-action@v1.1.0
-        with:
-          server: ${{ secrets.IIS_SERVER }}
-          webSiteName: 'mine-care'
-          username: ${{ secrets.USERNAME }}
-          password: ${{ secrets.IIS_PASSWORD }}
-          physicalPath: 'C:\inetpub\wwwroot\mine-care'
-          package: ''
+      - name: Remove the existing website files except for web.config file
+        run: Remove-Item -Recurse -Force 'C:\inetpub\wwwroot\mine-care\*' -Exclude 'web.config'
 
+      - name: Copy build folder to the website folder
+        run: Copy-Item -Recurse -Force 'build' 'C:\inetpub\wwwroot\mine-care'
+
+      - name: Verifying that the website is running
+        run: $response = Invoke-WebRequest -Uri 'http://localhost/mine-care' -UseBasicParsing
+          if ($response.StatusCode -ne 200) {
+          throw 'Failed to verify that the website is running'
+          } else {
+          Write-Host 'The website is running'
+          }
