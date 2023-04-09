@@ -8,7 +8,7 @@ import {ENP_URL} from '../../../../../urls'
 import {useQuery} from 'react-query'
 import {useState} from 'react'
 
-const EquipmentDetail = () => {
+function EquipmentSchedule() {
   let dropDownListObj: any
   const [chosenLocationIdFromDropdown, setChosenLocationIdFromDropdown] = useState(null)
   const navigate = useNavigate()
@@ -75,11 +75,11 @@ const EquipmentDetail = () => {
       {/*Todo: Add a calendar component that takes a vehicle type as a prop and displays the vehicle's schedule*/}
       <KTCard>
         <KTCardBody className='py-5 px-2'>
-          <Calendar chosenLocationIdFromDropdown={chosenLocationIdFromDropdown} />
+        <Calendar chosenLocationIdFromDropdown={chosenLocationIdFromDropdown} />
         </KTCardBody>
       </KTCard>
     </>
   )
 }
 
-export {EquipmentDetail}
+export default EquipmentSchedule

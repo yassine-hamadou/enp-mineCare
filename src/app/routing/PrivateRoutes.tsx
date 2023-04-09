@@ -1,4 +1,4 @@
-import {FC, Suspense} from 'react'
+import {FC, lazy, Suspense} from 'react'
 import {Navigate, Route, Routes} from 'react-router-dom'
 import {MasterLayout} from '../../_metronic/layout/MasterLayout'
 import TopBarProgress from 'react-topbar-progress-indicator'
@@ -6,9 +6,9 @@ import {DashboardWrapper} from '../pages/dashboard/DashboardWrapper'
 import {getCSSVariableValue} from '../../_metronic/assets/ts/_utils'
 import {WithChildren} from '../../_metronic/helpers'
 import ProductionPage from '../modules/production/ProductionPage'
-import WeeklyReport from '../modules/production/components/report/weekly/WeeklyReport'
-import DailyReport from '../modules/production/components/report/daily/DailyReport'
-import DownTimeReport from '../modules/production/components/report/downtime/DowntimeReport'
+const DailyReport = lazy(() => import('../modules/production/components/report/daily/DailyReport'))
+const WeeklyReport = lazy(() => import('../modules/production/components/report/weekly/WeeklyReport' ))
+const DownTimeReport = lazy(() => import('../modules/production/components/report/downtime/DowntimeReport'))
 
 const PrivateRoutes = () => {
   return (
@@ -59,7 +59,7 @@ const PrivateRoutes = () => {
   )
 }
 
-const SuspensedView: FC<WithChildren> = ({children}) => {
+export const SuspensedView: FC<WithChildren> = ({children}) => {
   const baseColor = getCSSVariableValue('--kt-primary')
   TopBarProgress.config({
     barColors: {

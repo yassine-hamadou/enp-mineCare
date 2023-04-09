@@ -29,34 +29,108 @@ const ResolutionTable = () => {
     {
       title: 'Model',
       dataIndex: 'vmModel',
+      sorter: (a: any, b: any) => {
+        if (a.vmModel > b.vmModel) {
+          return 1
+        }
+        if (b.vmModel > a.vmModel) {
+          return -1
+        }
+        return 0
+      }
     },
     {
       title: 'Description',
       dataIndex: 'vmClass',
+      sorter: (a: any, b: any) => {
+        if (a.vmClass > b.vmClass) {
+          return 1
+        }
+        if (b.vmClass > a.vmClass) {
+          return -1
+        }
+        return 0
+      }
     },
     {
       title: 'Down Type',
       dataIndex: 'downType',
+      sorter: (a: any, b: any) => {
+        if (a.downType > b.downType) {
+          return 1
+        }
+        if (b.downType > a.downType) {
+          return -1
+
+        }
+        return 0
+      }
     },
     {
       title: 'Custodian',
       dataIndex: 'custodian',
+      sorter: (a: any, b: any) => {
+        if (a.custodian > b.custodian) {
+          return 1
+        }
+        if (b.custodian > a.custodian) {
+          return -1
+        }
+        return 0
+      }
     },
     {
       title: 'Location',
       dataIndex: 'locationId',
+      sorter: (a: any, b: any) => {
+        if (a.locationId > b.locationId
+        ) {
+          return 1
+        }
+        if (b.locationId > a.locationId) {
+          return -1
+        }
+        return 0
+      }
     },
     {
       title: 'Resolution Type',
       dataIndex: 'resolutionType',
+      sorter: (a: any, b: any) => {
+        if (a.resolutionType > b.resolutionType) {
+          return 1
+        }
+        if (b.resolutionType > a.resolutionType) {
+          return -1
+        }
+        return 0
+      }
     },
     {
       title: 'Down Status',
       dataIndex: 'downStatus',
+      sorter: (a: any, b: any) => {
+        if (a.downStatus > b.downStatus) {
+          return 1
+        }
+        if (b.downStatus > a.downStatus) {
+          return -1
+        }
+        return 0
+      }
     },
     {
       title: 'Comment',
       dataIndex: 'comment',
+      sorter: (a: any, b: any) => {
+        if (a.comment > b.comment) {
+          return 1
+        }
+        if (b.comment > a.comment) {
+          return -1
+        }
+        return 0
+      }
     },
     {
       title: 'Time Started',
@@ -101,6 +175,9 @@ const ResolutionTable = () => {
   return (
     <div>
       <div className='d-flex justify-content-between'>
+        <h3 className='mb-0'>Last 7 Days</h3>
+      </div>
+      <div className='d-flex justify-content-between'>
         <Space style={{marginBottom: 16}}>
           <Input
             placeholder='Enter Search Text'
@@ -111,7 +188,7 @@ const ResolutionTable = () => {
         </Space>
         <Space style={{marginBottom: 16}}>
           <button type='button' className='btn btn-primary me-3'>
-            <KTSVG path='/media/icons/duotune/arrows/arr078.svg' className='svg-icon-2' />
+            <KTSVG path='/media/icons/duotune/arrows/arr078.svg' className='svg-icon-2'/>
             Export
           </button>
         </Space>
@@ -119,7 +196,15 @@ const ResolutionTable = () => {
       {/*@ts-ignore*/}
       <Table
         columns={columns}
-        dataSource={gridData}
+        //filter data for last 7 days
+        dataSource={
+          gridData?.filter((fault: any) => {
+            return (
+              new Date(fault.wtimeEnd).getTime() >
+              new Date().getTime() - 7 * 24 * 60 * 60 * 1000
+            )
+          }) || []
+        }
         bordered
         loading={loading}
         rowKey={(record) => record.entryId}

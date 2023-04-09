@@ -20,19 +20,19 @@ const Mixed: FC = () => {
       <div className='row g-5 g-xl-8'>
         {/* begin::Col */}
         <div className='col-xl-4'>
-          <MixedWidget1 className='card-xl-stretch mb-xl-8' color='primary' />
+          <MixedWidget1 className='card-xl-stretch mb-xl-8' color='primary'/>
         </div>
         {/* end::Col */}
 
         {/* begin::Col */}
         <div className='col-xl-4'>
-          <MixedWidget1 className='card-xl-stretch mb-xl-8' color='danger' />
+          <MixedWidget1 className='card-xl-stretch mb-xl-8' color='danger'/>
         </div>
         {/* end::Col */}
 
         {/* begin::Col */}
         <div className='col-xl-4'>
-          <MixedWidget1 className='card-xl-stretch mb-5 mb-xl-8' color='success' />
+          <MixedWidget1 className='card-xl-stretch mb-5 mb-xl-8' color='success'/>
         </div>
         {/* end::Col */}
       </div>
@@ -79,7 +79,7 @@ const Mixed: FC = () => {
       <div className='row g-5 g-xl-8'>
         {/* begin::Col */}
         <div className='col-xl-4'>
-          <MixedWidget3 className='card-xl-stretch mb-xl-8' chartColor='info' chartHeight='250px' />
+          <MixedWidget3 className='card-xl-stretch mb-xl-8' chartColor='info' chartHeight='250px'/>
         </div>
         {/* end::Col */}
 

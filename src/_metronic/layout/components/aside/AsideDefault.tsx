@@ -38,16 +38,21 @@ const AsideDefault: FC = () => {
         {/* begin::Logo */}
         {aside.theme === 'dark' && (
           <Link to='/dashboard'>
-            <h1 className='text-primary'>Mine Care</h1>
+            <img
+              alt='Logo'
+              className='h-55px logo'
+              src={toAbsoluteUrl('/media/logos/img.png')}
+            />
           </Link>
         )}
         {aside.theme === 'light' && (
           <Link to='/dashboard'>
-            <img
-              alt='Logo'
-              className='h-55px logo'
-              src={toAbsoluteUrl('/media/logos/default.svg')}
-            />
+            {/*<img*/}
+            {/*  alt='Logo'*/}
+            {/*  className='h-55px logo'*/}
+            {/*  src={toAbsoluteUrl('/media/logos/default.svg')}*/}
+            {/*/>*/}
+            <h5 className='text-primary'>Equipment Service and Maintenance</h5>
           </Link>
         )}
         {/* end::Logo */}

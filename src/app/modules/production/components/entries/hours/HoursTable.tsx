@@ -1,232 +1,23 @@
-import {Button, Input, TableColumnsType} from 'antd'
+import {Button, DatePicker, Input, InputNumber, Modal, Select, TableColumnsType} from 'antd'
 import {Space, Table, Form} from 'antd'
-import axios from 'axios'
 import React, {useEffect, useState} from 'react'
-import { useQuery } from "react-query";
+import {useQuery} from "react-query";
 import {KTSVG} from '../../../../../../_metronic/helpers'
-import {ENP_URL, fetchEquips, fetchHours, fetchModels} from '../../../../../urls'
-
-interface DataType {
-  key: React.Key
-  name: string
-  platform: string
-  version: string
-  upgradeNum: number
-  creator: string
-  createdAt: string
-}
-
-// interface ExpandedDataType {
-//   // key: React.Key
-//   id: string
-//   date: string
-//   name: string
-//   pread: string
-//   cread: string
-// }
-
-const items = [
-  {key: '1', label: 'Action 1'},
-  {key: '2', label: 'Action 2'},
-]
+import {fetchEquips, fetchHours, fetchModels} from '../../../../../urls'
 
 const HoursPage: React.FC = () => {
-  const [searchText, setSearchText] = useState('')
-  const [editingRow, setEditingRow] = useState(null)
-  const [dataSource, setDataSource] = useState([])
-  // const [edit, setEdit] = useState(false)
   const [form] = Form.useForm()
-  const [loading, setLoading] = useState(false)
-
-  const [editingKey, setEditingKey] = useState('');
-  const isEditing = (record: any) => record.key === editingKey;
-  const handleInputChange = (e: any) => {
-    setSearchText(e.target.value)
-    if (e.target.value === '') {
-      // loadData()
-    }
-  }
-
-  const edit = (record:any & { key: React.Key }) => {
-    form.setFieldsValue({ name: '', age: '', address: '', ...record });
-    setEditingKey(record.key);
-  };
-
-  const cancel = () => {
-    setEditingKey('');
-  };
   const [isModalOpen, setIsModalOpen] = useState(false)
 
   const showModal = () => {
     setIsModalOpen(true)
   }
 
-  const handleOk = () => {
-    setIsModalOpen(false)
-  }
-
   const handleCancel = () => {
-    // form.resetFields()
     setIsModalOpen(false)
   }
-  const {data:allHours} = useQuery('hours', fetchHours, {cacheTime:5000})
-  const {data:equipData} = useQuery('equip-count', fetchEquips, {cacheTime:5000})
-  const countNumberOfEquipment = (model: any) => {
-    //count number of model
-    let count = 0
-    equipData?.data.forEach((item: any) => {
-      if (item.modlName === model) {
-        count++
-      }
-    })
-    return count
-  }
-  // const getRelatedFleets = (model: any) => {
-  //   //count number of model
-  //   let count = null
-  //   equipData?.data.forEach((item: any) => {
-  //     if (item.modlName === model) {
-  //       // count++
-  //     }
-  //   })
-  //   return count
-  // }
-
-  
-  const expandedRowRender = () => {
-    
-    const columns= [
-      // {title: 'ID', dataIndex: 'id', key: 'id'},
-      {title: 'FleetID', dataIndex: 'fleetId', key: 'fleetId'},
-      {
-        title: 'Date',
-        dataIndex: 'date',
-        key: 'date',
-        render: (text:any, record:any) => {
-          if (editingRow === record) {
-            return (
-              <Form.Item name='date'>
-                <Input />
-              </Form.Item>
-            )
-          } else {
-            return <p>{text}</p>
-          }
-        },
-      },
-
-      // {
-      //   title: 'Prv. Reading',
-      //   dataIndex: 'previousReading',
-      //   key: 'previousReading',
-      //   // render: (text:any, record:any) => {
-      //   //   if (editingRow === record.key) {
-      //   //     return (
-      //   //       <Form.Item name='previousReading'>
-      //   //         <Input />
-      //   //       </Form.Item>
-      //   //     )
-      //   //   } else {
-      //   //     return <p>{text}</p>
-      //   //   }
-      //   // },
-      // },
-      {
-        title: 'Cur. Reading',
-        dataIndex: 'currentReading',
-        key: 'currentReading',
-        render: (text:any, record:any) => {
-          if (editingRow === record) {
-            return (
-              <Form.Item name='currentReading'>
-                <Input />
-              </Form.Item>
-            )
-          } else {
-            return <p> {text}</p>
-          }
-        },
-      },
-      {
-        title: 'Action',
-        dataIndex: 'operation',
-        key: 'operation',
-        render: (_:any, record: any) => (
-          <Space>
-            <Button
-              onClick={() => {
-                setEditingRow(record)
-                form.setFieldsValue({
-                  date: record.date,
-                  previousReading: record.previousReading,
-                  currentReading: record.currentReading
-                })
-              }}
-            >
-              Edit
-            </Button>
-            <Button onClick={onDone} htmlType='submit' danger>
-              Done
-            </Button>
-          </Space>
-        ),
-      },
-    ]
-    const save =  (key:any) => {
-      try {
-        const row = (form.validateFields());
-  
-        const newData = [...allHours?.data];
-        const index = newData.findIndex((item) => key === item.key);
-        if (index > -1) {
-          const item = newData[index];
-          newData.splice(index, 1, {
-            ...item,
-            ...row,
-          });
-          console.log(newData)
-          setEditingKey('');
-        } else {
-          // newData.push(row);
-          // setData(newData);
-          setEditingKey('');
-        }
-      } catch (errInfo) {
-        console.log('Validate Failed:', errInfo);
-      }
-    };
-    
-    let rowData:any =[...allHours?.data]
-    const onDone = (values: any) => {
-      
-      const updatedDataSource: any = [...allHours?.data]
-      updatedDataSource.splice(editingRow, 1, {...values, id: editingRow})
-      console.log(updatedDataSource)
-      setEditingRow(null)
-    }
-
-    // console.log(rowData)
-
-    return (
-      <Form form={form} onFinish={save}>
-        <Table columns={columns} rowKey="id" dataSource={allHours?.data} pagination={false} />
-      </Form>
-    )
-  }
-
-  const columns: any = [
-    {title: 'Manufacturer', dataIndex: 'txmanf', key: 'txmanf'},
-    {title: 'Model', dataIndex: 'txmodel', key: 'txmodel'},
-    {
-      title: 'Number of vehicles',
-      key:'txmodel', 
-      render: (row: any) => {
-        return countNumberOfEquipment(row.txmodel)
-      }
-    }
-  ]
- 
-  const {data:mainData} = useQuery('main-data', fetchModels, {cacheTime:5000})
+  const {data: allHours, isLoading} = useQuery('hours', fetchHours, {cacheTime: 5000})
+  const {data: equips, isLoading: equipsLoading} = useQuery('equips', fetchEquips, {cacheTime: 5000})
 
   return (
     <>
@@ -242,28 +33,93 @@ const HoursPage: React.FC = () => {
           <Space style={{marginBottom: 16}}>
             <Input
               placeholder='Enter Search Text'
-              onChange={handleInputChange}
+              // onChange={handleInputChange}
               type='text'
               allowClear
-              value={searchText}
+              // value={searchText}
             />
             <Button type='primary'>Search</Button>
           </Space>
           <Space style={{marginBottom: 16}}>
-            <button type='button' className='btn btn-light-primary me-3'>
-              <KTSVG path='/media/icons/duotune/arrows/arr078.svg' className='svg-icon-2' />
-              Export
+            <button
+              type='button'
+              className='btn btn-primary me-3'
+              onClick={showModal}
+            >
+              <KTSVG path='/media/icons/duotune/arrows/arr075.svg' className='svg-icon-2'/>
+              Add
             </button>
           </Space>
         </div>
-        <Table
-          columns={columns}
-          expandable={{expandedRowRender, defaultExpandedRowKeys: ['txmodl']}}
-          rowKey='txmodl'
-          loading={loading}
-          dataSource={mainData?.data}
-        />
+        <Table bordered loading={isLoading} dataSource={
+          allHours?.data
+        }>
+          <Table.Column title='Equipment ID' dataIndex='fleetId'/>
+          <Table.Column title='Date' dataIndex='date' render={
+            (date: string) => {
+              return new Date(date).toDateString()
+            }
+          }/>
+          <Table.Column title='Previous Reading' dataIndex='previousReading'/>
+          <Table.Column title='Current Reading' dataIndex='currentReading'/>
+        </Table>
       </div>
+      <Modal title='Add Hours' open={isModalOpen} onCancel={handleCancel}
+             closable={true}
+      >
+        <Form form={form}
+              name={'addHours'}
+              labelCol={{span: 24}}
+              wrapperCol={{span: 24}}
+        >
+          <Form.Item label='Equipment ID' name='equipmentId'
+                     rules={[{required: true, message: 'Please select an equipment'}]}
+          >
+            <Select
+              placeholder='Select an Equipment'
+              showSearch
+              className='form-control form-control-solid'
+            >
+              {
+                equips?.data?.map((equip: any) => {
+                  return <Select.Option
+                    value={equip.fleetID}
+                    key={equip.fleetID}
+                  >{equip.fleetID} - {equip.modlName} - {equip.modlClass}</Select.Option>
+                })
+              }
+            </Select>
+          </Form.Item>
+          <Form.Item label='Date' name='date'
+                     rules={[{required: true, message: 'Please select a date'}]}>
+            <DatePicker
+              className='form-control form-control-solid'
+            />
+          </Form.Item>
+          <div className='row'>
+            <div className='col-6'>
+              <Form.Item label='Previous Reading' name='previousReading'
+                         rules={[{required: true, message: 'Please select hours'}]}>
+                <InputNumber
+                  className='form-control form-control-solid'
+                  min={0}
+                  placeholder='Previous Reading'
+                />
+              </Form.Item>
+            </div>
+            <div className='col-6'>
+              <Form.Item label='Current Reading' name='currentReading'
+                         rules={[{required: true, message: 'Please select hours'}]}>
+                <InputNumber
+                  min={0}
+                  className='form-control form-control-solid'
+                  placeholder='Current Reading'
+                />
+              </Form.Item>
+            </div>
+          </div>
+        </Form>
+      </Modal>
     </>
   )
 }
