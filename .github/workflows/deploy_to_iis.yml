@@ -24,7 +24,7 @@ jobs:
       #      install dependencies only if package.json has changed
       - name: Cache node modules
         id: cache-nodemodules
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         env:
           cache-name: cache-node-modules
         with:
@@ -37,9 +37,14 @@ jobs:
 
 
         # Checking if the cache hit is not true, if it is true then the dependencies are already installed otherwise we
-        # install the dependencies
-      - name: Install Dependencies
-        if: steps.cache-nodemodules.outputs.cache-hit != 'true'
+        # install the dependencies on windows server
+      - name: Install Dependencies if windows cache hit is not true
+        if: ${{ steps.cache-nodemodules.outputs.cache-hit != 'true' }}
+        continue-on-error: true
+        run: npm list
+
+
+      - name: Install Dependencies if windows cache hit is tru
         run: npm install --legacy-peer-deps
 
       - name: Build
