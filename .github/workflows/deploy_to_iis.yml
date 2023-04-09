@@ -49,7 +49,7 @@ jobs:
         run: npm run ciBuild
 
       - name: Remove the existing website files except for web.config file
-        run: Remove-Item -Recurse -Force 'C:\inetpub\wwwroot\mine-care\*' -Exclude 'web.config'
+        run: get-childitem 'C:\inetpub\wwwroot\mine-care\' -Exclude *.config -recurse | remove-item -recurse -force
 
       - name: Copy build folder to the website folder
         run: Copy-Item -Recurse -Force 'build\*' 'C:\inetpub\wwwroot\mine-care'
