@@ -23,19 +23,18 @@ jobs:
       
       #      install dependencies only if package.json has changed
       - name: Cache node modules
-        id: cache-nodemodules
-        uses: actions/cache@v3
-        env:
-          cache-name: cache-node-modules
+        # npm cache files on windows
+        uses: actions/cache@v2
         with:
-          path: C:\Users\Administrator\AppData\Local\npm-cache
-          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('package-lock.json') }}
-          restore-keys: ${{ runner.os }}-build-${{ env.cache-name }}-
+          path: 'C:\\Users\\Administrator\\AppData\\Local\\npm-cache'
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
 
         # Checking if the cache hit is not true, if it is true then the dependencies are already installed otherwise we
         # install the dependencies on windows server
       - name: Install Dependencies if windows cache hit is not true
-        if: ${{ steps.cache-nodemodules.outputs.cache-hit != 'true' }}
+        if: ${{ steps.cache.outputs.cache-hit != 'true' }}
         continue-on-error: true
         run: npm install --legacy-peer-deps
 
