@@ -29,7 +29,7 @@ jobs:
           # A unique key for the cache based on package-lock.json
           key: ${{ hashFiles('./package-lock.json') }}
           # The path to the cache directory
-          path: C:\Users\Administrator\AppData\Local\npm-cache
+          path: C:\Windows\ServiceProfiles\NetworkService\AppData\Local\npm-cache
 
           # Checking if the cache hit is not true, if it is true then the dependencies are already installed otherwise we
           # install the dependencies on windows server
