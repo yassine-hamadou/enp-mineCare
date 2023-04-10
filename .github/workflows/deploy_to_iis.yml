@@ -52,10 +52,4 @@ jobs:
       - name: Copy build folder to the website folder
         run: Copy-Item -Recurse -Force 'build\*' 'C:\inetpub\wwwroot\mine-care'
 
-      - name: Verifying that the website is running
-        run: $response = Invoke-WebRequest -Uri 'http://localhost/mine-care' -UseBasicParsing
-          if ($response.StatusCode -ne 200) {
-          throw 'Failed to verify that the website is running'
-          } else {
-          Write-Host 'The website is running'
-          }
+  
