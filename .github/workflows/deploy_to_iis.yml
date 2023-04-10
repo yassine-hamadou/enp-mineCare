@@ -27,7 +27,7 @@ jobs:
         uses: actions/cache@v3
         with:
           # A unique key for the cache based on package-lock.json
-          key: ${{ runner.os }}-node-${{ hashFiles('./package-lock.json') }}
+          key: ${{ hashFiles('./package-lock.json') }}
           # The path to the cache directory
           path: C:\Users\Administrator\AppData\Local\npm-cache
 
