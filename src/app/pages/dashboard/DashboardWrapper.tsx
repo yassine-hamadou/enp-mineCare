@@ -1,15 +1,20 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import {FC} from 'react'
+import {FC, useEffect, useState} from 'react'
 import {useIntl} from 'react-intl'
 import {PageTitle} from '../../../_metronic/layout/core'
 import {MixedWidget11} from '../../../_metronic/partials/widgets'
 import {DashboardTable} from './dashboardTable/CycleDetailsList'
 import {Column} from "@ant-design/plots";
-import {KTCard, KTCardBody} from "../../../_metronic/helpers";
+import {useQuery} from "react-query";
+import axios from "axios";
+import {ENP_URL} from "../../urls";
 import {BarChart} from "./BarChart";
 
+
 const ColumnChart = () => {
-  const data = [
+
+
+  const data1 = [
     {
       type: 'Apr',
       sales: 38,
@@ -61,8 +66,10 @@ const ColumnChart = () => {
       sales: 40,
     },
   ];
+
+
   const config = {
-    data,
+    data1,
     xField: 'type',
     yField: 'sales',
     label: {
@@ -101,6 +108,7 @@ const DashboardPage = () => (
           chartColor='primary'
           chartHeight='200px'
         />
+        {/*<ColumnChart/>*/}
       </div>
       <div className='col-xl-6'>
         <MixedWidget11
