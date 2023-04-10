@@ -30,12 +30,18 @@ jobs:
           key: ${{ hashFiles('./package-lock.json') }}
           # The path to the cache directory
           path: C:\Windows\ServiceProfiles\NetworkService\AppData\Local\npm-cache
-
-          # Checking if the cache hit is not true, if it is true then the dependencies are already installed otherwise we
-          # install the dependencies on windows server
+          # The cache will be restored if the key matches
+          restore-keys: |
+            ${{ hashFiles('./package-lock.json') }}
 
       - name: Install Dependencies
-        run: npm install --legacy-peer-deps
+        if: steps.cache-node-modules.outputs.cache-hit != 'true'
+        run: npm ci
+
+          # Checking if the cache hit is not true, if it is true then the dependencies are already installed otherwise we
+        # install the dependencies on windows server
+
+      - name: Install Dependencies
 
       - name: Build
         run: npm run ciBuild
