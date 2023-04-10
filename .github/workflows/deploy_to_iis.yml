@@ -28,13 +28,9 @@ jobs:
         env:
           cache-name: cache-node-modules
         with:
-          path: C:\actions-runner\_work\_tool\node\18.15.0\x64
+          path: C:\Users\Administrator\AppData\Local\npm-cache
           key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-build-${{ env.cache-name }}-
-            ${{ runner.os }}-build-
-            ${{ runner.os }}-
-
+          restore-keys: ${{ runner.os }}-build-${{ env.cache-name }}-
 
         # Checking if the cache hit is not true, if it is true then the dependencies are already installed otherwise we
         # install the dependencies on windows server
@@ -52,4 +48,4 @@ jobs:
       - name: Copy build folder to the website folder
         run: Copy-Item -Recurse -Force 'build\*' 'C:\inetpub\wwwroot\mine-care'
 
-  
+
