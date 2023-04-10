@@ -21,6 +21,7 @@ jobs:
         with:
           node-version: '18.x'
           cache: 'npm'
+          path: C:\Users\Administrator\AppData\Local\npm-cache
 
 
             #      #      install dependencies only if package.json has changed
@@ -31,7 +32,7 @@ jobs:
             #          # A unique key for the cache based on package-lock.json
             #          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
             #          # The path to the cache directory
-            #          path: |
+          #          path: |
           #            ./node_modules
           #            C:\Users\Administrator\AppData\Local\npm-cache
 
