@@ -21,14 +21,14 @@ jobs:
         with:
           node-version: '18.x'
           cache: 'npm'
-          cache-dependency-path: C:\Users\Administrator\AppData\Local\npm-cache
+          cache-dependency-path: 'package-lock.json'
 
             #      #      install dependencies only if package.json has changed
             #      - name: Cache node modules
             #        # npm cache files on windows
             #        uses: actions/cache@v3
             #        with:
-            #          # A unique key for the cache based on package-lock.json
+          #          # A unique key for the cache based on package-lock.json
           #          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
           #          # The path to the cache directory
           #          path: |
