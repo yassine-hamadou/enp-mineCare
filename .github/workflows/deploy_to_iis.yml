@@ -32,15 +32,13 @@ jobs:
             #          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
             #          # The path to the cache directory
             #          path: |
-            #            ./node_modules
-            #            C:\Users\Administrator\AppData\Local\npm-cache
+          #            ./node_modules
+          #            C:\Users\Administrator\AppData\Local\npm-cache
 
-            # Checking if the cache hit is not true, if it is true then the dependencies are already installed otherwise we
+          # Checking if the cache hit is not true, if it is true then the dependencies are already installed otherwise we
           # install the dependencies on windows server
 
-      - name: Install Dependencies if windows cache hit is not true
-        if: ${{ steps.cache.outputs.cache-hit != 'true' }}
-        continue-on-error: true
+      - name: Install Dependencies
         run: npm install --legacy-peer-deps
 
       - name: Build
@@ -51,5 +49,3 @@ jobs:
 
       - name: Copy build folder to the website folder
         run: Copy-Item -Recurse -Force 'build\*' 'C:\inetpub\wwwroot\mine-care'
-
-
