@@ -37,11 +37,10 @@ jobs:
       - name: Install Dependencies
         if: steps.cache-node-modules.outputs.cache-hit != 'true'
         run: npm ci
-
-          # Checking if the cache hit is not true, if it is true then the dependencies are already installed otherwise we
+        
+        # Checking if the cache hit is not true, if it is true then the dependencies are already installed otherwise we
         # install the dependencies on windows server
-
-      - name: Install Dependencies
+ 
 
       - name: Build
         run: npm run ciBuild
