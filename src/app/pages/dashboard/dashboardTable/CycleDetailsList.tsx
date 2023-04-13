@@ -181,6 +181,7 @@ const DashboardTable = () => {
                 </Space>
               </div>
               <Table columns={columns} dataSource={listOfequipmentModel?.data} bordered loading={isLoading}
+                     scroll={{x: 1500}}
                      rowKey={() => uuid()}/>
             </KTCardBody>
           </KTCard>
@@ -212,50 +213,47 @@ const DashboardTable = () => {
                   </button>
                 </Space>
               </div>
-              <Table columns={[
-                // {
-                //   title: 'ID',
-                //   dataIndex: 'key',
-                //   sorter: (a: any, b: any) => a.key - b.key,
-                // },
-                {
-                  title: 'Equipment Manufacturer',
-                  render: (apiData: any) => {
-                    return getEquipmentManufacturer(apiData.manufacturerId)
+              <Table
+                columns={[
+                  {
+                    title: 'Equipment Manufacturer',
+                    render: (apiData: any) => {
+                      return getEquipmentManufacturer(apiData.manufacturerId)
+                    },
+                    sorter: (a: any, b: any) => {
+                      if (a.name > b.name) {
+                        return 1
+                      }
+                      if (b.name > a.name) {
+                        return -1
+                      }
+                      return 0
+                    },
                   },
-                  sorter: (a: any, b: any) => {
-                    if (a.name > b.name) {
-                      return 1
-                    }
-                    if (b.name > a.name) {
-                      return -1
-                    }
-                    return 0
+                  {
+                    title: 'Model',
+                    dataIndex: 'name',
+                    sorter: (a: any, b: any) => {
+                      if (a.name > b.name) {
+                        return 1
+                      }
+                      if (a.name < b.name) {
+                        return -1
+                      }
+                      return 0
+                    },
                   },
-                },
-                {
-                  title: 'Model',
-                  dataIndex: 'name',
-                  sorter: (a: any, b: any) => {
-                    if (a.name > b.name) {
-                      return 1
-                    }
-                    if (a.name < b.name) {
-                      return -1
-                    }
-                    return 0
+                  {
+                    title: 'Fault',
+                    sorter: (a: any, b: any) => a.modelId - b.modelId,
+                    render: (apiData: any) => {
+                      return countNumberOfEquipment(apiData.modelId)
+                    },
                   },
-                },
-                {
-                  title: 'Fault',
-                  sorter: (a: any, b: any) => a.modelId - b.modelId,
-                  render: (apiData: any) => {
-                    return countNumberOfEquipment(apiData.modelId)
-                  },
-                },
-              ]} bordered loading={isLoading} rowKey={
+                ]} bordered loading={isLoading} rowKey={
                 () => uuid()
-              }/>
+              }
+              />
             </KTCardBody>
           </KTCard>
         </div>

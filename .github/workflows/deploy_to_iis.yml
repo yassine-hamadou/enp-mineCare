@@ -1,5 +1,5 @@
 name: Run self hosted server and deploy to IIS folder
-  # This workflow allows me to controls when the action will run. Triggers the workflow on push to the master branch
+# This workflow allows me to controls when the action will run. Triggers the workflow on push to the master branch
 # or manually from the Actions tab
 # Author: Yassine Hamadou Mounkaila
 on:

@@ -4,18 +4,17 @@ import React from "react";
 import {Link} from "react-router-dom";
 
 
-
 const data = [
-    {
-        key: '1',
-        code: '001',
-        name: 'Toyota',
-    },
-    {
-        key: '2',
-        code: '002',
-        name: 'Mercedes',
-    }
+  {
+    key: '1',
+    code: '001',
+    name: 'Toyota',
+  },
+  {
+    key: '2',
+    code: '002',
+    name: 'Mercedes',
+  }
 ]
 const Manufacturer = () => {
   const columns = [
@@ -28,19 +27,19 @@ const Manufacturer = () => {
       dataIndex: 'name',
     },
     {
-        title: 'Action',
-        render: (_: any, record: any) => (
-            <Space size='middle'>
-                <Link to={`model/${record.code}`}>
-                  <button type='button' className='btn btn-light-primary me-3'>
-                    Models
-                  </button>
-                </Link>
-                {/*<button type='button' className='btn btn-light-danger me-3'>*/}
-                {/*Delete*/}
-                {/*</button>*/}
-            </Space>
-        )
+      title: 'Action',
+      render: (_: any, record: any) => (
+        <Space size='middle'>
+          <Link to={`model/${record.code}`}>
+            <button type='button' className='btn btn-light-primary me-3'>
+              Models
+            </button>
+          </Link>
+          {/*<button type='button' className='btn btn-light-danger me-3'>*/}
+          {/*Delete*/}
+          {/*</button>*/}
+        </Space>
+      )
     }
   ]
 
@@ -58,7 +57,7 @@ const Manufacturer = () => {
           </Space>
           <Space style={{marginBottom: 16}}>
             <button type='button' className='btn btn-primary me-3' onClick={() => console.log()}>
-              <KTSVG path='/media/icons/duotune/arrows/arr075.svg' className='svg-icon-2' />
+              <KTSVG path='/media/icons/duotune/arrows/arr075.svg' className='svg-icon-2'/>
               Add
             </button>
           </Space>
@@ -68,7 +67,7 @@ const Manufacturer = () => {
           bordered
           dataSource={data}
         />
-        </KTCardBody>
+      </KTCardBody>
     </KTCard>
   )
 }

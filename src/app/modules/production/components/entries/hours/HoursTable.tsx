@@ -1,14 +1,29 @@
-import {Button, DatePicker, Input, InputNumber, Modal, Select, TableColumnsType} from 'antd'
+import {Button, DatePicker, Input, InputNumber, message, Modal, Select, TableColumnsType} from 'antd'
 import {Space, Table, Form} from 'antd'
 import React, {useEffect, useState} from 'react'
-import {useQuery} from "react-query";
+import {useMutation, useQuery, useQueryClient} from "react-query";
 import {KTSVG} from '../../../../../../_metronic/helpers'
-import {fetchEquips, fetchHours, fetchModels} from '../../../../../urls'
+import {addHours, fetchEquips, fetchHours} from '../../../../../urls'
 
 const HoursPage: React.FC = () => {
   const [form] = Form.useForm()
+  const queryClient = useQueryClient()
   const [isModalOpen, setIsModalOpen] = useState(false)
 
+  const {data: allHours, isLoading} = useQuery('hours', fetchHours, {cacheTime: 5000})
+  const {data: equips, isLoading: equipsLoading} = useQuery('equips', fetchEquips, {cacheTime: 5000})
+  const {mutate: mutateHours} = useMutation('addHours', addHours, {
+    onSuccess: () => {
+      setIsModalOpen(false)
+      form.resetFields()
+      message.success('Hours added successfully')
+      queryClient.invalidateQueries('hours')
+    },
+    onError: (error: any) => {
+      message.error(error.message)
+
+    }
+  })
   const showModal = () => {
     setIsModalOpen(true)
   }
@@ -16,8 +31,17 @@ const HoursPage: React.FC = () => {
   const handleCancel = () => {
     setIsModalOpen(false)
   }
-  const {data: allHours, isLoading} = useQuery('hours', fetchHours, {cacheTime: 5000})
-  const {data: equips, isLoading: equipsLoading} = useQuery('equips', fetchEquips, {cacheTime: 5000})
+
+  function handleFinish() {
+    form.validateFields().then((values: any) => {
+      console.log(values)
+      const data = {
+        ...values,
+        fleetId: values.equipmentId,
+      }
+      mutateHours(data)
+    })
+  }
 
   return (
     <>
@@ -51,9 +75,14 @@ const HoursPage: React.FC = () => {
             </button>
           </Space>
         </div>
-        <Table bordered loading={isLoading} dataSource={
-          allHours?.data
-        }>
+        <Table
+          bordered
+          loading={isLoading}
+          dataSource={
+            allHours?.data
+          }
+          rowKey='id'
+        >
           <Table.Column title='Equipment ID' dataIndex='fleetId'/>
           <Table.Column title='Date' dataIndex='date' render={
             (date: string) => {
@@ -66,11 +95,29 @@ const HoursPage: React.FC = () => {
       </div>
       <Modal title='Add Hours' open={isModalOpen} onCancel={handleCancel}
              closable={true}
+             footer={[
+               <Button key='back' onClick={handleCancel}>
+                 Cancel
+               </Button>,
+               <Button
+                 key='submit'
+                 type='primary'
+                 htmlType='submit'
+                 // loading={submitLoading}
+                 onClick={() => {
+                   form.submit()
+                 }}
+               >
+                 Submit
+               </Button>,
+             ]}
       >
-        <Form form={form}
-              name={'addHours'}
-              labelCol={{span: 24}}
-              wrapperCol={{span: 24}}
+        <Form
+          form={form}
+          name={'addHours'}
+          labelCol={{span: 24}}
+          wrapperCol={{span: 24}}
+          onFinish={handleFinish}
         >
           <Form.Item label='Equipment ID' name='equipmentId'
                      rules={[{required: true, message: 'Please select an equipment'}]}

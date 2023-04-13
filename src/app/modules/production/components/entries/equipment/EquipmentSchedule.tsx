@@ -21,61 +21,61 @@ function EquipmentSchedule() {
   console.log('chosenLocationIdFromDropdown', chosenLocationIdFromDropdown)
   return (
     <>
-      <div className='d-flex justify-content-between'>
-        <Space style={{marginBottom: 0}}>
-          <DropDownListComponent
-            id='dropdownlist'
-            placeholder='Select a location'
-            onChange={(e: any) => setChosenLocationIdFromDropdown(e.value)}
-            ref={(scope) => {
-              dropDownListObj = scope
-            }}
-            dataSource={locations?.data.map((location: any) => {
-              return {
-                text: `${location.locationCode}- ${location.locationDesc}`,
-                value: `${location.locationCode}`,
-              }
-            })}
-            fields={{text: 'text', value: 'value'}}
-          />
-          <Button
-            type='primary'
-            onClick={() => {
-              setChosenLocationIdFromDropdown(null)
-              dropDownListObj.value = null
-            }}
-          >
-            Reset
-          </Button>
-        </Space>
-        <Space style={{marginBottom: 0}}>
-          <button
-            type='button'
-            className='btn btn-primary me-3'
-            onClick={() => {
-              navigate('/entries/start-work')
-            }}
-          >
-            <KTSVG path='/media/icons/duotune/arrows/arr078.svg' className='svg-icon-2' />
-            Upload
-          </button>
-          <button
-            type='button'
-            className='btn btn-primary me-3'
-            onClick={() => {
-              navigate('/entries/start-work')
-            }}
-          >
-            <KTSVG path='/media/icons/duotune/technology/teh005.svg' className='svg-icon-2' />
-            PM
-          </button>
-        </Space>
-      </div>
 
       {/*Todo: Add a calendar component that takes a vehicle type as a prop and displays the vehicle's schedule*/}
       <KTCard>
         <KTCardBody className='py-5 px-2'>
-        <Calendar chosenLocationIdFromDropdown={chosenLocationIdFromDropdown} />
+          <div className='d-flex justify-content-between'>
+            <Space style={{marginBottom: 0}}>
+              <DropDownListComponent
+                id='dropdownlist'
+                placeholder='Select a location'
+                onChange={(e: any) => setChosenLocationIdFromDropdown(e.value)}
+                ref={(scope) => {
+                  dropDownListObj = scope
+                }}
+                dataSource={locations?.data?.map((location: any) => {
+                  return {
+                    text: `${location.locationCode}- ${location.locationDesc}`,
+                    value: `${location.locationCode}`,
+                  }
+                })}
+                fields={{text: 'text', value: 'value'}}
+              />
+              <Button
+                type='primary'
+                onClick={() => {
+                  setChosenLocationIdFromDropdown(null)
+                  dropDownListObj.value = null
+                }}
+              >
+                Reset
+              </Button>
+            </Space>
+            <Space style={{marginBottom: 0}}>
+              <button
+                type='button'
+                className='btn btn-primary me-3'
+                onClick={() => {
+                  navigate('/entries/start-work')
+                }}
+              >
+                <KTSVG path='/media/icons/duotune/arrows/arr078.svg' className='svg-icon-2'/>
+                Upload
+              </button>
+              <button
+                type='button'
+                className='btn btn-primary me-3'
+                onClick={() => {
+                  navigate('/entries/start-work')
+                }}
+              >
+                <KTSVG path='/media/icons/duotune/technology/teh005.svg' className='svg-icon-2'/>
+                PM
+              </button>
+            </Space>
+          </div>
+          <Calendar chosenLocationIdFromDropdown={chosenLocationIdFromDropdown}/>
         </KTCardBody>
       </KTCard>
     </>

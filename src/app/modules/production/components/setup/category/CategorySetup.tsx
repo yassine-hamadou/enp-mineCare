@@ -38,48 +38,46 @@ const CategorySetup = () => {
       }}
     >
       <KTCardBody className='py-4 '>
-        <div className='table-responsive'>
-          <div className='d-flex justify-content-between'>
-            <Space style={{marginBottom: 16}}>
+        <div className='d-flex justify-content-between'>
+          <Space style={{marginBottom: 16}}>
+            <Input
+              placeholder='Enter Search Text'
+              type='text'
+              allowClear
+            />
+            <Button type='primary'>
+              Search
+            </Button>
+          </Space>
+          <Space style={{marginBottom: 16}}>
+            <button type='button' className='btn btn-primary me-3' onClick={
+              () => setIsCategoryModalOpen(true)
+            }>
+              <KTSVG path='/media/icons/duotune/arrows/arr075.svg' className='svg-icon-2'/>
+              Add
+            </button>
+          </Space>
+        </div>
+        <Table columns={columns} dataSource={listOfCategory?.data} bordered loading={categoryLoading}/>
+        <Modal title='Add Category' open={isCategoryModalOpen} onCancel={handleCategoryCancel}>
+          <Form
+            labelCol={{span: 7}}
+            wrapperCol={{span: 14}}
+            layout='horizontal'
+            form={categoryForm}
+            name='control-hooks'
+            title='Add Category'
+            // onFinish={onFinish}
+          >
+            <Form.Item label='Name' name='name' rules={[{required: true}]}>
               <Input
-                placeholder='Enter Search Text'
+                placeholder='Enter Category Name'
                 type='text'
                 allowClear
               />
-              <Button type='primary'>
-                Search
-              </Button>
-            </Space>
-            <Space style={{marginBottom: 16}}>
-              <button type='button' className='btn btn-primary me-3' onClick={
-                () => setIsCategoryModalOpen(true)
-              }>
-                <KTSVG path='/media/icons/duotune/arrows/arr075.svg' className='svg-icon-2'/>
-                Add
-              </button>
-            </Space>
-          </div>
-          <Table columns={columns} dataSource={listOfCategory?.data} bordered loading={categoryLoading}/>
-          <Modal title='Add Category' open={isCategoryModalOpen} onCancel={handleCategoryCancel}>
-            <Form
-              labelCol={{span: 7}}
-              wrapperCol={{span: 14}}
-              layout='horizontal'
-              form={categoryForm}
-              name='control-hooks'
-              title='Add Category'
-              // onFinish={onFinish}
-            >
-              <Form.Item label='Name' name='name' rules={[{required: true}]}>
-                <Input
-                  placeholder='Enter Category Name'
-                  type='text'
-                  allowClear
-                />
-              </Form.Item>
-            </Form>
-          </Modal>
-        </div>
+            </Form.Item>
+          </Form>
+        </Modal>
       </KTCardBody>
     </div>
   )
