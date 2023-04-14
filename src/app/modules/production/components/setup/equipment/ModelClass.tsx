@@ -1,47 +1,38 @@
 import {Button, Input, Space, Table} from "antd";
 import {KTCard, KTCardBody, KTSVG} from "../../../../../../_metronic/helpers";
 import React from "react";
+import {useQuery} from "react-query";
+import {getModelClasses} from "../../../../../urls";
 
 
-const data = [
-  {
-    key: '001',
-    code: '001',
-    name: '14HM',
-  },
-  {
-    key: '002',
-    code: '002',
-    name: '12HM',
-  }
-]
 const ModelClass = () => {
+  const {data: modelClasses, isLoading} = useQuery('ModelClasses', getModelClasses)
   const columns = [
     {
-        title: 'Code',
-        dataIndex: 'code',
+      title: 'Code',
+      dataIndex: 'code',
     },
     {
-        title: 'Name',
-        dataIndex: 'name',
+      title: 'Name',
+      dataIndex: 'name',
     },
     {
-        title: 'Action',
+      title: 'Action',
       render: () => (
         <Space size='middle'>
-            <Button type='primary' ghost>
-                Edit
-            </Button>
-            <Button type={'primary'} danger>
-                Delete
-            </Button>
+          <Button type='primary' ghost>
+            Edit
+          </Button>
+          <Button type={'primary'} danger>
+            Delete
+          </Button>
         </Space>
-        )
+      )
     }
   ]
 
   return (
-        <KTCard>
+    <KTCard>
       <KTCardBody>
         <div className='d-flex justify-content-between'>
           <Space style={{marginBottom: 16}}>
@@ -54,7 +45,7 @@ const ModelClass = () => {
           </Space>
           <Space style={{marginBottom: 16}}>
             <button type='button' className='btn btn-primary me-3' onClick={() => console.log()}>
-              <KTSVG path='/media/icons/duotune/arrows/arr075.svg' className='svg-icon-2' />
+              <KTSVG path='/media/icons/duotune/arrows/arr075.svg' className='svg-icon-2'/>
               Add
             </button>
           </Space>
@@ -62,11 +53,11 @@ const ModelClass = () => {
         <Table
           columns={columns}
           bordered
-            dataSource={data}
+          dataSource={modelClasses?.data}
         />
       </KTCardBody>
-        </KTCard>
-    )
+    </KTCard>
+  )
 }
 
 export default ModelClass

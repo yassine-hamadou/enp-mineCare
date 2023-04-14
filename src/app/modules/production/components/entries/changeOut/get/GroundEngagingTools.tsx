@@ -1,29 +1,83 @@
-import React, {useState, useEffect} from "react";
+import React, {useState} from "react";
 import {Button, DatePicker, Form, Input, InputNumber, message, Modal, Select, Space, Table} from "antd";
 import {KTCard, KTCardBody, KTSVG} from "../../../../../../../_metronic/helpers";
 import {useForm} from "antd/es/form/Form";
 import {useMutation, useQuery, useQueryClient} from "react-query";
-import {getEquipment, getGroundEngagingTools, postGroundEngagingTools} from "../../../../../../urls";
+import {
+  deleteGroundEngagingTools,
+  getEquipment,
+  getGroundEngagingTools,
+  postGroundEngagingTools,
+  putGroundEngagingTools
+} from "../../../../../../urls";
 import TextArea from "antd/lib/input/TextArea";
 import dayjs from "dayjs";
+import {uuid} from "@ant-design/plots/es/utils";
 
 export default function GroundEngagingTools() {
 
   const queryClient = useQueryClient()
-
-
-  const {
-    data: groundengagingtools,
-    isLoading: groundengagingtoolsLoading
-  } = useQuery('groundengagingtools', () => getGroundEngagingTools())
-
   const [getForm] = useForm();
   const [editGetForm] = useForm();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [openEditModal, setOpenEditModal] = useState(false);
+  const [submitLoading, setSubmitLoading] = useState(false);
+  const [deleteLoading, setDeleteLoading] = useState(false);
+  const [dataToEdit, setDataToEdit] = useState<any>();
   const {data: equipmentData} = useQuery('equipments', () => getEquipment());
   const {data: groundETData, isLoading: getLoading} = useQuery('groundEngagingTools', () => getGroundEngagingTools());
+  const {mutate: postGroundTool} = useMutation(postGroundEngagingTools, {
+    onSuccess: () => {
+      setSubmitLoading(false);
+      getForm.resetFields();
+      setIsModalOpen(false);
+      queryClient.invalidateQueries('groundEngagingTools').then(
+        () => {
+          message.success('Ground Engaging Tool Added Successfully')
+        }
+      )
+    }, onError: (e: any) => {
+      setSubmitLoading(false);
+      message.error(e.message)
+    }
+  })
+  const {mutate: editGet} = useMutation(putGroundEngagingTools, {
+
+    onSuccess: () => {
+      setSubmitLoading(false);
+      editGetForm.resetFields();
+      setOpenEditModal(false);
+      queryClient.invalidateQueries('groundEngagingTools').then(
+        () => {
+          message.success('Ground Engaging Tool Edited Successfully')
+        }
+      )
+    },
+    onError: (e: any) => {
+      setSubmitLoading(false);
+      message.error(e.message)
+    }
+  })
+  const {mutate: deleteGet} = useMutation(deleteGroundEngagingTools, {
+    onSuccess: () => {
+      setDeleteLoading(false);
+      queryClient.invalidateQueries('groundEngagingTools').then(
+        () => {
+          message.success('Ground Engaging Tool Deleted Successfully')
+        }
+      )
+    },
+    onError: (e: any) => {
+      setDeleteLoading(false);
+      message.error(e.message)
+    }
+  })
+
   const columns: any = [
+    {
+      title: "ID",
+      dataIndex: "id",
+    },
     {
       title: "Equipment ID",
       dataIndex: "equipmentId"
@@ -46,17 +100,22 @@ export default function GroundEngagingTools() {
     },
     {
       title: "Date",
-      dataIndex: "date"
+      dataIndex: "date",
+      render: (text: any, record: any) => {
+        return new Date(record.date).toDateString()
+      }
     },
     {
       title: "Action",
       dataIndex: "action",
+      key: `${uuid()}`,
       render: (text: any, record: any) => (
-        <Space size="middle">
+        <Space size="small">
           <Button type="primary" className="me-3" onClick={() => handleEdit(record)}>
             Edit
           </Button>
-          <Button type="primary" className="me-3" danger>
+          <Button type="primary" className="me-3" danger onClick={() => handleDelete(record)}
+                  loading={deleteLoading}>
             Delete
           </Button>
         </Space>
@@ -64,23 +123,6 @@ export default function GroundEngagingTools() {
     }
   ];
 
-  const {mutate: postGroundTool} = useMutation(postGroundEngagingTools, {
-    onSuccess: () => {
-      setSubmitLoading(false);
-      getForm.resetFields();
-      setIsModalOpen(false);
-      queryClient.invalidateQueries('groundEngagingTools').then(
-        () => {
-          message.success('Ground Engaging Tool Added Successfully')
-        }
-      )
-    }, onError: (e: any) => {
-      setSubmitLoading(false);
-      message.error(e.message)
-    }
-  })
-
-  const [submitLoading, setSubmitLoading] = useState(false);
   const handleEdit = (values: any) => {
     setOpenEditModal(true);
     editGetForm.setFieldsValue({
@@ -91,9 +133,41 @@ export default function GroundEngagingTools() {
       reason: values.reason,
       date: dayjs(values.date)
     })
-    console.log('date', values.date)
-    console.log('values', values);
+    setDataToEdit(values);
   }
+  const handleDelete = (values: any) => {
+    Modal.confirm({
+
+        title: 'Delete this Ground Engaging Tool?',
+        maskClosable: true,
+        okType: 'danger',
+        onOk() {
+          deleteGet(values.id);
+        },
+      }
+    )
+  }
+
+  const onEditFinish = () => {
+    setSubmitLoading(true);
+    const dataToSubmit = {
+      id: dataToEdit.id,
+      equipmentId: editGetForm.getFieldValue('equipmentId'),
+      previousHours: editGetForm.getFieldValue('previousHours'),
+      currentHours: editGetForm.getFieldValue('currentHours'),
+      quantity: editGetForm.getFieldValue('quantity'),
+      reason: editGetForm.getFieldValue('reason'),
+      date: new Date(editGetForm.getFieldValue('date').$d).toISOString()
+    }
+    console.log('dataToSubmit', dataToSubmit);
+    editGet(dataToSubmit);
+  }
+
+  const handleEditCancel = () => {
+    setOpenEditModal(false);
+  }
+
+
   const showModal = () => {
     setIsModalOpen(true);
   };
@@ -101,15 +175,6 @@ export default function GroundEngagingTools() {
   const handleCancel = () => {
     setIsModalOpen(false);
   };
-
-  const handleEditCancel = () => {
-    setOpenEditModal(false);
-  }
-
-  const onEditFinish = (values: any) => {
-    return console.log('done', values);
-  }
-
 
   const onFinish = (values: any) => {
     setSubmitLoading(true);
@@ -324,9 +389,10 @@ export default function GroundEngagingTools() {
                     name='previousHours'
                     label='Previous Hours'
                   >
-                    <InputNumber min={1}
-                                 className={'w-100'}
-                                 disabled
+                    <InputNumber
+                      min={1}
+                      className={'w-100'}
+                      disabled
                     />
                   </Form.Item>
                   <Form.Item
@@ -385,7 +451,7 @@ export default function GroundEngagingTools() {
             dataSource={groundETData?.data}
             bordered
             loading={getLoading}
-            // rowKey={}
+            rowKey={() => uuid()}
           />
         </KTCardBody>
       </KTCard>

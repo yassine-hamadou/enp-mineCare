@@ -64,6 +64,23 @@ export function postGroundEngagingTools(data: any) {
   return axios.post(`${ENP_URL}/groundEngagingTools`, data);
 }
 
+export function putGroundEngagingTools(data: any) {
+  console.log('putttt', data);
+  return axios.put(`${ENP_URL}/groundEngagingTools/${data.id}`, data);
+}
+
+export function deleteGroundEngagingTools(id: any) {
+  return axios.delete(`${ENP_URL}/groundEngagingTools/${id}`);
+}
+
+export function getManufacturers() {
+  return axios.get(`${ENP_URL}/manufacturers`);
+}
+
+export function getModelClasses() {
+  return axios.get(`${ENP_URL}/modelClasses`);
+}
+
 export function addHours(data: any) {
   return axios.post(`${ENP_URL}/hoursentry`, data);
 }

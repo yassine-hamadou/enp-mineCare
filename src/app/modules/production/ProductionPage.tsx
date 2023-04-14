@@ -230,10 +230,10 @@ const ProductionPage: React.FC = () => {
             </>
           }/>
           <Route
-            path='model/:manufacturerCode'
+            path=':manufacturerCode'
             element={
               <>
-                <PageTitle breadcrumbs={accountBreadCrumbs}>Model</PageTitle>
+                <PageTitle breadcrumbs={accountBreadCrumbs}>Models</PageTitle>
                 <ModelsForManufacturer/>
               </>
             }
