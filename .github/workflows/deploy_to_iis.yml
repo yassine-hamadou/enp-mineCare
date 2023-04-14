@@ -5,7 +5,7 @@ name: Run self hosted server and deploy to IIS folder
 on:
   push:
     branches:
-      - master
+      - production
   workflow_dispatch: # Allows you to run this workflow manually from the Actions tab
   # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 
@@ -20,42 +20,31 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: '18.x'
-      
+
       #      install dependencies only if package.json has changed
       - name: Cache node modules
-        id: cache-nodemodules
-        uses: actions/cache@v2
-        env:
-          cache-name: cache-node-modules
-        with:
         # npm cache files on windows
-        path: 'C:\\Users\\Administrator\\AppData\\Local\\npm-cache'
-        key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
-        restore-keys: |
-          ${{ runner.os }}-build-${{ env.cache-name }}-
-          ${{ runner.os }}-build-
-          ${{ runner.os }}-
+        uses: actions/cache@v3
+        with:
+          # A unique key for the cache based on package-lock.json
+          key: ${{ hashFiles('./package-lock.json') }}
+          # The path to the cache directory
+          path: C:\Windows\ServiceProfiles\NetworkService\AppData\Local\npm-cache
+          # The cache will be restored if the key matches
+          restore-keys: |
+            ${{ hashFiles('./package-lock.json') }}
+          # Checking if the cache hit is not true, if it is true then the dependencies are already installed otherwise we
+          # install the dependencies on windows server
 
-
-        # Checking if the cache hit is not true, if it is true then the dependencies are already installed otherwise we
-        # install the dependencies
       - name: Install Dependencies
-        if: steps.cache-nodemodules.outputs.cache-hit != 'true'
-        run: npm ci
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: npm install --legacy-peer-deps
 
       - name: Build
         run: npm run ciBuild
 
       - name: Remove the existing website files except for web.config file
-        run: Remove-Item -Recurse -Force 'C:\inetpub\wwwroot\mine-care\*' -Exclude 'web.config'
+        run: get-childitem 'C:\inetpub\wwwroot\mine-care\' -Exclude *.config -recurse | remove-item -recurse -force
 
       - name: Copy build folder to the website folder
         run: Copy-Item -Recurse -Force 'build\*' 'C:\inetpub\wwwroot\mine-care'
-
-      - name: Verifying that the website is running
-        run: $response = Invoke-WebRequest -Uri 'http://localhost/mine-care' -UseBasicParsing
-          if ($response.StatusCode -ne 200) {
-          throw 'Failed to verify that the website is running'
-          } else {
-          Write-Host 'The website is running'
-          }

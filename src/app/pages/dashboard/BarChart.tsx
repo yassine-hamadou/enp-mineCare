@@ -5,7 +5,6 @@ import {getCSSVariableValue} from '../../../_metronic/assets/ts/_utils'
 import {useQuery} from "react-query";
 import axios from "axios";
 import {ENP_URL} from '../../urls';
-import {dataSource} from "devexpress-reporting/designer/controls/metadata/properties/metadata";
 
 type Props = {
   className: string
@@ -13,23 +12,19 @@ type Props = {
   chartHeight: string
 }
 
-const data: any = []
-const categories: any = []
-const monthArray = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+
 const BarChart: React.FC<Props> = ({className, chartColor, chartHeight}) => {
   const chartRef = useRef<HTMLDivElement | null>(null)
   const {mode} = useThemeMode()
+  const data: any = []
+  const categories: any = []
+  const monthArray = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+
   const {data: listOfFaults} = useQuery('listOfFaults', () => {
     return axios.get(`${ENP_URL}/faultentriesapi`)
   })
   // const [categories, setCategories]: any = useState([])
   // const [data, setData]: any = useState([])
-
-  // const janFaults = listOfFaults?.data.filter((item: any) => {
-  //   if (item.status === 1 && item.faultDate?.includes('2021-01')) {
-  //     return item
-  //   }
-  // })
 
 
   console.log('data', data)
@@ -157,30 +152,29 @@ const BarChart: React.FC<Props> = ({className, chartColor, chartHeight}) => {
 
     return chart
   }
-  const [loading, setLoading] = useState(false)
+
+  //from now to last 12 months
+  for (let i = 0; i < 12; i++) {
+    const date = new Date()
+    date.setMonth(date.getMonth() - i)
+    const year = date.getFullYear()
+    const month = date.getMonth() + 1
+    const monthString = month < 10 ? `0${month}` : month
+    const dateString = `${year}-${monthString}`
+    // setCategories([...categories, monthArray[new Date(dateString).getMonth()]])
+    categories.push(monthArray[new Date(dateString).getMonth()])
+    const faultDuringTheMonth = listOfFaults?.data.filter((item: any) => {
+      if (item.status === 1 && item.downtime?.includes(dateString)) {
+        return item
+      }
+    })
+    const TDowntimeMillisecond = faultDuringTheMonth?.map((item: any) => new Date(item.wtimeEnd).getTime() - new Date(item.downtime).getTime()).reduce(
+      (a: any, b: any) => a + b, 0
+    )
+    data.push(Math.floor(TDowntimeMillisecond / 1000 / 60 / 60))
+  }
   useEffect(() => {
-    //from now to last 12 months
-    setLoading(true)
-    for (let i = 0; i < 12; i++) {
-      const date = new Date()
-      date.setMonth(date.getMonth() - i)
-      const year = date.getFullYear()
-      const month = date.getMonth() + 1
-      const monthString = month < 10 ? `0${month}` : month
-      const dateString = `${year}-${monthString}`
-      // setCategories([...categories, monthArray[new Date(dateString).getMonth()]])
-      categories.push(monthArray[new Date(dateString).getMonth()])
-      const faultDuringTheMonth = listOfFaults?.data.filter((item: any) => {
-        if (item.status === 1 && item.downtime?.includes(dateString)) {
-          return item
-        }
-      })
-      const TDowntimeMillisecond = faultDuringTheMonth?.map((item: any) => new Date(item.wtimeEnd).getTime() - new Date(item.downtime).getTime()).reduce(
-        (a: any, b: any) => a + b, 0
-      )
-      data.push(Math.floor(TDowntimeMillisecond / 1000 / 60 / 60))
-    }
-    setLoading(false)
+
     const chart = refreshChart()
 
     return () => {
@@ -189,7 +183,7 @@ const BarChart: React.FC<Props> = ({className, chartColor, chartHeight}) => {
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [chartRef, mode])
+  }, [chartRef, mode, categories, data])
   const todayDate = new Date()
   const lastDate = new Date()
   lastDate.setMonth(todayDate.getMonth() - 11)

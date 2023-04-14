@@ -594,6 +594,7 @@ const FaultTable = () => {
                   bordered
                   loading={isSolveLoading ? isSolveLoading : loading}
                   rowKey={(record: any) => record.entryId}
+                  scroll={{x: 1500}}
                 />
               </>
             ),

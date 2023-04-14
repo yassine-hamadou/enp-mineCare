@@ -41,6 +41,17 @@ import {AllReportPage} from './components/report/AllReportPage'
 import {CategorySetup} from './components/setup/category/CategorySetup'
 import ServiceTypeReport from "./components/report/ServiceTypeReport/ServiceTypeReport";
 import WarrantyEndOfLifeReport from './components/report/warrantyEndOfLifeReport/WarrantyEndOfLife'
+import GroundEngagingTools from './components/entries/changeOut/get/GroundEngagingTools'
+import MeteringByModelDetail from './components/report/metering/MeteringByModelDetail/MeteringByModelDetail'
+import MeteringByModelSummary from './components/report/metering/MeteringByModelSummary/MeteringByModelSummary'
+import ChangeoutByModel from "./components/report/changeout/ChangeoutByModel/ChangeoutByModel";
+import ChangeoutByRefillTypeModel
+  from "./components/report/changeout/ChangeoutByRefillTypeModel/ChangeoutByRefillTypeModel";
+import FaultByCustodianSummary from './components/report/fault/FaultByCustodianSummary/FaultByCustodianSummary'
+import FaultByCustodianDetail from './components/report/fault/faultByCustodianDetail/FaultByCustodianDetail'
+import ScheduleByModelSummaryReport from './components/report/ScheduleByModelSummaryReport/ScheduleByModelSummaryReport'
+import ScheduleByServiceTypeReport from './components/report/ScheduleByServiceTypeReport/ScheduleByServiceTypeReport'
+import ScheduleByLocationReport from './components/report/ScheduleByLocationReport/ScheduleByLocationReport'
 
 const accountBreadCrumbs: Array<PageLink> = []
 
@@ -104,14 +115,32 @@ const ProductionPage: React.FC = () => {
           }
         />
         <Route
-          path='changeout/lube'
+          path='changeout/*'
           element={
             <>
-              <PageTitle breadcrumbs={accountBreadCrumbs}>Change Out</PageTitle>
-              <LubePage/>
+              <Outlet/>
             </>
           }
-        />
+        >
+          <Route
+            path='lube'
+            element={
+              <>
+                <PageTitle breadcrumbs={accountBreadCrumbs}>Change Out</PageTitle>
+                <LubePage/>
+              </>
+            }
+          />
+          <Route
+            path='ground-engaging-tools'
+            element={
+              <>
+                <PageTitle breadcrumbs={accountBreadCrumbs}>Ground Engaging Tools</PageTitle>
+                <GroundEngagingTools/>
+              </>
+            }
+          />
+        </Route>
         <Route
           path='start-work/*'
           element={
@@ -331,7 +360,105 @@ const ProductionPage: React.FC = () => {
           </>
         }
       >
-
+        <Route
+          path='metering/*'
+          element={
+            <>
+              <Outlet/>
+            </>
+          }
+        >
+          <Route
+            path='MeteringByModelDetail'
+            element={
+              <>
+                <PageTitle breadcrumbs={accountBreadCrumbs}>Metering By Model Detail</PageTitle>
+                <MeteringByModelDetail/>
+              </>
+            }
+          />
+          <Route
+            path='MeteringByModelSummary'
+            element={
+              <>
+                <PageTitle breadcrumbs={accountBreadCrumbs}>Metering By Model Summary</PageTitle>
+                <MeteringByModelSummary/>
+              </>
+            }
+          />
+          <Route
+            path='MeteringByModelEquipment'
+            element={
+              <>
+                <PageTitle breadcrumbs={accountBreadCrumbs}>Metering By Model Equipment</PageTitle>
+                {/*<MeteringByModelEquipment/>*/}
+              </>
+            }
+          />
+        </Route>
+        <Route
+          path='changeout/*'
+          element={
+            <>
+              <Outlet/>
+            </>
+          }
+        >
+          <Route
+            path='ChangeOutByModel'
+            element={
+              <>
+                <PageTitle breadcrumbs={accountBreadCrumbs}>Change Out By Model</PageTitle>
+                <ChangeoutByModel/>
+              </>
+            }
+          />
+          <Route
+            path='ChangeoutByRefillTypeModel'
+            element={
+              <>
+                <PageTitle breadcrumbs={accountBreadCrumbs}>Changeout By Refill Type Model</PageTitle>
+                <ChangeoutByRefillTypeModel/>
+              </>
+            }
+          />
+        </Route>
+        <Route
+          path='schedules/*'
+          element={
+            <>
+              <Outlet/>
+            </>
+          }
+        >
+          <Route
+            path='ScheduleByModelSummaryReport'
+            element={
+              <>
+                <PageTitle breadcrumbs={accountBreadCrumbs}>Schedule By Model Summary Report</PageTitle>
+                <ScheduleByModelSummaryReport/>
+              </>
+            }
+          />
+          <Route
+            path='ScheduleByServiceTypeReport'
+            element={
+              <>
+                <PageTitle breadcrumbs={accountBreadCrumbs}>Schedule By Model Service Type</PageTitle>
+                <ScheduleByServiceTypeReport/>
+              </>
+            }
+          />
+          <Route
+            path={'ScheduleByLocationReport'}
+            element={
+              <>
+                <PageTitle breadcrumbs={accountBreadCrumbs}>Schedule By Location Report</PageTitle>
+                <ScheduleByLocationReport/>
+              </>
+            }
+          />
+        </Route>
         <Route
           path='all'
           element={
@@ -347,6 +474,24 @@ const ProductionPage: React.FC = () => {
             <>
               <PageTitle breadcrumbs={accountBreadCrumbs}>All Fault Report</PageTitle>
               <FaultEntryReport/>
+            </>
+          }
+        />
+        <Route
+          path='FaultByCustodianSummary'
+          element={
+            <>
+              <PageTitle breadcrumbs={accountBreadCrumbs}>Fault By Custodian Summary</PageTitle>
+              <FaultByCustodianSummary/>
+            </>
+          }
+        />
+        <Route
+          path='FaultByCustodianDetail'
+          element={
+            <>
+              <PageTitle breadcrumbs={accountBreadCrumbs}>Fault By Custodian Detail</PageTitle>
+              <FaultByCustodianDetail/>
             </>
           }
         />
@@ -426,13 +571,15 @@ const ProductionPage: React.FC = () => {
           path='fleet-history-report'
           element={
             <>
-              <PageTitle breadcrumbs={accountBreadCrumbs}>Fleet History Report</PageTitle>
+              <PageTitle breadcrumbs={accountBreadCrumbs}>Equipment History Report</PageTitle>
               <FaultEntryFleetHistoryReport/>
             </>
           }
         />
         <Route index element={<Navigate to='/dashboard'/>}/>
       </Route>
+
+
       <Route
         path='/checkListForm/*'
         element={

@@ -38,7 +38,7 @@ export function AsideMenuMain() {
         <AsideMenuItem to='entries/hours' hasBullet={true} title='Hours'/>
         <AsideMenuItemWithSub to='#' title={'Changeout'} hasBullet={true}>
           <AsideMenuItem to='/entries/changeout/lube' title='Lube' hasBullet={true}/>
-          <AsideMenuItem to='/entries/changeout/get' title='GET' hasBullet={true}/>
+          <AsideMenuItem to='/entries/changeout/ground-engaging-tools' title='GET' hasBullet={true}/>
         </AsideMenuItemWithSub>
       </AsideMenuItemWithSub>
 

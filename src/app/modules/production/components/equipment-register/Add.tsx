@@ -51,7 +51,7 @@ const AddEquipRegister = () => {
                   >
                     <div className='row mb-0'>
                       <div className='col-4 mb-7'>
-                        <Form.Item name='equipmentId' label='Euipment ID' rules={[{required: true}]}>
+                        <Form.Item name='equipmentId' label='Equipment ID' rules={[{required: true}]}>
                           <Input
                             placeholder='Enter Equipment ID'
                             type='text'

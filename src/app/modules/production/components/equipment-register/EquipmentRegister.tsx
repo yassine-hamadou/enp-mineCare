@@ -7,7 +7,7 @@ import axios from "axios";
 import {ENP_URL} from "../../../../urls";
 
 const EquipmentRegister = () => {
-  const {manufacturerCode} = useParams();
+  // const {manufacturerCode} = useParams();
 
   const {data: listOfEquipments, isLoading} = useQuery('equipments', () =>
     axios.get(`${ENP_URL}/equipments`)
@@ -19,7 +19,7 @@ const EquipmentRegister = () => {
 
   const {data: modelClasses} = useQuery('listOfModelClass', () => axios.get(`${ENP_URL}/modelClasses`))
   const {data: manufacturers} = useQuery('listOfEquipmentManufacturer', () => axios.get(`${ENP_URL}/manufacturers`))
-  const columns = [
+  const columns: any = [
     {
       title: 'Equipment ID',
       dataIndex: 'equipmentId',
@@ -205,7 +205,7 @@ const EquipmentRegister = () => {
     {
       title: 'Action',
       width: 200,
-      fixed: 'left',
+      fixed: true,
       render: (_: any, record: any) => (
         <Space>
           <Link
@@ -258,43 +258,42 @@ const EquipmentRegister = () => {
     }, 2000);
   }
 
-  // const data = listOfEquipments?.data?.map((equipment: any) => {
-  //   const {
-  //     name,
-  //     manufacturerId,
-  //     modelClassId
-  //   } = models?.data?.find((model: any) => model.modelId === equipment.modelId)
-  //   const {name: modelClassName} = modelClasses?.data?.find((modelClass: any) => modelClass.modelClassId === modelClassId)
-  //   const {name: manufacturer} = manufacturers?.data?.find((manufacturer: any) => manufacturer.manufacturerId === manufacturerId)
-  //   // console.log('manufacturer', manufacturer)
-  //   // const manufacturer = listOfequipmentManufacturerQueryClient?.getQueryData('listOfequipmentManufacturer')?.data?.find((manufacturer: any) => manufacturer.manufacturerId === manufacturerId)
-  //   return {
-  //     ...equipment,
-  //     modelName: name,
-  //     modelClassName: modelClassName,
-  //     manufacturer: manufacturer
-  //   }
-  // })
+  const data = listOfEquipments?.data?.map((equipment: any) => {
+    const model = models?.data?.find((model: any) => model.modelId === equipment.modelId)
+    const {name: modelClassName} = modelClasses?.data?.find((modelClass: any) => modelClass.modelClassId === model.modelClassId)
+    const {name: manufacturer} = manufacturers?.data?.find((manufacturer: any) => manufacturer.manufacturerId === model.manufacturerId)
+    // console.log('manufacturer', manufacturer)
+    // const manufacturer = listOfequipmentManufacturerQueryClient?.getQueryData('listOfequipmentManufacturer')?.data?.find((manufacturer: any) => manufacturer.manufacturerId === manufacturerId)
+    return {
+      ...equipment,
+      modelName: model.name,
+      modelClassName: modelClassName,
+      manufacturer: manufacturer
+    }
+  })
   const [gridData, setGridData] = useState([])
   const [beforeSearch, setBeforeSearch] = useState([])
   useEffect(() => {
-    const data = listOfEquipments?.data?.map((equipment: any) => {
-      const {
-        name,
-        manufacturerId,
-        modelClassId
-      } = models?.data?.find((model: any) => model.modelId === equipment.modelId)
-      const {name: modelClassName} = modelClasses?.data?.find((modelClass: any) => modelClass.modelClassId === modelClassId)
-      const {name: manufacturer} = manufacturers?.data?.find((manufacturer: any) => manufacturer.manufacturerId === manufacturerId)
-      // console.log('manufacturer', manufacturer)
-      // const manufacturer = listOfequipmentManufacturerQueryClient?.getQueryData('listOfequipmentManufacturer')?.data?.find((manufacturer: any) => manufacturer.manufacturerId === manufacturerId)
-      return {
-        ...equipment,
-        modelName: name,
-        modelClassName: modelClassName,
-        manufacturer: manufacturer
-      }
-    })
+    // const data = listOfEquipments?.data?.map((equipment: any) => {
+    //   const {
+    //     name,
+    //     manufacturerId,
+    //     modelClassId
+    //   } = models?.data?.find((model: any) => model.modelId === equipment.modelId)
+    //
+    //
+    //   const {name: modelClassName} = modelClasses?.data?.find((modelClass: any) => modelClass.modelClassId === modelClassId)
+    //   // console.log('modelClassName', modelClassName)
+    //   const {name: manufacturer} = manufacturers?.data?.find((manufacturer: any) => manufacturer.manufacturerId === manufacturerId)
+    //   // console.log('manufacturer', manufacturer)
+    //   // const manufacturer = listOfequipmentManufacturerQueryClient?.getQueryData('listOfequipmentManufacturer')?.data?.find((manufacturer: any) => manufacturer.manufacturerId === manufacturerId)
+    //   return {
+    //     ...equipment,
+    //     modelName: name,
+    //     modelClassName: modelClassName,
+    //     manufacturer: manufacturer
+    //   }
+    // })
     console.log('data', data)
     setGridData(data)
     setBeforeSearch(data)
@@ -311,7 +310,7 @@ const EquipmentRegister = () => {
         item.manufactureDate?.toLowerCase().includes(searchValue?.toLowerCase()) ||
         item.purchaseDate?.toLowerCase().includes(searchValue?.toLowerCase()) ||
         item.endOfLifeDate?.toLowerCase().includes(searchValue?.toLowerCase()) ||
-        item.facode?.toLowerCase().includes(searchValue?.toLowerCase()) ||
+        // item.facode?.toLowerCase().includes(searchValue?.toLowerCase()) ||
         item.note?.toLowerCase().includes(searchValue.toLowerCase()) ||
         item.warrantyStartDate?.toLowerCase().includes(searchValue.toLowerCase()) ||
         item.warrantyEndDate?.toLowerCase().includes(searchValue.toLowerCase()) ||
@@ -355,7 +354,6 @@ const EquipmentRegister = () => {
           </Space>
         </div>
         <Table
-          // @ts-ignore
           columns={columns}
           rowKey={(record: any) => record.equipmentId}
           bordered
