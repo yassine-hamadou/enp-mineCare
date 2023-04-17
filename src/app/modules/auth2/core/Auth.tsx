@@ -1,12 +1,12 @@
 import {
-  FC,
-  useState,
-  useEffect,
   createContext,
-  useContext,
-  useRef,
   Dispatch,
+  FC,
   SetStateAction,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
 } from 'react'
 import {LayoutSplashScreen} from '../../../../_metronic/layout/core'
 import {AuthModel, UserModel} from './_models'
@@ -86,8 +86,8 @@ const AuthInit: FC<WithChildren> = ({children}) => {
       return () => (didRequest.current = true)
     }
 
-    if (auth && auth.jwtToken) {
-      requestUser(auth.jwtToken)
+    if (auth && auth.api_token) {
+      requestUser(auth.api_token)
     } else {
       logout()
       setShowSplashScreen(false)
