@@ -52,6 +52,8 @@ import FaultByCustodianDetail from './components/report/fault/faultByCustodianDe
 import ScheduleByModelSummaryReport from './components/report/ScheduleByModelSummaryReport/ScheduleByModelSummaryReport'
 import ScheduleByServiceTypeReport from './components/report/ScheduleByServiceTypeReport/ScheduleByServiceTypeReport'
 import ScheduleByLocationReport from './components/report/ScheduleByLocationReport/ScheduleByLocationReport'
+import HoursModelClass from './components/entries/hours/HoursModelClass'
+
 
 const accountBreadCrumbs: Array<PageLink> = []
 
@@ -186,14 +188,32 @@ const ProductionPage: React.FC = () => {
         {/*  }*/}
         {/*/>*/}
         <Route
-          path='hours'
+          path={'hours/*'}
           element={
             <>
-              <PageTitle breadcrumbs={accountBreadCrumbs}>All Hours</PageTitle>
-              <HoursPage/>
+              <Outlet/>
             </>
           }
-        />
+        >
+          <Route
+            path=''
+            element={
+              <>
+                <PageTitle breadcrumbs={accountBreadCrumbs}>All Model Classes</PageTitle>
+                <HoursModelClass/>
+              </>
+            }
+          />
+          <Route
+            path=':modelClassId'
+            element={
+              <>
+                <PageTitle breadcrumbs={accountBreadCrumbs}>All Entries</PageTitle>
+                <HoursPage/>
+              </>
+            }
+          />
+        </Route>
         <Route index element={<Navigate to='/dashboard'/>}/>
       </Route>
       <Route

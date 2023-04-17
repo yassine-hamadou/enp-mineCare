@@ -4,7 +4,7 @@ import {DropDownListComponent} from '@syncfusion/ej2-react-dropdowns'
 import {Calendar} from './calendar/Calendar'
 import {Button, Space} from 'antd'
 import {useNavigate} from 'react-router-dom'
-import {ENP_URL} from '../../../../../urls'
+import {ENP_URL, fetchEmployee} from '../../../../../urls'
 import {useQuery} from 'react-query'
 import {useState} from 'react'
 
@@ -13,6 +13,10 @@ function EquipmentSchedule() {
   const [chosenLocationIdFromDropdown, setChosenLocationIdFromDropdown] = useState(null)
   const navigate = useNavigate()
   const {data: locations} = useQuery('Locations', () => axios.get(`${ENP_URL}/IclocsApi`), {
+    refetchOnWindowFocus: false,
+    staleTime: Infinity,
+  })
+  const {data: custodians} = useQuery('custodians', fetchEmployee, {
     refetchOnWindowFocus: false,
     staleTime: Infinity,
   })
@@ -29,7 +33,7 @@ function EquipmentSchedule() {
             <Space style={{marginBottom: 0}}>
               <DropDownListComponent
                 id='dropdownlist'
-                placeholder='Select a location'
+                placeholder='Filter By location'
                 onChange={(e: any) => setChosenLocationIdFromDropdown(e.value)}
                 ref={(scope) => {
                   dropDownListObj = scope
@@ -51,18 +55,33 @@ function EquipmentSchedule() {
               >
                 Reset
               </Button>
-            </Space>
-            <Space style={{marginBottom: 0}}>
-              <button
-                type='button'
-                className='btn btn-primary me-3'
+              <DropDownListComponent
+                id='dropdownlist'
+                placeholder='Filter By Custodian'
+                onChange={(e: any) => setChosenLocationIdFromDropdown(e.value)}
+                ref={(scope) => {
+                  dropDownListObj = scope
+                }}
+                dataSource={custodians?.data?.map((custodians: any) => {
+                  return {
+                    text: `${custodians.emplCode}- ${custodians.emplName}`,
+                    value: `${custodians.emplCode}`,
+                  }
+                })}
+                fields={{text: 'text', value: 'value'}}
+              />
+              <Button
+                type='primary'
                 onClick={() => {
-                  navigate('/entries/start-work')
+                  setChosenLocationIdFromDropdown(null)
+
+                  dropDownListObj.value = null
                 }}
               >
-                <KTSVG path='/media/icons/duotune/arrows/arr078.svg' className='svg-icon-2'/>
-                Upload
-              </button>
+                Reset
+              </Button>
+            </Space>
+            <Space style={{marginBottom: 0}}>
               <button
                 type='button'
                 className='btn btn-primary me-3'

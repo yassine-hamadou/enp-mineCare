@@ -1,5 +1,4 @@
 import {
-  Avatar,
   Badge,
   Button,
   DatePicker,
@@ -243,6 +242,7 @@ const FaultTable = () => {
                   custodian: record.custodian,
                   location: record.locationId,
                   dtime: record.duration,
+                  downTime: new Date(record.downtime).toDateString(),
                 })
                 handleSolve(record)
 
@@ -543,10 +543,10 @@ const FaultTable = () => {
     )
   }
   const faults = gridData.filter((fault: any) => fault.status === 0)
-
+  const numFaultsForBadge = allFaultsEntries?.data?.filter((fault: any) => fault.status === 0).length
   // Solved less  7 days ago
-  const solvedFaults = gridData.filter((fault: any) => fault.status === 1 && new Date(fault.wtimeEnd).getTime() >
-    new Date().getTime() - 7 * 24 * 60 * 60 * 1000)
+  const solvedFaults = allFaultsEntries?.data?.filter((fault: any) => fault.status === 1 &&
+    new Date(fault.wtimeEnd).getTime() > new Date().getTime() - 7 * 24 * 60 * 60 * 1000)
   return (
     <div
       style={{
@@ -560,7 +560,8 @@ const FaultTable = () => {
         defaultActiveKey='1'
         items={[
           {
-            label: <Badge count={faults.length}><span className='me-4'>All Faults</span></Badge>,
+            label: <Badge count={numFaultsForBadge ? numFaultsForBadge : 0}><span
+              className='me-4'>All Faults</span></Badge>,
             key: '1',
             children: (
               <>
@@ -580,10 +581,6 @@ const FaultTable = () => {
                     </button>
                     <button type='button' className='btn btn-light-primary me-3'>
                       <KTSVG path='/media/icons/duotune/arrows/arr078.svg' className='svg-icon-2'/>
-                      Upload
-                    </button>
-                    <button type='button' className='btn btn-light-primary me-3'>
-                      <KTSVG path='/media/icons/duotune/arrows/arr078.svg' className='svg-icon-2'/>
                       Export
                     </button>
                   </Space>
@@ -595,12 +592,16 @@ const FaultTable = () => {
                   loading={isSolveLoading ? isSolveLoading : loading}
                   rowKey={(record: any) => record.entryId}
                   scroll={{x: 1500}}
+                  pagination={{
+                    defaultPageSize: 10,
+                  }}
                 />
               </>
             ),
           },
           {
-            label: <Badge style={{backgroundColor: '#52c41a'}} count={solvedFaults.length}><span className='me-4'>Resolved Faults</span></Badge>,
+            label: <Badge style={{backgroundColor: '#52c41a'}} count={solvedFaults ? solvedFaults.length : 0}><span
+              className='me-4'>Resolved Faults</span></Badge>,
             key: '2',
             children: (
               <>
@@ -782,6 +783,9 @@ const FaultTable = () => {
           <Form.Item name='dType' label='Down Type'>
             <Input disabled style={{color: 'black'}}/>
           </Form.Item>
+          <Form.Item name='downTime' label='Down Time'>
+            <Input disabled style={{color: 'black'}}/>
+          </Form.Item>
           <Form.Item name='dtime' label='Duration'>
             <Input disabled style={{color: 'black'}}/>
           </Form.Item>
@@ -829,7 +833,18 @@ const FaultTable = () => {
             id='SolveTimeStarted'
             name='timeStarted'
             label='Time Started'
-            rules={[{required: true}]}
+            rules={[
+              {required: true},
+              ({getFieldValue}) => ({
+                validator(rule, value) {
+                  console.log('value', value);
+                  if (!value || new Date(getFieldValue('downTime')).getTime() < value.$d.getTime()) {
+                    return Promise.resolve();
+                  }
+                  return Promise.reject('Time Started must be greater than Down Time');
+                }
+              })
+            ]}
           >
             <DatePicker showTime/>
           </Form.Item>
@@ -837,7 +852,17 @@ const FaultTable = () => {
             id='solveTimeCompleted'
             name='timeCompleted'
             label='Time Completed'
-            rules={[{required: true}]}
+            rules={[
+              {required: true},
+              ({getFieldValue}) => ({
+                validator(rule, value) {
+                  if (!value || value.$d.getTime() > new Date(getFieldValue('timeStarted')).getTime()) {
+                    return Promise.resolve();
+                  }
+                  return Promise.reject('Time Completed must be greater than Time Started');
+                }
+              })
+            ]}
           >
             <DatePicker showTime/>
           </Form.Item>
@@ -865,7 +890,7 @@ const FaultTable = () => {
               formDefect.submit()
             }}
           >
-            Submit Defect
+            Submit
           </Button>,
         ]}
       >

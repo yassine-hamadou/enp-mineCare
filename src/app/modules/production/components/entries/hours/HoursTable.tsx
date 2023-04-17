@@ -4,15 +4,30 @@ import React, {useEffect, useState} from 'react'
 import {useMutation, useQuery, useQueryClient} from "react-query";
 import {KTSVG} from '../../../../../../_metronic/helpers'
 import {addHours, fetchEquips, fetchHours} from '../../../../../urls'
+import {useLocation} from "react-router-dom";
 
 const HoursPage: React.FC = () => {
+
+  const modelClassSelected: any = useLocation().state
+  // modelClassSelected is an array of models
+  const modelsForModelClassSelected = modelClassSelected[0].models
+  const allEquipForModelClassSelected = modelsForModelClassSelected.map((model: any) => model.equipment) // array of arrays of objects
+  const allEquipForModelClassSelectedFlat = allEquipForModelClassSelected.flat() // array of objects
+
+  //another way to do it
+  // const allEquipForModelClassSelectedFlat = modelsForModelClassSelected.reduce((acc: any, model: any) => {
+  //   return acc.concat(model.equipment)
+  // }, [])
+
+  console.log("allEquipForModelClassSelectedFlat", allEquipForModelClassSelectedFlat)
+
   const [form] = Form.useForm()
   const queryClient = useQueryClient()
   const [isModalOpen, setIsModalOpen] = useState(false)
 
-  const {data: allHours, isLoading} = useQuery('hours', fetchHours, {cacheTime: 5000})
-  const {data: equips, isLoading: equipsLoading} = useQuery('equips', fetchEquips, {cacheTime: 5000})
-  const {mutate: mutateHours} = useMutation('addHours', addHours, {
+  const {data: allHours, isLoading} = useQuery('hours', fetchHours)
+  console.log('allHours', allHours)
+  const {mutate: mutateHours} = useMutation(addHours, {
     onSuccess: () => {
       setIsModalOpen(false)
       form.resetFields()
@@ -79,7 +94,13 @@ const HoursPage: React.FC = () => {
           bordered
           loading={isLoading}
           dataSource={
-            allHours?.data
+            allHours?.data?.filter((hour: any) => {
+              // return only the hours for the selected model class
+              return allEquipForModelClassSelectedFlat?.find((equip: any) => {
+                  return equip.equipmentId === hour.fleetId
+                }
+              )
+            })
           }
           rowKey='id'
         >
@@ -128,11 +149,11 @@ const HoursPage: React.FC = () => {
               className='form-control form-control-solid'
             >
               {
-                equips?.data?.map((equip: any) => {
+                allEquipForModelClassSelectedFlat?.map((equip: any) => {
                   return <Select.Option
-                    value={equip.fleetID}
-                    key={equip.fleetID}
-                  >{equip.fleetID} - {equip.modlName} - {equip.modlClass}</Select.Option>
+                    value={equip.equipmentId}
+                    key={equip.equipmentId}
+                  >{equip.equipmentId}</Select.Option>
                 })
               }
             </Select>

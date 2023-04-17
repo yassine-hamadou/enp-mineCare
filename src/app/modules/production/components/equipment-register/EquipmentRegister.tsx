@@ -241,92 +241,92 @@ const EquipmentRegister = () => {
     }
   ]
 
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [submitLoading, setSubmitLoading] = useState(false);
-  // const [gridData, setGridData] = useState()
-  const [form] = Form.useForm();
+  // const [isModalOpen, setIsModalOpen] = useState(false);
+  // const [submitLoading, setSubmitLoading] = useState(false);
+  // // const [gridData, setGridData] = useState()
+  // const [form] = Form.useForm();
+  //
+  // const handleCancel = () => {
+  //   setIsModalOpen(false);
+  // }
+  //
+  // function onFinish() {
+  //   setSubmitLoading(true);
+  //   setTimeout(() => {
+  //     setSubmitLoading(false);
+  //     setIsModalOpen(false);
+  //   }, 2000);
+  // }
 
-  const handleCancel = () => {
-    setIsModalOpen(false);
-  }
-
-  function onFinish() {
-    setSubmitLoading(true);
-    setTimeout(() => {
-      setSubmitLoading(false);
-      setIsModalOpen(false);
-    }, 2000);
-  }
-
-  const data = listOfEquipments?.data?.map((equipment: any) => {
-    const model = models?.data?.find((model: any) => model.modelId === equipment.modelId)
-    const {name: modelClassName} = modelClasses?.data?.find((modelClass: any) => modelClass.modelClassId === model.modelClassId)
-    const {name: manufacturer} = manufacturers?.data?.find((manufacturer: any) => manufacturer.manufacturerId === model.manufacturerId)
-    // console.log('manufacturer', manufacturer)
-    // const manufacturer = listOfequipmentManufacturerQueryClient?.getQueryData('listOfequipmentManufacturer')?.data?.find((manufacturer: any) => manufacturer.manufacturerId === manufacturerId)
-    return {
-      ...equipment,
-      modelName: model.name,
-      modelClassName: modelClassName,
-      manufacturer: manufacturer
-    }
-  })
+  // const data = listOfEquipments?.data?.map((equipment: any) => {
+  //   const model = models?.data?.find((model: any) => model.modelId === equipment.modelId)
+  //   const {name: modelClassName} = modelClasses?.data?.find((modelClass: any) => modelClass.modelClassId === model.modelClassId)
+  //   const {name: manufacturer} = manufacturers?.data?.find((manufacturer: any) => manufacturer.manufacturerId === model.manufacturerId)
+  //   // console.log('manufacturer', manufacturer)
+  //   // const manufacturer = listOfequipmentManufacturerQueryClient?.getQueryData('listOfequipmentManufacturer')?.data?.find((manufacturer: any) => manufacturer.manufacturerId === manufacturerId)
+  //   return {
+  //     ...equipment,
+  //     modelName: model.name,
+  //     modelClassName: modelClassName,
+  //     manufacturer: manufacturer
+  //   }
+  // })
   const [gridData, setGridData] = useState([])
   const [beforeSearch, setBeforeSearch] = useState([])
   useEffect(() => {
-    // const data = listOfEquipments?.data?.map((equipment: any) => {
-    //   const {
-    //     name,
-    //     manufacturerId,
-    //     modelClassId
-    //   } = models?.data?.find((model: any) => model.modelId === equipment.modelId)
-    //
-    //
-    //   const {name: modelClassName} = modelClasses?.data?.find((modelClass: any) => modelClass.modelClassId === modelClassId)
-    //   // console.log('modelClassName', modelClassName)
-    //   const {name: manufacturer} = manufacturers?.data?.find((manufacturer: any) => manufacturer.manufacturerId === manufacturerId)
-    //   // console.log('manufacturer', manufacturer)
-    //   // const manufacturer = listOfequipmentManufacturerQueryClient?.getQueryData('listOfequipmentManufacturer')?.data?.find((manufacturer: any) => manufacturer.manufacturerId === manufacturerId)
-    //   return {
-    //     ...equipment,
-    //     modelName: name,
-    //     modelClassName: modelClassName,
-    //     manufacturer: manufacturer
-    //   }
-    // })
+    const data = listOfEquipments?.data?.map((equipment: any) => {
+      const {
+        name,
+        manufacturerId,
+        modelClassId
+      } = models?.data?.find((model: any) => model.modelId === equipment.modelId)
+
+
+      const {name: modelClassName} = modelClasses?.data?.find((modelClass: any) => modelClass.modelClassId === modelClassId)
+      // console.log('modelClassName', modelClassName)
+      const {name: manufacturer} = manufacturers?.data?.find((manufacturer: any) => manufacturer.manufacturerId === manufacturerId)
+      // console.log('manufacturer', manufacturer)
+      // const manufacturer = listOfequipmentManufacturerQueryClient?.getQueryData('listOfequipmentManufacturer')?.data?.find((manufacturer: any) => manufacturer.manufacturerId === manufacturerId)
+      return {
+        ...equipment,
+        modelName: name,
+        modelClassName: modelClassName,
+        manufacturer: manufacturer
+      }
+    })
     console.log('data', data)
     setGridData(data)
     setBeforeSearch(data)
-  }, [listOfEquipments, models, modelClasses, manufacturers])
+  }, [listOfEquipments])
 
-  const globalSearch = (searchValue: string) => {
-    //searchValue is the value of the search input
-    const searchResult = beforeSearch?.filter((item: any) => {
-      console.log('item', item)
-      return (
-        item.description?.toLowerCase().includes(searchValue?.toLowerCase()) ||
-        item.equipmentId?.toLowerCase().includes(searchValue?.toLowerCase()) ||
-        item.serialNumber?.toLowerCase().includes(searchValue?.toLowerCase()) ||
-        item.manufactureDate?.toLowerCase().includes(searchValue?.toLowerCase()) ||
-        item.purchaseDate?.toLowerCase().includes(searchValue?.toLowerCase()) ||
-        item.endOfLifeDate?.toLowerCase().includes(searchValue?.toLowerCase()) ||
-        // item.facode?.toLowerCase().includes(searchValue?.toLowerCase()) ||
-        item.note?.toLowerCase().includes(searchValue.toLowerCase()) ||
-        item.warrantyStartDate?.toLowerCase().includes(searchValue.toLowerCase()) ||
-        item.warrantyEndDate?.toLowerCase().includes(searchValue.toLowerCase()) ||
-        item.universalCode?.toLowerCase().includes(searchValue.toLowerCase()) ||
-        item.meterType?.toLowerCase().includes(searchValue.toLowerCase()) ||
-        item.modelName?.toLowerCase().includes(searchValue.toLowerCase()) ||
-        item.modelClassName?.toLowerCase().includes(searchValue.toLowerCase()) ||
-        item.manufacturer?.toLowerCase().includes(searchValue.toLowerCase())
-      )
-    })//search the grid data
-    console.log('searchResult', searchResult)
-    setGridData(searchResult) //set the grid data to the search result
-  }
+  // const globalSearch = (searchValue: string) => {
+  //   //searchValue is the value of the search input
+  //   const searchResult = beforeSearch?.filter((item: any) => {
+  //     console.log('item', item)
+  //     return (
+  //       item.description?.toLowerCase().includes(searchValue?.toLowerCase()) ||
+  //       item.equipmentId?.toLowerCase().includes(searchValue?.toLowerCase()) ||
+  //       item.serialNumber?.toLowerCase().includes(searchValue?.toLowerCase()) ||
+  //       item.manufactureDate?.toLowerCase().includes(searchValue?.toLowerCase()) ||
+  //       item.purchaseDate?.toLowerCase().includes(searchValue?.toLowerCase()) ||
+  //       item.endOfLifeDate?.toLowerCase().includes(searchValue?.toLowerCase()) ||
+  //       // item.facode?.toLowerCase().includes(searchValue?.toLowerCase()) ||
+  //       item.note?.toLowerCase().includes(searchValue.toLowerCase()) ||
+  //       item.warrantyStartDate?.toLowerCase().includes(searchValue.toLowerCase()) ||
+  //       item.warrantyEndDate?.toLowerCase().includes(searchValue.toLowerCase()) ||
+  //       item.universalCode?.toLowerCase().includes(searchValue.toLowerCase()) ||
+  //       item.meterType?.toLowerCase().includes(searchValue.toLowerCase()) ||
+  //       item.modelName?.toLowerCase().includes(searchValue.toLowerCase()) ||
+  //       item.modelClassName?.toLowerCase().includes(searchValue.toLowerCase()) ||
+  //       item.manufacturer?.toLowerCase().includes(searchValue.toLowerCase())
+  //     )
+  //   })//search the grid data
+  //   console.log('searchResult', searchResult)
+  //   setGridData(searchResult) //set the grid data to the search result
+  // }
   const handleInputChange = (e: any) => {
     console.log('e.target.value', e.target.value)
-    globalSearch(e.target.value)
+    // globalSearch(e.target.value)
     if (e.target.value === '') {
       setGridData(beforeSearch)
     }

@@ -113,7 +113,7 @@ const DashboardTable = () => {
       // console.log('modelName', modelName)
 
       // Triming these two fucking strings because they made me debug for 2hours without identifying what the hell
-      // was wrong with my code. I really know how those trailing space got stored in the databases like that. What a mess!
+      // was wrong with my code. I really don't know how those trailing space got stored in the databases like that. What a mess!
       // Finally!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
       if (fault.vmModel.trimEnd() === modelName.trimEnd()) {
         // console.log('fault model ', fault.vmModel)
@@ -150,6 +150,35 @@ const DashboardTable = () => {
     setGridData(filteredData)
   }
 
+
+  ///////////////////////////////////////////
+  //////////Right Table//////////////////////
+  ///////////////////////////////////////////
+  const numberOfDownTime = (custodian: any) => {
+    //count number of down time from fault entries for this particular equipment
+    //@ts-ignore
+    // const modelName = queryClient.getQueryData('listOfEquipmentModel')?.data?.find((model: any) => model.modelId == modelId).name
+    console.log("custodian", custodian)
+    return 0
+    let numberOfDowntime = 0
+    listOfFaults?.data?.forEach((fault: any) => {
+      // console.log("fault.vmModel", fault.vmModel)
+      // console.log('modelName', modelName)
+
+      // Triming these two fucking strings because they made me debug for 2hours without identifying what the hell
+      // was wrong with my code. I really know how those trailing space got stored in the databases like that. What a mess!
+      // Finally!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+      // if (fault.fleetId.trimEnd() === fleetId.trimEnd()) {
+      //   // console.log('fault model ', fault.vmModel)
+      //   numberOfDowntime++
+      // }
+    })
+    return numberOfDowntime
+  }
+
+  ///////////////////////////////////////////
+  //////////End Table//////////////////////
+  ///////////////////////////////////////////
   return (
     <>
       <div className='row gy-5 g-xl-8'>
@@ -170,10 +199,6 @@ const DashboardTable = () => {
                   </Button>
                 </Space>
                 <Space style={{marginBottom: 16}}>
-                  <button type='button' className='btn btn-light-primary me-3'>
-                    <KTSVG path='/media/icons/duotune/arrows/arr078.svg' className='svg-icon-2'/>
-                    Upload
-                  </button>
                   <button type='button' className='btn btn-light-primary me-3'>
                     <KTSVG path='/media/icons/duotune/arrows/arr078.svg' className='svg-icon-2'/>
                     Export
@@ -201,12 +226,9 @@ const DashboardTable = () => {
                   <Button type='primary' onClick={globalSearch}>
                     Search
                   </Button>
+
                 </Space>
                 <Space style={{marginBottom: 16}}>
-                  <button type='button' className='btn btn-light-primary me-3'>
-                    <KTSVG path='/media/icons/duotune/arrows/arr078.svg' className='svg-icon-2'/>
-                    Upload
-                  </button>
                   <button type='button' className='btn btn-light-primary me-3'>
                     <KTSVG path='/media/icons/duotune/arrows/arr078.svg' className='svg-icon-2'/>
                     Export
@@ -216,43 +238,40 @@ const DashboardTable = () => {
               <Table
                 columns={[
                   {
-                    title: 'Equipment Manufacturer',
-                    render: (apiData: any) => {
-                      return getEquipmentManufacturer(apiData.manufacturerId)
-                    },
+                    title: 'Custodian',
+                    dataIndex: 'custodian',
                     sorter: (a: any, b: any) => {
-                      if (a.name > b.name) {
-                        return 1
-                      }
-                      if (b.name > a.name) {
+                      if (a.custodian < b.custodian) {
                         return -1
+                      }
+                      if (a.custodian > b.custodian) {
+                        return 1
                       }
                       return 0
                     },
                   },
                   {
                     title: 'Model',
-                    dataIndex: 'name',
-                    sorter: (a: any, b: any) => {
-                      if (a.name > b.name) {
-                        return 1
-                      }
-                      if (a.name < b.name) {
-                        return -1
-                      }
-                      return 0
+                    dataIndex: 'vmModel',
+                  },
+                  {
+                    title: 'Number of Downtime',
+                    render: (apiData: any) => {
+                      return numberOfDownTime(apiData.custodian)
                     },
                   },
                   {
-                    title: 'Fault',
-                    sorter: (a: any, b: any) => a.modelId - b.modelId,
-                    render: (apiData: any) => {
-                      return countNumberOfEquipment(apiData.modelId)
-                    },
+                    title: 'Total Downtime',
+                  },
+                  {
+                    title: 'Number of Schedule',
+                  },
+                  {
+                    title: 'Total Schedule',
                   },
                 ]} bordered loading={isLoading} rowKey={
                 () => uuid()
-              }
+              } dataSource={listOfFaults?.data} scroll={{x: 1500}}
               />
             </KTCardBody>
           </KTCard>
