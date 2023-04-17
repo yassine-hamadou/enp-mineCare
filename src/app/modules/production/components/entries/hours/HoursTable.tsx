@@ -105,6 +105,8 @@ const HoursPage: React.FC = () => {
           rowKey='id'
         >
           <Table.Column title='Equipment ID' dataIndex='fleetId'/>
+          <Table.Column title='Model' dataIndex='model'/>
+          <Table.Column title='Description' dataIndex='description'/>
           <Table.Column title='Date' dataIndex='date' render={
             (date: string) => {
               return new Date(date).toDateString()
