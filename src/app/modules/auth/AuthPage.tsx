@@ -24,7 +24,7 @@ const AuthLayout = () => {
       {/* begin::Content */}
       <div className='d-flex flex-center flex-column flex-column-fluid p-10 pb-lg-20'>
         {/* begin::Logo */}
-        <h1 className='mb-12'>Sign in to Equipment Register and Maintenance</h1>
+        <h1 className='mb-12'>Sign in to Equipment Service and Maintenance</h1>
 
         <div className='w-lg-500px bg-body rounded shadow-sm p-10 p-lg-15 mx-auto'>
           <Outlet/>

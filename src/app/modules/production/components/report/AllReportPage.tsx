@@ -24,7 +24,9 @@ const AllReportPage = () => {
           <h3><span className="bullet me-5"></span><Link to="/report/warranty-life">Warranty End</Link></h3>
           <h3><span className="bullet me-5"></span><Link to="/report/CarperManufacturerReport">Manufacturer
             Detail</Link></h3>
-          <h3><span className="bullet me-5"></span><Link to="/report/CarperManufacturerReport">Manufacturer
+          <h3><span className="bullet me-5"></span><Link to="/report/equipment-summary">Equipment
+            Summary</Link></h3>
+          <h3><span className="bullet me-5"></span><Link to="/report/CarperManufacturerReport">Model Class
             Summary</Link></h3>
         </div>
         <div

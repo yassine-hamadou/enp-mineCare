@@ -108,6 +108,7 @@ export function AsideMenuMain() {
         <AsideMenuItemWithSub to='#' title='Equipment' hasBullet={true}>
           <AsideMenuItem to='/setup/equipment/model-class' title='Model Class' hasBullet={true}/>
           <AsideMenuItem to='/setup/equipment/manufacturer' title='Manufacturer' hasBullet={true}/>
+          <AsideMenuItem to='/setup/category' title='Category' hasBullet={true}/>
         </AsideMenuItemWithSub>
         {/*<AsideMenuItem to='/setup/fleet' title='Fleet' hasBullet={true} />*/}
         <AsideMenuItem to='/setup/down-type' title='Down Type' hasBullet={true}/>

@@ -5,7 +5,7 @@ import React, {useState} from "react";
 import dayjs from 'dayjs';
 import axios from "axios";
 import {useQuery, useQueryClient} from "react-query";
-import {ENP_URL} from "../../../../urls";
+import {ENP_URL, getModels} from "../../../../urls";
 
 const UpdateRegister = () => {
   const location = useLocation();
@@ -25,6 +25,8 @@ const UpdateRegister = () => {
     data: listOfFaults,
     isLoading: isFaultLoading
   } = useQuery('faults', () => axios.get(`${ENP_URL}/faultentriesapi`));
+  const {data: listOfModels} = useQuery('listOfModels', getModels)
+  
   const queryClient: any = useQueryClient();
   const handleCancel = () => {
     setShowModal(false);
@@ -192,16 +194,14 @@ const UpdateRegister = () => {
                         </Form.Item>
                       </div>
                       <div className='col-4 mb-7'>
-                        <Form.Item name='modelClass' label='Model Class'
+                        <Form.Item name='model' label='Model'
                                    rules={[{required: true}]}>
                           <Select
-                            showSearch
-                            defaultValue={equipmentData.modelClassId}
-                            placeholder='Select Model Class'
+                            placeholder='Select Model'
                             className='form-control form-control-solid py-1'
                           >
-                            {queryClient.getQueryData('listOfModelClass')?.data?.map((item: any) => (
-                                <Select.Option value={item.modelClassId}>{item.name}</Select.Option>
+                            {listOfModels?.data?.map((item: any) => (
+                                <Select.Option value={item.code}>{item.manufacturer?.name} - {item.name}</Select.Option>
                               )
                             )}
                           </Select>

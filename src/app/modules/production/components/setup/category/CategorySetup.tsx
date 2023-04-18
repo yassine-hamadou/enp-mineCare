@@ -1,23 +1,54 @@
-import {Button, Form, Input, Modal, Space, Table} from 'antd'
-import axios from 'axios'
+import {Button, Form, Input, message, Modal, Space, Table} from 'antd'
 import {KTCardBody, KTSVG} from '../../../../../../_metronic/helpers'
-import {ENP_URL} from '../../../../../urls'
-import {useQuery} from "react-query";
+import {getCategories, postCategories} from '../../../../../urls'
+import {useMutation, useQuery, useQueryClient} from "react-query";
 import {useState} from "react";
 
 const CategorySetup = () => {
+
+  const queryClient = useQueryClient()
+  const [submitLoading, setSubmitLoading] = useState(false)
+
   const {
     data: listOfCategory,
     isLoading: categoryLoading
-  } = useQuery('category', () => axios.get(`${ENP_URL}/categories`))
+  } = useQuery('category', getCategories)
 
+  const {mutate: addCategory} = useMutation(postCategories, {
+    onSuccess: () => {
+      queryClient.invalidateQueries('category')
+      setIsCategoryModalOpen(false)
+      setSubmitLoading(false)
+      message.success('Category added successfully')
+      categoryForm.resetFields()
+    },
+    onError: (error: any) => {
+      setSubmitLoading(false)
+      message.error(error.message)
+    }
+  })
   const columns: any = [
     {
       title: 'Code',
+      dataIndex: 'id',
     },
     {
       title: 'Name',
+      dataIndex: 'name',
     },
+    {
+      title: 'Action',
+      render: (text: any, record: any) => (
+        <Space size='middle'>
+          <Button type='primary'>
+            Edit
+          </Button>
+          <Button type='primary' danger>
+            Delete
+          </Button>
+        </Space>
+      )
+    }
   ]
 
 
@@ -26,6 +57,16 @@ const CategorySetup = () => {
 
   function handleCategoryCancel() {
     setIsCategoryModalOpen(false);
+  }
+
+  function handleCategorySubmit() {
+    categoryForm.submit();
+  }
+
+  function onFinish(values: any) {
+    setSubmitLoading(true)
+    console.log(values)
+    addCategory(values)
   }
 
   return (
@@ -59,7 +100,21 @@ const CategorySetup = () => {
           </Space>
         </div>
         <Table columns={columns} dataSource={listOfCategory?.data} bordered loading={categoryLoading}/>
-        <Modal title='Add Category' open={isCategoryModalOpen} onCancel={handleCategoryCancel}>
+        <Modal
+          title='Add Category'
+          open={isCategoryModalOpen}
+          onCancel={handleCategoryCancel}
+          footer={
+            <div className='d-flex justify-content-end'>
+              <Button type='dashed' onClick={handleCategoryCancel}>
+                Cancel
+              </Button>
+              <Button type='primary' loading={submitLoading} onClick={handleCategorySubmit}>
+                Save
+              </Button>
+            </div>
+          }
+        >
           <Form
             labelCol={{span: 7}}
             wrapperCol={{span: 14}}
@@ -67,7 +122,7 @@ const CategorySetup = () => {
             form={categoryForm}
             name='control-hooks'
             title='Add Category'
-            // onFinish={onFinish}
+            onFinish={onFinish}
           >
             <Form.Item label='Name' name='name' rules={[{required: true}]}>
               <Input

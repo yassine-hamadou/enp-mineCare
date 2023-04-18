@@ -75,9 +75,7 @@ export function Login() {
           className={clsx(
             'form-control form-control-lg form-control-solid',
             {'is-invalid': formik.touched.username && formik.errors.username},
-            {
-              'is-valid': formik.touched.username && !formik.errors.username,
-            }
+            {'is-valid': formik.touched.username && !formik.errors.username}
           )}
           type='text'
           name='username'
@@ -132,6 +130,7 @@ export function Login() {
                 formik.values.username === '' || formik.values.password === '' ?
                   '' :
                   <>
+                    <option></option>
                     <option value='damangDivision'>EnP - DAMANG DIVISION</option>
                     <option value='dzataDivision'>EnP - DZATA DIVISION</option>
                     <option value='mpohorDivision'>EnP - MPOHOR DIVISION</option>

@@ -5,8 +5,8 @@ import {message} from "antd";
  */
 // export const ENP_URL = 'http://localhost:3001'
 // export const ENP_URL = 'https://cors-anywhere.herokuapp.com/http://208.117.44.15/SmWebApi/api'
-export const ENP_URL = 'http://208.117.44.15/SmWebApi/api'
-// export const ENP_URL = 'https://localhost:7144/api'
+// export const ENP_URL = 'http://208.117.44.15/SmWebApi/api'
+export const ENP_URL = 'https://localhost:7144/api'
 
 
 export const fetchEmployee = () => {
@@ -85,6 +85,21 @@ export function getModelClasses() {
   return axios.get(`${ENP_URL}/modelClasses`);
 }
 
+export function getModels() {
+  return axios.get(`${ENP_URL}/models`)
+}
+
 export function addHours(data: any) {
   return axios.post(`${ENP_URL}/hoursentry`, data);
 }
+
+
+export function getCategories() {
+  return axios.get(`${ENP_URL}/categories`);
+}
+
+export function postCategories(data: any) {
+  return axios.post(`${ENP_URL}/categories`, data);
+}
+
+

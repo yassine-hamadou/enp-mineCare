@@ -826,7 +826,7 @@ const FaultTable = () => {
               <Option value={'others'}>Others</Option>
             </Select>
           </Form.Item>
-          <Form.Item name='comment' label='Comment' rules={[{required: true}]}>
+          <Form.Item name='comment' label='Comment' rules={[{required: true, message: 'Comment is Required'}]}>
             <TextArea/>
           </Form.Item>
           <Form.Item
@@ -834,14 +834,14 @@ const FaultTable = () => {
             name='timeStarted'
             label='Time Started'
             rules={[
-              {required: true},
+              {required: true, message: 'Time Started is required'},
               ({getFieldValue}) => ({
                 validator(rule, value) {
                   console.log('value', value);
                   if (!value || new Date(getFieldValue('downTime')).getTime() < value.$d.getTime()) {
                     return Promise.resolve();
                   }
-                  return Promise.reject('Time Started must be greater than Down Time');
+                  return Promise.reject('Time Started must be after Down Time');
                 }
               })
             ]}
@@ -853,13 +853,13 @@ const FaultTable = () => {
             name='timeCompleted'
             label='Time Completed'
             rules={[
-              {required: true},
+              {required: true, message: 'Time Completed is required'},
               ({getFieldValue}) => ({
                 validator(rule, value) {
                   if (!value || value.$d.getTime() > new Date(getFieldValue('timeStarted')).getTime()) {
                     return Promise.resolve();
                   }
-                  return Promise.reject('Time Completed must be greater than Time Started');
+                  return Promise.reject('Time Completed must be after Time Started');
                 }
               })
             ]}
@@ -902,7 +902,7 @@ const FaultTable = () => {
           title='Defect'
           onFinish={onDefectFinish}
         >
-          <Form.Item name='fleetId' label='Equipment ID' rules={[{required: true}]}>
+          <Form.Item hidden={true} name='fleetId' label='Equipment ID' rules={[{required: true}]}>
             <Input disabled style={{color: 'black'}}/>
           </Form.Item>
           <Form.Item name='Defect Date' label='Expected Date' rules={[{required: true}]}>

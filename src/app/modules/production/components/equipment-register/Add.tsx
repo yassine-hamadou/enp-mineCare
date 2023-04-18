@@ -1,14 +1,14 @@
 import {Button, Col, DatePicker, Form, Input, Row, Select, Tabs} from "antd";
 import React from "react";
 import {KTCard, KTCardBody} from "../../../../../_metronic/helpers";
-import {ENP_URL} from "../../../../urls";
+import {ENP_URL, getModels} from "../../../../urls";
 import axios from "axios";
 import {useQuery} from "react-query";
 import {Link} from "react-router-dom";
 
 const AddEquipRegister = () => {
   let [form] = Form.useForm();
-  const {data: listOfModelClasses} = useQuery('listOfModelClass', () => axios.get(`${ENP_URL}/modelClasses`))
+  const {data: listOfModels} = useQuery('listOfModels', getModels)
 
   function onfinish(values: any) {
     console.log('onfinish');
@@ -82,14 +82,14 @@ const AddEquipRegister = () => {
                         </Form.Item>
                       </div>
                       <div className='col-4 mb-7'>
-                        <Form.Item name='modelClass' label='Model Class'
+                        <Form.Item name='model' label='Model'
                                    rules={[{required: true}]}>
                           <Select
-                            placeholder='Select Model Class'
+                            placeholder='Select Model'
                             className='form-control form-control-solid py-1'
                           >
-                            {listOfModelClasses?.data?.map((item: any) => (
-                                <Select.Option value={item.modelClassId}>{item.name}</Select.Option>
+                            {listOfModels?.data?.map((item: any) => (
+                                <Select.Option value={item.code}>{item.manufacturer?.name} - {item.name}</Select.Option>
                               )
                             )}
                           </Select>
