@@ -54,6 +54,7 @@ const ModelClass = () => {
           columns={columns}
           bordered
           dataSource={modelClasses?.data}
+          loading={isLoading}
         />
       </KTCardBody>
     </KTCard>

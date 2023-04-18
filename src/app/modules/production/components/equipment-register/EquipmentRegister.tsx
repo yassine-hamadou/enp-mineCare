@@ -21,7 +21,7 @@ const EquipmentRegister = () => {
     () => axios.get(`${ENP_URL}/modelClasses`)
   )
 
-  const {data: manufacturers} = useQuery('listOfEquipmentManufacturer',
+  const {data: manufacturers, isLoading: manufacturerLoading} = useQuery('listOfEquipmentManufacturer',
     () => axios.get(`${ENP_URL}/manufacturers`)
   )
 
@@ -280,13 +280,13 @@ const EquipmentRegister = () => {
   const [gridData, setGridData] = useState([])
   const [beforeSearch, setBeforeSearch] = useState([])
   useEffect(() => {
-    const data = listOfEquipments?.data?.map((equipment: any) => {
-      const model = models?.data?.find((model: any) => model.modelId === equipment.modelId)
+    const data = !isLoading ? listOfEquipments?.data?.map((equipment: any) => {
+      const model = models ? models?.data?.find((model: any) => model.modelId === equipment.modelId) : ''
       console.log('model', model)
 
       const {name: modelClassName} = modelClasses ? modelClasses?.data?.find((modelClass: any) => modelClass.modelClassId === model.modelClassId) : ''
       // console.log('modelClassName', modelClassName)
-      const {name: manufacturer} = manufacturers ? manufacturers?.data?.find((manufacturer: any) => manufacturer.manufacturerId === model.manufacturerId) : ''
+      const {name: manufacturer} = !manufacturerLoading ? manufacturers?.data?.find((manufacturer: any) => manufacturer.manufacturerId === model.manufacturerId) : ''
       // console.log('manufacturer', manufacturer)
       // const manufacturer = listOfequipmentManufacturerQueryClient?.getQueryData('listOfequipmentManufacturer')?.data?.find((manufacturer: any) => manufacturer.manufacturerId === manufacturerId)
       return {
@@ -295,7 +295,7 @@ const EquipmentRegister = () => {
         modelClassName: modelClassName,
         manufacturer: manufacturer
       }
-    })
+    }) : []
     console.log('data', data)
     setGridData(data)
     setBeforeSearch(data)
@@ -312,7 +312,7 @@ const EquipmentRegister = () => {
         item.manufactureDate?.toLowerCase().includes(searchValue?.toLowerCase()) ||
         item.purchaseDate?.toLowerCase().includes(searchValue?.toLowerCase()) ||
         item.endOfLifeDate?.toLowerCase().includes(searchValue?.toLowerCase()) ||
-        // item.facode?.toLowerCase().includes(searchValue?.toLowerCase()) ||
+        item.facode?.toLowerCase().includes(searchValue?.toLowerCase()) ||
         item.note?.toLowerCase().includes(searchValue.toLowerCase()) ||
         item.warrantyStartDate?.toLowerCase().includes(searchValue.toLowerCase()) ||
         item.warrantyEndDate?.toLowerCase().includes(searchValue.toLowerCase()) ||

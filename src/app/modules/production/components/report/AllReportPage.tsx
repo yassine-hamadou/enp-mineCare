@@ -44,6 +44,7 @@ const AllReportPage = () => {
           <h3><span className="bullet me-5"></span><Link to="#">Defect</Link></h3>
           <h3><span className="bullet me-5"></span><Link to="/report/daily-hme-report">Daily HME</Link></h3>
           <h3><span className="bullet me-5"></span><Link to="#">Transactions</Link></h3>
+          <h3><span className="bullet me-5"></span><Link to="#">All Equipment Summary</Link></h3>
 
         </div>
         <div

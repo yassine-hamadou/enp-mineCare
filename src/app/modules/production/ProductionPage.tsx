@@ -15,7 +15,7 @@ import {TabsTest} from './components/checkListForm/Tabs'
 import {LubePage} from './components/setup/lube/Lube'
 import {CompartmentPage} from './components/setup/compartment/Compartment'
 import {RefillPage} from './components/setup/refill/Refill'
-import {HoursPage} from './components/entries/hours/HoursTable'
+import {HoursPage} from './components/entries/hours/HoursModelClass'
 import {OilGradePage} from './components/setup/oilGrade/OilGrade'
 import {OilTypePage} from './components/setup/oilType/OilType'
 import {FaultTable} from './components/entries/fault_d/FaultTable'
@@ -52,7 +52,6 @@ import FaultByCustodianDetail from './components/report/fault/faultByCustodianDe
 import ScheduleByModelSummaryReport from './components/report/ScheduleByModelSummaryReport/ScheduleByModelSummaryReport'
 import ScheduleByServiceTypeReport from './components/report/ScheduleByServiceTypeReport/ScheduleByServiceTypeReport'
 import ScheduleByLocationReport from './components/report/ScheduleByLocationReport/ScheduleByLocationReport'
-import HoursModelClass from './components/entries/hours/HoursModelClass'
 
 
 const accountBreadCrumbs: Array<PageLink> = []
@@ -199,8 +198,9 @@ const ProductionPage: React.FC = () => {
             path=''
             element={
               <>
-                <PageTitle breadcrumbs={accountBreadCrumbs}>All Model Classes</PageTitle>
-                <HoursModelClass/>
+                <PageTitle breadcrumbs={accountBreadCrumbs}>All Entries</PageTitle>
+                {/*<HoursModelClass/>*/}
+                <HoursPage/>
               </>
             }
           />

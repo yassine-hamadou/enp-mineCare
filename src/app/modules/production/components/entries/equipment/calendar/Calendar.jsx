@@ -3,10 +3,9 @@ import {
     ScheduleComponent,
     Day,
     Week,
-    WorkWeek,
     Month,
     Agenda,
-    Inject, dataBound
+    Inject,
 } from "@syncfusion/ej2-react-schedule";
 import {DateTimePickerComponent} from '@syncfusion/ej2-react-calendars'
 import {DropDownListComponent} from '@syncfusion/ej2-react-dropdowns'
@@ -33,6 +32,7 @@ import {
 } from './requests'
 import {message, Space, Spin} from 'antd'
 import React from "react";
+import {getEquipment} from "../../../../../../urls";
 
 /**
  *  Schedule editor custom fields sample
@@ -75,6 +75,12 @@ const Calendar = ({chosenLocationIdFromDropdown}) => {
         staleTime: Infinity,
     })
 
+    const {data: equipmentData} = useQuery('equipment', getEquipment, {
+        refetchOnWindowFocus: false,
+        staleTime: Infinity,
+    })
+
+
     //Create
     const {mutate: addScheduleMutation} = useMutation(addSchedule, {
         onSuccess: () => {
@@ -110,7 +116,7 @@ const Calendar = ({chosenLocationIdFromDropdown}) => {
     })
     //Access the same location query from cycle details component
     const locationQuery = useQueryClient().getQueryData('Locations')
-
+    // const vmQuery = useQueryClient().getQueryData('vmequps')
     let dropDownListObject;
 
     function onEventRendered(args) {
@@ -145,8 +151,6 @@ const Calendar = ({chosenLocationIdFromDropdown}) => {
         // }
     }
 
-    let vmQuery = useQueryClient()
-
     function editorTemplate(props) {
         console.log('props', props)
         // if (props.serviceTypeId) {
@@ -178,9 +182,12 @@ const Calendar = ({chosenLocationIdFromDropdown}) => {
             if (e.itemData) {
                 const equips = serviceQueryClient?.getQueryData('serviceTypes')?.data?.find((service) => service.id === e.itemData.value)
                 console.log('equips', equips)
-                dropDownListObject.dataSource = equips?.modelNavigation ? equips?.modelNavigation?.equipment?.map((equip) => {
-                    return {text: equip.description, value: equip.equipmentId}
-                }) : []
+                // dropDownListObject.dataSource = equips?.modelNavigation ? equips?.modelNavigation?.equipment?.map((equip) => {
+                //     return {text: equip.description, value: equip.equipmentId}
+                // }) : []
+
+                //get fleet model
+                const fleetModel = vmequps?.data?.find((fleet) => fleet.fleetID.trimEnd() === e.itemData.value)?.modlName
                 dropDownListObject.dataBind() // refresh the dropdown list
             }
         }
