@@ -9,16 +9,22 @@ import {ENP_URL} from "../../../../urls";
 const EquipmentRegister = () => {
   // const {manufacturerCode} = useParams();
 
-  const {data: listOfEquipments, isLoading} = useQuery('equipments', () =>
-    axios.get(`${ENP_URL}/equipments`)
+  const {data: listOfEquipments, isLoading} = useQuery('equipments',
+    () => axios.get(`${ENP_URL}/equipments`)
   )
 
   const {data: models} = useQuery('listOfEquipmentModel', () =>
     axios.get(`${ENP_URL}/models`)
   )
 
-  const {data: modelClasses} = useQuery('listOfModelClass', () => axios.get(`${ENP_URL}/modelClasses`))
-  const {data: manufacturers} = useQuery('listOfEquipmentManufacturer', () => axios.get(`${ENP_URL}/manufacturers`))
+  const {data: modelClasses} = useQuery('listOfModelClass',
+    () => axios.get(`${ENP_URL}/modelClasses`)
+  )
+
+  const {data: manufacturers} = useQuery('listOfEquipmentManufacturer',
+    () => axios.get(`${ENP_URL}/manufacturers`)
+  )
+
   const columns: any = [
     {
       title: 'Equipment ID',
@@ -275,21 +281,17 @@ const EquipmentRegister = () => {
   const [beforeSearch, setBeforeSearch] = useState([])
   useEffect(() => {
     const data = listOfEquipments?.data?.map((equipment: any) => {
-      const {
-        name,
-        manufacturerId,
-        modelClassId
-      } = models?.data?.find((model: any) => model.modelId === equipment.modelId)
+      const model = models?.data?.find((model: any) => model.modelId === equipment.modelId)
+      console.log('model', model)
 
-
-      const {name: modelClassName} = modelClasses?.data?.find((modelClass: any) => modelClass.modelClassId === modelClassId)
+      const {name: modelClassName} = modelClasses ? modelClasses?.data?.find((modelClass: any) => modelClass.modelClassId === model.modelClassId) : ''
       // console.log('modelClassName', modelClassName)
-      const {name: manufacturer} = manufacturers?.data?.find((manufacturer: any) => manufacturer.manufacturerId === manufacturerId)
+      const {name: manufacturer} = manufacturers ? manufacturers?.data?.find((manufacturer: any) => manufacturer.manufacturerId === model.manufacturerId) : ''
       // console.log('manufacturer', manufacturer)
       // const manufacturer = listOfequipmentManufacturerQueryClient?.getQueryData('listOfequipmentManufacturer')?.data?.find((manufacturer: any) => manufacturer.manufacturerId === manufacturerId)
       return {
         ...equipment,
-        modelName: name,
+        modelName: model?.name,
         modelClassName: modelClassName,
         manufacturer: manufacturer
       }
@@ -297,36 +299,36 @@ const EquipmentRegister = () => {
     console.log('data', data)
     setGridData(data)
     setBeforeSearch(data)
-  }, [listOfEquipments])
+  }, [listOfEquipments, models, modelClasses, manufacturers])
 
-  // const globalSearch = (searchValue: string) => {
-  //   //searchValue is the value of the search input
-  //   const searchResult = beforeSearch?.filter((item: any) => {
-  //     console.log('item', item)
-  //     return (
-  //       item.description?.toLowerCase().includes(searchValue?.toLowerCase()) ||
-  //       item.equipmentId?.toLowerCase().includes(searchValue?.toLowerCase()) ||
-  //       item.serialNumber?.toLowerCase().includes(searchValue?.toLowerCase()) ||
-  //       item.manufactureDate?.toLowerCase().includes(searchValue?.toLowerCase()) ||
-  //       item.purchaseDate?.toLowerCase().includes(searchValue?.toLowerCase()) ||
-  //       item.endOfLifeDate?.toLowerCase().includes(searchValue?.toLowerCase()) ||
-  //       // item.facode?.toLowerCase().includes(searchValue?.toLowerCase()) ||
-  //       item.note?.toLowerCase().includes(searchValue.toLowerCase()) ||
-  //       item.warrantyStartDate?.toLowerCase().includes(searchValue.toLowerCase()) ||
-  //       item.warrantyEndDate?.toLowerCase().includes(searchValue.toLowerCase()) ||
-  //       item.universalCode?.toLowerCase().includes(searchValue.toLowerCase()) ||
-  //       item.meterType?.toLowerCase().includes(searchValue.toLowerCase()) ||
-  //       item.modelName?.toLowerCase().includes(searchValue.toLowerCase()) ||
-  //       item.modelClassName?.toLowerCase().includes(searchValue.toLowerCase()) ||
-  //       item.manufacturer?.toLowerCase().includes(searchValue.toLowerCase())
-  //     )
-  //   })//search the grid data
-  //   console.log('searchResult', searchResult)
-  //   setGridData(searchResult) //set the grid data to the search result
-  // }
+  const globalSearch = (searchValue: string) => {
+    //searchValue is the value of the search input
+    const searchResult = beforeSearch?.filter((item: any) => {
+      console.log('item', item)
+      return (
+        item.description?.toLowerCase().includes(searchValue?.toLowerCase()) ||
+        item.equipmentId?.toLowerCase().includes(searchValue?.toLowerCase()) ||
+        item.serialNumber?.toLowerCase().includes(searchValue?.toLowerCase()) ||
+        item.manufactureDate?.toLowerCase().includes(searchValue?.toLowerCase()) ||
+        item.purchaseDate?.toLowerCase().includes(searchValue?.toLowerCase()) ||
+        item.endOfLifeDate?.toLowerCase().includes(searchValue?.toLowerCase()) ||
+        // item.facode?.toLowerCase().includes(searchValue?.toLowerCase()) ||
+        item.note?.toLowerCase().includes(searchValue.toLowerCase()) ||
+        item.warrantyStartDate?.toLowerCase().includes(searchValue.toLowerCase()) ||
+        item.warrantyEndDate?.toLowerCase().includes(searchValue.toLowerCase()) ||
+        item.universalCode?.toLowerCase().includes(searchValue.toLowerCase()) ||
+        item.meterType?.toLowerCase().includes(searchValue.toLowerCase()) ||
+        item.modelName?.toLowerCase().includes(searchValue.toLowerCase()) ||
+        item.modelClassName?.toLowerCase().includes(searchValue.toLowerCase()) ||
+        item.manufacturer?.toLowerCase().includes(searchValue.toLowerCase())
+      )
+    })//search the grid data
+    console.log('searchResult', searchResult)
+    setGridData(searchResult) //set the grid data to the search result
+  }
   const handleInputChange = (e: any) => {
     console.log('e.target.value', e.target.value)
-    // globalSearch(e.target.value)
+    globalSearch(e.target.value)
     if (e.target.value === '') {
       setGridData(beforeSearch)
     }
