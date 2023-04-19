@@ -48,14 +48,19 @@ import ChangeoutByModel from "./components/report/changeout/ChangeoutByModel/Cha
 import ChangeoutByRefillTypeModel
   from "./components/report/changeout/ChangeoutByRefillTypeModel/ChangeoutByRefillTypeModel";
 import FaultByCustodianSummary from './components/report/fault/FaultByCustodianSummary/FaultByCustodianSummary'
-import FaultByCustodianDetail from './components/report/fault/faultByCustodianDetail/FaultByCustodianDetail'
 import ScheduleByModelSummaryReport from './components/report/ScheduleByModelSummaryReport/ScheduleByModelSummaryReport'
 import ScheduleByServiceTypeReport from './components/report/ScheduleByServiceTypeReport/ScheduleByServiceTypeReport'
 import ScheduleByLocationReport from './components/report/ScheduleByLocationReport/ScheduleByLocationReport'
+import AllEquipSummary from "./components/report/equipmentReport/AllEquipSummary";
+import FaultByCustodianDetail from './components/report/fault/faultByCustodianDetail/FaultByCustodianDetail'
+import FaultByModelSummary from './components/report/fault/faultByModelSummary/FaultByModelSummary'
+import FaultByDowntimeReport from './components/report/fault/FaultByDownTimeReport/FaultByDowntimeReport'
+import ListEquipmentSummary from "./components/report/equipmentReport/ListEquipmentSummary";
+import MeteringByModelClassSummary
+  from "./components/report/metering/MeteringByModelSummary/MeteringByModelClassSummary";
 
 
 const accountBreadCrumbs: Array<PageLink> = []
-
 
 const ProductionPage: React.FC = () => {
   return (
@@ -525,6 +530,43 @@ const ProductionPage: React.FC = () => {
           }
         />
         <Route
+          path='all-equip-summary'
+          element={
+            <>
+              <PageTitle breadcrumbs={accountBreadCrumbs}>All Equipment Summary</PageTitle>
+              <AllEquipSummary/>
+            </>
+          }
+        />
+        <Route
+          path='sumBydownType'
+          element={
+            <>
+              <PageTitle breadcrumbs={accountBreadCrumbs}>Summary By Down Type</PageTitle>
+              <FaultByDowntimeReport/>
+            </>
+          }
+        />
+        <Route
+          path='equipment-summary'
+          element={
+            <>
+              <PageTitle breadcrumbs={accountBreadCrumbs}>List Equipment Summary</PageTitle>
+              <ListEquipmentSummary/>
+            </>
+          }
+        />
+        <Route
+          path='faultByModelSummary'
+          element={
+            <>
+              <PageTitle breadcrumbs={accountBreadCrumbs}>Fault By Model Summary</PageTitle>
+              <FaultByModelSummary/>
+            </>
+          }
+        />
+
+        <Route
           path='service-type'
           element={
             <>
@@ -548,6 +590,15 @@ const ProductionPage: React.FC = () => {
             <>
               <PageTitle breadcrumbs={accountBreadCrumbs}>Number Of Equipment Per Manufacturer</PageTitle>
               <NumberOfCarperManufacturerReport/>
+            </>
+          }
+        />
+        <Route
+          path='meteringbymodelClassSummary'
+          element={
+            <>
+              <PageTitle breadcrumbs={accountBreadCrumbs}>Metering By Model Class Summary</PageTitle>
+              <MeteringByModelClassSummary/>
             </>
           }
         />

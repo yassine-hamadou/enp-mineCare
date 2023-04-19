@@ -1,15 +1,15 @@
 import React from "react";
 import ko from "knockout";
 import "devexpress-reporting/dx-webdocumentviewer";
-import "../../../../../../../node_modules/jquery-ui/themes/base/all.css";
-import "../../../../../../../node_modules/devextreme/dist/css/dx.light.css";
-import "../../../../../../../node_modules/devexpress-reporting/dist/css/dx-webdocumentviewer.css";
-import "../../../../../../../node_modules/@devexpress/analytics-core/dist/css/dx-analytics.common.css";
+import "../../../../../../../../node_modules/jquery-ui/themes/base/all.css";
+import "../../../../../../../../node_modules/devextreme/dist/css/dx.light.css";
+import "../../../../../../../../node_modules/devexpress-reporting/dist/css/dx-webdocumentviewer.css";
+import "../../../../../../../../node_modules/@devexpress/analytics-core/dist/css/dx-analytics.common.css";
 
 class ReportViewer extends React.Component {
     constructor(props) {
         super(props);
-        this.reportUrl = ko.observable("scheduleByServiceTypeReport");
+        this.reportUrl = ko.observable("meteringbymodelclasssummary");
         this.requestOptions = {
             host: "http://208.117.44.15/serverside/",
             invokeAction: "DXXRDV"
@@ -32,10 +32,10 @@ class ReportViewer extends React.Component {
     }
 };
 
-function ScheduleByServiceTypeReport() {
+function MeteringByModelClassSummary() {
     return (<div style={{width: "100%", height: "1000px"}}>
         <ReportViewer/>
     </div>);
 }
 
-export default ScheduleByServiceTypeReport;
+export default MeteringByModelClassSummary;

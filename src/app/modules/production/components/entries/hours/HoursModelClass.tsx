@@ -325,7 +325,7 @@ import type {InputRef} from 'antd';
 import {Button, Form, Input, message, Popconfirm, Space, Table} from 'antd';
 import type {FormInstance} from 'antd/es/form';
 import {useMutation, useQuery, useQueryClient} from "react-query";
-import {fetchHours, putHours} from "../../../../../urls";
+import {addHours, fetchHours, putHours} from "../../../../../urls";
 import {KTCard, KTCardBody, KTSVG} from "../../../../../../_metronic/helpers";
 
 const EditableContext = React.createContext<FormInstance<any> | null>(null);
@@ -418,7 +418,7 @@ const EditableCell: React.FC<EditableCellProps> = ({
           },
         ]}
       >
-        <Input ref={inputRef} onPressEnter={save} onBlur={save}/>
+        <Input ref={inputRef} onPressEnter={save}/>
       </Form.Item>
     ) : (
       <div className="editable-cell-value-wrap" style={{paddingRight: 24}} onClick={toggleEdit}>
@@ -439,7 +439,7 @@ const HoursPage: React.FC = () => {
 
   const queryClient = useQueryClient()
   const {data: allHours, isLoading: isHoursLoading} = useQuery('all-hours', fetchHours)
-  const {mutate: mutateHour} = useMutation(putHours, {
+  const {mutate: mutateHour} = useMutation(addHours, {
     onSuccess: () => {
       message.success('Saved successfully').then(r => r)
       queryClient.invalidateQueries('all-hours').then(r => r)
@@ -467,12 +467,19 @@ const HoursPage: React.FC = () => {
       }
     },
     {
+      title: 'Previous Reading Date',
+      dataIndex: 'date',
+      render: (date: string) => {
+        return new Date(date).toDateString()
+      }
+    },
+    {
       title: 'Previous Reading',
-      dataIndex: 'previousReading',
+      dataIndex: 'currentReading',
       sorter: (a: any, b: any) => a.previousReading - b.previousReading,
     },
     {
-      title: 'Date',
+      title: 'Current Reading Date',
       dataIndex: 'date',
       sorter: (a: any, b: any) => {
         if (a.date < b.date) {
@@ -483,14 +490,16 @@ const HoursPage: React.FC = () => {
         }
         return 0
       },
-      render: (date: string) => {
-        return new Date(date).toDateString()
+      render: () => {
+        return new Date().toDateString()
       }
     },
     {
       title: 'Current Reading',
       dataIndex: 'currentReading',
-      sorter: (a: any, b: any) => a.currentReading - b.currentReading,
+      render: () => {
+        return 0
+      },
       width: '30%',
       onCell: (record: any) => ({
         record: record,
@@ -499,16 +508,16 @@ const HoursPage: React.FC = () => {
         handleSave,
       })
     },
-    {
-      title: 'operation',
-      dataIndex: 'operation',
-      render: (_: any, record: any) =>
-        allHours?.data.length >= 1 ? (
-          <Popconfirm title="Sure to delete?" onConfirm={() => handleDelete(record.id)}>
-            <Button type={'primary'} danger>Delete</Button>
-          </Popconfirm>
-        ) : null,
-    },
+    // {
+    //   title: 'operation',
+    //   dataIndex: 'operation',
+    //   render: (_: any, record: any) =>
+    //     allHours?.data.length >= 1 ? (
+    //       <Popconfirm title="Sure to delete?" onConfirm={() => handleDelete(record.id)}>
+    //         <Button type={'primary'} danger>Delete</Button>
+    //       </Popconfirm>
+    //     ) : null,
+    // },
   ];
 
 
@@ -523,13 +532,13 @@ const HoursPage: React.FC = () => {
     // });
     // setDataSource(newData);
     const newData: {
-      id: number
+      // id: number
       fleetId: string
       date: string
       previousReading: number
       currentReading: number
     } = {
-      id: row.id,
+      // id: row.id,
       fleetId: row.fleetId,
       date: row.date,
       previousReading: row.previousReading,
@@ -537,14 +546,14 @@ const HoursPage: React.FC = () => {
     }
 
     //Do not mutate if data has not changed
-    const queryData: any = queryClient.getQueryData('all-hours')
-
-    const oldData: any = queryData?.data?.find((row: any) => row.id === newData.id)
+    // const queryData: any = queryClient.getQueryData('all-hours')
+    //
+    // const oldData: any = queryData?.data?.find((row: any) => row.id === newData.id)
     // console.log('rowData', oldData)
     // console.log('queryData', queryData)
-    if (oldData?.currentReading === newData.currentReading) {
-      return
-    }
+    // if (oldData?.currentReading === newData.currentReading) {
+    //   return
+    // }
     mutateHour(newData)
   };
 

@@ -26,8 +26,8 @@ const AllReportPage = () => {
             Detail</Link></h3>
           <h3><span className="bullet me-5"></span><Link to="/report/equipment-summary">Equipment
             Summary</Link></h3>
-          <h3><span className="bullet me-5"></span><Link to="/report/CarperManufacturerReport">Model Class
-            Summary</Link></h3>
+          {/*<h3><span className="bullet me-5"></span><Link to="/report/CarperManufacturerReport">Equipment Per*/}
+          {/*  Manufacturer</Link></h3>*/}
         </div>
         <div
           style={{
@@ -44,7 +44,8 @@ const AllReportPage = () => {
           <h3><span className="bullet me-5"></span><Link to="#">Defect</Link></h3>
           <h3><span className="bullet me-5"></span><Link to="/report/daily-hme-report">Daily HME</Link></h3>
           <h3><span className="bullet me-5"></span><Link to="#">Transactions</Link></h3>
-          <h3><span className="bullet me-5"></span><Link to="#">All Equipment Summary</Link></h3>
+          <h3><span className="bullet me-5"></span><Link to="/report/all-equip-summary">All Equipment Summary</Link>
+          </h3>
 
         </div>
         <div
@@ -63,11 +64,11 @@ const AllReportPage = () => {
           <h3><span className="bullet me-5"></span><Link to="/report/solved-report">Solved</Link></h3>
           <h3><span className="bullet me-5"></span><Link to="/report/pending-report">Pending</Link></h3>
           <h3><span className="bullet me-5"></span><Link to="/report/fleet-history-report">Equip History</Link></h3>
-          <h3><span className="bullet me-5"></span><Link to="#">Summary By Model</Link>
+          <h3><span className="bullet me-5"></span><Link to="/report/faultByModelSummary">Summary By Model</Link>
           </h3>
           <h3><span className="bullet me-5"></span><Link to="/report/FaultByCustodianSummary">Summary By
             Custodian</Link></h3>
-          <h3><span className="bullet me-5"></span><Link to="#">Summary By Down Type</Link></h3>
+          <h3><span className="bullet me-5"></span><Link to="/report/sumBydownType">Summary By Down Type</Link></h3>
           <h3><span className="bullet me-5"></span><Link to="/report/FaultByCustodianDetail">Fault by Custodian
             Details</Link>
           </h3>
@@ -131,6 +132,8 @@ const AllReportPage = () => {
           </h3>
           <h3><span className="bullet me-5"></span><Link to="/report/metering/MeteringByModelDetail">Equipment</Link>
           </h3>
+          <h3><span className="bullet me-5"></span><Link to="/report/meteringbymodelClassSummary">Model Class
+            Summary</Link></h3>
         </div>
       </div>
     </div>
