@@ -115,7 +115,7 @@ export function AsideMenuMain() {
         <AsideMenuItem to='/setup/custodian' title='Custodian' hasBullet={true}/>
         <AsideMenuItem to='/setup/location' title='Location' hasBullet={true}/>
         <AsideMenuItem to='/setup/work-type' title='Service Type' hasBullet={true}/>
-        <AsideMenuItem to='/setup/category' title='Category' hasBullet={true}/>
+        {/*<AsideMenuItem to='/setup/category' title='Category' hasBullet={true}/>*/}
         <AsideMenuItemWithSub to='/setup/lube' title='Lube' hasBullet={true}>
           <AsideMenuItem to='/setup/compartment' title='Compartment' hasBullet={true}/>
           <AsideMenuItem to='/setup/lube-brand' title='Brand' hasBullet={true}/>

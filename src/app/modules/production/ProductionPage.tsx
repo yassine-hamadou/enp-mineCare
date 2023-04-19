@@ -204,15 +204,15 @@ const ProductionPage: React.FC = () => {
               </>
             }
           />
-          <Route
-            path=':modelClassId'
-            element={
-              <>
-                <PageTitle breadcrumbs={accountBreadCrumbs}>All Entries</PageTitle>
-                <HoursPage/>
-              </>
-            }
-          />
+          {/*<Route*/}
+          {/*  path=':modelClassId'*/}
+          {/*  element={*/}
+          {/*    <>*/}
+          {/*      <PageTitle breadcrumbs={accountBreadCrumbs}>All Entries</PageTitle>*/}
+          {/*      <HoursPage/>*/}
+          {/*    </>*/}
+          {/*  }*/}
+          {/*/>*/}
         </Route>
         <Route index element={<Navigate to='/dashboard'/>}/>
       </Route>
