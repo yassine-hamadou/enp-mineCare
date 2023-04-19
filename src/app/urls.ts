@@ -25,6 +25,9 @@ export const fetchBrands = () => {
 export const fetchHours = () => {
   return axios.get(`${ENP_URL}/HoursEntry`)
 }
+export const putHours = (data: any) => {
+  return axios.put(`${ENP_URL}/HoursEntry/${data.id}`, data)
+}
 export const fetchCompartments = () => {
   return axios.get(`${ENP_URL}/Compartment`)
 }
