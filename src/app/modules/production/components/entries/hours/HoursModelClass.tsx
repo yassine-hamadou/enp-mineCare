@@ -320,325 +320,501 @@
 // export {HoursPage}
 
 
-import React, {useContext, useEffect, useRef, useState} from 'react';
-import type {InputRef} from 'antd';
-import {Button, Form, Input, message, Popconfirm, Space, Table} from 'antd';
-import type {FormInstance} from 'antd/es/form';
-import {useMutation, useQuery, useQueryClient} from "react-query";
-import {addHours, fetchHours, putHours} from "../../../../../urls";
-import {KTCard, KTCardBody, KTSVG} from "../../../../../../_metronic/helpers";
+//////////////////////////////////////////////
+//////////////////////////////////////////////
+/////////////////////////////////////////////
+////////////////////////////////////////////
 
-const EditableContext = React.createContext<FormInstance<any> | null>(null);
 
-interface Item {
-  id: number
-  fleetId: string
-  date: string
-  previousReading: number
-  currentReading: number
-}
+// import React, {useContext, useEffect, useRef, useState} from 'react';
+// import type {InputRef} from 'antd';
+// import {Button, Form, Input, message, Popconfirm, Space, Table} from 'antd';
+// import type {FormInstance} from 'antd/es/form';
+// import {useMutation, useQuery, useQueryClient} from "react-query";
+// import {addHours, fetchHours, putHours} from "../../../../../urls";
+// import {KTCard, KTCardBody, KTSVG} from "../../../../../../_metronic/helpers";
+//
+// const EditableContext = React.createContext<FormInstance<any> | null>(null);
+//
+// interface Item {
+//   id: number
+//   fleetId: string
+//   date: string
+//   previousReading: number
+//   currentReading: number
+// }
+//
+// interface EditableRowProps {
+//   index: number;
+// }
+//
+// const EditableRow: React.FC<EditableRowProps> = ({index, ...props}) => {
+//   const [form] = Form.useForm();
+//   return (
+//     <Form form={form} component={false}>
+//       <EditableContext.Provider value={form}>
+//         <tr {...props} />
+//       </EditableContext.Provider>
+//     </Form>
+//   );
+// };
+//
+// interface EditableCellProps {
+//   title: React.ReactNode;
+//   editable: boolean;
+//   children: React.ReactNode;
+//   dataIndex: keyof Item;
+//   record: Item;
+//   handleSave: (record: Item) => void;
+// }
+//
+// const EditableCell: React.FC<EditableCellProps> = ({
+//                                                      title,
+//                                                      editable,
+//                                                      children,
+//                                                      dataIndex,
+//                                                      record,
+//                                                      handleSave,
+//                                                      ...restProps
+//                                                    }) => {
+//   const [editing, setEditing] = useState(false);
+//   const inputRef = useRef<InputRef>(null);
+//   const form = useContext(EditableContext)!;
+//
+//   useEffect(() => {
+//     if (editing) {
+//       inputRef.current!.focus();
+//     }
+//   }, [editing]);
+//
+//   const toggleEdit = () => {
+//     setEditing(!editing);
+//     form.setFieldsValue({[dataIndex]: record[dataIndex]});
+//   };
+//
+//   const save = async () => {
+//     // try {
+//     //   message.success('Saved successfully')
+//     //   const values = await form.validateFields();
+//     //
+//     //   toggleEdit();
+//     //   handleSave({...record, ...values});
+//     // } catch (errInfo) {
+//     //   console.log('Save failed:', errInfo);
+//     // }
+//
+//
+//     const values = await form.validateFields();
+//     toggleEdit();
+//     handleSave({...record, ...values});
+//
+//   };
+//
+//   let childNode = children;
+//
+//   if (editable) {
+//     childNode = editing ? (
+//       <Form.Item
+//         style={{margin: 0}}
+//         name={dataIndex}
+//         rules={[
+//           {
+//             required: true,
+//             message: `${title} is required.`,
+//           },
+//         ]}
+//       >
+//         <Input ref={inputRef} onPressEnter={save}/>
+//       </Form.Item>
+//     ) : (
+//       <div className="editable-cell-value-wrap" style={{paddingRight: 24}} onClick={toggleEdit}>
+//         {children}
+//       </div>
+//     );
+//   }
+//
+//   return <td {...restProps}>{childNode}</td>;
+// };
+//
+// type EditableTableProps = Parameters<typeof Table>[0];
+//
+//
+// type ColumnTypes = Exclude<EditableTableProps['columns'], undefined>;
+//
+// const HoursPage: React.FC = () => {
+//
+//   const queryClient = useQueryClient()
+//   const {data: allHours, isLoading: isHoursLoading} = useQuery('all-hours', fetchHours)
+//   const {mutate: mutateHour} = useMutation(addHours, {
+//     onSuccess: () => {
+//       message.success('Saved successfully').then(r => r)
+//       queryClient.invalidateQueries('all-hours').then(r => r)
+//     },
+//     onError: (error: any) => {
+//       message.error(error.message).then(r => r)
+//     }
+//   })
+//   const handleDelete = (key: React.Key) => {
+//     return null
+//   };
+//
+//   const defaultColumns = [
+//     {
+//       title: 'Equipment ID',
+//       dataIndex: 'fleetId',
+//       sorter: (a: any, b: any) => {
+//         if (a.fleetId < b.fleetId) {
+//           return -1
+//         }
+//         if (a.fleetId > b.fleetId) {
+//           return 1
+//         }
+//         return 0
+//       }
+//     },
+//     {
+//       title: 'Previous Reading Date',
+//       dataIndex: 'date',
+//       render: (date: string) => {
+//         return new Date(date).toDateString()
+//       }
+//     },
+//     {
+//       title: 'Previous Reading',
+//       dataIndex: 'currentReading',
+//       sorter: (a: any, b: any) => a.previousReading - b.previousReading,
+//     },
+//     {
+//       title: 'Current Reading Date',
+//       dataIndex: 'date',
+//       sorter: (a: any, b: any) => {
+//         if (a.date < b.date) {
+//           return -1
+//         }
+//         if (a.date > b.date) {
+//           return 1
+//         }
+//         return 0
+//       },
+//       render: () => {
+//         return new Date().toDateString()
+//       }
+//     },
+//     {
+//       title: 'Current Reading',
+//       dataIndex: 'currentReading',
+//       render: () => {
+//         return 0
+//       },
+//       width: '30%',
+//       onCell: (record: any) => ({
+//         record: record,
+//         dataIndex: 'currentReading',
+//         editable: true,
+//         handleSave,
+//       })
+//     },
+//     // {
+//     //   title: 'operation',
+//     //   dataIndex: 'operation',
+//     //   render: (_: any, record: any) =>
+//     //     allHours?.data.length >= 1 ? (
+//     //       <Popconfirm title="Sure to delete?" onConfirm={() => handleDelete(record.id)}>
+//     //         <Button type={'primary'} danger>Delete</Button>
+//     //       </Popconfirm>
+//     //     ) : null,
+//     // },
+//   ];
+//
+//
+//   const handleSave = (row: any) => {
+//     // console.log('row', row)
+//     // const newData = [...allHours?.data];
+//     // const index = newData.findIndex((item) => row.key === item.key);
+//     // const item = newData[index];
+//     // newData.splice(index, 1, {
+//     //   ...item,
+//     //   ...row,
+//     // });
+//     // setDataSource(newData);
+//     const newData: {
+//       // id: number
+//       fleetId: string
+//       date: string
+//       previousReading: number
+//       currentReading: number
+//     } = {
+//       // id: row.id,
+//       fleetId: row.fleetId,
+//       date: row.date,
+//       previousReading: row.previousReading,
+//       currentReading: row.currentReading
+//     }
+//
+//     //Do not mutate if data has not changed
+//     // const queryData: any = queryClient.getQueryData('all-hours')
+//     //
+//     // const oldData: any = queryData?.data?.find((row: any) => row.id === newData.id)
+//     // console.log('rowData', oldData)
+//     // console.log('queryData', queryData)
+//     // if (oldData?.currentReading === newData.currentReading) {
+//     //   return
+//     // }
+//     mutateHour(newData)
+//   };
+//
+//   const components = {
+//     body: {
+//       row: EditableRow,
+//       cell: EditableCell,
+//     },
+//   };
+//
+//   // const columns = defaultColumns.map((col) => {
+//   //   if (!col.editable) {
+//   //     return col;
+//   // {/*  }*/}
+//   // {/*  return {*/}
+//   // eslint-disable-next-line no-lone-blocks
+//   // {/*    ...col,*/}
+//   //     onCell: (record: any) => ({
+//   //       record,
+//   //       editable: col.editable,
+//   //       dataIndex: col.dataIndex,
+//   //       title: col.title,
+//   //       handleSave,
+//   //     }),
+//   //   };
+//   // });
+//
+//   const [gridData, setGridData] = useState<any>([])
+//   const [beforeSearch, setBeforeSearch] = useState<any>([])
+//
+//   useEffect(() => {
+//     setBeforeSearch(allHours?.data)
+//     setGridData(allHours?.data)
+//   }, [allHours?.data])
+//
+//   const globalSearch = (searchValue: string) => {
+//     //searchValue is the value of the search input
+//     const searchResult = beforeSearch?.filter((item: any) => {
+//       // console.log('item', item)
+//       return (
+//         item.fleetId.toLowerCase().includes(searchValue.toLowerCase()) ||
+//         item.previousReading.toString().toLowerCase().includes(searchValue.toLowerCase()) ||
+//         item.currentReading.toString().toLowerCase().includes(searchValue.toLowerCase())
+//       )
+//     })//search the grid data
+//     console.log('searchResult', searchResult)
+//     setGridData(searchResult) //set the grid data to the search result
+//   }
+//   const handleInputChange = (e: any) => {
+//     // console.log('e.target.value', e.target.value)
+//     globalSearch(e.target.value)
+//     if (e.target.value === '') {
+//       setGridData(beforeSearch)
+//     }
+//   }
+//
+//
+//   return (
+//     <KTCard>
+//       <KTCardBody>
+//         <div className='d-flex justify-content-between'>
+//           <Space style={{marginBottom: 16}}>
+//             <Input
+//               placeholder='Enter Search Text'
+//               type='text'
+//               allowClear
+//               onChange={handleInputChange}
+//             />
+//           </Space>
+//           <Space style={{marginBottom: 16}}>
+//             {/*<button type='button' className='btn btn-primary me-3' onClick={() => console.log()}>*/}
+//             {/*  <KTSVG path='/media/icons/duotune/arrows/arr075.svg' className='svg-icon-2'/>*/}
+//             {/*  Add*/}
+//             {/*</button>*/}
+//           </Space>
+//         </div>
+//         <Table
+//           components={components}
+//           bordered
+//           loading={isHoursLoading}
+//           dataSource={gridData}
+//           columns={defaultColumns as ColumnTypes}
+//         />
+//       </KTCardBody>
+//     </KTCard>
+//   );
+// };
+//
+// export {HoursPage};
 
-interface EditableRowProps {
-  index: number;
-}
 
-const EditableRow: React.FC<EditableRowProps> = ({index, ...props}) => {
-  const [form] = Form.useForm();
-  return (
-    <Form form={form} component={false}>
-      <EditableContext.Provider value={form}>
-        <tr {...props} />
-      </EditableContext.Provider>
-    </Form>
+/////////////////////////////////////////////
+////////////////////////////////////////////
+/////`HoursPage.tsx`////////////////////////
+
+
+import type {ProColumns} from '@ant-design/pro-components';
+import {EditableProTable, ProCard, ProFormField} from '@ant-design/pro-components';
+import {Button, ConfigProvider} from 'antd';
+import React, {useState} from 'react';
+import {useQuery} from "react-query";
+import {fetchHours} from "../../../../../urls";
+import en_US from 'antd/lib/locale/en_US';
+
+type DataSourceType = {
+  id: React.Key;
+  title?: string;
+  decs?: string;
+  state?: string;
+  created_at?: string;
+  children?: DataSourceType[];
+};
+
+// const defaultData: DataSourceType[] = new Array(20).fill(1).map((_, index) => {
+//   return {
+//     id: (Date.now() + index).toString(),
+//     title: `title${index}`,
+//     decs: 'description',
+//     state: 'open',
+//     created_at: '1590486176000',
+//   };
+// });
+
+
+const HoursPage = () => {
+  const {data: defaultData} = useQuery('all-hours', fetchHours)
+
+  const [editableKeys, setEditableRowKeys] = useState<React.Key[]>(() =>
+    defaultData?.data?.map((item: any) => item.id),
   );
-};
+  const [dataSource, setDataSource] = useState<readonly DataSourceType[]>(() => defaultData?.data);
 
-interface EditableCellProps {
-  title: React.ReactNode;
-  editable: boolean;
-  children: React.ReactNode;
-  dataIndex: keyof Item;
-  record: Item;
-  handleSave: (record: Item) => void;
-}
-
-const EditableCell: React.FC<EditableCellProps> = ({
-                                                     title,
-                                                     editable,
-                                                     children,
-                                                     dataIndex,
-                                                     record,
-                                                     handleSave,
-                                                     ...restProps
-                                                   }) => {
-  const [editing, setEditing] = useState(false);
-  const inputRef = useRef<InputRef>(null);
-  const form = useContext(EditableContext)!;
-
-  useEffect(() => {
-    if (editing) {
-      inputRef.current!.focus();
-    }
-  }, [editing]);
-
-  const toggleEdit = () => {
-    setEditing(!editing);
-    form.setFieldsValue({[dataIndex]: record[dataIndex]});
-  };
-
-  const save = async () => {
-    // try {
-    //   message.success('Saved successfully')
-    //   const values = await form.validateFields();
-    //
-    //   toggleEdit();
-    //   handleSave({...record, ...values});
-    // } catch (errInfo) {
-    //   console.log('Save failed:', errInfo);
-    // }
-
-
-    const values = await form.validateFields();
-    toggleEdit();
-    handleSave({...record, ...values});
-
-  };
-
-  let childNode = children;
-
-  if (editable) {
-    childNode = editing ? (
-      <Form.Item
-        style={{margin: 0}}
-        name={dataIndex}
-        rules={[
-          {
-            required: true,
-            message: `${title} is required.`,
-          },
-        ]}
-      >
-        <Input ref={inputRef} onPressEnter={save}/>
-      </Form.Item>
-    ) : (
-      <div className="editable-cell-value-wrap" style={{paddingRight: 24}} onClick={toggleEdit}>
-        {children}
-      </div>
-    );
-  }
-
-  return <td {...restProps}>{childNode}</td>;
-};
-
-type EditableTableProps = Parameters<typeof Table>[0];
-
-
-type ColumnTypes = Exclude<EditableTableProps['columns'], undefined>;
-
-const HoursPage: React.FC = () => {
-
-  const queryClient = useQueryClient()
-  const {data: allHours, isLoading: isHoursLoading} = useQuery('all-hours', fetchHours)
-  const {mutate: mutateHour} = useMutation(addHours, {
-    onSuccess: () => {
-      message.success('Saved successfully').then(r => r)
-      queryClient.invalidateQueries('all-hours').then(r => r)
-    },
-    onError: (error: any) => {
-      message.error(error.message).then(r => r)
-    }
-  })
-  const handleDelete = (key: React.Key) => {
-    return null
-  };
-
-  const defaultColumns = [
+  const columns: ProColumns<DataSourceType>[] = [
     {
       title: 'Equipment ID',
       dataIndex: 'fleetId',
-      sorter: (a: any, b: any) => {
-        if (a.fleetId < b.fleetId) {
-          return -1
-        }
-        if (a.fleetId > b.fleetId) {
-          return 1
-        }
-        return 0
-      }
+      // width: '30%',
+      editable: false,
+      // formItemProps: {
+      //   rules: [
+      //     {
+      //       required: true,
+      //       whitespace: true,
+      //       message: 'message',
+      //     },
+      //     {
+      //       message: 'message',
+      //       pattern: /[0-9]/,
+      //     },
+      //     {
+      //       max: 16,
+      //       whitespace: true,
+      //       message: '1',
+      //     },
+      //     {
+      //       min: 6,
+      //       whitespace: true,
+      //       message: '6',
+      //     },
+      //   ],
+      // },
     },
+    // {
+    //   title: 'Model & Manufacturer',
+    //   key: 'state',
+    //   dataIndex: 'state',
+    //   valueType: 'select',
+    //   valueEnum: {
+    //     all: {text: 'text', status: 'Default'},
+    //     open: {
+    //       text: 'text',
+    //       status: 'Error',
+    //     },
+    //     closed: {
+    //       text: 'text',
+    //       status: 'Success',
+    //     },
+    //   },
+    // },
     {
       title: 'Previous Reading Date',
       dataIndex: 'date',
-      render: (date: string) => {
-        return new Date(date).toDateString()
-      }
+      valueType: 'date',
+      editable: false,
     },
     {
       title: 'Previous Reading',
       dataIndex: 'currentReading',
-      sorter: (a: any, b: any) => a.previousReading - b.previousReading,
-    },
-    {
-      title: 'Current Reading Date',
-      dataIndex: 'date',
-      sorter: (a: any, b: any) => {
-        if (a.date < b.date) {
-          return -1
-        }
-        if (a.date > b.date) {
-          return 1
-        }
-        return 0
-      },
-      render: () => {
-        return new Date().toDateString()
-      }
+      editable: false,
     },
     {
       title: 'Current Reading',
-      dataIndex: 'currentReading',
-      render: () => {
-        return 0
-      },
-      width: '30%',
-      onCell: (record: any) => ({
-        record: record,
-        dataIndex: 'currentReading',
-        editable: true,
-        handleSave,
-      })
+      dataIndex: 'decs',
     },
-    // {
-    //   title: 'operation',
-    //   dataIndex: 'operation',
-    //   render: (_: any, record: any) =>
-    //     allHours?.data.length >= 1 ? (
-    //       <Popconfirm title="Sure to delete?" onConfirm={() => handleDelete(record.id)}>
-    //         <Button type={'primary'} danger>Delete</Button>
-    //       </Popconfirm>
-    //     ) : null,
-    // },
+    {
+      title: 'Current Reading Date',
+      dataIndex: 'decs',
+      valueType: 'date',
+    },
   ];
 
-
-  const handleSave = (row: any) => {
-    // console.log('row', row)
-    // const newData = [...allHours?.data];
-    // const index = newData.findIndex((item) => row.key === item.key);
-    // const item = newData[index];
-    // newData.splice(index, 1, {
-    //   ...item,
-    //   ...row,
-    // });
-    // setDataSource(newData);
-    const newData: {
-      // id: number
-      fleetId: string
-      date: string
-      previousReading: number
-      currentReading: number
-    } = {
-      // id: row.id,
-      fleetId: row.fleetId,
-      date: row.date,
-      previousReading: row.previousReading,
-      currentReading: row.currentReading
-    }
-
-    //Do not mutate if data has not changed
-    // const queryData: any = queryClient.getQueryData('all-hours')
-    //
-    // const oldData: any = queryData?.data?.find((row: any) => row.id === newData.id)
-    // console.log('rowData', oldData)
-    // console.log('queryData', queryData)
-    // if (oldData?.currentReading === newData.currentReading) {
-    //   return
-    // }
-    mutateHour(newData)
-  };
-
-  const components = {
-    body: {
-      row: EditableRow,
-      cell: EditableCell,
-    },
-  };
-
-  // const columns = defaultColumns.map((col) => {
-  //   if (!col.editable) {
-  //     return col;
-  // {/*  }*/}
-  // {/*  return {*/}
-  // eslint-disable-next-line no-lone-blocks
-  // {/*    ...col,*/}
-  //     onCell: (record: any) => ({
-  //       record,
-  //       editable: col.editable,
-  //       dataIndex: col.dataIndex,
-  //       title: col.title,
-  //       handleSave,
-  //     }),
-  //   };
-  // });
-
-  const [gridData, setGridData] = useState<any>([])
-  const [beforeSearch, setBeforeSearch] = useState<any>([])
-
-  useEffect(() => {
-    setBeforeSearch(allHours?.data)
-    setGridData(allHours?.data)
-  }, [allHours?.data])
-
-  const globalSearch = (searchValue: string) => {
-    //searchValue is the value of the search input
-    const searchResult = beforeSearch?.filter((item: any) => {
-      // console.log('item', item)
-      return (
-        item.fleetId.toLowerCase().includes(searchValue.toLowerCase()) ||
-        item.previousReading.toString().toLowerCase().includes(searchValue.toLowerCase()) ||
-        item.currentReading.toString().toLowerCase().includes(searchValue.toLowerCase())
-      )
-    })//search the grid data
-    console.log('searchResult', searchResult)
-    setGridData(searchResult) //set the grid data to the search result
-  }
-  const handleInputChange = (e: any) => {
-    // console.log('e.target.value', e.target.value)
-    globalSearch(e.target.value)
-    if (e.target.value === '') {
-      setGridData(beforeSearch)
-    }
-  }
-
-
   return (
-    <KTCard>
-      <KTCardBody>
-        <div className='d-flex justify-content-between'>
-          <Space style={{marginBottom: 16}}>
-            <Input
-              placeholder='Enter Search Text'
-              type='text'
-              allowClear
-              onChange={handleInputChange}
-            />
-          </Space>
-          <Space style={{marginBottom: 16}}>
-            {/*<button type='button' className='btn btn-primary me-3' onClick={() => console.log()}>*/}
-            {/*  <KTSVG path='/media/icons/duotune/arrows/arr075.svg' className='svg-icon-2'/>*/}
-            {/*  Add*/}
-            {/*</button>*/}
-          </Space>
-        </div>
-        <Table
-          components={components}
-          bordered
-          loading={isHoursLoading}
-          dataSource={gridData}
-          columns={defaultColumns as ColumnTypes}
-        />
-      </KTCardBody>
-    </KTCard>
+    <ConfigProvider locale={en_US}>
+      <EditableProTable<DataSourceType>
+        headerTitle="Batch Entries"
+        columns={columns}
+        rowKey="id"
+        scroll={{
+          x: 960,
+        }}
+        value={dataSource}
+        onChange={setDataSource}
+        recordCreatorProps={{
+          newRecordType: 'dataSource',
+          record: () => ({
+            id: Date.now(),
+          }),
+        }}
+        toolBarRender={() => {
+          return [
+            <Button
+              type="primary"
+              key="save"
+              onClick={() => {
+                // dataSource 就是当前数据，可以调用 api 将其保存
+                console.log(dataSource);
+              }}
+            >
+              Save
+            </Button>,
+          ];
+        }}
+        editable={{
+          type: 'multiple',
+          editableKeys,
+          onValuesChange: (record, recordList) => {
+            setDataSource(recordList);
+          },
+          onChange: setEditableRowKeys,
+        }}
+      />
+      {/*<ProCard title="titleCard" headerBordered collapsible defaultCollapsed>*/}
+      {/*  <ProFormField*/}
+      {/*    ignoreFormItem*/}
+      {/*    fieldProps={{*/}
+      {/*      style: {*/}
+      {/*        width: '100%',*/}
+      {/*      },*/}
+      {/*    }}*/}
+      {/*    mode="read"*/}
+      {/*    valueType="jsonCode"*/}
+      {/*    text={JSON.stringify(dataSource)}*/}
+      {/*  />*/}
+      {/*</ProCard>*/}
+    </ConfigProvider>
   );
 };
 
