@@ -785,6 +785,9 @@ const HoursPage = () => {
       title: 'Previous Reading Date',
       dataIndex: 'date',
       valueType: 'date',
+      fieldProps: {
+        format: 'DD-MM-YYYY',
+      },
       editable: false,
     },
     {
@@ -796,6 +799,9 @@ const HoursPage = () => {
       title: 'Current Reading Date',
       valueType: 'date',
       dataIndex: 'today',
+      fieldProps: {
+        format: 'DD-MM-YYYY',
+      }
     },
     {
       title: 'Current Reading',
