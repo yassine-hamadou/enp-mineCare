@@ -331,7 +331,7 @@
 // import {Button, Form, Input, message, Popconfirm, Space, Table} from 'antd';
 // import type {FormInstance} from 'antd/es/form';
 // import {useMutation, useQuery, useQueryClient} from "react-query";
-// import {addHours, fetchHours, putHours} from "../../../../../urls";
+// import {addHours, addHoursTemp, fetchHours, getEquipment, putHours} from "../../../../../urls";
 // import {KTCard, KTCardBody, KTSVG} from "../../../../../../_metronic/helpers";
 //
 // const EditableContext = React.createContext<FormInstance<any> | null>(null);
@@ -445,7 +445,9 @@
 //
 //   const queryClient = useQueryClient()
 //   const {data: allHours, isLoading: isHoursLoading} = useQuery('all-hours', fetchHours)
-//   const {mutate: mutateHour} = useMutation(addHours, {
+//   const {data: allEquipment, isLoading: isEquipmentLoading} = useQuery('all-equipment', getEquipment)
+//
+//   const {mutate: mutateHour} = useMutation(addHoursTemp, {
 //     onSuccess: () => {
 //       message.success('Saved successfully').then(r => r)
 //       queryClient.invalidateQueries('all-hours').then(r => r)
@@ -454,9 +456,11 @@
 //       message.error(error.message).then(r => r)
 //     }
 //   })
-//   const handleDelete = (key: React.Key) => {
-//     return null
-//   };
+//
+//   // const handleDelete = (key: React.Key) => {
+//   //   return null
+//   // };
+//
 //
 //   const defaultColumns = [
 //     {
@@ -481,7 +485,7 @@
 //     },
 //     {
 //       title: 'Previous Reading',
-//       dataIndex: 'currentReading',
+//       dataIndex: 'previousReading',
 //       sorter: (a: any, b: any) => a.previousReading - b.previousReading,
 //     },
 //     {
@@ -503,7 +507,7 @@
 //     {
 //       title: 'Current Reading',
 //       dataIndex: 'currentReading',
-//       render: () => {
+//       render: (currentReading: number, record: any) => {
 //         return 0
 //       },
 //       width: '30%',
@@ -594,7 +598,6 @@
 //     setBeforeSearch(allHours?.data)
 //     setGridData(allHours?.data)
 //   }, [allHours?.data])
-//
 //   const globalSearch = (searchValue: string) => {
 //     //searchValue is the value of the search input
 //     const searchResult = beforeSearch?.filter((item: any) => {
@@ -658,11 +661,12 @@
 
 import type {ProColumns} from '@ant-design/pro-components';
 import {EditableProTable, ProCard, ProFormField} from '@ant-design/pro-components';
-import {Button, ConfigProvider} from 'antd';
+import {Button, Input, InputNumber, message, Space} from 'antd';
 import React, {useState} from 'react';
-import {useQuery} from "react-query";
-import {fetchHours} from "../../../../../urls";
-import en_US from 'antd/lib/locale/en_US';
+import {useMutation, useQuery, useQueryClient} from "react-query";
+import {addHours, fetchHours, getEquipment} from "../../../../../urls";
+import {useNavigate} from "react-router-dom";
+import {KTCard} from "../../../../../../_metronic/helpers";
 
 type DataSourceType = {
   id: React.Key;
@@ -685,12 +689,50 @@ type DataSourceType = {
 
 
 const HoursPage = () => {
-  const {data: defaultData} = useQuery('all-hours', fetchHours)
+  const {data: defaultData, isLoading} = useQuery('all-hours', fetchHours, {
+    refetchOnWindowFocus: false
+  })
 
-  const [editableKeys, setEditableRowKeys] = useState<React.Key[]>(() =>
-    defaultData?.data?.map((item: any) => item.id),
-  );
-  const [dataSource, setDataSource] = useState<readonly DataSourceType[]>(() => defaultData?.data);
+  const queryClient = useQueryClient()
+  const navigate = useNavigate()
+  // const {data: allEquipment} = useQuery('all-equipment', getEquipment)
+
+  const {mutate: mutateHours, isLoading: isHoursMutationLoading} =
+    useMutation(addHours, {
+      onSuccess: () => {
+        navigate('/')
+        message.success('Hours Entries Saved successfully').then(r => r)
+        queryClient.invalidateQueries('all-hours').then(r => r)
+      },
+      onError: (error: any) => {
+        message.error(error.message).then(r => r)
+      }
+    })
+
+  const [dataSource, setDataSource] =
+    useState<readonly DataSourceType[]>(() => defaultData?.data);
+
+  const [record, setRecord] =
+    useState<DataSourceType | undefined>(undefined);
+
+  const [editableKeys, setEditableRowKeys] =
+    useState<React.Key[]>(() => defaultData?.data?.map((item: any) => item.id));
+  console.log('editableKeys', editableKeys)
+  // const equipHours: [] = allEquipment?.data?.map((equip: any) => {
+  //   defaultData?.data?.map((hours: any) => {
+  //       console.log('equip', equip)
+  //       console.log('hours', hours)
+  //       if (equip.equipmentId.trim() === hours.fleetId.trim()) {
+  //         return {
+  //           ...hours,
+  //           fleetId: equip.equipmentId
+  //         }
+  //       }
+  //     }
+  //   )
+  // })
+  // console.log("sdsd", equipHours)
+
 
   const columns: ProColumns<DataSourceType>[] = [
     {
@@ -751,51 +793,110 @@ const HoursPage = () => {
       editable: false,
     },
     {
-      title: 'Current Reading',
-      dataIndex: 'decs',
+      title: 'Current Reading Date',
+      valueType: 'date',
+      dataIndex: 'today',
     },
     {
-      title: 'Current Reading Date',
-      dataIndex: 'decs',
-      valueType: 'date',
+      title: 'Current Reading',
+      valueType: 'digit',
+      dataIndex: 'zeroReading',
     },
-  ];
 
+  ];
+  const saveAndContinue = () => {
+    dataSource?.map((item: any) => {
+      if (item.zeroReading) {
+        mutateHours({
+          fleetId: item.fleetId,
+          previousReading: item.currentReading,
+          date: item.today,
+          currentReading: item.zeroReading,
+        })
+      }
+    })
+  }
   return (
-    <ConfigProvider locale={en_US}>
+    // <KTCard>
+    <ProCard>
+      {/*<ConfigProvider locale={en_US}>*/}
+      <div className='d-flex justify-content-between'>
+        <Space
+          key="search"
+          style={{
+            marginBottom: 16,
+          }}
+        >
+          <Input
+            placeholder='Enter Search Text'
+            // onChange={handleInputChange}
+            type='text'
+            allowClear
+            // value={searchText}
+          />
+          <Button type='primary'>Search</Button>
+        </Space>
+        <Space
+          key="button"
+          style={{
+            marginBottom: 16,
+          }}
+        >
+          <Button
+            type="primary"
+            size={'large'}
+            key="save"
+            onClick={record ? saveAndContinue : () => {
+              message.error('No Hours Entered').then(r => r)
+            }}
+            // onClick={saveAndContinue}
+            loading={isHoursMutationLoading}
+          >
+            Save
+          </Button>
+        </Space>
+      </div>
       <EditableProTable<DataSourceType>
-        headerTitle="Batch Entries"
+        // headerTitle="Batch Entries"
         columns={columns}
+        loading={isLoading}
         rowKey="id"
         scroll={{
           x: 960,
         }}
-        value={dataSource}
-        onChange={setDataSource}
-        recordCreatorProps={{
-          newRecordType: 'dataSource',
-          record: () => ({
-            id: Date.now(),
-          }),
+        pagination={{
+          pageSize: 30,
         }}
-        toolBarRender={() => {
-          return [
-            <Button
-              type="primary"
-              key="save"
-              onClick={() => {
-                // dataSource 就是当前数据，可以调用 api 将其保存
-                console.log(dataSource);
-              }}
-            >
-              Save
-            </Button>,
-          ];
-        }}
+        // value={defaultData?.data?.map(
+        //   (item: any) => {
+        //     return {
+        //       ...item,
+        //       zeroReading: 0,
+        //       today: new Date(),
+        //     }
+        //   }
+        // )}
+        value={defaultData?.data?.map(
+          (item: any) => {
+            return {
+              ...item,
+              zeroReading: 0,
+              today: new Date(),
+            }
+          }
+        )}
+        // onChange={setDataSource}
+
+        //do not show add button
+        recordCreatorProps={false}
+        // toolBarRender={() => {
+        //   return [];
+        // }}
         editable={{
           type: 'multiple',
-          editableKeys,
+          editableKeys: defaultData?.data?.map((item: any) => item.id),
           onValuesChange: (record, recordList) => {
+            setRecord(record)
             setDataSource(recordList);
           },
           onChange: setEditableRowKeys,
@@ -814,7 +915,9 @@ const HoursPage = () => {
       {/*    text={JSON.stringify(dataSource)}*/}
       {/*  />*/}
       {/*</ProCard>*/}
-    </ConfigProvider>
+      {/*</ConfigProvider>*/}
+    </ProCard>
+    // </KTCard>
   );
 };
 

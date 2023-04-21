@@ -96,6 +96,10 @@ export function addHours(data: any) {
   return axios.post(`${ENP_URL}/hoursentry`, data);
 }
 
+export function addHoursTemp(data: any) {
+  return axios.post(`${ENP_URL}/HoursEntryTemp`, data);
+}
+
 
 export function getCategories() {
   return axios.get(`${ENP_URL}/categories`);
