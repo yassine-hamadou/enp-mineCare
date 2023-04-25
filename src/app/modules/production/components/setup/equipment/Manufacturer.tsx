@@ -2,25 +2,17 @@ import {Input, Space, Table} from "antd";
 import {KTCard, KTCardBody, KTSVG} from "../../../../../../_metronic/helpers";
 import React from "react";
 import {Link} from "react-router-dom";
+import {getManufacturers} from "../../../../../urls";
+import {useQuery} from "react-query";
 
 
-const data = [
-  {
-    key: '1',
-    code: '001',
-    name: 'Toyota',
-  },
-  {
-    key: '2',
-    code: '002',
-    name: 'Mercedes',
-  }
-]
 const Manufacturer = () => {
-  const columns = [
+  const {data: manufacturers, isLoading} = useQuery('Manufacturers', getManufacturers)
+
+  const columns: any = [
     {
       title: 'Code',
-      dataIndex: 'code',
+      dataIndex: 'manufacturerId',
     },
     {
       title: 'Name',
@@ -30,7 +22,14 @@ const Manufacturer = () => {
       title: 'Action',
       render: (_: any, record: any) => (
         <Space size='middle'>
-          <Link to={`model/${record.code}`}>
+          <Link
+            to={`${record.manufacturerId}`}
+            state={
+              manufacturers?.data?.filter(
+                (manufacturer: any) => manufacturer.manufacturerId === record.manufacturerId
+              )
+            }
+          >
             <button type='button' className='btn btn-light-primary me-3'>
               Models
             </button>
@@ -50,7 +49,6 @@ const Manufacturer = () => {
           <Space style={{marginBottom: 16}}>
             <Input
               placeholder='Enter Search Text'
-              // onChange={handleInputChange}
               type='text'
               allowClear
             />
@@ -65,7 +63,8 @@ const Manufacturer = () => {
         <Table
           columns={columns}
           bordered
-          dataSource={data}
+          dataSource={manufacturers?.data}
+          loading={isLoading}
         />
       </KTCardBody>
     </KTCard>

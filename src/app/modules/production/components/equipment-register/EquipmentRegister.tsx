@@ -9,16 +9,25 @@ import {ENP_URL} from "../../../../urls";
 const EquipmentRegister = () => {
   // const {manufacturerCode} = useParams();
 
-  const {data: listOfEquipments, isLoading} = useQuery('equipments', () =>
-    axios.get(`${ENP_URL}/equipments`)
+  const {data: listOfEquipments, isLoading} = useQuery('equipments',
+    () => axios.get(`${ENP_URL}/equipments`), {
+      refetchOnWindowFocus: false,
+      staleTime: Infinity
+    }
   )
 
   const {data: models} = useQuery('listOfEquipmentModel', () =>
     axios.get(`${ENP_URL}/models`)
   )
 
-  const {data: modelClasses} = useQuery('listOfModelClass', () => axios.get(`${ENP_URL}/modelClasses`))
-  const {data: manufacturers} = useQuery('listOfEquipmentManufacturer', () => axios.get(`${ENP_URL}/manufacturers`))
+  const {data: modelClasses} = useQuery('listOfModelClass',
+    () => axios.get(`${ENP_URL}/modelClasses`)
+  )
+
+  const {data: manufacturers, isLoading: manufacturerLoading} = useQuery('listOfEquipmentManufacturer',
+    () => axios.get(`${ENP_URL}/manufacturers`)
+  )
+
   const columns: any = [
     {
       title: 'Equipment ID',
@@ -241,63 +250,59 @@ const EquipmentRegister = () => {
     }
   ]
 
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [submitLoading, setSubmitLoading] = useState(false);
-  // const [gridData, setGridData] = useState()
-  const [form] = Form.useForm();
+  // const [isModalOpen, setIsModalOpen] = useState(false);
+  // const [submitLoading, setSubmitLoading] = useState(false);
+  // // const [gridData, setGridData] = useState()
+  // const [form] = Form.useForm();
+  //
+  // const handleCancel = () => {
+  //   setIsModalOpen(false);
+  // }
+  //
+  // function onFinish() {
+  //   setSubmitLoading(true);
+  //   setTimeout(() => {
+  //     setSubmitLoading(false);
+  //     setIsModalOpen(false);
+  //   }, 2000);
+  // }
 
-  const handleCancel = () => {
-    setIsModalOpen(false);
-  }
-
-  function onFinish() {
-    setSubmitLoading(true);
-    setTimeout(() => {
-      setSubmitLoading(false);
-      setIsModalOpen(false);
-    }, 2000);
-  }
-
-  const data = listOfEquipments?.data?.map((equipment: any) => {
-    const model = models?.data?.find((model: any) => model.modelId === equipment.modelId)
-    const {name: modelClassName} = modelClasses?.data?.find((modelClass: any) => modelClass.modelClassId === model.modelClassId)
-    const {name: manufacturer} = manufacturers?.data?.find((manufacturer: any) => manufacturer.manufacturerId === model.manufacturerId)
-    // console.log('manufacturer', manufacturer)
-    // const manufacturer = listOfequipmentManufacturerQueryClient?.getQueryData('listOfequipmentManufacturer')?.data?.find((manufacturer: any) => manufacturer.manufacturerId === manufacturerId)
-    return {
-      ...equipment,
-      modelName: model.name,
-      modelClassName: modelClassName,
-      manufacturer: manufacturer
-    }
-  })
+  // const data = listOfEquipments?.data?.map((equipment: any) => {
+  //   const model = models?.data?.find((model: any) => model.modelId === equipment.modelId)
+  //   const {name: modelClassName} = modelClasses?.data?.find((modelClass: any) => modelClass.modelClassId === model.modelClassId)
+  //   const {name: manufacturer} = manufacturers?.data?.find((manufacturer: any) => manufacturer.manufacturerId === model.manufacturerId)
+  //   // console.log('manufacturer', manufacturer)
+  //   // const manufacturer = listOfequipmentManufacturerQueryClient?.getQueryData('listOfequipmentManufacturer')?.data?.find((manufacturer: any) => manufacturer.manufacturerId === manufacturerId)
+  //   return {
+  //     ...equipment,
+  //     modelName: model.name,
+  //     modelClassName: modelClassName,
+  //     manufacturer: manufacturer
+  //   }
+  // })
   const [gridData, setGridData] = useState([])
   const [beforeSearch, setBeforeSearch] = useState([])
   useEffect(() => {
-    // const data = listOfEquipments?.data?.map((equipment: any) => {
-    //   const {
-    //     name,
-    //     manufacturerId,
-    //     modelClassId
-    //   } = models?.data?.find((model: any) => model.modelId === equipment.modelId)
-    //
-    //
-    //   const {name: modelClassName} = modelClasses?.data?.find((modelClass: any) => modelClass.modelClassId === modelClassId)
-    //   // console.log('modelClassName', modelClassName)
-    //   const {name: manufacturer} = manufacturers?.data?.find((manufacturer: any) => manufacturer.manufacturerId === manufacturerId)
-    //   // console.log('manufacturer', manufacturer)
-    //   // const manufacturer = listOfequipmentManufacturerQueryClient?.getQueryData('listOfequipmentManufacturer')?.data?.find((manufacturer: any) => manufacturer.manufacturerId === manufacturerId)
-    //   return {
-    //     ...equipment,
-    //     modelName: name,
-    //     modelClassName: modelClassName,
-    //     manufacturer: manufacturer
-    //   }
-    // })
+    const data = !isLoading ? listOfEquipments?.data?.map((equipment: any) => {
+      // const model = models ? models?.data?.find((model: any) => model.modelId === equipment.modelId) : ''
+      // console.log('model', model)
+      // console.log('equipment', equipment)
+      const {name: modelClassName} = modelClasses ? modelClasses?.data?.find((modelClass: any) => modelClass.modelClassId === equipment?.model?.modelClassId) : ''
+      // console.log('modelClassName', modelClassName)
+      const {name: manufacturer} = !manufacturerLoading ? manufacturers?.data?.find((manufacturer: any) => manufacturer.manufacturerId === equipment?.model?.manufacturerId) : ''
+      // console.log('manufacturer', manufacturer)
+      // const manufacturer = listOfequipmentManufacturerQueryClient?.getQueryData('listOfequipmentManufacturer')?.data?.find((manufacturer: any) => manufacturer.manufacturerId === manufacturerId)
+      return {
+        ...equipment,
+        modelName: equipment?.model?.name,
+        modelClassName: modelClassName,
+        manufacturer: manufacturer
+      }
+    }) : []
     console.log('data', data)
     setGridData(data)
     setBeforeSearch(data)
-  }, [listOfEquipments, models, modelClasses, manufacturers])
+  }, [listOfEquipments, models, modelClasses, manufacturers, isLoading, manufacturerLoading])
 
   const globalSearch = (searchValue: string) => {
     //searchValue is the value of the search input
@@ -310,7 +315,7 @@ const EquipmentRegister = () => {
         item.manufactureDate?.toLowerCase().includes(searchValue?.toLowerCase()) ||
         item.purchaseDate?.toLowerCase().includes(searchValue?.toLowerCase()) ||
         item.endOfLifeDate?.toLowerCase().includes(searchValue?.toLowerCase()) ||
-        // item.facode?.toLowerCase().includes(searchValue?.toLowerCase()) ||
+        item.facode?.toLowerCase().includes(searchValue?.toLowerCase()) ||
         item.note?.toLowerCase().includes(searchValue.toLowerCase()) ||
         item.warrantyStartDate?.toLowerCase().includes(searchValue.toLowerCase()) ||
         item.warrantyEndDate?.toLowerCase().includes(searchValue.toLowerCase()) ||

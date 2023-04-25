@@ -108,13 +108,14 @@ export function AsideMenuMain() {
         <AsideMenuItemWithSub to='#' title='Equipment' hasBullet={true}>
           <AsideMenuItem to='/setup/equipment/model-class' title='Model Class' hasBullet={true}/>
           <AsideMenuItem to='/setup/equipment/manufacturer' title='Manufacturer' hasBullet={true}/>
+          <AsideMenuItem to='/setup/category' title='Category' hasBullet={true}/>
         </AsideMenuItemWithSub>
         {/*<AsideMenuItem to='/setup/fleet' title='Fleet' hasBullet={true} />*/}
         <AsideMenuItem to='/setup/down-type' title='Down Type' hasBullet={true}/>
         <AsideMenuItem to='/setup/custodian' title='Custodian' hasBullet={true}/>
         <AsideMenuItem to='/setup/location' title='Location' hasBullet={true}/>
         <AsideMenuItem to='/setup/work-type' title='Service Type' hasBullet={true}/>
-        <AsideMenuItem to='/setup/category' title='Category' hasBullet={true}/>
+        {/*<AsideMenuItem to='/setup/category' title='Category' hasBullet={true}/>*/}
         <AsideMenuItemWithSub to='/setup/lube' title='Lube' hasBullet={true}>
           <AsideMenuItem to='/setup/compartment' title='Compartment' hasBullet={true}/>
           <AsideMenuItem to='/setup/lube-brand' title='Brand' hasBullet={true}/>

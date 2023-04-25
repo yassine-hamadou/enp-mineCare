@@ -4,7 +4,7 @@ import axios from 'axios'
 import {KTCardBody, KTSVG} from '../../../../../../_metronic/helpers'
 import {Link, useNavigate, useParams} from 'react-router-dom'
 import {ENP_URL, fetchServices} from '../../../../../urls'
-import { useQuery } from 'react-query'
+import {useQuery} from 'react-query'
 
 const ServicesPage = () => {
   const [gridData, setGridData] = useState<any>([])
@@ -15,7 +15,7 @@ const ServicesPage = () => {
   const [submitLoading, setSubmitLoading] = useState(false)
   const [form] = Form.useForm()
 
-  const routeParams:any  = useParams();
+  const routeParams: any = useParams();
   const navigate = useNavigate();
 
   // console.log(routeParams)
@@ -47,7 +47,6 @@ const ServicesPage = () => {
     }
   }
 
-  
 
   function handleDelete(element: any) {
     deleteData(element)
@@ -73,7 +72,7 @@ const ServicesPage = () => {
       width: 100,
       render: (_: any, record: any) => (
         <Space size='middle'>
-          
+
           <Link to={`/setup/sections/${record.id}`}>
             <span className='btn btn-light-info btn-sm'>Sections</span>
           </Link>
@@ -83,7 +82,7 @@ const ServicesPage = () => {
           <a onClick={() => handleDelete(record)} className='btn btn-light-danger btn-sm'>
             Delete
           </a>
-         
+
         </Space>
       ),
     },
@@ -91,8 +90,9 @@ const ServicesPage = () => {
   const loadData = async () => {
     setLoading(true)
     try {
-      
+
       const response = await axios.get(`${ENP_URL}/Services`)
+      console.log('responssss', response.data)
       setGridData(response.data)
       setLoading(false)
     } catch (error) {
@@ -102,7 +102,7 @@ const ServicesPage = () => {
   const loadModel = async () => {
     setLoading(true)
     try {
-      
+
       const response = await axios.get(`${ENP_URL}/VmmodlsApi`)
       setModelData(response.data)
       setLoading(false)
@@ -115,17 +115,16 @@ const ServicesPage = () => {
 
   useEffect(() => {
     loadData()
-    loadModel()
+    // loadModel()
   }, [])
 
-  const dataWithIndex = gridData.map((item: any, index:any) => ({
+  const dataWithIndex = gridData?.map((item: any, index: any) => ({
     ...item,
     key: index,
-
   }))
 
-  const dataByID = dataWithIndex.filter((service:any) =>{
-    return service.model ===routeParams.id
+  const dataByID = dataWithIndex.filter((service: any) => {
+    return service?.model?.trim() === routeParams.id
   });
 
   console.log(dataByID)
@@ -189,9 +188,11 @@ const ServicesPage = () => {
               Back to Models
             </span>
           </Link> */}
-          <h3 style={{fontWeight:"bolder"}}>{routeParams.id}</h3>
+          <h3 style={{fontWeight: "bolder"}}>{routeParams.id}</h3>
           <br></br>
-          <button className='mb-3 btn btn-outline btn-outline-dashed btn-outline-primary btn-active-light-primary' onClick={() => navigate(-1)}>Back to Work Types</button>
+          <button className='mb-3 btn btn-outline btn-outline-dashed btn-outline-primary btn-active-light-primary'
+                  onClick={() => navigate(-1)}>Back to Service Types
+          </button>
           <div className='d-flex justify-content-between'>
             <Space style={{marginBottom: 16}}>
               <Input
@@ -207,20 +208,20 @@ const ServicesPage = () => {
             </Space>
             <Space style={{marginBottom: 16}}>
               <button type='button' className='btn btn-primary me-3' onClick={showModal}>
-                <KTSVG path='/media/icons/duotune/arrows/arr075.svg' className='svg-icon-2' />
+                <KTSVG path='/media/icons/duotune/arrows/arr075.svg' className='svg-icon-2'/>
                 Add
               </button>
               <button type='button' className='btn btn-light-primary me-3'>
-                <KTSVG path='/media/icons/duotune/arrows/arr078.svg' className='svg-icon-2' />
+                <KTSVG path='/media/icons/duotune/arrows/arr078.svg' className='svg-icon-2'/>
                 Upload
               </button>
               <button type='button' className='btn btn-light-primary me-3'>
-                <KTSVG path='/media/icons/duotune/arrows/arr078.svg' className='svg-icon-2' />
+                <KTSVG path='/media/icons/duotune/arrows/arr078.svg' className='svg-icon-2'/>
                 Export
               </button>
             </Space>
           </div>
-          <Table columns={columns} dataSource={dataByID} loading={loading} />
+          <Table columns={columns} dataSource={dataByID} loading={loading}/>
           <Modal
             title='Add Service'
             open={isModalOpen}
@@ -254,7 +255,7 @@ const ServicesPage = () => {
               onFinish={onFinish}
             >
               <Form.Item label='Name' name='name' rules={[{required: true}]}>
-                <Input />
+                <Input/>
               </Form.Item>
               {/* <Form.Item label='Model' name='modelID'>
                 <Input />
@@ -277,7 +278,3 @@ const ServicesPage = () => {
 }
 
 export {ServicesPage}
-
-function uuidv4() {
-  throw new Error('Function not implemented.')
-}

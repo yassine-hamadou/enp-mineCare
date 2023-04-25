@@ -66,7 +66,7 @@ const TabsTest: React.FC = () => {
   return sections?.length > 0 ? (
     <>
       <Modal
-        title='Report Defect'
+        title='Defect Entry'
         open={defectModalOpen}
         onCancel={handleCancel}
         closable={true}
@@ -84,7 +84,7 @@ const TabsTest: React.FC = () => {
               defectForm.submit()
             }}
           >
-            Report Defect
+            Submit
           </Button>,
         ]}
       >
@@ -93,7 +93,7 @@ const TabsTest: React.FC = () => {
           name='control-hooks'
           labelCol={{span: 8}}
           wrapperCol={{span: 14}}
-          title='Report Defect'
+          title='Defect'
           // onFinish={onFinish}
         >
           <Form.Item name='fleetId' label='Fleet ID' rules={[{required: true}]}>
@@ -129,16 +129,6 @@ const TabsTest: React.FC = () => {
             >
               Defect
             </Button>
-            {current < steps.length - 1 && (
-              <Button type="primary" onClick={() => next()}>
-                Next
-              </Button>
-            )}
-            {current === steps.length - 1 && (
-              <Button type="primary" onClick={() => message.success('Processing complete!')}>
-                Done
-              </Button>
-            )}
             {current > 0 && (
               <Button
                 style={{
@@ -147,6 +137,16 @@ const TabsTest: React.FC = () => {
                 onClick={() => prev()}
               >
                 Previous
+              </Button>
+            )}
+            {current < steps.length - 1 && (
+              <Button type="primary" onClick={() => next()}>
+                Next
+              </Button>
+            )}
+            {current === steps.length - 1 && (
+              <Button type="primary" onClick={() => message.success('Processing complete!')}>
+                Done
               </Button>
             )}
           </div>

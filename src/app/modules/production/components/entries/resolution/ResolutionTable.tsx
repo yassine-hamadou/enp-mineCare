@@ -207,6 +207,7 @@ const ResolutionTable = () => {
         }
         bordered
         loading={loading}
+        scroll={{x: 1500}}
         rowKey={(record) => record.entryId}
       />
     </div>

@@ -6,22 +6,27 @@ import {MasterInit} from '../_metronic/layout/MasterInit'
 import {AuthInit} from './modules/auth'
 import {ReactQueryDevtools} from 'react-query/devtools'
 import {QueryClient, QueryClientProvider} from 'react-query'
+import {ConfigProvider} from "antd";
+import en_US from 'antd/lib/locale/en_US';
+
 const queryClient = new QueryClient()
 const App = () => {
   return (
-    <QueryClientProvider client={queryClient}>
-      <Suspense fallback={<LayoutSplashScreen />}>
-        <I18nProvider>
-          <LayoutProvider>
-            <AuthInit>
-              <Outlet />
-              <MasterInit />
-            </AuthInit>
-          </LayoutProvider>
-        </I18nProvider>
-      </Suspense>
-      <ReactQueryDevtools initialIsOpen={false} />
-    </QueryClientProvider>
+    <ConfigProvider locale={en_US}>
+      <QueryClientProvider client={queryClient}>
+        <Suspense fallback={<LayoutSplashScreen/>}>
+          <I18nProvider>
+            <LayoutProvider>
+              <AuthInit>
+                <Outlet/>
+                <MasterInit/>
+              </AuthInit>
+            </LayoutProvider>
+          </I18nProvider>
+        </Suspense>
+        <ReactQueryDevtools initialIsOpen={false}/>
+      </QueryClientProvider>
+    </ConfigProvider>
   )
 }
 
