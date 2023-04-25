@@ -92,6 +92,7 @@ const ServicesPage = () => {
     try {
 
       const response = await axios.get(`${ENP_URL}/Services`)
+      console.log('responssss', response.data)
       setGridData(response.data)
       setLoading(false)
     } catch (error) {
@@ -117,14 +118,13 @@ const ServicesPage = () => {
     // loadModel()
   }, [])
 
-  const dataWithIndex = gridData.map((item: any, index: any) => ({
+  const dataWithIndex = gridData?.map((item: any, index: any) => ({
     ...item,
     key: index,
-
   }))
 
   const dataByID = dataWithIndex.filter((service: any) => {
-    return service.model === routeParams.id
+    return service?.model?.trim() === routeParams.id
   });
 
   console.log(dataByID)

@@ -10,7 +10,7 @@ import '../../../../../../../node_modules/@devexpress/analytics-core/dist/css/dx
 class ReportViewer extends React.Component {
     constructor(props) {
         super(props)
-        this.reportUrl = ko.observable('AllEquipmentSummary')
+        this.reportUrl = ko.observable('ListEquipmentSummary')
         this.requestOptions = {
             host: 'http://208.117.44.15/serverside/',
             // Use this line for the ASP.NET MVC backend.

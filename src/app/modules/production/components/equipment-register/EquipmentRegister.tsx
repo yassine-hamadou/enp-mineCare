@@ -10,7 +10,10 @@ const EquipmentRegister = () => {
   // const {manufacturerCode} = useParams();
 
   const {data: listOfEquipments, isLoading} = useQuery('equipments',
-    () => axios.get(`${ENP_URL}/equipments`)
+    () => axios.get(`${ENP_URL}/equipments`), {
+      refetchOnWindowFocus: false,
+      staleTime: Infinity
+    }
   )
 
   const {data: models} = useQuery('listOfEquipmentModel', () =>
@@ -281,17 +284,17 @@ const EquipmentRegister = () => {
   const [beforeSearch, setBeforeSearch] = useState([])
   useEffect(() => {
     const data = !isLoading ? listOfEquipments?.data?.map((equipment: any) => {
-      const model = models ? models?.data?.find((model: any) => model.modelId === equipment.modelId) : ''
-      console.log('model', model)
-
-      const {name: modelClassName} = modelClasses ? modelClasses?.data?.find((modelClass: any) => modelClass.modelClassId === model.modelClassId) : ''
+      // const model = models ? models?.data?.find((model: any) => model.modelId === equipment.modelId) : ''
+      // console.log('model', model)
+      // console.log('equipment', equipment)
+      const {name: modelClassName} = modelClasses ? modelClasses?.data?.find((modelClass: any) => modelClass.modelClassId === equipment?.model?.modelClassId) : ''
       // console.log('modelClassName', modelClassName)
-      const {name: manufacturer} = !manufacturerLoading ? manufacturers?.data?.find((manufacturer: any) => manufacturer.manufacturerId === model.manufacturerId) : ''
+      const {name: manufacturer} = !manufacturerLoading ? manufacturers?.data?.find((manufacturer: any) => manufacturer.manufacturerId === equipment?.model?.manufacturerId) : ''
       // console.log('manufacturer', manufacturer)
       // const manufacturer = listOfequipmentManufacturerQueryClient?.getQueryData('listOfequipmentManufacturer')?.data?.find((manufacturer: any) => manufacturer.manufacturerId === manufacturerId)
       return {
         ...equipment,
-        modelName: model?.name,
+        modelName: equipment?.model?.name,
         modelClassName: modelClassName,
         manufacturer: manufacturer
       }
@@ -299,7 +302,7 @@ const EquipmentRegister = () => {
     console.log('data', data)
     setGridData(data)
     setBeforeSearch(data)
-  }, [listOfEquipments, models, modelClasses, manufacturers])
+  }, [listOfEquipments, models, modelClasses, manufacturers, isLoading, manufacturerLoading])
 
   const globalSearch = (searchValue: string) => {
     //searchValue is the value of the search input

@@ -180,14 +180,11 @@ const Calendar = ({chosenLocationIdFromDropdown}) => {
         function setEquipment(e) {
             console.log('e', e.itemData)
             if (e.itemData) {
-                const equips = serviceQueryClient?.getQueryData('serviceTypes')?.data?.find((service) => service.id === e.itemData.value)
-                console.log('equips', equips)
-                // dropDownListObject.dataSource = equips?.modelNavigation ? equips?.modelNavigation?.equipment?.map((equip) => {
-                //     return {text: equip.description, value: equip.equipmentId}
-                // }) : []
-
-                //get fleet model
-                const fleetModel = vmequps?.data?.find((fleet) => fleet.fleetID.trimEnd() === e.itemData.value)?.modlName
+                const serviceType = serviceQueryClient?.getQueryData('serviceTypes')?.data?.find((service) => service.id === e.itemData.value)
+                console.log('serviceType', serviceType)
+                dropDownListObject.dataSource = serviceType?.modelNavigation ? serviceType?.modelNavigation?.equipment?.map((equip) => {
+                    return {text: equip.description, value: equip.equipmentId}
+                }) : []
                 dropDownListObject.dataBind() // refresh the dropdown list
             }
         }
@@ -206,7 +203,7 @@ const Calendar = ({chosenLocationIdFromDropdown}) => {
                             className='e-field'
                             style={{width: '100%'}}
                             dataSource={serviceTypes?.data.map((service) => {
-                                return {text: service.name, value: service.id}
+                                return {text: `${service.name} For Model: ${service?.model}`, value: service.id}
                             })}
                             fields={{text: 'text', value: 'value'}}
                             change={setEquipment}
@@ -224,7 +221,12 @@ const Calendar = ({chosenLocationIdFromDropdown}) => {
                             className='e-field'
                             style={{width: '100%'}}
                             ref={(scope) => (dropDownListObject = scope)}
-                            value={props && props.fleetId ? `${props.fleetId}` : null}
+                            dataSource={props?.serviceTypeId ? serviceTypes?.data.find((service) =>
+                                service.id === props.serviceTypeId)?.modelNavigation?.equipment?.map((equip) => {
+                                return {text: equip.description, value: equip.equipmentId}
+                            }) : []}
+                            fields={{text: 'text', value: 'value'}}
+                            value={props && props.fleetId ? props.fleetId : null}
                         />
                     </td>
                 </tr>
