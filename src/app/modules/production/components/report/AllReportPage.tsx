@@ -140,3 +140,4 @@ const AllReportPage = () => {
 }
 
 export {AllReportPage}
+

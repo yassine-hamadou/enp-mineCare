@@ -58,6 +58,7 @@ import FaultByDowntimeReport from './components/report/fault/FaultByDownTimeRepo
 import ListEquipmentSummary from "./components/report/equipmentReport/ListEquipmentSummary";
 import MeteringByModelClassSummary
   from "./components/report/metering/MeteringByModelSummary/MeteringByModelClassSummary";
+import {ErrorBoundary} from "@ant-design/pro-components";
 
 
 const accountBreadCrumbs: Array<PageLink> = []
@@ -78,7 +79,9 @@ const ProductionPage: React.FC = () => {
           element={
             <>
               <PageTitle breadcrumbs={accountBreadCrumbs}>Equipment Register</PageTitle>
-              <EquipmentRegister/>
+              <ErrorBoundary>
+                <EquipmentRegister/>
+              </ErrorBoundary>
               {/*dfs*/}
             </>
           }
@@ -205,7 +208,9 @@ const ProductionPage: React.FC = () => {
               <>
                 <PageTitle breadcrumbs={accountBreadCrumbs}>All Entries</PageTitle>
                 {/*<HoursModelClass/>*/}
-                <HoursPage/>
+                <ErrorBoundary>
+                  <HoursPage/>
+                </ErrorBoundary>
               </>
             }
           />

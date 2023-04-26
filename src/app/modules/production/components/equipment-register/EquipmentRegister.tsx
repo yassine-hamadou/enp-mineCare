@@ -336,7 +336,6 @@ const EquipmentRegister = () => {
       setGridData(beforeSearch)
     }
   }
-
   return <>
     <KTCard>
       <KTCardBody>

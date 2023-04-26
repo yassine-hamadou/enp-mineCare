@@ -16,12 +16,15 @@ export const fetchEmployee = () => {
 export const fetchEquips = () => {
   return axios.get(`${ENP_URL}/VmequpsApi`)
 }
+
 export const fetchModels = () => {
   return axios.get(`${ENP_URL}/VmmodlsApi`)
 }
+
 export const fetchBrands = () => {
   return axios.get(`${ENP_URL}/LubeBrands`)
 }
+
 export const fetchHours = () => {
   return axios.get(`${ENP_URL}/HoursEntry`)
 }

@@ -36,7 +36,7 @@ const HoursPage: React.FC = () => {
     },
     onError: (error: any) => {
       message.error(error.message)
-
+      throw error.ErrorBoundary
     }
   })
   const showModal = () => {

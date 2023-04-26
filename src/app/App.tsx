@@ -8,25 +8,28 @@ import {ReactQueryDevtools} from 'react-query/devtools'
 import {QueryClient, QueryClientProvider} from 'react-query'
 import {ConfigProvider} from "antd";
 import en_US from 'antd/lib/locale/en_US';
+import {ErrorBoundary} from '@ant-design/pro-components'
 
 const queryClient = new QueryClient()
 const App = () => {
   return (
-    <ConfigProvider locale={en_US}>
-      <QueryClientProvider client={queryClient}>
-        <Suspense fallback={<LayoutSplashScreen/>}>
-          <I18nProvider>
-            <LayoutProvider>
-              <AuthInit>
-                <Outlet/>
-                <MasterInit/>
-              </AuthInit>
-            </LayoutProvider>
-          </I18nProvider>
-        </Suspense>
-        <ReactQueryDevtools initialIsOpen={false}/>
-      </QueryClientProvider>
-    </ConfigProvider>
+    <ErrorBoundary>
+      <ConfigProvider locale={en_US}>
+        <QueryClientProvider client={queryClient}>
+          <Suspense fallback={<LayoutSplashScreen/>}>
+            <I18nProvider>
+              <LayoutProvider>
+                <AuthInit>
+                  <Outlet/>
+                  <MasterInit/>
+                </AuthInit>
+              </LayoutProvider>
+            </I18nProvider>
+          </Suspense>
+          <ReactQueryDevtools initialIsOpen={false}/>
+        </QueryClientProvider>
+      </ConfigProvider>
+    </ErrorBoundary>
   )
 }
 

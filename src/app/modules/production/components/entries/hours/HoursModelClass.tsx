@@ -660,13 +660,14 @@
 
 
 import type {ProColumns} from '@ant-design/pro-components';
-import {EditableProTable, ProCard, ProFormField} from '@ant-design/pro-components';
+import {EditableProTable, ErrorBoundary, ProCard, ProFormField} from '@ant-design/pro-components';
 import {Button, Input, InputNumber, message, Space} from 'antd';
 import React, {useState} from 'react';
 import {useMutation, useQuery, useQueryClient} from "react-query";
 import {addHours, fetchHours, getEquipment} from "../../../../../urls";
 import {useNavigate} from "react-router-dom";
 import {KTCard} from "../../../../../../_metronic/helpers";
+import {throwError} from "@syncfusion/ej2-base";
 
 type DataSourceType = {
   id: React.Key;
@@ -706,6 +707,7 @@ const HoursPage = () => {
       },
       onError: (error: any) => {
         message.error(error.message).then(r => r)
+        throwError(error.message)
       }
     })
 
@@ -862,52 +864,54 @@ const HoursPage = () => {
           </Button>
         </Space>
       </div>
-      <EditableProTable<DataSourceType>
-        // headerTitle="Batch Entries"
-        columns={columns}
-        loading={isLoading}
-        rowKey="id"
-        scroll={{
-          x: 960,
-        }}
-        pagination={{
-          pageSize: 30,
-        }}
-        // value={defaultData?.data?.map(
-        //   (item: any) => {
-        //     return {
-        //       ...item,
-        //       zeroReading: 0,
-        //       today: new Date(),
-        //     }
-        //   }
-        // )}
-        value={defaultData?.data?.map(
-          (item: any) => {
-            return {
-              ...item,
-              zeroReading: 0,
-              today: new Date(),
+      <ErrorBoundary>
+        <EditableProTable<DataSourceType>
+          // headerTitle="Batch Entries"
+          columns={columns}
+          loading={isLoading}
+          rowKey="id"
+          scroll={{
+            x: 960,
+          }}
+          pagination={{
+            pageSize: 30,
+          }}
+          // value={defaultData?.data?.map(
+          //   (item: any) => {
+          //     return {
+          //       ...item,
+          //       zeroReading: 0,
+          //       today: new Date(),
+          //     }
+          //   }
+          // )}
+          value={defaultData?.data?.map(
+            (item: any) => {
+              return {
+                ...item,
+                zeroReading: 0,
+                today: new Date(),
+              }
             }
-          }
-        )}
-        // onChange={setDataSource}
+          )}
+          // onChange={setDataSource}
 
-        //do not show add button
-        recordCreatorProps={false}
-        // toolBarRender={() => {
-        //   return [];
-        // }}
-        editable={{
-          type: 'multiple',
-          editableKeys: defaultData?.data?.map((item: any) => item.id),
-          onValuesChange: (record, recordList) => {
-            setRecord(record)
-            setDataSource(recordList);
-          },
-          onChange: setEditableRowKeys,
-        }}
-      />
+          //do not show add button
+          recordCreatorProps={false}
+          // toolBarRender={() => {
+          //   return [];
+          // }}
+          editable={{
+            type: 'multiple',
+            editableKeys: defaultData?.data?.map((item: any) => item.id),
+            onValuesChange: (record, recordList) => {
+              setRecord(record)
+              setDataSource(recordList);
+            },
+            onChange: setEditableRowKeys,
+          }}
+        />
+      </ErrorBoundary>
       {/*<ProCard title="titleCard" headerBordered collapsible defaultCollapsed>*/}
       {/*  <ProFormField*/}
       {/*    ignoreFormItem*/}
