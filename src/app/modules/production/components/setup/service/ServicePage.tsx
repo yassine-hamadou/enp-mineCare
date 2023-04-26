@@ -1,10 +1,10 @@
-import {Button, Form, Input, Modal, Radio, Select, Space, Table} from 'antd'
-import {useEffect, useState} from 'react'
+import {Button, Form, Input, Modal, Space, Table} from 'antd'
+import {useState} from 'react'
 import axios from 'axios'
 import {KTCardBody, KTSVG} from '../../../../../../_metronic/helpers'
-import {Link, useNavigate, useParams} from 'react-router-dom'
+import {Link, useLocation, useNavigate, useParams} from 'react-router-dom'
 import {ENP_URL, fetchServices} from '../../../../../urls'
-import {useQuery} from 'react-query'
+import {QueryClient, useQuery, useQueryClient} from 'react-query'
 
 const ServicesPage = () => {
   const [gridData, setGridData] = useState<any>([])
@@ -13,10 +13,13 @@ const ServicesPage = () => {
   const [searchText, setSearchText] = useState('')
   let [filteredData] = useState([])
   const [submitLoading, setSubmitLoading] = useState(false)
+  const {data: services, isLoading: servicesLoading} = useQuery('services', fetchServices)
   const [form] = Form.useForm()
+  const queryClient: QueryClient = useQueryClient()
 
   const routeParams: any = useParams();
   const navigate = useNavigate();
+  const location: any = useLocation();
 
   // console.log(routeParams)
   // Modal functions
@@ -87,44 +90,44 @@ const ServicesPage = () => {
       ),
     },
   ]
-  const loadData = async () => {
-    setLoading(true)
-    try {
+  // const loadData = async () => {
+  //   setLoading(true)
+  //   try {
+  //
+  //     const response = await axios.get(`${ENP_URL}/Services`)
+  //     console.log('responssss', response.data)
+  //     setGridData(response.data)
+  //     setLoading(false)
+  //   } catch (error) {
+  //     console.log(error)
+  //   }
+  // }
+  // const loadModel = async () => {
+  //   setLoading(true)
+  //   try {
+  //
+  //     const response = await axios.get(`${ENP_URL}/VmmodlsApi`)
+  //     setModelData(response.data)
+  //     setLoading(false)
+  //   } catch (error) {
+  //     console.log(error)
+  //   }
+  // }
+  //
+  // const {Option} = Select
+  //
+  // useEffect(() => {
+  //   loadData()
+  //   // loadModel()
+  // }, [])
 
-      const response = await axios.get(`${ENP_URL}/Services`)
-      console.log('responssss', response.data)
-      setGridData(response.data)
-      setLoading(false)
-    } catch (error) {
-      console.log(error)
-    }
-  }
-  const loadModel = async () => {
-    setLoading(true)
-    try {
-
-      const response = await axios.get(`${ENP_URL}/VmmodlsApi`)
-      setModelData(response.data)
-      setLoading(false)
-    } catch (error) {
-      console.log(error)
-    }
-  }
-
-  const {Option} = Select
-
-  useEffect(() => {
-    loadData()
-    // loadModel()
-  }, [])
-
-  const dataWithIndex = gridData?.map((item: any, index: any) => ({
-    ...item,
-    key: index,
-  }))
-
-  const dataByID = dataWithIndex.filter((service: any) => {
-    return service?.model?.trim() === routeParams.id
+  // const dataWithIndex = services?.data?.map((item: any, index: any) => ({
+  //   ...item,
+  //   key: index,
+  // }))
+  const equipModel = location?.state?.txmodl
+  const dataByID = services?.data?.filter((service: any) => {
+    return service?.model?.trim() === equipModel?.trim()
   });
 
   console.log(dataByID)
@@ -133,10 +136,10 @@ const ServicesPage = () => {
   const {data: allServices} = useQuery('services', fetchServices, {cacheTime: 60000000})
 
   const handleInputChange = (e: any) => {
-    setSearchText(e.target.value)
-    if (e.target.value === '') {
-      loadData()
-    }
+    // setSearchText(e.target.value)
+    // if (e.target.value === '') {
+    //   queryClient.invalidateQueries('services')
+    // }
   }
 
   const globalSearch = () => {
@@ -155,7 +158,7 @@ const ServicesPage = () => {
     setSubmitLoading(true)
     const data = {
       name: values.name,
-      model: routeParams.id,
+      model: equipModel,
     }
 
 
@@ -164,14 +167,14 @@ const ServicesPage = () => {
       setSubmitLoading(false)
       form.resetFields()
       setIsModalOpen(false)
-      loadData()
+      queryClient.invalidateQueries('services')
       return response.statusText
     } catch (error: any) {
       setSubmitLoading(false)
       return error.statusText
     }
   }
-
+ 
   return (
     <div
       style={{
