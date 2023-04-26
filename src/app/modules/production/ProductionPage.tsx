@@ -154,7 +154,7 @@ const ProductionPage: React.FC = () => {
           path='start-work/*'
           element={
             <>
-              <PageTitle breadcrumbs={accountBreadCrumbs}>Check List</PageTitle>
+              <PageTitle breadcrumbs={accountBreadCrumbs}>Maintenance Schedule</PageTitle>
               <ScheduleInfo/>
               <br/>
               <Outlet/>

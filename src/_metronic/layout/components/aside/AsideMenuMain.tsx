@@ -128,18 +128,14 @@ export function AsideMenuMain() {
           <div className='separator mx-1 my-4'></div>
         </div>
       </div>
-
-      <div className='menu-item'>
-        <Link
-          className={clsx('menu-link without-sub ml0', {active: isDashboardActive})}
-          to='/dashboard'
-        >
-          <span className='menu-icon'>
-            <KTSVG path='/media/icons/duotune/general/gen055.svg' className='svg-icon-2'/>
-          </span>
-          <span className='menu-title'>Configuration</span>
-        </Link>
-      </div>
+      <AsideMenuItemWithSub
+        to='#'
+        title='Configuration'
+        fontIcon='bi-archive'
+        icon='/media/icons/duotune/general/gen055.svg'
+      >
+        <AsideMenuItem to='/configuration/data-integrity' title='Data Integrity' hasBullet={true}/>
+      </AsideMenuItemWithSub>
     </>
   )
 }

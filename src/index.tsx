@@ -28,7 +28,7 @@ import {AuthProvider, setupAxios} from './app/modules/auth'
  * @see https://github.com/axios/axios#interceptors
  */
 // Registering Syncfusion license key
-registerLicense('ORg4AjUWIQA/Gnt2VVhjQlFaclhJXGFWfVJpTGpQdk5xdV9DaVZUTWY/P1ZhSXxQdkZiXH5dcHdQR2JeWUY=')
+registerLicense('ORg4AjUWIQA/Gnt2VVhjQlFaclhJXGFWfVJpTGpQdk5xdV9DaVZUTWY/P1ZhSXxQdkFhX35edHRQQmRfVUw=')
 setupAxios(axios)
 Chart.register(...registerables)
 
@@ -37,7 +37,7 @@ if (container) {
   createRoot(container).render(
     <MetronicI18nProvider>
       <AuthProvider>
-        <AppRoutes />
+        <AppRoutes/>
       </AuthProvider>
     </MetronicI18nProvider>
   )
