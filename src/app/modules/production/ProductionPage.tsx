@@ -59,6 +59,7 @@ import ListEquipmentSummary from "./components/report/equipmentReport/ListEquipm
 import MeteringByModelClassSummary
   from "./components/report/metering/MeteringByModelSummary/MeteringByModelClassSummary";
 import {ErrorBoundary} from "@ant-design/pro-components";
+import MeteringByEquipment from './components/report/metering/MeteringByEquipment/MeteringByEquipment'
 
 
 const accountBreadCrumbs: Array<PageLink> = []
@@ -404,6 +405,15 @@ const ProductionPage: React.FC = () => {
               <>
                 <PageTitle breadcrumbs={accountBreadCrumbs}>Metering By Model Detail</PageTitle>
                 <MeteringByModelDetail/>
+              </>
+            }
+          />
+          <Route
+            path='MeteringByEquipment'
+            element={
+              <>
+                <PageTitle breadcrumbs={accountBreadCrumbs}>Metering By Equipment</PageTitle>
+                <MeteringByEquipment/>
               </>
             }
           />

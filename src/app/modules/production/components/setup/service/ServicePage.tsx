@@ -167,14 +167,14 @@ const ServicesPage = () => {
       setSubmitLoading(false)
       form.resetFields()
       setIsModalOpen(false)
-      queryClient.invalidateQueries('services')
+      await queryClient.invalidateQueries('services')
       return response.statusText
     } catch (error: any) {
       setSubmitLoading(false)
       return error.statusText
     }
   }
- 
+
   return (
     <div
       style={{

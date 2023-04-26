@@ -129,7 +129,7 @@ const AllReportPage = () => {
           <h3><span className="bullet me-5"></span><Link to="/report/metering/MeteringByModelDetail">Model</Link></h3>
           <h3><span className="bullet me-5"></span><Link to="/report/metering/MeteringByModelSummary">Summary</Link>
           </h3>
-          <h3><span className="bullet me-5"></span><Link to="/report/metering/MeteringByModelDetail">Equipment</Link>
+          <h3><span className="bullet me-5"></span><Link to="/report/metering/MeteringByEquipment">Equipment</Link>
           </h3>
           <h3><span className="bullet me-5"></span><Link to="/report/meteringbymodelClassSummary">Model Class
             Summary</Link></h3>
