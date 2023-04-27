@@ -874,7 +874,7 @@ const HoursPage = () => {
             x: 960,
           }}
           pagination={{
-            pageSize: 30,
+            pageSize: 10,
           }}
           // value={defaultData?.data?.map(
           //   (item: any) => {
@@ -894,7 +894,7 @@ const HoursPage = () => {
               }
             }
           )}
-          // onChange={setDataSource}
+          onChange={setDataSource}
 
           //do not show add button
           recordCreatorProps={false}
@@ -903,7 +903,7 @@ const HoursPage = () => {
           // }}
           editable={{
             type: 'multiple',
-            editableKeys: defaultData?.data?.map((item: any) => item.id),
+            editableKeys,
             onValuesChange: (record, recordList) => {
               setRecord(record)
               setDataSource(recordList);

@@ -1,9 +1,8 @@
 import {Button, Input, Modal, Space, Table} from 'antd'
-import {useEffect, useState} from 'react'
 import axios from 'axios'
 import {Link} from 'react-router-dom'
 import {KTCardBody, KTSVG} from '../../../../../../_metronic/helpers'
-import {ENP_URL} from '../../../../../urls'
+import {ENP_URL, getModels} from '../../../../../urls'
 import {useQuery} from "react-query";
 
 const WorkTypePage = () => {
@@ -12,7 +11,7 @@ const WorkTypePage = () => {
   // const [searchText, setSearchText] = useState('')
   // const [isModalOpen, setIsModalOpen] = useState(false)
   const {data: equipModels, isLoading: equipModelLoading} = useQuery('equipmodels',
-    () => axios.get(`${ENP_URL}/VmmodlsApi`)
+    getModels
   )
   console.log(equipModels)
   // const showModal = () => {
@@ -31,16 +30,15 @@ const WorkTypePage = () => {
   const columns: any = [
     {
       title: 'Manufacturer',
-      dataIndex: 'txmanf',
-      key: 'txmanf',
-      // onFilter: (value: any, record: any) => {
-      //   return String(record.txmanf).toLowerCase().includes(value.toLowerCase())
-      // },
+      dataIndex: 'manufacturer',
+      render: (manufacturer: any) => {
+        return manufacturer?.name
+      },
       sorter: (a: any, b: any) => {
-        if (a.txmanf > b.txmanf) {
+        if (a.manufacturer?.name > b.manufacturer?.name) {
           return 1
         }
-        if (b.txmanf > a.txmanf) {
+        if (b.manufacturer?.name > a.manufacturer?.name) {
           return -1
         }
         return 0
@@ -49,13 +47,13 @@ const WorkTypePage = () => {
 
     {
       title: 'Model',
-      dataIndex: 'txmodl',
-      key: 'txmodl',
+      dataIndex: 'code',
+      key: 'code',
       sorter: (a: any, b: any) => {
-        if (a.txmodl > b.txmodl) {
+        if (a.code > b.code) {
           return 1
         }
-        if (b.txmodl > a.txmodl) {
+        if (b.code > a.code) {
           return -1
         }
         return 0
@@ -72,10 +70,10 @@ const WorkTypePage = () => {
       render: (_: any, record: any) => (
         <Space size='middle'>
           {/* <a href="service" className="btn btn-light-info btn-sm">Services</a> */}
-          <Link to={`/setup/service/${record.txmodel}`} state={
+          <Link to={`/setup/service/${record.code}`} state={
             {
-              txmanf: record.txmanf,
-              txmodl: record.txmodl,
+              txmanf: record.manufacturer,
+              txmodl: record.code,
             }
           }>
             <span className='btn btn-light-info btn-sm'>Service</span>

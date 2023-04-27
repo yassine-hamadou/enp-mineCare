@@ -376,7 +376,9 @@ const ProductionPage: React.FC = () => {
             <>
               <PageTitle breadcrumbs={accountBreadCrumbs}>All Service Types</PageTitle>
               {/*<Overview />*/}
-              <WorkTypePage/>
+              <ErrorBoundary>
+                <WorkTypePage/>
+              </ErrorBoundary>
             </>
           }
         />
