@@ -662,7 +662,7 @@
 import type {ProColumns} from '@ant-design/pro-components';
 import {EditableProTable, ErrorBoundary, ProCard, ProFormField} from '@ant-design/pro-components';
 import {Button, Input, InputNumber, message, Space} from 'antd';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {useMutation, useQuery, useQueryClient} from "react-query";
 import {addHours, fetchHours, getEquipment} from "../../../../../urls";
 import {useNavigate} from "react-router-dom";
@@ -735,6 +735,9 @@ const HoursPage = () => {
   // })
   // console.log("sdsd", equipHours)
 
+  useEffect(() => {
+    setEditableRowKeys(() => defaultData?.data?.map((item: any) => item.id))
+  }, [defaultData?.data]);
 
   const columns: ProColumns<DataSourceType>[] = [
     {
