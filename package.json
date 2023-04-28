@@ -1,8 +1,8 @@
 {
-  "name": "mine-care",
+  "name": "esms",
   "version": "8.1.0",
   "private": true,
-  "homepage": "/mine-care/",
+  "homepage": "/esms/",
   "dependencies": {
     "@ant-design/charts": "^1.4.2",
     "@ant-design/icons": "^4.7.0",
