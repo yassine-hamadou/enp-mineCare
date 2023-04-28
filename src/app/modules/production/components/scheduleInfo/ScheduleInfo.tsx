@@ -1,7 +1,7 @@
 import {Divider, Form, Select} from 'antd'
 import {useState} from 'react'
 import axios from 'axios'
-import {ENP_URL} from '../../../../urls'
+import {ENP_URL, fetchServices} from '../../../../urls'
 import {KTCard, KTCardBody} from '../../../../../_metronic/helpers'
 import {useQuery} from 'react-query'
 import {Link, useNavigate} from "react-router-dom";
@@ -14,9 +14,7 @@ export function ScheduleInfo() {
     return axios.get(`${ENP_URL}/FleetSchedulesApi`)
   })
 
-  const {data: serviceType}: any = useQuery('serviceType', () => {
-    return axios.get(`${ENP_URL}/Services`)
-  })
+  const {data: serviceType}: any = useQuery('serviceType', fetchServices)
 
   const onSelect = (e: any) => {
     const entryID = parseInt(e.target.value)

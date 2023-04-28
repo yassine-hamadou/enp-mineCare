@@ -6,6 +6,8 @@ import React, {CSSProperties, useState} from "react";
 import {CheckListForm} from "./CheckListForm";
 import {v4 as uuidv4} from "uuid";
 import TextArea from "antd/lib/input/TextArea";
+import {useForm} from "antd/es/form/Form";
+import {ErrorBoundary} from "@ant-design/pro-components";
 
 
 const TabsTest: React.FC = () => {
@@ -24,10 +26,12 @@ const TabsTest: React.FC = () => {
 
   console.log("sections", sections)
 
-  const steps = sections?.map((s: any, index: any) => {
+  const [checkListForm] = useForm();
+  const steps = sections?.map((s: any) => {
     return {
       title: String(`${s.name}`).toUpperCase(),
-      content: <CheckListForm sections={s}/>,
+      //passing the form hook from here to the child component so that we can use it to submit the form from here
+      content: <CheckListForm sections={s} form={checkListForm}/>,
     }
   })
 
@@ -36,9 +40,14 @@ const TabsTest: React.FC = () => {
   const [current, setCurrent] = useState(0);
   const [defectModalOpen, setDefectModalOpen] = useState(false);
   const [defectForm] = Form.useForm();
+
   defectForm.setFieldsValue({
     fleetId: `${params.fleetId}`,
   })
+
+  const submitForm = () => {
+    checkListForm.submit()
+  }
   const next = () => {
     setCurrent(current + 1);
   };
@@ -110,49 +119,59 @@ const TabsTest: React.FC = () => {
           </Form.Item>
         </Form>
       </Modal>
-      <KTCard>
-        <KTCardBody>
-          <Steps current={current} items={items}/>
-          <div style={contentStyle}>{steps[current].content}</div>
-          <div
-            style={{
-              marginTop: 24,
-            }}
-          >
-            <Button
+      <ErrorBoundary>
+        <KTCard>
+          <KTCardBody>
+            <Steps current={current} items={items}/>
+            <div style={contentStyle}>{steps[current].content}</div>
+            <div
               style={{
-                margin: '0 8px',
-              }}
-              onClick={() => {
-                setDefectModalOpen(true)
+                marginTop: 24,
               }}
             >
-              Defect
-            </Button>
-            {current > 0 && (
               <Button
                 style={{
                   margin: '0 8px',
                 }}
-                onClick={() => prev()}
+                onClick={() => {
+                  setDefectModalOpen(true)
+                }}
               >
-                Previous
+                Defect
               </Button>
-            )}
-            {current < steps.length - 1 && (
-              <Button type="primary" onClick={() => next()}>
-                Next
-              </Button>
-            )}
-            {current === steps.length - 1 && (
-              <Button type="primary" onClick={() => message.success('Processing complete!')}>
-                Done
-              </Button>
-            )}
-          </div>
+              {current > 0 && (
+                <Button
+                  style={{
+                    margin: '0 8px',
+                  }}
+                  onClick={() => prev()}
+                >
+                  Previous
+                </Button>
+              )}
+              {current < steps.length - 1 && (
+                <Button type="primary" onClick={() => {
+                  checkListForm.validateFields().then(() => {
+                    submitForm()
+                    next()
+                  }).catch((err) => {
+                    message.error({content: "Please fill all the required fields", duration: 2})
+                  })
+                }
+                }>
+                  Next
+                </Button>
+              )}
+              {current === steps.length - 1 && (
+                <Button type="primary" onClick={() => message.success('Processing complete!')}>
+                  Done
+                </Button>
+              )}
+            </div>
 
-        </KTCardBody>
-      </KTCard>
+          </KTCardBody>
+        </KTCard>
+      </ErrorBoundary>
     </>
   ) : (
     <>

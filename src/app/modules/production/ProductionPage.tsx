@@ -60,6 +60,7 @@ import MeteringByModelClassSummary
   from "./components/report/metering/MeteringByModelSummary/MeteringByModelClassSummary";
 import {ErrorBoundary} from "@ant-design/pro-components";
 import MeteringByEquipment from './components/report/metering/MeteringByEquipment/MeteringByEquipment'
+import {Context} from "react-intl/src/components/injectIntl";
 
 
 const accountBreadCrumbs: Array<PageLink> = []
