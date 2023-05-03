@@ -24,7 +24,7 @@ export function ScheduleInfo() {
     if (schedule?.serviceTypeId === null || schedule?.serviceTypeId === undefined) {
       navigate(`/entries/start-work`)
     } else {
-      navigate(`/entries/start-work/${schedule?.serviceTypeId}/${schedule?.fleetId}`)
+      navigate(`/entries/start-work/${schedule?.serviceTypeId}/${schedule?.fleetId}`, {state: {schedule: schedule}})
     }
   }
 

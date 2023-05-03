@@ -8,7 +8,6 @@ import {message} from "antd";
 export const ENP_URL = 'http://208.117.44.15/SmWebApi/api'
 // export const ENP_URL = 'https://localhost:7144/api'
 
-
 export const fetchEmployee = () => {
   return axios.get(`${ENP_URL}/vmemplsApi`)
 }
@@ -101,6 +100,10 @@ export function addHours(data: any) {
 
 export function addHoursTemp(data: any) {
   return axios.post(`${ENP_URL}/HoursEntryTemp`, data);
+}
+
+export function postScheduleTransactions(data: any) {
+  return axios.post(`${ENP_URL}/ScheduleTransactions`, data);
 }
 
 

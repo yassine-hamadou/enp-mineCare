@@ -1,10 +1,12 @@
-import {Divider, Empty, Radio, Form, Input, message, Select} from "antd";
+import {Divider, Empty, Form, message, Select} from "antd";
 import {useEffect, useState} from "react";
 import React from "react";
-import {v4 as uuidv4} from 'uuid'
+import {useMutation} from "react-query";
+import {postScheduleTransactions} from "../../../../urls";
 
-//pass props to the component
+
 const CheckListForm = (props) => {
+    const {mutate: mutateScheduleTransactions} = useMutation(postScheduleTransactions)
     //export the form
     const checkListForm = props.form
     console.log('props', props.sections)
@@ -33,7 +35,21 @@ const CheckListForm = (props) => {
     // When the button is clicked
     const onSectionFinish = (values) => {
         console.log('values', values)
-        message.success('Checklist submitted successfully')
+        const ItemValuesAsArray = Object.values(values)
+        console.log('valuesChanged', ItemValuesAsArray)
+        // return
+        try {
+            ItemValuesAsArray.map((value, index) => {
+                const data = {
+                    equipmentId: props.equipmentId,
+                    itemValueId: value,
+                    referenceId: props.referenceId,
+                }
+                mutateScheduleTransactions(data)
+            })
+        } catch (e) {
+            message.error('Error occurred while submitting the form')
+        }
     }
 
 

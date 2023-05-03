@@ -1,27 +1,33 @@
 import {Empty, Button, message, Steps, theme, Form, Select, Input, InputNumber, DatePicker, Modal} from "antd";
-import {useParams} from "react-router-dom";
-import {useQueryClient} from "react-query";
+import {useLocation, useParams} from "react-router-dom";
+import {useQuery, useQueryClient} from "react-query";
 import {KTCard, KTCardBody} from "../../../../../_metronic/helpers";
 import React, {CSSProperties, useState} from "react";
 import {CheckListForm} from "./CheckListForm";
-import {v4 as uuidv4} from "uuid";
 import TextArea from "antd/lib/input/TextArea";
 import {useForm} from "antd/es/form/Form";
 import {ErrorBoundary} from "@ant-design/pro-components";
+import {fetchServices} from "../../../../urls";
 
 
 const TabsTest: React.FC = () => {
   //Get the service type with useQueryClient
-  const AllServiceTypes: any = useQueryClient().getQueryData("serviceType");
+  const {data: AllServiceTypes} = useQuery("serviceType", fetchServices);
   // const loadSchedule: any = useQueryClient().getQueryData("loadSchedule");
   console.log("serviceType", AllServiceTypes);
   //Get the service type id from the url
   const params = useParams()
+  const location: any = useLocation();
+  const state = location.state
+  const fleetId: any = state?.schedule?.fleetId
+  const referenceId: any = state?.schedule?.referenceId
+  console.log("fleetId", fleetId)
+  console.log("state", state)
 
   console.log("paramsss", params)
-  const serviceId: any = params.serviceId
+  const serviceId: any = state.schedule?.serviceTypeId
   //Get the service type name from the service type id
-  const serviceType = AllServiceTypes?.data.find((s: any) => s.id === parseInt(serviceId))
+  const serviceType = AllServiceTypes?.data?.find((s: any) => s.id === parseInt(serviceId))
   const sections = serviceType?.sections
 
   console.log("sections", sections)
@@ -31,7 +37,7 @@ const TabsTest: React.FC = () => {
     return {
       title: String(`${s.name}`).toUpperCase(),
       //passing the form hook from here to the child component so that we can use it to submit the form from here
-      content: <CheckListForm sections={s} form={checkListForm}/>,
+      content: <CheckListForm sections={s} form={checkListForm} equipmentId={fleetId} referenceId={referenceId}/>,
     }
   })
 

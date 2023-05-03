@@ -906,7 +906,7 @@ const HoursPage = () => {
           // }}
           editable={{
             type: 'multiple',
-            editableKeys,
+            editableKeys: editableKeys ? editableKeys : defaultData?.data?.map((item: any) => item.id),
             onValuesChange: (record, recordList) => {
               setRecord(record)
               setDataSource(recordList);

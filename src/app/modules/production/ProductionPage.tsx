@@ -167,7 +167,9 @@ const ProductionPage: React.FC = () => {
             path=':serviceId/:fleetId'
             element={
               <>
-                <TabsTest/>
+                <ErrorBoundary>
+                  <TabsTest/>
+                </ErrorBoundary>
               </>
             }
           />
@@ -692,7 +694,9 @@ const ProductionPage: React.FC = () => {
           element={
             <>
               <PageTitle breadcrumbs={accountBreadCrumbs}>Tabs</PageTitle>
-              <TabsTest/>
+              <ErrorBoundary>
+                <TabsTest/>
+              </ErrorBoundary>
             </>
           }
         />

@@ -323,7 +323,7 @@ const Calendar = ({chosenLocationIdFromDropdown}) => {
                     locationId: schedule.locationId,
                     timeStart: schedule.StartTime,
                     timeEnd: schedule.EndTime,
-                    entryId: 0,
+                    entryId: schedule.entryId,
                     vmModel: 'null',
                     vmClass: 'null',
                     serviceTypeId: schedule.serviceTypeId,

@@ -1,6 +1,5 @@
 import {createRoot} from 'react-dom/client'
-import {registerLicense} from '@syncfusion/ej2-base'
-
+import {registerLicense, validateLicense} from "@syncfusion/ej2-base";
 // Axios
 import axios from 'axios'
 import {Chart, registerables} from 'chart.js'
@@ -28,7 +27,8 @@ import {AuthProvider, setupAxios} from './app/modules/auth'
  * @see https://github.com/axios/axios#interceptors
  */
 // Registering Syncfusion license key
-registerLicense('ORg4AjUWIQA/Gnt2VVhjQlFaclhJXGFWfVJpTGpQdk5xdV9DaVZUTWY/P1ZhSXxQdkFhX35edHRQQmRfVUw=')
+registerLicense('ORg4AjUWIQA/Gnt2VFhhQlJBfV5AQmBIYVp/TGpJfl96cVxMZVVBJAtUQF1hSn5WdkZiXXpadHRWQ2ha')
+validateLicense()
 setupAxios(axios)
 Chart.register(...registerables)
 
