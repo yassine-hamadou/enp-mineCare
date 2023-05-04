@@ -232,7 +232,6 @@ const LubePage = () => {
     },
     {
       title: 'Action',
-
       // dataIndex: 'faultDesc',
       // sorter: (a: any, b: any) => a.faultDesc - b.faultDesc,
       fixed: 'right',

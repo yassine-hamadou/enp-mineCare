@@ -21,27 +21,27 @@ jobs:
         with:
           node-version: '18.x'
 
-      #      install dependencies only if package.json has changed
-      #      - name: Cache node modules
-      #        # npm cache files on windows
-      #        uses: actions/cache@v3
-      #        with:
-      #          # A unique key for the cache based on package-lock.json
-      #          key: ${{ hashFiles('./package-lock.json') }}
-      #          # The path to the cache directory
-      #          path: C:\Windows\ServiceProfiles\NetworkService\AppData\Local\npm-cache
-      #          # The cache will be restored if the key matches
-      #          restore-keys: |
-      #            ${{ hashFiles('./package-lock.json') }}
-      #          # Checking if the cache hit is not true, if it is true then the dependencies are already installed otherwise we
-      #          # install the dependencies on windows server
+            #      install dependencies only if package.json has changed
+            #      - name: Cache node modules
+            #        # npm cache files on windows
+            #        uses: actions/cache@v3
+            #        with:
+            #          # A unique key for the cache based on package-lock.json
+            #          key: ${{ hashFiles('./package-lock.json') }}
+            #          # The path to the cache directory
+            #          path: C:\Windows\ServiceProfiles\NetworkService\AppData\Local\npm-cache
+            #          # The cache will be restored if the key matches
+            #          restore-keys: |
+            #            ${{ hashFiles('./package-lock.json') }}
+            #          # Checking if the cache hit is not true, if it is true then the dependencies are already installed otherwise we
+          #          # install the dependencies on windows server
 
-      #      - name: Install Dependencies
-      #        if: steps.cache.outputs.cache-hit != 'true'
-      #        run: npm install --legacy-peer-deps
+      - name: Install Dependencies
+        #              if: steps.cache.outputs.cache-hit != 'true'
+        run: npm install --legacy-peer-deps
 
-      - name: Build
-        run: npm run ciBuild
+      #      - name: Build
+      #        run: npm run ciBuild
 
       - name: Remove the existing website files except for web.config file
         run: get-childitem 'C:\inetpub\wwwroot\esms\' -Exclude *.config -recurse | remove-item -recurse -force
