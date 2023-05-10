@@ -1,18 +1,21 @@
-import {Button, Form, Input, Space, Table} from "antd";
+import {Button, Input, Space, Table} from "antd";
 import React, {useEffect, useState} from "react";
-import {Link, useParams} from "react-router-dom";
+import {Link} from "react-router-dom";
 import {KTCard, KTCardBody, KTSVG} from "../../../../../_metronic/helpers";
 import {useQuery} from "react-query";
 import axios from "axios";
 import {ENP_URL} from "../../../../urls";
+import {useAuth} from "../../../auth";
 
 const EquipmentRegister = () => {
   // const {manufacturerCode} = useParams();
+  const {tenant} = useAuth()
+  // const tenant = localStorage.getItem('tenant')
 
   const {data: listOfEquipments, isLoading} = useQuery('equipments',
-    () => axios.get(`${ENP_URL}/equipments`), {
-      refetchOnWindowFocus: false,
-      staleTime: Infinity
+    () => axios.get(`${ENP_URL}/equipments/tenant/${tenant}`), {
+      // refetchOnWindowFocus: false,
+      // staleTime: Infinity
     }
   )
 

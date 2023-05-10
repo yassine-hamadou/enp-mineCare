@@ -18,9 +18,10 @@ import axios from 'axios'
 import React, {useEffect, useState} from 'react'
 import {v4 as uuidv4} from 'uuid'
 import {KTSVG} from '../../../../../../_metronic/helpers'
-import {ENP_URL} from '../../../../../urls'
+import {ENP_URL, fetchFaults, getEquipment} from '../../../../../urls'
 import {useMutation, useQuery, useQueryClient} from 'react-query'
 import {ResolutionTable} from '../resolution/ResolutionTable'
+import {useAuth} from "../../../../auth";
 
 export function dhm(t: any) {
   var cd = 24 * 60 * 60 * 1000,
@@ -61,6 +62,7 @@ const FaultTable = () => {
   const [submitDefectLoading, setSubmitDefectLoading] = useState(false)
   const [isHovering, setIsHovering] = useState(false)
   let QueryClient = useQueryClient()
+  const {tenant} = useAuth()
   const handleInputChange = (e: any) => {
     globalSearch(e.target.value)
     if (e.target.value === '') {
@@ -101,28 +103,28 @@ const FaultTable = () => {
   }
   // Modal functions end
 
-  const {data: allFaultsEntries} = useQuery(
+  const {data: allFaultsEntries, isLoading} = useQuery(
     'faults',
-    () => axios.get(`${ENP_URL}/FaultEntriesApi`),
-    {
-      onSuccess: (data) => {
-        const tableData = data?.data.map((item: any, index: number) => ({
-          ...item,
-          key: index,
-
-          //Calculating duration: Present Time MINUS Time the fault was reported
-          duration: `${dhm(new Date().getTime() - new Date(item.downtime).getTime())}`,
-          formattedDate: new Date(item.downtime).toLocaleString(),
-        }))
-        setGridData(tableData)
-        setLoading(false)
-      },
-      onError: (error: any) => {
-        setLoading(false)
-        return error.statusText
-      },
-    }
+    () => fetchFaults(tenant)
+    // {
+    //   onSuccess: (data) => {
+    //     const tableData = data?.data.map((item: any, index: number) => ({
+    //       ...item,
+    //       key: index,
+    //       //Calculating duration: Present Time MINUS Time the fault was reported
+    //       duration: `${dhm(new Date().getTime() - new Date(item.downtime).getTime())}`,
+    //       formattedDate: new Date(item.downtime).toLocaleString(),
+    //     }))
+    //     setGridData(tableData)
+    //     setLoading(false)
+    //   },
+    //   onError: (error: any) => {
+    //     setLoading(false)
+    //     return error.statusText
+    //   },
+    // }
   )
+  const {data: allEquipment} = useQuery('equipment', () => getEquipment(tenant))
 
   // const loadData = async () => {
   //   setLoading(true);
@@ -159,6 +161,7 @@ const FaultTable = () => {
       const newData = gridData.filter((item: any) => item.entryId !== element.entryId)
       setGridData(newData)
       QueryClient.invalidateQueries('faults')
+
       message.success('Fault deleted successfully')
       setLoading(false)
       return response.status
@@ -228,37 +231,35 @@ const FaultTable = () => {
       title: 'Action',
       dataIndex: 'action',
       render: (_: any, record: any) =>
-        gridData.length >= 1 ? (
-          <>
-            <button
-              className='btn btn-light-success btn-sm'
-              onClick={() => {
-                formSolve.setFieldsValue({
-                  entryId: record.entryId,
-                  fleetId: record.fleetId,
-                  model: record.vmModel,
-                  desc: record.vmClass,
-                  dType: record.downType,
-                  custodian: record.custodian,
-                  location: record.locationId,
-                  dtime: record.duration,
-                  downTime: new Date(record.downtime).toDateString(),
-                })
-                handleSolve(record)
+        <>
+          <button
+            className='btn btn-light-success btn-sm'
+            onClick={() => {
+              formSolve.setFieldsValue({
+                entryId: record.entryId,
+                fleetId: record.fleetId,
+                model: record.vmModel,
+                desc: record.vmClass,
+                dType: record.downType,
+                custodian: record.custodian,
+                location: record.locationId,
+                dtime: record.duration,
+                downTime: new Date(record.downtime).toDateString(),
+              })
+              handleSolve(record)
 
-                //set the defect fleet id to the selected row
-                formDefect.setFieldsValue({
-                  fleetId: record.fleetId,
-                })
-              }}
-            >
-              Solve
-            </button>
-            <Popconfirm title='Sure to delete?' onConfirm={() => handleDelete(record)}>
-              <button className='btn btn-light-danger btn-sm'>Delete</button>
-            </Popconfirm>
-          </>
-        ) : null,
+              //set the defect fleet id to the selected row
+              formDefect.setFieldsValue({
+                fleetId: record.fleetId,
+              })
+            }}
+          >
+            Solve
+          </button>
+          <Popconfirm title='Sure to delete?' onConfirm={() => handleDelete(record)}>
+            <button className='btn btn-light-danger btn-sm'>Delete</button>
+          </Popconfirm>
+        </>
     },
   ]
 
@@ -298,14 +299,14 @@ const FaultTable = () => {
       locationId: values.location,
       custodian: values.custodian,
     }
-    const dataWithId = {...data, entryId: uuidv4()}
+    const dataWithId = {...data, entryId: uuidv4(), tenantId: tenant}
     try {
       const response = await axios.post(url, dataWithId)
       setSubmitLoading(false)
       form.resetFields()
       setIsModalOpen(false)
       //invalidate the query to refetch the data
-      QueryClient.invalidateQueries('faults')
+      await QueryClient.invalidateQueries('faults')
       message.success('Fault reported successfully')
       return response.statusText
     } catch (error: any) {
@@ -445,7 +446,7 @@ const FaultTable = () => {
       locationId: values.location,
       custodian: values.custodian,
     }
-    const dataWithId = {...data, entryId: uuidv4()}
+    // const dataWithId = {...data, entryId: uuidv4()}
     try {
       // const response = await axios.post(url, dataWithId)
       // setSubmitDefectLoading(false)
@@ -462,7 +463,7 @@ const FaultTable = () => {
   const loadEqupData = async () => {
     setLoading(true)
     try {
-      const response = await axios.get(`${ENP_URL}/VmequpsApi`)
+      const response = await fetchFaults(tenant)
       setDataSource(response.data)
       setLoading(false)
     } catch (error: any) {
@@ -533,19 +534,35 @@ const FaultTable = () => {
       then set the model and description of the fleet in the form
     */
   const onFleetIdChange = (fleetChosen: any) => {
-    dataSource.map((item: any) =>
-      item.fleetID === fleetChosen
+    allEquipment?.data?.map((item: any) =>
+      item.equipmentId === fleetChosen
         ? form.setFieldsValue({
-          model: item.modlName,
-          desc: item.modlClass,
+          model: item?.model?.name,
+          desc: item?.description,
         })
         : null
     )
   }
-  const faults = gridData.filter((fault: any) => fault.status === 0)
-  const numFaultsForBadge = allFaultsEntries?.data?.filter((fault: any) => fault.status === 0).length
+  // const faults = gridData.filter((fault: any) => fault.status === 0)
+
+  const allFaults = allFaultsEntries?.data?.map((item: any, index: number) => ({
+    ...item,
+    key: index,
+    //Calculating duration: Present Time MINUS Time the fault was reported
+    duration: `${dhm(new Date().getTime() - new Date(item.downtime).getTime())}`,
+    formattedDate: new Date(item.downtime).toLocaleString(),
+  }))
+
+  const faults = allFaults?.filter((fault: any) => fault.status === 0)
+
+  console.log('Faults', faults)
+
+  // const numFaultsForBadge = allFaultsEntries?.data?.filter((fault: any) => fault.status === 0).length // Refactor this
+  const numFaultsForBadge = faults?.length
+
   // Solved less  7 days ago
-  const solvedFaults = allFaultsEntries?.data?.filter((fault: any) => fault.status === 1 &&
+  // const solvedFaults = allFaultsEntries?.data?
+  const solvedFaults = allFaults?.filter((fault: any) => fault.status === 1 &&
     new Date(fault.wtimeEnd).getTime() > new Date().getTime() - 7 * 24 * 60 * 60 * 1000)
   return (
     <div
@@ -589,7 +606,7 @@ const FaultTable = () => {
                   columns={columns}
                   dataSource={faults}
                   bordered
-                  loading={isSolveLoading ? isSolveLoading : loading}
+                  loading={isLoading}
                   rowKey={(record: any) => record.entryId}
                   scroll={{x: 1500}}
                   pagination={{
@@ -646,9 +663,9 @@ const FaultTable = () => {
         >
           <Form.Item name='fleetId' label='Equipment ID' rules={[{required: true}]}>
             <Select placeholder='Select an Equipment' onChange={onFleetIdChange}>
-              {dataSource.map((item: any) => (
-                <Option key={item.fleetID} value={item.fleetID}>
-                  {item.fleetID} - {item.modlName} - {item.modlClass}
+              {allEquipment?.data?.map((item: any) => (
+                <Option key={item.equipmentId} value={item.equipmentId}>
+                  {item.equipmentId} - {item.model?.name} - {item.model?.modelClass?.name}
                 </Option>
               ))}
             </Select>
@@ -921,3 +938,5 @@ const FaultTable = () => {
 }
 
 export {FaultTable}
+
+

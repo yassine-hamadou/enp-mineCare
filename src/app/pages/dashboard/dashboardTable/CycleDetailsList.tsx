@@ -5,15 +5,17 @@ import {KTCard, KTCardBody, KTSVG} from '../../../../_metronic/helpers'
 import {ENP_URL} from '../../../urls'
 import {useQuery, useQueryClient} from 'react-query'
 import {uuid} from "@ant-design/plots/es/utils";
+import {useAuth} from "../../../modules/auth";
 
 const DashboardTable = () => {
   const [gridData, setGridData] = useState([])
   const [searchText, setSearchText] = useState('')
+  const {tenant} = useAuth()
   let [filteredData] = useState([])
 
 
   const {data: listOfequipment} = useQuery('listOfEquipment', () =>
-    axios.get(`${ENP_URL}/equipments`)
+    axios.get(`${ENP_URL}/equipments/tenant/${tenant}`)
   )
 
   const {data: listOfequipmentModel, isLoading} = useQuery('listOfEquipmentModel', () =>

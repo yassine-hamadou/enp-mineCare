@@ -26,7 +26,7 @@ const UpdateRegister = () => {
     isLoading: isFaultLoading
   } = useQuery('faults', () => axios.get(`${ENP_URL}/faultentriesapi`));
   const {data: listOfModels} = useQuery('listOfModels', getModels)
-  
+
   const queryClient: any = useQueryClient();
   const handleCancel = () => {
     setShowModal(false);
@@ -78,6 +78,14 @@ const UpdateRegister = () => {
       dataIndex: 'downType',
     },
     {
+      title: 'Model',
+      dataIndex: 'vmModel',
+    },
+    {
+      title: 'Class',
+      dataIndex: 'vmClass',
+    },
+    {
       title: 'Down Date',
       dataIndex: 'downtime',
       render: (date: any) => new Date(date).toDateString(),
@@ -85,7 +93,11 @@ const UpdateRegister = () => {
     {
       title: 'Custodian',
       dataIndex: 'custodian',
-    }
+    },
+    {
+      title: 'Location',
+      dataIndex: 'locationId',
+    },
   ]
   const agreementColumns: any = [
     {
@@ -325,7 +337,7 @@ const UpdateRegister = () => {
               ),
             },
             {
-              label: `Component`,
+              label: `Components`,
               key: '3',
               children: (
                 <>
@@ -474,7 +486,7 @@ const UpdateRegister = () => {
               ),
             },
             {
-              label: `Fault`,
+              label: `Faults`,
               key: '5',
               children: (
                 <>
@@ -488,7 +500,7 @@ const UpdateRegister = () => {
               ),
             },
             {
-              label: `Agreement`,
+              label: `Agreements`,
               key: '6',
               children: (
                 <>

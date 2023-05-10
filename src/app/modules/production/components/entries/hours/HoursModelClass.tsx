@@ -660,13 +660,12 @@
 
 
 import type {ProColumns} from '@ant-design/pro-components';
-import {EditableProTable, ErrorBoundary, ProCard, ProFormField} from '@ant-design/pro-components';
-import {Button, Input, InputNumber, message, Space} from 'antd';
+import {EditableProTable, ErrorBoundary, ProCard} from '@ant-design/pro-components';
+import {Button, Input, message, Space} from 'antd';
 import React, {useEffect, useState} from 'react';
 import {useMutation, useQuery, useQueryClient} from "react-query";
-import {addHours, fetchHours, getEquipment} from "../../../../../urls";
+import {addHours, fetchHours} from "../../../../../urls";
 import {useNavigate} from "react-router-dom";
-import {KTCard} from "../../../../../../_metronic/helpers";
 import {throwError} from "@syncfusion/ej2-base";
 
 type DataSourceType = {
@@ -689,7 +688,7 @@ type DataSourceType = {
 // });
 
 
-const HoursPage = () => {
+const HoursModelClass: any = () => {
   const {data: defaultData, isLoading} = useQuery('all-hours', fetchHours, {
     refetchOnWindowFocus: false
   })
@@ -934,4 +933,4 @@ const HoursPage = () => {
   );
 };
 
-export {HoursPage};
+export default HoursModelClass;

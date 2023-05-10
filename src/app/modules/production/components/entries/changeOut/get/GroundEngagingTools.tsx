@@ -13,9 +13,10 @@ import {
 import TextArea from "antd/lib/input/TextArea";
 import dayjs from "dayjs";
 import {uuid} from "@ant-design/plots/es/utils";
+import {useAuth} from "../../../../../auth";
 
 export default function GroundEngagingTools() {
-
+  const {tenant} = useAuth()
   const queryClient = useQueryClient()
   const [getForm] = useForm();
   const [editGetForm] = useForm();
@@ -24,7 +25,7 @@ export default function GroundEngagingTools() {
   const [submitLoading, setSubmitLoading] = useState(false);
   const [deleteLoading, setDeleteLoading] = useState(false);
   const [dataToEdit, setDataToEdit] = useState<any>();
-  const {data: equipmentData} = useQuery('equipments', () => getEquipment());
+  const {data: equipmentData} = useQuery('equipments', () => getEquipment(tenant));
   const {data: groundETData, isLoading: getLoading} = useQuery('groundEngagingTools', () => getGroundEngagingTools());
   const {mutate: postGroundTool} = useMutation(postGroundEngagingTools, {
     onSuccess: () => {

@@ -4,19 +4,10 @@ import {useAuth} from '../../../../app/modules/auth'
 import {toAbsoluteUrl} from '../../../helpers'
 
 const HeaderUserMenu: FC = () => {
-  const {currentUser, logout} = useAuth() // <== this is a jwt token
+  const {currentUser, tenant, logout} = useAuth() // <== this is a jwt token
   console.log('currentUser', currentUser)
-  const jwt: any = currentUser
-  const parts = jwt.split('.');
-  const header = JSON.parse(atob(parts[0]));
-  const payload = JSON.parse(atob(parts[1]));
+  console.log('tenant', tenant)
 
-  const user = {
-    first_name: payload.firstName,
-    surname: payload.surname,
-    email: payload.email,
-  }
-  
   return (
     <div
       className='menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg menu-state-primary fw-bold py-4 fs-6 w-275px'
@@ -30,11 +21,11 @@ const HeaderUserMenu: FC = () => {
 
           <div className='d-flex flex-column'>
             <div className='fw-bolder d-flex align-items-center fs-5'>
-              {user?.first_name} {user?.surname}
+              {currentUser?.firstName} {currentUser?.surname}
               {/*<span className='badge badge-light-success fw-bolder fs-8 px-2 py-1 ms-2'>Pro</span>*/}
             </div>
             <a href='#' className='fw-bold text-muted text-hover-primary fs-7'>
-              {user?.email}
+              {currentUser?.email}
             </a>
           </div>
         </div>

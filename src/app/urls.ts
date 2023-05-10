@@ -1,12 +1,16 @@
 import axios from 'axios';
-import {message} from "antd";
+
+
 /*
  Use this file to define your base URLs whether on localhost or on the ENP server
  */
 // export const ENP_URL = 'http://localhost:3001'
 // export const ENP_URL = 'https://cors-anywhere.herokuapp.com/http://208.117.44.15/SmWebApi/api'
-export const ENP_URL = 'http://208.117.44.15/SmWebApi/api'
-// export const ENP_URL = 'https://localhost:7144/api'
+export const USERS_ENDPOINTS = "http://208.117.44.15/userapi/api";
+const tenant: string | null = localStorage.getItem('tenant');
+console.log('tenantfromurl', tenant)
+// export const ENP_URL = 'http://208.117.44.15/SmWebApi/api'
+export const ENP_URL = 'https://localhost:7144/api'
 
 export const fetchEmployee = () => {
   return axios.get(`${ENP_URL}/vmemplsApi`)
@@ -25,7 +29,7 @@ export const fetchBrands = () => {
 }
 
 export const fetchHours = () => {
-  return axios.get(`${ENP_URL}/HoursEntry`)
+  return axios.get(`${ENP_URL}/HoursEntry/tenant/${tenant}`)
 }
 export const putHours = (data: any) => {
   return axios.put(`${ENP_URL}/HoursEntry/${data.id}`, data)
@@ -61,12 +65,18 @@ export const fetchItemValue = () => {
   return axios.get(`${ENP_URL}/ItemValue`)
 }
 
-export function getEquipment() {
-  return axios.get(`${ENP_URL}/equipments`);
+export const fetchFaults = (tenant: any) => {
+  const url = axios.get(`${ENP_URL}/FaultEntriesApi/tenant/${tenant}`)
+  console.log('url', url)
+  return url
+}
+
+export function getEquipment(tenant: any) {
+  return axios.get(`${ENP_URL}/equipments/tenant/${tenant}`);
 }
 
 export function getGroundEngagingTools() {
-  return axios.get(`${ENP_URL}/groundEngagingTools`);
+  return axios.get(`${ENP_URL}/groundEngagingTools/tenant/${tenant}`);
 }
 
 export function postGroundEngagingTools(data: any) {
@@ -98,9 +108,6 @@ export function addHours(data: any) {
   return axios.post(`${ENP_URL}/hoursentry`, data);
 }
 
-export function addHoursTemp(data: any) {
-  return axios.post(`${ENP_URL}/HoursEntryTemp`, data);
-}
 
 export function postScheduleTransactions(data: any) {
   return axios.post(`${ENP_URL}/ScheduleTransactions`, data);
@@ -108,11 +115,18 @@ export function postScheduleTransactions(data: any) {
 
 
 export function getCategories() {
-  return axios.get(`${ENP_URL}/categories`);
+  return axios.get(`${ENP_URL}/categories/tenant/${tenant}`);
 }
 
 export function postCategories(data: any) {
   return axios.post(`${ENP_URL}/categories`, data);
 }
 
+export function fetchUserApplications() {
+  return axios.get(`${USERS_ENDPOINTS}/userApplications`)
+}
+
+export const fetchCompanies = () => {
+  return axios.get(`${USERS_ENDPOINTS}/Companies`)
+}
 

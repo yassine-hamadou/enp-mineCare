@@ -1,4 +1,3 @@
-import React, {lazy, Suspense} from 'react'
 import {Navigate, Outlet, Route, Routes} from 'react-router-dom'
 import {PageLink, PageTitle} from '../../../_metronic/layout/core'
 import {ScheduleInfo} from './components/scheduleInfo/ScheduleInfo'
@@ -15,7 +14,6 @@ import {TabsTest} from './components/checkListForm/Tabs'
 import {LubePage} from './components/setup/lube/Lube'
 import {CompartmentPage} from './components/setup/compartment/Compartment'
 import {RefillPage} from './components/setup/refill/Refill'
-import {HoursPage} from './components/entries/hours/HoursModelClass'
 import {OilGradePage} from './components/setup/oilGrade/OilGrade'
 import {OilTypePage} from './components/setup/oilType/OilType'
 import {FaultTable} from './components/entries/fault_d/FaultTable'
@@ -30,9 +28,6 @@ import {ItemValuePage} from './components/setup/itemValue/ItemValuePage'
 import ModelClass from "./components/setup/equipment/ModelClass";
 import Manufacturer from "./components/setup/equipment/Manufacturer";
 import ModelsForManufacturer from "./components/setup/equipment/ModelsForManufacturer";
-import EquipmentRegister from "./components/equipment-register/EquipmentRegister";
-import AddEquipRegister from "./components/equipment-register/Add";
-import UpdateRegister from './components/equipment-register/UpdateRegister'
 import EquipmentSchedule from "./components/entries/equipment/EquipmentSchedule";
 import ReportNew from "./components/report/DailyHMEReport/DailyaHMEReport";
 import NumberOfCarperManufacturerReport
@@ -58,9 +53,14 @@ import FaultByDowntimeReport from './components/report/fault/FaultByDownTimeRepo
 import ListEquipmentSummary from "./components/report/equipmentReport/ListEquipmentSummary";
 import MeteringByModelClassSummary
   from "./components/report/metering/MeteringByModelSummary/MeteringByModelClassSummary";
-import {ErrorBoundary} from "@ant-design/pro-components";
+import {ErrorBoundary, PageLoading} from "@ant-design/pro-components";
 import MeteringByEquipment from './components/report/metering/MeteringByEquipment/MeteringByEquipment'
-import {Context} from "react-intl/src/components/injectIntl";
+import {lazy, Suspense} from "react";
+
+const EquipmentRegister = lazy(() => import('./components/equipment-register/EquipmentRegister'))
+const AddEquipRegister = lazy(() => import('./components/equipment-register/Add'))
+const UpdateRegister = lazy(() => import('./components/equipment-register/UpdateRegister'))
+const HoursModelClass = lazy(() => import('./components/entries/hours/HoursModelClass'))
 
 
 const accountBreadCrumbs: Array<PageLink> = []
@@ -81,9 +81,11 @@ const ProductionPage: React.FC = () => {
           element={
             <>
               <PageTitle breadcrumbs={accountBreadCrumbs}>Equipment Register</PageTitle>
-              <ErrorBoundary>
-                <EquipmentRegister/>
-              </ErrorBoundary>
+              <Suspense fallback={<PageLoading/>}>
+                <ErrorBoundary>
+                  <EquipmentRegister/>
+                </ErrorBoundary>
+              </Suspense>
               {/*dfs*/}
             </>
           }
@@ -93,7 +95,11 @@ const ProductionPage: React.FC = () => {
           element={
             <>
               <PageTitle breadcrumbs={accountBreadCrumbs}>Add Equipment</PageTitle>
-              <AddEquipRegister/>
+              <Suspense fallback={<PageLoading/>}>
+                <ErrorBoundary>
+                  <AddEquipRegister/>
+                </ErrorBoundary>
+              </Suspense>
             </>
           }
         />
@@ -102,7 +108,11 @@ const ProductionPage: React.FC = () => {
           element={
             <>
               <PageTitle breadcrumbs={accountBreadCrumbs}>Update Equipment</PageTitle>
-              <UpdateRegister/>
+              <Suspense fallback={<PageLoading/>}>
+                <ErrorBoundary>
+                  <UpdateRegister/>
+                </ErrorBoundary>
+              </Suspense>
             </>
           }
         />
@@ -121,7 +131,11 @@ const ProductionPage: React.FC = () => {
             <>
               <PageTitle breadcrumbs={accountBreadCrumbs}>Equipment Schedule</PageTitle>
               {/*<Overview />*/}
-              <EquipmentSchedule/>
+              <Suspense fallback={<PageLoading/>}>
+                <ErrorBoundary>
+                  <EquipmentSchedule/>
+                </ErrorBoundary>
+              </Suspense>
             </>
           }
         />
@@ -178,7 +192,9 @@ const ProductionPage: React.FC = () => {
           path='fault/*'
           element={
             <>
-              <Outlet/>
+              <ErrorBoundary>
+                <Outlet/>
+              </ErrorBoundary>
             </>
           }
         >
@@ -202,7 +218,11 @@ const ProductionPage: React.FC = () => {
           path={'hours/*'}
           element={
             <>
-              <Outlet/>
+              <ErrorBoundary>
+                <Suspense fallback={<PageLoading/>}>
+                  <Outlet/>
+                </Suspense>
+              </ErrorBoundary>
             </>
           }
         >
@@ -211,10 +231,7 @@ const ProductionPage: React.FC = () => {
             element={
               <>
                 <PageTitle breadcrumbs={accountBreadCrumbs}>All Entries</PageTitle>
-                {/*<HoursModelClass/>*/}
-                <ErrorBoundary>
-                  <HoursPage/>
-                </ErrorBoundary>
+                <HoursModelClass/>
               </>
             }
           />
