@@ -31,7 +31,7 @@ jobs:
             #      - name: Cache node modules
             #        # npm cache files on windows
             #        uses: actions/cache@v3
-            #        with:
+          #        with:
           #          # A unique key for the cache based on package-lock.json
           #          key: ${{ hashFiles('./package-lock.json') }}
           #          # The path to the cache directory
@@ -43,7 +43,7 @@ jobs:
           #          # install the dependencies on windows server
 
       - name: Install Dependencies
-        run: npm ci
+        run: npm install
 
       - name: Build the project
         run: npm run build
