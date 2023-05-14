@@ -161,7 +161,7 @@ const DashboardTable = () => {
     //@ts-ignore
     // const modelName = queryClient.getQueryData('listOfEquipmentModel')?.data?.find((model: any) => model.modelId == modelId).name
     console.log("custodian", custodian)
-    return 0
+    // return 0
     let numberOfDowntime = 0
     listOfFaults?.data?.forEach((fault: any) => {
       // console.log("fault.vmModel", fault.vmModel)

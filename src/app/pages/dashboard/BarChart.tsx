@@ -5,6 +5,7 @@ import {getCSSVariableValue} from '../../../_metronic/assets/ts/_utils'
 import {useQuery} from "react-query";
 import axios from "axios";
 import {ENP_URL} from '../../urls';
+import {useAuth} from "../../modules/auth";
 
 type Props = {
   className: string
@@ -14,6 +15,7 @@ type Props = {
 
 
 const BarChart: React.FC<Props> = ({className, chartColor, chartHeight}) => {
+  const {tenant} = useAuth()
   const chartRef = useRef<HTMLDivElement | null>(null)
   const {mode} = useThemeMode()
   const data: any = []
@@ -21,7 +23,7 @@ const BarChart: React.FC<Props> = ({className, chartColor, chartHeight}) => {
   const monthArray = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
 
   const {data: listOfFaults} = useQuery('listOfFaults', () => {
-    return axios.get(`${ENP_URL}/faultentriesapi`)
+    return axios.get(`${ENP_URL}/faultentriesapi/tenant/${tenant}`)
   })
   // const [categories, setCategories]: any = useState([])
   // const [data, setData]: any = useState([])

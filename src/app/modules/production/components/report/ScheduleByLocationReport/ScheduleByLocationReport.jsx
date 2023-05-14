@@ -9,9 +9,11 @@ import "../../../../../../../node_modules/@devexpress/analytics-core/dist/css/dx
 class ReportViewer extends React.Component {
     constructor(props) {
         super(props);
-        this.reportUrl = ko.observable("ScheduleByLocationSummaryReport");
+        const tenantId = localStorage.getItem('tenant');
+        console.log(tenantId)
+        this.reportUrl = ko.observable(`EmployeeByGenderReport`);
         this.requestOptions = {
-            host: "http://208.117.44.15/serverside/",
+            host: "https://localhost:5001/",
             invokeAction: "DXXRDV"
         };
     }

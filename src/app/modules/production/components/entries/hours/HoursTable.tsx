@@ -1,12 +1,12 @@
 import {Button, DatePicker, Input, InputNumber, message, Modal, Select, TableColumnsType} from 'antd'
 import {Space, Table, Form} from 'antd'
-import React, {useEffect, useState} from 'react'
+import {useState} from 'react'
 import {useMutation, useQuery, useQueryClient} from "react-query";
 import {KTSVG} from '../../../../../../_metronic/helpers'
-import {addHours, fetchEquips, fetchHours} from '../../../../../urls'
+import {addHours, fetchHours} from '../../../../../urls'
 import {useLocation} from "react-router-dom";
 
-const HoursPage: React.FC = () => {
+const HoursPage = () => {
 
   const modelClassSelected: any = useLocation().state
   // modelClassSelected is an array of models

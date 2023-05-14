@@ -622,7 +622,7 @@ const FaultTable = () => {
             key: '2',
             children: (
               <>
-                <ResolutionTable/>
+                <ResolutionTable faults={allFaults}/>
               </>
             ),
           },

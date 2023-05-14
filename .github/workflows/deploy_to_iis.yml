@@ -12,39 +12,45 @@ on:
 jobs:
   build-and-deploy:
     runs-on: self-hosted
+
+    strategy:
+      matrix:
+        node-version: [ 18.x ]
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Setup Node.js
+      - name: Setup Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v3
         with:
-          node-version: '18.x'
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
 
             #      install dependencies only if package.json has changed
             #      - name: Cache node modules
             #        # npm cache files on windows
             #        uses: actions/cache@v3
             #        with:
-            #          # A unique key for the cache based on package-lock.json
-            #          key: ${{ hashFiles('./package-lock.json') }}
-            #          # The path to the cache directory
-            #          path: C:\Windows\ServiceProfiles\NetworkService\AppData\Local\npm-cache
-            #          # The cache will be restored if the key matches
-            #          restore-keys: |
-            #            ${{ hashFiles('./package-lock.json') }}
-            #          # Checking if the cache hit is not true, if it is true then the dependencies are already installed otherwise we
+          #          # A unique key for the cache based on package-lock.json
+          #          key: ${{ hashFiles('./package-lock.json') }}
+          #          # The path to the cache directory
+          #          path: C:\Windows\ServiceProfiles\NetworkService\AppData\Local\npm-cache
+          #          # The cache will be restored if the key matches
+          #          restore-keys: |
+          #            ${{ hashFiles('./package-lock.json') }}
+          #          # Checking if the cache hit is not true, if it is true then the dependencies are already installed otherwise we
           #          # install the dependencies on windows server
 
       - name: Install Dependencies
-        #              if: steps.cache.outputs.cache-hit != 'true'
-        run: npm install --legacy-peer-deps
+        run: npm ci
 
-      #      - name: Build
-      #        run: npm run ciBuild
+      - name: Build the project
+        run: npm run build
 
-      - name: Remove the existing website files except for web.config file
-        run: get-childitem 'C:\inetpub\wwwroot\esms\' -Exclude *.config -recurse | remove-item -recurse -force
+      #      - name: Remove the existing website files except for web.config file
+      #        run: get-childitem 'C:\inetpub\wwwroot\esms\' -Exclude *.config -recurse | remove-item -recurse -force
 
       - name: Copy build folder to the website folder
-        run: Copy-Item -Recurse -Force 'build\*' 'C:\inetpub\wwwroot\esms'
+        run: xcopy /Y /S /I build\* C:\inetpub\wwwroot\esms\
+#        run: Copy-Item -Recurse -Force 'build\*' 'C:\inetpub\wwwroot\esms'
