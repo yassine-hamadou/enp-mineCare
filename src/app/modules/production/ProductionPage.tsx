@@ -56,6 +56,7 @@ import MeteringByModelClassSummary
 import {ErrorBoundary, PageLoading} from "@ant-design/pro-components";
 import MeteringByEquipment from './components/report/metering/MeteringByEquipment/MeteringByEquipment'
 import {lazy, Suspense} from "react";
+import ReportComponent from "./components/report/ReportComponent/ReportComponent";
 
 const EquipmentRegister = lazy(() => import('./components/equipment-register/EquipmentRegister'))
 const AddEquipRegister = lazy(() => import('./components/equipment-register/Add'))
@@ -426,7 +427,10 @@ const ProductionPage: React.FC = () => {
             element={
               <>
                 <PageTitle breadcrumbs={accountBreadCrumbs}>Metering By Model Detail</PageTitle>
-                <MeteringByModelDetail/>
+                {/*<MeteringByModelDetail/>*/}
+                <ReportComponent
+                  reportName={"MeteringbyModelDetail"}
+                />
               </>
             }
           />
@@ -435,7 +439,10 @@ const ProductionPage: React.FC = () => {
             element={
               <>
                 <PageTitle breadcrumbs={accountBreadCrumbs}>Metering By Equipment</PageTitle>
-                <MeteringByEquipment/>
+                {/*<MeteringByEquipment/>*/}
+                <ReportComponent
+                  reportName={"MeteringByEquipment"}
+                />
               </>
             }
           />
@@ -444,7 +451,10 @@ const ProductionPage: React.FC = () => {
             element={
               <>
                 <PageTitle breadcrumbs={accountBreadCrumbs}>Metering By Model Summary</PageTitle>
-                <MeteringByModelSummary/>
+                {/*<MeteringByModelSummary/>*/}
+                <ReportComponent
+                  reportName={"Meteringbymodelsummary"}
+                />
               </>
             }
           />
@@ -471,7 +481,10 @@ const ProductionPage: React.FC = () => {
             element={
               <>
                 <PageTitle breadcrumbs={accountBreadCrumbs}>Change Out By Model</PageTitle>
-                <ChangeoutByModel/>
+                {/*<ChangeoutByModel/>*/}
+                <ReportComponent
+                  reportName={"ChangeoutByModel"}
+                />
               </>
             }
           />
@@ -481,6 +494,9 @@ const ProductionPage: React.FC = () => {
               <>
                 <PageTitle breadcrumbs={accountBreadCrumbs}>Changeout By Refill Type Model</PageTitle>
                 <ChangeoutByRefillTypeModel/>
+                <ReportComponent
+                  reportName={"Changeoutbyrefilltypemodel"}
+                />
               </>
             }
           />
@@ -498,7 +514,10 @@ const ProductionPage: React.FC = () => {
             element={
               <>
                 <PageTitle breadcrumbs={accountBreadCrumbs}>Schedule By Model Summary Report</PageTitle>
-                <ScheduleByModelSummaryReport/>
+                {/*<ScheduleByModelSummaryReport/>*/}
+                <ReportComponent
+                  reportName={"ScheduleByModelSummaryReport"}
+                />
               </>
             }
           />
@@ -507,7 +526,10 @@ const ProductionPage: React.FC = () => {
             element={
               <>
                 <PageTitle breadcrumbs={accountBreadCrumbs}>Schedule By Model Service Type</PageTitle>
-                <ScheduleByServiceTypeReport/>
+                {/*<ScheduleByServiceTypeReport/>*/}
+                <ReportComponent
+                  reportName={"ScheduleByServiceTypeReport"}
+                />
               </>
             }
           />
@@ -516,7 +538,10 @@ const ProductionPage: React.FC = () => {
             element={
               <>
                 <PageTitle breadcrumbs={accountBreadCrumbs}>Schedule By Location Report</PageTitle>
-                <ScheduleByLocationReport/>
+                {/*<ScheduleByLocationReport/>*/}
+                <ReportComponent
+                  reportName={"ScheduleByLocationSummaryReport"}
+                />
               </>
             }
           />
@@ -535,7 +560,10 @@ const ProductionPage: React.FC = () => {
           element={
             <>
               <PageTitle breadcrumbs={accountBreadCrumbs}>All Fault Report</PageTitle>
-              <FaultEntryReport/>
+              {/*<FaultEntryReport/>*/}
+              <ReportComponent
+                reportName={"FaultEntrySummaryReport"}
+              />
             </>
           }
         />
@@ -544,7 +572,10 @@ const ProductionPage: React.FC = () => {
           element={
             <>
               <PageTitle breadcrumbs={accountBreadCrumbs}>Fault By Custodian Summary</PageTitle>
-              <FaultByCustodianSummary/>
+              {/*<FaultByCustodianSummary/>*/}
+              <ReportComponent
+                reportName={"FaultByCustodianSummary"}
+              />
             </>
           }
         />
@@ -553,7 +584,10 @@ const ProductionPage: React.FC = () => {
           element={
             <>
               <PageTitle breadcrumbs={accountBreadCrumbs}>Fault By Custodian Detail</PageTitle>
-              <FaultByCustodianDetail/>
+              {/*<FaultByCustodianDetail/>*/}
+              <ReportComponent
+                reportName={"FaultByCustodianDetail"}
+              />
             </>
           }
         />
@@ -562,7 +596,10 @@ const ProductionPage: React.FC = () => {
           element={
             <>
               <PageTitle breadcrumbs={accountBreadCrumbs}>Daily HME Report</PageTitle>
-              <ReportNew/>
+              {/*<ReportNew/>*/}
+              <ReportComponent
+                reportName={"Daily_HME_KPIReport"}
+              />
             </>
           }
         />
@@ -571,7 +608,10 @@ const ProductionPage: React.FC = () => {
           element={
             <>
               <PageTitle breadcrumbs={accountBreadCrumbs}>All Equipment Summary</PageTitle>
-              <AllEquipSummary/>
+              {/*<AllEquipSummary/>*/}
+              <ReportComponent
+                reportName={"AllEquipmentSummary"}
+              />
             </>
           }
         />
@@ -580,7 +620,10 @@ const ProductionPage: React.FC = () => {
           element={
             <>
               <PageTitle breadcrumbs={accountBreadCrumbs}>Summary By Down Type</PageTitle>
-              <FaultByDowntimeReport/>
+              {/*<FaultByDowntimeReport/>*/}
+              <ReportComponent
+                reportName={"FaultByDowntimeReport"}
+              />
             </>
           }
         />
@@ -589,7 +632,10 @@ const ProductionPage: React.FC = () => {
           element={
             <>
               <PageTitle breadcrumbs={accountBreadCrumbs}>List Equipment Summary</PageTitle>
-              <ListEquipmentSummary/>
+              {/*<ListEquipmentSummary/>*/}
+              <ReportComponent
+                reportName={"ListEquipmentSummary"}
+              />
             </>
           }
         />
@@ -598,7 +644,10 @@ const ProductionPage: React.FC = () => {
           element={
             <>
               <PageTitle breadcrumbs={accountBreadCrumbs}>Fault By Model Summary</PageTitle>
-              <FaultByModelSummary/>
+              {/*<FaultByModelSummary/>*/}
+              <ReportComponent
+                reportName={"FaultByModelSummary"}
+              />
             </>
           }
         />
@@ -608,7 +657,10 @@ const ProductionPage: React.FC = () => {
           element={
             <>
               <PageTitle breadcrumbs={accountBreadCrumbs}>Service Type Report</PageTitle>
-              <ServiceTypeReport/>
+              {/*<ServiceTypeReport/>*/}
+              <ReportComponent
+                reportName={"ServiceTypeReport"}
+              />
             </>
           }
         />
@@ -617,7 +669,10 @@ const ProductionPage: React.FC = () => {
           element={
             <>
               <PageTitle>Warranty End Of Life Report</PageTitle>
-              <WarrantyEndOfLifeReport/>
+              {/*<WarrantyEndOfLifeReport/>*/}
+              <ReportComponent
+                reportName={"WarrantyEndOfLifeReport"}
+              />
             </>
           }
         />
@@ -626,7 +681,7 @@ const ProductionPage: React.FC = () => {
           element={
             <>
               <PageTitle breadcrumbs={accountBreadCrumbs}>Number Of Equipment Per Manufacturer</PageTitle>
-              <NumberOfCarperManufacturerReport/>
+              <ReportComponent reportName={"NumberOfCarperManufacturerReport"}/>
             </>
           }
         />
@@ -635,7 +690,8 @@ const ProductionPage: React.FC = () => {
           element={
             <>
               <PageTitle breadcrumbs={accountBreadCrumbs}>Metering By Model Class Summary</PageTitle>
-              <MeteringByModelClassSummary/>
+              {/*<MeteringByModelClassSummary/>*/}
+              <ReportComponent reportName={"meteringbymodelclasssummary"}/>
             </>
           }
         />
@@ -644,7 +700,10 @@ const ProductionPage: React.FC = () => {
           element={
             <>
               <PageTitle breadcrumbs={accountBreadCrumbs}>Hourly Report</PageTitle>
-              <HourlyReport/>
+              {/*<HourlyReport/>*/}
+              <ReportComponent
+                reportName={"HourlyReport"}
+              />
             </>
           }
         />
@@ -653,7 +712,11 @@ const ProductionPage: React.FC = () => {
           element={
             <>
               <PageTitle breadcrumbs={accountBreadCrumbs}>Solved Fault Report</PageTitle>
-              <FaultEntrySolvedReport/>
+              {/*<FaultEntrySolvedReport/>*/}
+              <ReportComponent
+                reportName={"FaultEntrySolvedReport"}
+              />
+
             </>
           }
         />
@@ -671,7 +734,10 @@ const ProductionPage: React.FC = () => {
           element={
             <>
               <PageTitle breadcrumbs={accountBreadCrumbs}>Fleet Schedule Report</PageTitle>
-              <FleetScheduleReport/>
+              {/*<FleetScheduleReport/>*/}
+              <ReportComponent
+                reportName={"FleetScheduleReport"}
+              />
             </>
           }
         />
@@ -680,7 +746,10 @@ const ProductionPage: React.FC = () => {
           element={
             <>
               <PageTitle breadcrumbs={accountBreadCrumbs}>Equipment History Report</PageTitle>
-              <FaultEntryFleetHistoryReport/>
+              {/*<FaultEntryFleetHistoryReport/>*/}
+              <ReportComponent
+                reportName={"FaultEntryFleetHistoryReport"}
+              />
             </>
           }
         />

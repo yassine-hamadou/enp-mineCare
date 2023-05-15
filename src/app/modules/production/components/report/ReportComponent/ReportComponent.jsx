@@ -9,9 +9,9 @@ import "../../../../../../../node_modules/@devexpress/analytics-core/dist/css/dx
 import {DxReportViewer} from "devexpress-reporting/dx-webdocumentviewer";
 import {useAuth} from "../../../../auth";
 
-const ReportViewer = () => {
+const ReportViewer = (props) => {
     const {tenant} = useAuth();
-    const reportUrl = ko.observable(`NumberOfCarperManufacturerReport`);
+    const reportUrl = ko.observable(`${props.reportName}`);
     const viewerRef = useRef();
     const requestOptions = {
         host: "http://208.117.44.15/serverside/",
@@ -42,10 +42,10 @@ const ReportViewer = () => {
     return (<div ref={viewerRef}></div>);
 }
 
-function NumberOfCarperManufacturerReport() {
+function ReportComponent(props) {
     return (<div style={{width: "100%", height: "1000px"}}>
-        <ReportViewer/>
+        <ReportViewer reportName={props.reportName}/>
     </div>);
 }
 
-export default NumberOfCarperManufacturerReport;
+export default ReportComponent;
