@@ -30,7 +30,7 @@ jobs:
             #      install dependencies only if package.json has changed
             #      - name: Cache node modules
             #        # npm cache files on windows
-            #        uses: actions/cache@v3
+          #        uses: actions/cache@v3
           #        with:
           #          # A unique key for the cache based on package-lock.json
           #          key: ${{ hashFiles('./package-lock.json') }}
@@ -46,7 +46,7 @@ jobs:
         run: npm install
 
       - name: Build the project
-        run: npm run build
+        run: npm run ciBuild
 
       #      - name: Remove the existing website files except for web.config file
       #        run: get-childitem 'C:\inetpub\wwwroot\esms\' -Exclude *.config -recurse | remove-item -recurse -force
