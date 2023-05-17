@@ -17,44 +17,19 @@ import {RefillPage} from './components/setup/refill/Refill'
 import {OilGradePage} from './components/setup/oilGrade/OilGrade'
 import {OilTypePage} from './components/setup/oilType/OilType'
 import {FaultTable} from './components/entries/fault_d/FaultTable'
-import HourlyReport from './components/report/hourly/HourlyReports'
-import FaultEntryReport from './components/report/fault/faultEntry/FaultEntryReport'
 import FaultEntryPendingReport from './components/report/fault/faultEntryPending/FaultEntryPendingReport'
-import FaultEntrySolvedReport from './components/report/fault/faultEntrySolved/FaultEntrySolvedReport'
-import FleetScheduleReport from './components/report/fleetSchedule/FleetScheduleReport'
 import {LubeConfig} from './components/setup/lubeConfig/LubeConfig'
-import FaultEntryFleetHistoryReport from './components/report/fault/faultFleetHistory/FaultEntryFleetHistoryReport'
 import {ItemValuePage} from './components/setup/itemValue/ItemValuePage'
 import ModelClass from "./components/setup/equipment/ModelClass";
 import Manufacturer from "./components/setup/equipment/Manufacturer";
 import ModelsForManufacturer from "./components/setup/equipment/ModelsForManufacturer";
 import EquipmentSchedule from "./components/entries/equipment/EquipmentSchedule";
-import ReportNew from "./components/report/DailyHMEReport/DailyaHMEReport";
-import NumberOfCarperManufacturerReport
-  from "./components/report/CarperManufacturerReport/NumberOfCarperManufacturerReport";
 import {AllReportPage} from './components/report/AllReportPage'
 import {CategorySetup} from './components/setup/category/CategorySetup'
-import ServiceTypeReport from "./components/report/ServiceTypeReport/ServiceTypeReport";
-import WarrantyEndOfLifeReport from './components/report/warrantyEndOfLifeReport/WarrantyEndOfLife'
 import GroundEngagingTools from './components/entries/changeOut/get/GroundEngagingTools'
-import MeteringByModelDetail from './components/report/metering/MeteringByModelDetail/MeteringByModelDetail'
-import MeteringByModelSummary from './components/report/metering/MeteringByModelSummary/MeteringByModelSummary'
-import ChangeoutByModel from "./components/report/changeout/ChangeoutByModel/ChangeoutByModel";
 import ChangeoutByRefillTypeModel
   from "./components/report/changeout/ChangeoutByRefillTypeModel/ChangeoutByRefillTypeModel";
-import FaultByCustodianSummary from './components/report/fault/FaultByCustodianSummary/FaultByCustodianSummary'
-import ScheduleByModelSummaryReport from './components/report/ScheduleByModelSummaryReport/ScheduleByModelSummaryReport'
-import ScheduleByServiceTypeReport from './components/report/ScheduleByServiceTypeReport/ScheduleByServiceTypeReport'
-import ScheduleByLocationReport from './components/report/ScheduleByLocationReport/ScheduleByLocationReport'
-import AllEquipSummary from "./components/report/equipmentReport/AllEquipSummary";
-import FaultByCustodianDetail from './components/report/fault/faultByCustodianDetail/FaultByCustodianDetail'
-import FaultByModelSummary from './components/report/fault/faultByModelSummary/FaultByModelSummary'
-import FaultByDowntimeReport from './components/report/fault/FaultByDownTimeReport/FaultByDowntimeReport'
-import ListEquipmentSummary from "./components/report/equipmentReport/ListEquipmentSummary";
-import MeteringByModelClassSummary
-  from "./components/report/metering/MeteringByModelSummary/MeteringByModelClassSummary";
 import {ErrorBoundary, PageLoading} from "@ant-design/pro-components";
-import MeteringByEquipment from './components/report/metering/MeteringByEquipment/MeteringByEquipment'
 import {lazy, Suspense} from "react";
 import ReportComponent from "./components/report/ReportComponent/ReportComponent";
 
