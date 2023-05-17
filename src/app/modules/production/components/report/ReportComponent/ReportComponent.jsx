@@ -1,7 +1,6 @@
 import React, {useEffect, useRef} from "react";
 import ko from "knockout";
 import "devexpress-reporting/dx-webdocumentviewer";
-// import "../../../../../../../node_modules/jquery-ui/themes/base/all.css";
 import "../../../../../../../node_modules/devextreme/dist/css/dx.light.css";
 import "../../../../../../../node_modules/devexpress-reporting/dist/css/dx-webdocumentviewer.css";
 import "../../../../../../../node_modules/@devexpress/analytics-core/dist/css/dx-analytics.common.css";
@@ -26,7 +25,7 @@ const ReportViewer = (props) => {
                 requestOptions,
                 callbacks: {
 
-                    customizeParameterLookUpSource: function (s, e) {
+                    CustomizeParameterLookUpSource: function (s, e) {
                         if (s.name === 'tenantid') {
                             var parametersModel = e.filter(x => x.value === tenant);
                             console.log(parametersModel);
