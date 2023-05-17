@@ -8,7 +8,6 @@ import axios from 'axios';
 // export const ENP_URL = 'https://cors-anywhere.herokuapp.com/http://208.117.44.15/SmWebApi/api'
 export const USERS_ENDPOINTS = "http://208.117.44.15/userapi/api";
 const tenant: string | null = localStorage.getItem('tenant');
-console.log('tenantfromurl', tenant)
 export const ENP_URL = 'http://208.117.44.15/SmWebApi/api'
 // export const ENP_URL = 'https://localhost:7144/api'
 
@@ -73,6 +72,10 @@ export const fetchFaults = (tenant: any) => {
 
 export function getEquipment(tenant: any) {
   return axios.get(`${ENP_URL}/equipments/tenant/${tenant}`);
+}
+
+export function postEquipment(data: any) {
+  return axios.post(`${ENP_URL}/equipments`, data);
 }
 
 export function getGroundEngagingTools() {

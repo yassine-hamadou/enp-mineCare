@@ -15,7 +15,7 @@ const EquipmentRegister = () => {
   const {data: listOfEquipments, isLoading} = useQuery('equipments',
     () => axios.get(`${ENP_URL}/equipments/tenant/${tenant}`), {
       // refetchOnWindowFocus: false,
-      // staleTime: Infinity
+      // staleTime: Infinity,
     }
   )
 
