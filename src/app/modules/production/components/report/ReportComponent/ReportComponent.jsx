@@ -18,14 +18,23 @@ const ReportViewer = (props) => {
     };
 
     useEffect(() => {
-
         const viewer = new DxReportViewer(viewerRef.current,
             {
                 reportUrl,
                 requestOptions,
                 callbacks: {
-
-                    CustomizeParameterLookUpSource: function (s, e) {
+                    // CustomizeParameterLookUpSource: function (s, e) {
+                    //
+                    //     let parameterObjects = s.GetParametersModel()
+                    //     console.log(parameterObjects._parameters)
+                    //     let tenantIdParameter = parameterObjects?._parameters.find(x => x.path === "tenantid")
+                    //     console.log("tenantIdParameter", tenantIdParameter)
+                    // if (tenantIdParameter) {
+                    //     tenantIdParameter._originalLookUpValues = tenant.id
+                    //     tenantIdParameter._originalLookUpValues
+                    // }
+                    // },
+                    customizeParameterLookUpSource: function (s, e) {
                         if (s.name === 'tenantid') {
                             var parametersModel = e.filter(x => x.value === tenant);
                             console.log(parametersModel);

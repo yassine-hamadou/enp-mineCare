@@ -8,11 +8,12 @@ import TextArea from "antd/lib/input/TextArea";
 import {useForm} from "antd/es/form/Form";
 import {ErrorBoundary} from "@ant-design/pro-components";
 import {fetchServices} from "../../../../urls";
+import {useAuth} from "../../../auth";
 
 
 const TabsTest: React.FC = () => {
-  //Get the service type with useQueryClient
-  const {data: AllServiceTypes} = useQuery("serviceType", fetchServices);
+  const {tenant} = useAuth()
+  const {data: AllServiceTypes} = useQuery("serviceType", () => fetchServices(tenant));
   // const loadSchedule: any = useQueryClient().getQueryData("loadSchedule");
   console.log("serviceType", AllServiceTypes);
   //Get the service type id from the url

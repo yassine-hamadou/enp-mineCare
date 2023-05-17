@@ -51,8 +51,8 @@ export const fetchLubeGrade = () => {
 export const fetchSections = () => {
   return axios.get(`${ENP_URL}/Sections`)
 }
-export const fetchServices = () => {
-  return axios.get(`${ENP_URL}/Services`)
+export const fetchServices = (tenant: string) => {
+  return axios.get(`${ENP_URL}/Services/tenant/${tenant}`)
 }
 export const fetchGroups = () => {
   return axios.get(`${ENP_URL}/Groups`)

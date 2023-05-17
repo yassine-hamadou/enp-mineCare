@@ -5,8 +5,10 @@ import {ENP_URL, fetchServices} from '../../../../urls'
 import {KTCard, KTCardBody} from '../../../../../_metronic/helpers'
 import {useQuery} from 'react-query'
 import {Link, useNavigate} from "react-router-dom";
+import {useAuth} from "../../../auth";
 
 export function ScheduleInfo() {
+  const {tenant} = useAuth()
   const navigate = useNavigate()
   const [scheduleToworkOn, setScheduleToWorkOn] = useState<any>([])
 
@@ -14,7 +16,7 @@ export function ScheduleInfo() {
     return axios.get(`${ENP_URL}/FleetSchedulesApi`)
   })
 
-  const {data: serviceType}: any = useQuery('serviceType', fetchServices)
+  const {data: serviceType}: any = useQuery('serviceType', () => fetchServices(tenant))
 
   const onSelect = (e: any) => {
     const entryID = parseInt(e.target.value)

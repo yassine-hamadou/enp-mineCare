@@ -5,15 +5,17 @@ import {KTCardBody, KTSVG} from '../../../../../../_metronic/helpers'
 import {Link, useLocation, useNavigate, useParams} from 'react-router-dom'
 import {ENP_URL, fetchServices} from '../../../../../urls'
 import {QueryClient, useQuery, useQueryClient} from 'react-query'
+import {useAuth} from "../../../../auth";
 
 const ServicesPage = () => {
+  const {tenant} = useAuth()
   const [gridData, setGridData] = useState<any>([])
   const [modeldData, setModelData] = useState([])
   const [loading, setLoading] = useState(false)
   const [searchText, setSearchText] = useState('')
   let [filteredData] = useState([])
   const [submitLoading, setSubmitLoading] = useState(false)
-  const {data: services, isLoading: servicesLoading} = useQuery('services', fetchServices)
+  const {data: services, isLoading: servicesLoading} = useQuery('services', () => fetchServices(tenant))
   const [form] = Form.useForm()
   const queryClient: QueryClient = useQueryClient()
 
@@ -133,7 +135,7 @@ const ServicesPage = () => {
   console.log(dataByID)
 
 
-  const {data: allServices} = useQuery('services', fetchServices, {cacheTime: 60000000})
+  const {data: allServices} = useQuery('services', () => fetchServices(tenant), {cacheTime: 60000000})
 
   const handleInputChange = (e: any) => {
     // setSearchText(e.target.value)
