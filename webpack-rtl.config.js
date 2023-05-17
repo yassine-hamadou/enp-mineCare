@@ -16,72 +16,72 @@ const rootPath = path.resolve(__dirname)
 const distPath = rootPath + '/src/_metronic/assets'
 
 const entries = {
-  'css/style': './src/_metronic/assets/sass/style.scss',
-}
+        'css/style': './src/_metronic/assets/sass/style.scss',
+    }
 
 // remove older folders and files
 ;(async () => {
-  await del.sync(distPath + '/css', {force: true})
+    await del.apply(null, [distPath + '/css', {force: true}])
 })()
 
 function mainConfig() {
-  return {
-    // enabled/disable optimizations
-    mode: 'development',
-    // console logs output, https://webpack.js.org/configuration/stats/
-    stats: 'errors-only',
-    performance: {
-      // disable warnings hint
-      hints: false,
-    },
-    entry: entries,
-    output: {
-      // main output path in assets folder
-      path: distPath,
-      // output path based on the cycle_details' filename
-      filename: '[name].js',
-    },
-    resolve: {
-      extensions: ['.scss'],
-    },
-    plugins: [
-      new MiniCssExtractPlugin({
-        filename: '[name].css',
-      }),
-      new RtlCssPlugin({
-        filename: '[name].rtl.css',
-      }),
-      {
-        apply: (compiler) => {
-          // hook name
-          compiler.hooks.afterEmit.tap('AfterEmitPlugin', () => {
-            ;(async () => {
-              await del.sync(distPath + '/css/*.js', {force: true})
-            })()
-          })
+    return {
+        // enabled/disable optimizations
+        mode: 'development',
+        // console logs output, https://webpack.js.org/configuration/stats/
+        stats: 'errors-only',
+        performance: {
+            // disable warnings hint
+            hints: "warning",
         },
-      },
-    ],
-    module: {
-      rules: [
-        {
-          test: /\.scss$/,
-          use: [
-            MiniCssExtractPlugin.loader,
-            'css-unit',
+        entry: entries,
+        output: {
+            // main output path in assets folder
+            path: distPath,
+            // output path based on the cycle_details' filename
+            filename: '[name].js',
+        },
+        resolve: {
+            extensions: ['.scss'],
+        },
+        plugins: [
+            new MiniCssExtractPlugin({
+                filename: '[name].css',
+            }),
+            new RtlCssPlugin({
+                filename: '[name].rtl.css',
+            }),
             {
-              loader: 'sass-unit',
-              options: {
-                sourceMap: true,
-              },
+                apply: (compiler) => {
+                    // hook name
+                    compiler.hooks.afterEmit.tap('AfterEmitPlugin', () => {
+                        ;(async () => {
+                            await del.apply(null, [distPath + '/css/*.js', {force: true}])
+                        })()
+                    })
+                },
             },
-          ],
+        ],
+        module: {
+            rules: [
+                {
+                    test: /\.scss$/,
+                    use: [
+                        MiniCssExtractPlugin.loader,
+                        'css-loader',
+                        {
+                            loader: 'sass-loader',
+                            options: {
+                                sourceMap: true,
+                            },
+                        },
+                    ],
+                },
+            ],
         },
-      ],
-    },
-  }
+    }
 }
 
 module.exports = function () {
-  return [mainConfig()]
+    return [mainConfig()]
 }

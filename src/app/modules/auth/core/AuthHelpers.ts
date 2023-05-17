@@ -1,6 +1,5 @@
 import {AuthModel} from './_models'
 import {QueryClient} from "react-query";
-import {message} from "antd";
 
 const AUTH_LOCAL_STORAGE_KEY: string = 'token'
 const TENANT_KEY: string = 'tenant'
@@ -81,7 +80,7 @@ const removeAuth = () => {
   try {
     localStorage.removeItem(AUTH_LOCAL_STORAGE_KEY)
     localStorage.removeItem(TENANT_KEY)
-    queryClient.resetQueries().then(r => message.success('Sucess'))
+    queryClient.resetQueries()
     queryClient.invalidateQueries()
     queryClient.removeQueries()
     queryClient.clear()

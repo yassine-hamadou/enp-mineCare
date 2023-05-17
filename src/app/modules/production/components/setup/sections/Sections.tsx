@@ -162,6 +162,7 @@ const SectionsPage = () => {
       setModelName(res.model)
     })();
 
+
     loadData()
   }, [allServices?.data, params.id])
   const globalSearch = () => {
