@@ -1,6 +1,6 @@
-import {Empty, Button, message, Steps, theme, Form, Select, Input, InputNumber, DatePicker, Modal} from "antd";
+import {Empty, Button, message, Steps, theme, Form, Input, DatePicker, Modal} from "antd";
 import {useLocation, useParams} from "react-router-dom";
-import {useQuery, useQueryClient} from "react-query";
+import {useQuery} from "react-query";
 import {KTCard, KTCardBody} from "../../../../../_metronic/helpers";
 import React, {CSSProperties, useState} from "react";
 import {CheckListForm} from "./CheckListForm";
@@ -78,7 +78,7 @@ const TabsTest: React.FC = () => {
     setDefectModalOpen(false);
   }
 
-  let [submitLoading, setSubmitLoading] = useState(false);
+  let [submitLoading] = useState(false);
   return sections?.length > 0 ? (
     <>
       <Modal
@@ -161,7 +161,7 @@ const TabsTest: React.FC = () => {
                   checkListForm.validateFields().then(() => {
                     submitForm()
                     next()
-                  }).catch((err) => {
+                  }).catch(() => {
                     message.error({content: "Please fill all the required fields", duration: 2})
                   })
                 }

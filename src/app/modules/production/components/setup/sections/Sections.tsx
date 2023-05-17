@@ -1,18 +1,13 @@
-import {Button, Form, Input, Modal, Select, Space, Table} from 'antd'
+import {Button, Form, Input, Modal, Space, Table} from 'antd'
 import {useEffect, useState} from 'react'
 import {KTCardBody, KTSVG} from '../../../../../../_metronic/helpers'
 // import { AddWorkTypeForm } from './AddWorkTypeForm'
 import {Link, useNavigate, useParams} from 'react-router-dom'
 import axios from 'axios'
-import {ENP_URL, fetchSections, fetchServices} from '../../../../../urls'
+import {ENP_URL, fetchServices} from '../../../../../urls'
 import {useQuery} from 'react-query'
 import {useAuth} from "../../../../auth";
 
-
-interface TestItems {
-  id: string,
-  name: string,
-}
 
 const SectionsPage = () => {
   const {tenant} = useAuth()
@@ -91,20 +86,18 @@ const SectionsPage = () => {
           <Link to={`/setup/groups/${record.id}`}>
             <span className='btn btn-light-info btn-sm'>Groups</span>
           </Link>
-          <a href='#' className='btn btn-light-warning btn-sm '>
+          <Button href='#' className='btn btn-light-warning btn-sm '>
             Update
-          </a>
+          </Button>
           {/* <a href="#" className="btn btn-light-danger btn-sm">Delete</a> */}
-          <a onClick={() => handleDelete(record)} className='btn btn-light-danger btn-sm'>
+          <Button onClick={() => handleDelete(record)} className='btn btn-light-danger btn-sm'>
             Delete
-          </a>
+          </Button>
         </Space>
       ),
     },
     //console
   ]
-
-  const {Option} = Select
 
   const loadData = async () => {
     setLoading(true)
@@ -131,29 +124,6 @@ const SectionsPage = () => {
 
 
   const {data: allServices} = useQuery('services', () => fetchServices(tenant), {cacheTime: 60000000})
-  const {data: allSections} = useQuery('sections', fetchSections, {cacheTime: 60000000})
-
-
-  const getItemName = async (param: any) => {
-
-    let newName = null
-
-    const itemTest = await allServices?.data.find((item: any) =>
-      item.id.toString() === param
-    )
-    newName = await itemTest
-    return newName
-  }
-
-
-  const getModel = () => {
-    let newName = null
-    const itemTest = allServices?.data.find((item: any) =>
-      item.id.toString() === params.id
-    )
-    newName = itemTest
-    return newName
-  }
 
 
   const handleInputChange = (e: any) => {
@@ -163,6 +133,25 @@ const SectionsPage = () => {
     }
   }
   useEffect(() => {
+    const getModel = () => {
+      let newName
+      newName = allServices?.data.find((item: any) =>
+        item.id.toString() === params.id
+      )
+      return newName
+    }
+
+    const getItemName = async (param: any) => {
+
+      let newName
+
+      const itemTest = await allServices?.data.find((item: any) =>
+        item.id.toString() === param
+      )
+      newName = await itemTest
+      return newName
+    }
+
     (async () => {
       let res = await getItemName(params.id)
       setItemName(res.name)
@@ -174,7 +163,7 @@ const SectionsPage = () => {
     })();
 
     loadData()
-  }, [])
+  }, [allServices?.data, params.id])
   const globalSearch = () => {
     // @ts-ignore
     filteredData = dataWithVehicleNum.filter((value) => {

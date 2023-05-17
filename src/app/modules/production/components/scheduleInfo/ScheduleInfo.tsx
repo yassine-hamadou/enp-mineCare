@@ -1,10 +1,10 @@
-import {Divider, Form, Select} from 'antd'
+import {Divider, Form} from 'antd'
 import {useState} from 'react'
 import axios from 'axios'
 import {ENP_URL, fetchServices} from '../../../../urls'
 import {KTCard, KTCardBody} from '../../../../../_metronic/helpers'
 import {useQuery} from 'react-query'
-import {Link, useNavigate} from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 import {useAuth} from "../../../auth";
 
 export function ScheduleInfo() {

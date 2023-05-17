@@ -10,12 +10,11 @@ import {useAuth} from "../../../../auth";
 const ServicesPage = () => {
   const {tenant} = useAuth()
   const [gridData, setGridData] = useState<any>([])
-  const [modeldData, setModelData] = useState([])
-  const [loading, setLoading] = useState(false)
-  const [searchText, setSearchText] = useState('')
+  const [loading] = useState(false)
+  const [searchText] = useState('')
   let [filteredData] = useState([])
   const [submitLoading, setSubmitLoading] = useState(false)
-  const {data: services, isLoading: servicesLoading} = useQuery('services', () => fetchServices(tenant))
+  const {data: services} = useQuery('services', () => fetchServices(tenant))
   const [form] = Form.useForm()
   const queryClient: QueryClient = useQueryClient()
 
@@ -81,12 +80,12 @@ const ServicesPage = () => {
           <Link to={`/setup/sections/${record.id}`}>
             <span className='btn btn-light-info btn-sm'>Sections</span>
           </Link>
-          <a href='#' className='btn btn-light-warning btn-sm'>
+          <Button href='#' className='btn btn-light-warning btn-sm'>
             Update
-          </a>
-          <a onClick={() => handleDelete(record)} className='btn btn-light-danger btn-sm'>
+          </Button>
+          <Button onClick={() => handleDelete(record)} className='btn btn-light-danger btn-sm'>
             Delete
-          </a>
+          </Button>
 
         </Space>
       ),
@@ -135,9 +134,7 @@ const ServicesPage = () => {
   console.log(dataByID)
 
 
-  const {data: allServices} = useQuery('services', () => fetchServices(tenant), {cacheTime: 60000000})
-
-  const handleInputChange = (e: any) => {
+  const handleInputChange = () => {
     // setSearchText(e.target.value)
     // if (e.target.value === '') {
     //   queryClient.invalidateQueries('services')
