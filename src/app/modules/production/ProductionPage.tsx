@@ -415,6 +415,15 @@ const ProductionPage: React.FC = () => {
         }
       >
         <Route
+          path='all'
+          element={
+            <>
+              <PageTitle breadcrumbs={accountBreadCrumbs}>All Reports</PageTitle>
+              <AllReportPage/>
+            </>
+          }
+        />
+        <Route
           path='metering/*'
           element={
             <>
@@ -546,12 +555,16 @@ const ProductionPage: React.FC = () => {
             }
           />
         </Route>
+
         <Route
-          path='all'
+          path='equipment-transactions'
           element={
             <>
-              <PageTitle breadcrumbs={accountBreadCrumbs}>All Reports</PageTitle>
-              <AllReportPage/>
+              <PageTitle breadcrumbs={accountBreadCrumbs}>Equipment transactions</PageTitle>
+              {/*<FaultEntryReport/>*/}
+              <ReportComponent
+                reportName={"EquipmentTransactionReport"}
+              />
             </>
           }
         />
@@ -611,6 +624,17 @@ const ProductionPage: React.FC = () => {
               {/*<AllEquipSummary/>*/}
               <ReportComponent
                 reportName={"AllEquipmentSummary"}
+              />
+            </>
+          }
+        />
+        <Route
+          path='defect'
+          element={
+            <>
+              <PageTitle breadcrumbs={accountBreadCrumbs}>All Defects</PageTitle>
+              <ReportComponent
+                reportName={"EquipmentDefect"}
               />
             </>
           }
