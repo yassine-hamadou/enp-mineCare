@@ -1,4 +1,4 @@
-import {FC, lazy, Suspense} from 'react'
+import {FC, Suspense} from 'react'
 import {Navigate, Route, Routes} from 'react-router-dom'
 import {MasterLayout} from '../../_metronic/layout/MasterLayout'
 import TopBarProgress from 'react-topbar-progress-indicator'
@@ -6,24 +6,22 @@ import {DashboardWrapper} from '../pages/dashboard/DashboardWrapper'
 import {getCSSVariableValue} from '../../_metronic/assets/ts/_utils'
 import {WithChildren} from '../../_metronic/helpers'
 import ProductionPage from '../modules/production/ProductionPage'
-const DailyReport = lazy(() => import('../modules/production/components/report/daily/DailyReport'))
-const WeeklyReport = lazy(() => import('../modules/production/components/report/weekly/WeeklyReport' ))
-const DownTimeReport = lazy(() => import('../modules/production/components/report/downtime/DowntimeReport'))
+import ReportComponent from "../modules/production/components/report/ReportComponent/ReportComponent";
 
 const PrivateRoutes = () => {
   return (
     <Routes>
-      <Route element={<MasterLayout />}>
+      <Route element={<MasterLayout/>}>
         {/* Redirect to Dashboard after success login/registartion */}
-        <Route path='auth/*' element={<Navigate to='/dashboard' />} />
+        <Route path='auth/*' element={<Navigate to='/dashboard'/>}/>
         {/* Pages */}
-        <Route path='dashboard' element={<DashboardWrapper />} />
-        <Route path='/*' element={<ProductionPage />} />
+        <Route path='dashboard' element={<DashboardWrapper/>}/>
+        <Route path='/*' element={<ProductionPage/>}/>
         <Route
           path='app/production/components/report/activity/*'
           element={
             <SuspensedView>
-              <WeeklyReport />
+              <ReportComponent reportName={"WeeklyReport"}/>
             </SuspensedView>
           }
         />
@@ -31,7 +29,7 @@ const PrivateRoutes = () => {
           path='app/production/components/report/daily/*'
           element={
             <SuspensedView>
-              <DailyReport />
+              <ReportComponent reportName={"DailyReport"}/>
             </SuspensedView>
           }
         />
@@ -39,7 +37,7 @@ const PrivateRoutes = () => {
           path='app/production/components/report/downtime/*'
           element={
             <SuspensedView>
-              <DownTimeReport />
+              <ReportComponent reportName={"ActivityReport"}/>
             </SuspensedView>
           }
         />
@@ -47,13 +45,13 @@ const PrivateRoutes = () => {
           path='app/production/components/report/weekly/*'
           element={
             <SuspensedView>
-              <WeeklyReport />
+              <ReportComponent reportName={"WeeklyReport"}/>
             </SuspensedView>
           }
         />
 
         {/* Page Not Found */}
-        <Route path='*' element={<Navigate to='/error/404' />} />
+        <Route path='*' element={<Navigate to='/error/404'/>}/>
       </Route>
     </Routes>
   )
@@ -68,7 +66,7 @@ export const SuspensedView: FC<WithChildren> = ({children}) => {
     barThickness: 1,
     shadowBlur: 5,
   })
-  return <Suspense fallback={<TopBarProgress />}>{children}</Suspense>
+  return <Suspense fallback={<TopBarProgress/>}>{children}</Suspense>
 }
 
 export {PrivateRoutes}

@@ -17,7 +17,6 @@ import {RefillPage} from './components/setup/refill/Refill'
 import {OilGradePage} from './components/setup/oilGrade/OilGrade'
 import {OilTypePage} from './components/setup/oilType/OilType'
 import {FaultTable} from './components/entries/fault_d/FaultTable'
-import FaultEntryPendingReport from './components/report/fault/faultEntryPending/FaultEntryPendingReport'
 import {LubeConfig} from './components/setup/lubeConfig/LubeConfig'
 import {ItemValuePage} from './components/setup/itemValue/ItemValuePage'
 import ModelClass from "./components/setup/equipment/ModelClass";
@@ -27,8 +26,6 @@ import EquipmentSchedule from "./components/entries/equipment/EquipmentSchedule"
 import {AllReportPage} from './components/report/AllReportPage'
 import {CategorySetup} from './components/setup/category/CategorySetup'
 import GroundEngagingTools from './components/entries/changeOut/get/GroundEngagingTools'
-import ChangeoutByRefillTypeModel
-  from "./components/report/changeout/ChangeoutByRefillTypeModel/ChangeoutByRefillTypeModel";
 import {ErrorBoundary, PageLoading} from "@ant-design/pro-components";
 import {lazy, Suspense} from "react";
 import ReportComponent from "./components/report/ReportComponent/ReportComponent";
@@ -477,7 +474,6 @@ const ProductionPage: React.FC = () => {
             element={
               <>
                 <PageTitle breadcrumbs={accountBreadCrumbs}>Changeout By Refill Type Model</PageTitle>
-                <ChangeoutByRefillTypeModel/>
                 <ReportComponent
                   reportName={"Changeoutbyrefilltypemodel"}
                 />
@@ -724,7 +720,7 @@ const ProductionPage: React.FC = () => {
           element={
             <>
               <PageTitle breadcrumbs={accountBreadCrumbs}>Pending Fault Report</PageTitle>
-              <FaultEntryPendingReport/>
+              <ReportComponent reportName={"FaultEntryPendingReport"}/>
             </>
           }
         />
@@ -745,7 +741,6 @@ const ProductionPage: React.FC = () => {
           element={
             <>
               <PageTitle breadcrumbs={accountBreadCrumbs}>Equipment History Report</PageTitle>
-              {/*<FaultEntryFleetHistoryReport/>*/}
               <ReportComponent
                 reportName={"FaultEntryFleetHistoryReport"}
               />
