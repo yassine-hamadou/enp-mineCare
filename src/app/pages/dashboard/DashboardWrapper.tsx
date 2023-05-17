@@ -1,10 +1,9 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React, {FC, useEffect, useState} from 'react'
+import React, {FC} from 'react'
 import {useIntl} from 'react-intl'
 import {PageTitle} from '../../../_metronic/layout/core'
 import {DashboardTable} from './dashboardTable/CycleDetailsList'
 import {BarChart} from "./BarChart";
-import {DownTypeFaultType} from "./DownTypeFaultType";
 import {BarChart2} from './BarChart2';
 
 
