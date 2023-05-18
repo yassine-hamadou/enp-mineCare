@@ -27,7 +27,7 @@ const DashboardTable = () => {
   )
 
   const {data: listOfFaults} = useQuery('listOfFaults', () =>
-    axios.get(`${ENP_URL}/faultentriesapi`)
+    axios.get(`${ENP_URL}/faultentriesapi/tenant/${tenant}`)
   )
 
   const columns: any = [
@@ -207,9 +207,13 @@ const DashboardTable = () => {
                   </button>
                 </Space>
               </div>
-              <Table columns={columns} dataSource={listOfequipmentModel?.data} bordered loading={isLoading}
-                     scroll={{x: 1500}}
-                     rowKey={() => uuid()}/>
+              <Table
+                columns={columns}
+                dataSource={listOfequipmentModel?.data}
+                bordered
+                loading={isLoading}
+                scroll={{x: 1500}}
+                rowKey={() => uuid()}/>
             </KTCardBody>
           </KTCard>
         </div>

@@ -65,9 +65,7 @@ export const fetchItemValue = () => {
 }
 
 export const fetchFaults = (tenant: any) => {
-  const url = axios.get(`${ENP_URL}/FaultEntriesApi/tenant/${tenant}`)
-  console.log('url', url)
-  return url
+  return axios.get(`${ENP_URL}/FaultEntriesApi/tenant/${tenant}`)
 }
 
 export function getEquipment(tenant: any) {

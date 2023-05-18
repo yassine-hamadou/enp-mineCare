@@ -217,7 +217,7 @@ const EquipmentRegister = () => {
     {
       title: 'Action',
       width: 200,
-      fixed: true,
+      fixed: "right",
       render: (_: any, record: any) => (
         <Space>
           <Link
@@ -366,7 +366,9 @@ const EquipmentRegister = () => {
           bordered
           dataSource={gridData}
           loading={isLoading}
-          scroll={{x: 1500}}
+          scroll={
+            {x: 1500}
+          }
         />
       </KTCardBody>
     </KTCard>

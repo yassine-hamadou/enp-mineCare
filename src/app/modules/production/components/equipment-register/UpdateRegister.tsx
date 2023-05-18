@@ -5,7 +5,8 @@ import React, {useState} from "react";
 import dayjs from 'dayjs';
 import axios from "axios";
 import {useQuery, useQueryClient} from "react-query";
-import {ENP_URL, getModels} from "../../../../urls";
+import {ENP_URL, fetchFaults, getModels} from "../../../../urls";
+import {getTenant, useAuth} from "../../../auth";
 
 const UpdateRegister = () => {
   const location = useLocation();
@@ -14,7 +15,8 @@ const UpdateRegister = () => {
   let [showModal, setShowModal] = useState(false);
   const [showMeterModal, setShowMeterModal] = useState(false);
   const [showAgreementModal, setShowAgreementModal] = useState(false);
-
+  const {tenant} = useAuth();
+  console.log('tenant', getTenant());
   const {data: listOfComponents} = useQuery('listOfComponents', () => axios.get(`${ENP_URL}/components`));
   const {
     data: listOfAgreements,
@@ -24,7 +26,7 @@ const UpdateRegister = () => {
   const {
     data: listOfFaults,
     isLoading: isFaultLoading
-  } = useQuery('faults', () => axios.get(`${ENP_URL}/faultentriesapi`));
+  } = useQuery('faults', () => fetchFaults(tenant));
   const {data: listOfModels} = useQuery('listOfModels', getModels)
 
   const queryClient: any = useQueryClient();
@@ -493,7 +495,7 @@ const UpdateRegister = () => {
                   <Table
                     bordered
                     columns={faultColumns}
-                    dataSource={listOfFaults?.data?.filter((item: any) => item.fleetId.trim() === equipmentData?.equipmentId.trim() && item.status === 0)}
+                    dataSource={listOfFaults?.data?.filter((item: any) => item.fleetId.trim() === equipmentData?.equipmentId.trim())}
                     loading={isFaultLoading}
                   />
                 </>
