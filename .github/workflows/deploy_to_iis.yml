@@ -1,13 +1,10 @@
-name: Run self hosted server and deploy to IIS folder
-# This workflow allows me to controls when the action will run. Triggers the workflow on push to the master branch
-# or manually from the Actions tab
+name: Run Github-hosted runner for build and self-hosted runner deployment to IIS 
 # Author: Yassine Hamadou Mounkaila
 on:
   push:
     branches:
       - production
-  workflow_dispatch: # Allows you to run this workflow manually from the Actions tab
-  # A workflow run is made up of one or more jobs that can run sequentially or in parallel
+  workflow_dispatch: # Allows you to run this workflow manually from the Actions tab 
 
 jobs:
   build-and-deploy:
