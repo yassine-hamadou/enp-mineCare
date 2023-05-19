@@ -46,10 +46,7 @@ jobs:
     runs-on: self-hosted
     needs: build-and-deploy
 
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-
+    steps: 
       - name: Download artifact from build job
         uses: actions/download-artifact@v2
         with:
