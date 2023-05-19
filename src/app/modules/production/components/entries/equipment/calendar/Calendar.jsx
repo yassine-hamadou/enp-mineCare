@@ -72,7 +72,7 @@ const Calendar = ({chosenLocationIdFromDropdown}) => {
         refetchOnWindowFocus: false,
         staleTime: Infinity,
     })
-    const {data: serviceTypes} = useQuery('serviceTypes', fetchServiceTypes, {
+    const {data: serviceTypes} = useQuery('serviceTypes', () => fetchServiceTypes(tenant), {
         refetchOnWindowFocus: false,
         staleTime: Infinity,
     })

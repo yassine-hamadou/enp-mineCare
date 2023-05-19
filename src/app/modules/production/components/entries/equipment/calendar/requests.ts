@@ -14,8 +14,8 @@ export const fetchLocations = () => {
 export const fetchCustodians = () => {
   return axios.get(`${ENP_URL}/VmemplsApi`)
 }
-export const fetchServiceTypes = () => {
-  return axios.get(`${ENP_URL}/Services`)
+export const fetchServiceTypes = (tenant: any) => {
+  return axios.get(`${ENP_URL}/Services/tenant/${tenant}`)
 }
 
 //Add
