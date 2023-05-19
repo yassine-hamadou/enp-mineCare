@@ -101,8 +101,9 @@ export function getModelClasses() {
   return axios.get(`${ENP_URL}/modelClasses`);
 }
 
-export function getModels() {
+export function getModels(tenant: any) {
   return axios.get(`${ENP_URL}/models`)
+  // return axios.get(`${ENP_URL}/models/tenant/${tenant}`);
 }
 
 export function addHours(data: any) {

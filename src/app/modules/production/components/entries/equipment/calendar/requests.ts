@@ -2,8 +2,8 @@
 import axios from 'axios'
 import {ENP_URL} from '../../../../../../urls'
 
-export const fetchSchedules = () => {
-  return axios.get(`${ENP_URL}/FleetSchedulesApi`)
+export const fetchSchedules = (tenant: any) => {
+  return axios.get(`${ENP_URL}/FleetSchedulesApi/tenant/${tenant}`)
 }
 export const fetchVmequps = () => {
   return axios.get(`${ENP_URL}/VmequpsApi`)

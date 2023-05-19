@@ -238,6 +238,7 @@ const EquipmentRegister = () => {
                 modelName: record.modelName,
                 modelClassName: record.modelClassName,
                 manufacturer: record.manufacturer,
+                modelId: record.modelId,
               }
             }
             to={`edit/${record.equipmentId}`}>

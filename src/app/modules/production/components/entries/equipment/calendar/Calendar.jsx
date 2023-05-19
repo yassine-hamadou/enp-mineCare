@@ -33,6 +33,7 @@ import {
 import {message, Space, Spin} from 'antd'
 import React from "react";
 import {getEquipment} from "../../../../../../urls";
+import {useAuth} from "../../../../../auth";
 
 /**
  *  Schedule editor custom fields sample
@@ -55,10 +56,11 @@ const Calendar = ({chosenLocationIdFromDropdown}) => {
     let scheduleObj
     let scheduleQueryClient = useQueryClient() // for refetching the schedules
     let serviceQueryClient = useQueryClient() // for refetching the service types
+    const {tenant} = useAuth()
 
     // React Query
     //Get
-    const {data: schedulesData} = useQuery('schedules', fetchSchedules, {
+    const {data: schedulesData} = useQuery('schedules', () => fetchSchedules(tenant), {
         refetchOnWindowFocus: false,
         staleTime: 300000,
     })
@@ -328,6 +330,7 @@ const Calendar = ({chosenLocationIdFromDropdown}) => {
                     vmClass: 'null',
                     serviceTypeId: schedule.serviceTypeId,
                     responsible: schedule.responsible,
+                    tenantId: tenant,
                 }
             })
             //Since format is an array, I need to change it to the format that the API will understand which is an object
