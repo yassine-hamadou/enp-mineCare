@@ -7,7 +7,6 @@ import {login, parseJwt} from '../core/_requests'
 import {useAuth} from '../core/Auth'
 import {useQuery} from "react-query";
 import {fetchCompanies, fetchUserApplications} from "../../../urls";
-import {UserModel} from "../core/_models";
 
 const loginSchema = Yup.object().shape({
   username: Yup.string()
@@ -57,7 +56,6 @@ export function Login() {
 
         const userDetails: any = parsedToken?.payload
         setCurrentUser(userDetails)
-        // localStorage.setItem('newTenant', values.tenantId)
         saveTenant(values.tenantId)
 
         const authorizedUserApps = userApplications?.data?.filter((application: any) => application.userId === parseInt(userDetails?.id))
