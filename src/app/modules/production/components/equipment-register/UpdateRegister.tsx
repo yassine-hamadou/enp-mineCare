@@ -4,7 +4,7 @@ import {Button, DatePicker, Form, Input, Modal, Select, Space, Table, Tabs} from
 import React, {useState} from "react";
 import dayjs from 'dayjs';
 import axios from "axios";
-import {useQuery, useQueryClient} from "react-query";
+import {useQuery} from "react-query";
 import {ENP_URL, fetchFaults, getModels} from "../../../../urls";
 import {getTenant, useAuth} from "../../../auth";
 import {fetchSchedules} from "../entries/equipment/calendar/requests";
@@ -139,6 +139,18 @@ const UpdateRegister = () => {
       render: (date: any) => new Date(date).toDateString(),
     }
   ]
+  const bookingsColumns: any = [
+    {
+      title: 'Start Date',
+    },
+    {
+      title: 'End Date',
+    },
+    {
+      title: 'Location',
+    }
+  ]
+
 
   const [updateDetailsForm] = Form.useForm();
   const [generalInfoUpdateForm] = Form.useForm();
@@ -547,8 +559,22 @@ const UpdateRegister = () => {
               ),
             },
             {
-              label: `Agreements`,
+              label: `Bookings`,
               key: '7',
+              children: (
+                <>
+                  <Table
+                    bordered
+                    columns={bookingsColumns}
+                    dataSource={[]}
+                  />
+                </>
+              ),
+
+            },
+            {
+              label: `Agreements`,
+              key: '8',
               children: (
                 <>
                   <div className='d-flex justify-content-between'>
