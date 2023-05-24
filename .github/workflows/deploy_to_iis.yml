@@ -28,6 +28,9 @@ jobs:
       - name: Install Dependencies
         run: npm install
 
+      - name: Heap size
+        run: set NODE_OPTIONS=--max-old-space-size=4096
+
       - name: Build the project
         run: npm run ciBuild
 
