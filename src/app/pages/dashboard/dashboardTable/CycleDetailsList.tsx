@@ -6,6 +6,7 @@ import {ENP_URL} from '../../../urls'
 import {useQuery, useQueryClient} from 'react-query'
 import {uuid} from "@ant-design/plots/es/utils";
 import {useAuth} from "../../../modules/auth";
+import Devexpres1 from "../Devexpress1";
 
 const DashboardTable = () => {
   const [gridData, setGridData] = useState([])
@@ -218,69 +219,66 @@ const DashboardTable = () => {
           </KTCard>
         </div>
         <div className='col-xl-6'>
-          <KTCard>
-            <KTCardBody>
-              <div className='d-flex justify-content-between'>
-                <Space style={{marginBottom: 16}}>
-                  <Input
-                    placeholder='Enter Search Text'
-                    onChange={handleInputChange}
-                    type='text'
-                    allowClear
-                    value={searchText}
-                  />
-                  <Button type='primary' onClick={globalSearch}>
-                    Search
-                  </Button>
+          {/*<div className='d-flex justify-content-between'>*/}
+          {/*  <Space style={{marginBottom: 16}}>*/}
+          {/*    <Input*/}
+          {/*      placeholder='Enter Search Text'*/}
+          {/*      onChange={handleInputChange}*/}
+          {/*      type='text'*/}
+          {/*      allowClear*/}
+          {/*      value={searchText}*/}
+          {/*    />*/}
+          {/*    <Button type='primary' onClick={globalSearch}>*/}
+          {/*      Search*/}
+          {/*    </Button>*/}
 
-                </Space>
-                <Space style={{marginBottom: 16}}>
-                  <button type='button' className='btn btn-light-primary me-3'>
-                    <KTSVG path='/media/icons/duotune/arrows/arr078.svg' className='svg-icon-2'/>
-                    Export
-                  </button>
-                </Space>
-              </div>
-              <Table
-                columns={[
-                  {
-                    title: 'Custodian',
-                    dataIndex: 'custodian',
-                    sorter: (a: any, b: any) => {
-                      if (a.custodian < b.custodian) {
-                        return -1
-                      }
-                      if (a.custodian > b.custodian) {
-                        return 1
-                      }
-                      return 0
-                    },
-                  },
-                  {
-                    title: 'Model',
-                    dataIndex: 'vmModel',
-                  },
-                  {
-                    title: 'Number of Downtime',
-                    render: (apiData: any) => {
-                      return numberOfDownTime(apiData.custodian)
-                    },
-                  },
-                  {
-                    title: 'Total Downtime',
-                  },
-                  {
-                    title: 'Number of Schedule',
-                  },
-                  {
-                    title: 'Total Schedule',
-                  },
-                ]} bordered loading={isLoading} rowKey={
-                () => uuid()
-              } dataSource={listOfFaults?.data} scroll={{x: 1500}}
-              />
-            </KTCardBody>
-          </KTCard>
+          {/*  </Space>*/}
+          {/*  <Space style={{marginBottom: 16}}>*/}
+          {/*    <button type='button' className='btn btn-light-primary me-3'>*/}
+          {/*      <KTSVG path='/media/icons/duotune/arrows/arr078.svg' className='svg-icon-2'/>*/}
+          {/*      Export*/}
+          {/*    </button>*/}
+          {/*  </Space>*/}
+          {/*</div>*/}
+          {/*<Table*/}
+          {/*  columns={[*/}
+          {/*    {*/}
+          {/*      title: 'Custodian',*/}
+          {/*      dataIndex: 'custodian',*/}
+          {/*      sorter: (a: any, b: any) => {*/}
+          {/*        if (a.custodian < b.custodian) {*/}
+          {/*          return -1*/}
+          {/*        }*/}
+          {/*        if (a.custodian > b.custodian) {*/}
+          {/*          return 1*/}
+          {/*        }*/}
+          {/*        return 0*/}
+          {/*      },*/}
+          {/*    },*/}
+          {/*    {*/}
+          {/*      title: 'Model',*/}
+          {/*      dataIndex: 'vmModel',*/}
+          {/*    },*/}
+          {/*    {*/}
+          {/*      title: 'Number of Downtime',*/}
+          {/*      render: (apiData: any) => {*/}
+          {/*        return numberOfDownTime(apiData.custodian)*/}
+          {/*      },*/}
+          {/*    },*/}
+          {/*    {*/}
+          {/*      title: 'Total Downtime',*/}
+          {/*    },*/}
+          {/*    {*/}
+          {/*      title: 'Number of Schedule',*/}
+          {/*    },*/}
+          {/*    {*/}
+          {/*      title: 'Total Schedule',*/}
+          {/*    },*/}
+          {/*  ]} bordered loading={isLoading} rowKey={*/}
+          {/*  () => uuid()*/}
+          {/*} dataSource={listOfFaults?.data} scroll={{x: 1500}}*/}
+          {/*/>*/}
+          <Devexpres1/>
         </div>
       </div>
     </>

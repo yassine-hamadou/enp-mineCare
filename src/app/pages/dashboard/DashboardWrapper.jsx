@@ -3,7 +3,7 @@ import React from 'react'
 import {useIntl} from 'react-intl'
 import {PageTitle} from '../../../_metronic/layout/core'
 import {DashboardTable} from './dashboardTable/CycleDetailsList'
-import Devexpres from "./Devexpress";
+import Devexpres from "./Devexpress"
 
 
 // @ts-ignore

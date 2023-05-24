@@ -80,7 +80,7 @@ const AsideDefault: FC = () => {
 
       {/* begin::Aside menu */}
       <div className='aside-menu flex-column-fluid'>
-        <AsideMenu asideMenuCSSClasses={classes.asideMenu} />
+        <AsideMenu asideMenuCSSClasses={classes.asideMenu}/>
       </div>
       {/*</div>*/}
       {/*/!* end::Footer *!/*/}
