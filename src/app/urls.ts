@@ -76,7 +76,7 @@ export function postEquipment(data: any) {
   return axios.post(`${ENP_URL}/equipments`, data);
 }
 
-export function getGroundEngagingTools() {
+export function getGroundEngagingTools(tenant: any) {
   return axios.get(`${ENP_URL}/groundEngagingTools/tenant/${tenant}`);
 }
 

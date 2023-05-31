@@ -1,12 +1,9 @@
-import {Button, Input, Space, Table} from 'antd'
 import {useState} from 'react'
 import axios from 'axios'
-import {KTCard, KTCardBody, KTSVG} from '../../../../_metronic/helpers'
 import {ENP_URL} from '../../../urls'
 import {useQuery, useQueryClient} from 'react-query'
-import {uuid} from "@ant-design/plots/es/utils";
 import {useAuth} from "../../../modules/auth";
-import Devexpres1 from "../Devexpress1";
+import DevexpressDashboardComponent from "../DevexpressDashboardComponent";
 
 const DashboardTable = () => {
   const [gridData, setGridData] = useState([])
@@ -186,37 +183,38 @@ const DashboardTable = () => {
     <>
       <div className='row gy-5 g-xl-8'>
         <div className='col-xl-6'>
-          <KTCard>
-            <KTCardBody>
-              <div className='d-flex justify-content-between'>
-                <Space style={{marginBottom: 16}}>
-                  <Input
-                    placeholder='Enter Search Text'
-                    onChange={handleInputChange}
-                    type='text'
-                    allowClear
-                    value={searchText}
-                  />
-                  <Button type='primary' onClick={globalSearch}>
-                    Search
-                  </Button>
-                </Space>
-                <Space style={{marginBottom: 16}}>
-                  <button type='button' className='btn btn-light-primary me-3'>
-                    <KTSVG path='/media/icons/duotune/arrows/arr078.svg' className='svg-icon-2'/>
-                    Export
-                  </button>
-                </Space>
-              </div>
-              <Table
-                columns={columns}
-                dataSource={listOfequipmentModel?.data}
-                bordered
-                loading={isLoading}
-                scroll={{x: 1500}}
-                rowKey={() => uuid()}/>
-            </KTCardBody>
-          </KTCard>
+          {/*<KTCard>*/}
+          {/*  <KTCardBody>*/}
+          {/*    <div className='d-flex justify-content-between'>*/}
+          {/*      <Space style={{marginBottom: 16}}>*/}
+          {/*        <Input*/}
+          {/*          placeholder='Enter Search Text'*/}
+          {/*          onChange={handleInputChange}*/}
+          {/*          type='text'*/}
+          {/*          allowClear*/}
+          {/*          value={searchText}*/}
+          {/*        />*/}
+          {/*        <Button type='primary' onClick={globalSearch}>*/}
+          {/*          Search*/}
+          {/*        </Button>*/}
+          {/*      </Space>*/}
+          {/*      <Space style={{marginBottom: 16}}>*/}
+          {/*        <button type='button' className='btn btn-light-primary me-3'>*/}
+          {/*          <KTSVG path='/media/icons/duotune/arrows/arr078.svg' className='svg-icon-2'/>*/}
+          {/*          Export*/}
+          {/*        </button>*/}
+          {/*      </Space>*/}
+          {/*    </div>*/}
+          {/*    <Table*/}
+          {/*      columns={columns}*/}
+          {/*      dataSource={listOfequipmentModel?.data}*/}
+          {/*      bordered*/}
+          {/*      loading={isLoading}*/}
+          {/*      scroll={{x: 1500}}*/}
+          {/*      rowKey={() => uuid()}/>*/}
+          {/*  </KTCardBody>*/}
+          {/*</KTCard>*/}
+          <DevexpressDashboardComponent dashboardId={'dashboard4'}/>
         </div>
         <div className='col-xl-6'>
           {/*<div className='d-flex justify-content-between'>*/}
@@ -278,7 +276,7 @@ const DashboardTable = () => {
           {/*  () => uuid()*/}
           {/*} dataSource={listOfFaults?.data} scroll={{x: 1500}}*/}
           {/*/>*/}
-          <Devexpres1/>
+          <DevexpressDashboardComponent dashboardId={'faultCount'}/>
         </div>
       </div>
     </>

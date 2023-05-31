@@ -3,7 +3,7 @@ import React from 'react'
 import {useIntl} from 'react-intl'
 import {PageTitle} from '../../../_metronic/layout/core'
 import {DashboardTable} from './dashboardTable/CycleDetailsList'
-import Devexpres from "./Devexpress"
+import DevexpressDashboardComponent from "./DevexpressDashboardComponent";
 
 
 // @ts-ignore
@@ -14,7 +14,7 @@ const DashboardPage = () => (
     <>
         <div className='row gy-5 g-xl-8'>
             <div className='col-xl-12'>
-                <Devexpres/>
+                <DevexpressDashboardComponent dashboardId={'dashboard3'}/>
             </div>
         </div>
         <br/>

@@ -26,7 +26,10 @@ export default function GroundEngagingTools() {
   const [deleteLoading, setDeleteLoading] = useState(false);
   const [dataToEdit, setDataToEdit] = useState<any>();
   const {data: equipmentData} = useQuery('equipments', () => getEquipment(tenant));
-  const {data: groundETData, isLoading: getLoading} = useQuery('groundEngagingTools', () => getGroundEngagingTools());
+  const {
+    data: groundETData,
+    isLoading: getLoading
+  } = useQuery('groundEngagingTools', () => getGroundEngagingTools(tenant));
   const {mutate: postGroundTool} = useMutation(postGroundEngagingTools, {
     onSuccess: () => {
       setSubmitLoading(false);
@@ -186,7 +189,8 @@ export default function GroundEngagingTools() {
       currentHours: values.currentHours,
       quantity: values.quantity,
       reason: values.reason,
-      date: new Date(values.date.$d).toISOString()
+      date: new Date(values.date.$d).toISOString(),
+      tenantId: tenant
     }
     console.log('data', data);
     postGroundTool(data);

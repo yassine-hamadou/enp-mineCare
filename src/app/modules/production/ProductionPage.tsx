@@ -203,7 +203,7 @@ const ProductionPage: React.FC = () => {
             path=''
             element={
               <>
-                <PageTitle breadcrumbs={accountBreadCrumbs}>All Entries</PageTitle>
+                <PageTitle breadcrumbs={accountBreadCrumbs}>Hours Entries</PageTitle>
                 <HoursModelClass/>
               </>
             }
