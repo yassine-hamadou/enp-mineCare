@@ -26,10 +26,13 @@ jobs:
 
 
       - name: Install Dependencies
-        run: npm install
+        run: |
+          npm install
+          npm install cross-env
 
       - name: Heap size
-        run: set NODE_OPTIONS=--max-old-space-size=4096
+        run: |
+          cross-env NODE_OPTIONS=--max_old_space_size=4096 
 
       - name: Build the project
         run: npm run ciBuild
