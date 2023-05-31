@@ -32,7 +32,7 @@ jobs:
 
       - name: Heap size
         run: |
-          cross-env NODE_OPTIONS=--max_old_space_size=4096 
+          set NODE_OPTIONS=--max_old_space_size=4096 
 
       - name: Build the project
         run: npm run ciBuild
@@ -43,7 +43,13 @@ jobs:
         with:
           name: build
           path: build
-
+      - name: Cache
+        uses: actions/cache@v3.2.6
+        with:
+          # A list of files, directories, and wildcard patterns to cache and restore
+          path: node_modules
+          # An explicit key for restoring and saving the cache
+          key: node 
 
   deploy:
     runs-on: self-hosted
