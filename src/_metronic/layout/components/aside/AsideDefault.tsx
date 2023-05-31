@@ -23,7 +23,6 @@ const AsideDefault: FC = () => {
     <div
       id='kt_aside'
       className={clsx('aside', classes.aside.join(' '))}
-      // style={{backgroundColor: }}
       data-kt-drawer='true'
       data-kt-drawer-name='aside'
       data-kt-drawer-activate='{default: true, lg: false}'

@@ -61,26 +61,19 @@ const Calendar = ({chosenLocationIdFromDropdown}) => {
     // React Query
     //Get
     const {data: schedulesData} = useQuery('schedules', () => fetchSchedules(tenant), {
-        refetchOnWindowFocus: false,
-        staleTime: 300000,
+        refetchOnWindowFocus: true,
     })
-    const {data: vmequps} = useQuery('vmequps', fetchVmequps, {
-        refetchOnWindowFocus: false,
-        staleTime: Infinity,
-    })
+
     const {data: custodiansData} = useQuery('custodians', fetchCustodians, {
         refetchOnWindowFocus: false,
         staleTime: Infinity,
     })
-    const {data: serviceTypes} = useQuery('serviceTypes', () => fetchServiceTypes(tenant), {
-        refetchOnWindowFocus: false,
-        staleTime: Infinity,
-    })
+    const {data: serviceTypes, isLoading: servicesLoading} = useQuery('serviceTypes', () => fetchServiceTypes(tenant))
 
-    const {data: equipmentData} = useQuery('equipment', getEquipment, {
-        refetchOnWindowFocus: false,
-        staleTime: Infinity,
-    })
+    // const {data: equipmentData} = useQuery('equipment', getEquipment, {
+    //     refetchOnWindowFocus: false,
+    //     staleTime: Infinity,
+    // })
 
 
     //Create
@@ -120,6 +113,10 @@ const Calendar = ({chosenLocationIdFromDropdown}) => {
     const locationQuery = useQueryClient().getQueryData('Locations')
     // const vmQuery = useQueryClient().getQueryData('vmequps')
     let dropDownListObject;
+    console.log('Mao service', serviceTypes?.data?.map((service) => {
+        console.log('service', service)
+        return {text: `${service.name} For Model: ${service?.model}`, value: service.id}
+    }))
 
     function onEventRendered(args) {
         let categoryColor = {
@@ -204,7 +201,8 @@ const Calendar = ({chosenLocationIdFromDropdown}) => {
                             data-name='serviceTypeId'
                             className='e-field'
                             style={{width: '100%'}}
-                            dataSource={serviceTypes?.data.map((service) => {
+                            dataSource={serviceTypes?.data?.map((service) => {
+                                console.log('service', service)
                                 return {text: `${service.name} For Model: ${service?.model}`, value: service.id}
                             })}
                             fields={{text: 'text', value: 'value'}}

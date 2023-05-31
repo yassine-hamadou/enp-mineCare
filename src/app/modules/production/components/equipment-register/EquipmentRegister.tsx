@@ -313,21 +313,7 @@ const EquipmentRegister = () => {
     const searchResult = beforeSearch?.filter((item: any) => {
       console.log('item', item)
       return (
-        item.description?.toLowerCase().includes(searchValue?.toLowerCase()) ||
-        item.equipmentId?.toLowerCase().includes(searchValue?.toLowerCase()) ||
-        item.serialNumber?.toLowerCase().includes(searchValue?.toLowerCase()) ||
-        item.manufactureDate?.toLowerCase().includes(searchValue?.toLowerCase()) ||
-        item.purchaseDate?.toLowerCase().includes(searchValue?.toLowerCase()) ||
-        item.endOfLifeDate?.toLowerCase().includes(searchValue?.toLowerCase()) ||
-        item.facode?.toLowerCase().includes(searchValue?.toLowerCase()) ||
-        item.note?.toLowerCase().includes(searchValue.toLowerCase()) ||
-        item.warrantyStartDate?.toLowerCase().includes(searchValue.toLowerCase()) ||
-        item.warrantyEndDate?.toLowerCase().includes(searchValue.toLowerCase()) ||
-        item.universalCode?.toLowerCase().includes(searchValue.toLowerCase()) ||
-        item.meterType?.toLowerCase().includes(searchValue.toLowerCase()) ||
-        item.modelName?.toLowerCase().includes(searchValue.toLowerCase()) ||
-        item.modelClassName?.toLowerCase().includes(searchValue.toLowerCase()) ||
-        item.manufacturer?.toLowerCase().includes(searchValue.toLowerCase())
+        Object.values(item).join('').toLowerCase().includes(searchValue?.toLowerCase())
       )
     })//search the grid data
     console.log('searchResult', searchResult)

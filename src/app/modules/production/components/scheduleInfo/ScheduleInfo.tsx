@@ -1,20 +1,18 @@
 import {Divider, Form} from 'antd'
 import {useState} from 'react'
-import axios from 'axios'
-import {ENP_URL, fetchServices} from '../../../../urls'
+import {fetchServices} from '../../../../urls'
 import {KTCard, KTCardBody} from '../../../../../_metronic/helpers'
 import {useQuery} from 'react-query'
 import {useNavigate} from "react-router-dom";
 import {useAuth} from "../../../auth";
+import {fetchSchedules} from "../entries/equipment/calendar/requests";
 
 export function ScheduleInfo() {
   const {tenant} = useAuth()
   const navigate = useNavigate()
   const [scheduleToworkOn, setScheduleToWorkOn] = useState<any>([])
 
-  const {data: loadSchedule}: any = useQuery('loadSchedule', () => {
-    return axios.get(`${ENP_URL}/FleetSchedulesApi`)
-  })
+  const {data: loadSchedule}: any = useQuery('loadSchedule', () => fetchSchedules(tenant))
 
   const {data: serviceType}: any = useQuery('serviceType', () => fetchServices(tenant))
 
@@ -40,7 +38,7 @@ export function ScheduleInfo() {
             className='form'
             noValidate
             name='basic'
-            initialValues={{remember: true}}
+            // initialValues={{remember: true}}
           >
             {/* begin::Scroll */}
             <div className='d-flex justify-content-center'>
@@ -68,7 +66,7 @@ export function ScheduleInfo() {
                   <option defaultValue='Select Schedule'>
                     Select Schedule
                   </option>
-                  {loadSchedule?.data.map((schedule: any) => (
+                  {loadSchedule?.data?.map((schedule: any) => (
                     <option value={schedule.entryId} key={schedule.entryId}>
                       {schedule.fleetId}- {schedule.locationId} -{' '}
                       {new Date(schedule.timeStart).toUTCString()} -{' '}

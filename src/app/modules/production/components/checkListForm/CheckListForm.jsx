@@ -11,7 +11,7 @@ const CheckListForm = (props) => {
     const checkListForm = props.form
     console.log('props', props.sections)
 
-    const [checkList, setCheckList] = useState([]);
+    const [checkList] = useState([]);
     // const [agree, setAgree] = useState(false)
     // const checkboxHandler = () => {
     //   // if agree === true, it will be set to false
@@ -39,7 +39,7 @@ const CheckListForm = (props) => {
         console.log('valuesChanged', ItemValuesAsArray)
         // return
         try {
-            ItemValuesAsArray.map((value, index) => {
+            ItemValuesAsArray.map((value) => {
                 const data = {
                     equipmentId: props.equipmentId,
                     itemValueId: value,

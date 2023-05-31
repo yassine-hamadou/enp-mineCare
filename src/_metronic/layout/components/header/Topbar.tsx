@@ -1,6 +1,6 @@
 import clsx from 'clsx'
 import {KTSVG, toAbsoluteUrl} from '../../../helpers'
-import {HeaderUserMenu, Search} from '../../../partials'
+import {HeaderUserMenu} from '../../../partials'
 import {useLayout} from '../../core'
 import {useAuth} from "../../../../app/modules/auth";
 
@@ -11,7 +11,7 @@ const toolbarButtonMarginClass = 'ms-1 ms-lg-3',
 
 const Topbar = () => {
   const {config} = useLayout()
-  const {tenant, currentUser} = useAuth()
+  const {tenant} = useAuth()
   return (
     <div className='d-flex align-items-stretch flex-shrink-0'>
       {/*/!* Search *!/*/}

@@ -5,6 +5,7 @@ import {useMutation, useQuery, useQueryClient} from "react-query";
 import {KTSVG} from '../../../../../../_metronic/helpers'
 import {addHours, fetchHours} from '../../../../../urls'
 import {useLocation} from "react-router-dom";
+import {useAuth} from "../../../../auth";
 
 const HoursPage = () => {
 
@@ -24,8 +25,8 @@ const HoursPage = () => {
   const [form] = Form.useForm()
   const queryClient = useQueryClient()
   const [isModalOpen, setIsModalOpen] = useState(false)
-
-  const {data: allHours, isLoading} = useQuery('hours', fetchHours)
+  const {tenant} = useAuth()
+  const {data: allHours, isLoading} = useQuery('hours', () => fetchHours(tenant))
   console.log('allHours', allHours)
   const {mutate: mutateHours} = useMutation(addHours, {
     onSuccess: () => {

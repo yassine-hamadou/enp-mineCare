@@ -157,27 +157,27 @@ const DashboardTable = () => {
   ///////////////////////////////////////////
   //////////Right Table//////////////////////
   ///////////////////////////////////////////
-  const numberOfDownTime = (custodian: any) => {
-    //count number of down time from fault entries for this particular equipment
-    //@ts-ignore
-    // const modelName = queryClient.getQueryData('listOfEquipmentModel')?.data?.find((model: any) => model.modelId == modelId).name
-    console.log("custodian", custodian)
-    // return 0
-    let numberOfDowntime = 0
-    listOfFaults?.data?.forEach((fault: any) => {
-      // console.log("fault.vmModel", fault.vmModel)
-      // console.log('modelName', modelName)
-
-      // Triming these two fucking strings because they made me debug for 2hours without identifying what the hell
-      // was wrong with my code. I really know how those trailing space got stored in the databases like that. What a mess!
-      // Finally!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-      // if (fault.fleetId.trimEnd() === fleetId.trimEnd()) {
-      //   // console.log('fault model ', fault.vmModel)
-      //   numberOfDowntime++
-      // }
-    })
-    return numberOfDowntime
-  }
+  // const numberOfDownTime = (custodian: any) => {
+  //   //count number of down time from fault entries for this particular equipment
+  //   //@ts-ignore
+  //   // const modelName = queryClient.getQueryData('listOfEquipmentModel')?.data?.find((model: any) => model.modelId == modelId).name
+  //   console.log("custodian", custodian)
+  //   // return 0
+  //   let numberOfDowntime = 0
+  //   listOfFaults?.data?.forEach((fault: any) => {
+  //     // console.log("fault.vmModel", fault.vmModel)
+  //     // console.log('modelName', modelName)
+  //
+  //     // Triming these two fucking strings because they made me debug for 2hours without identifying what the hell
+  //     // was wrong with my code. I really know how those trailing space got stored in the databases like that. What a mess!
+  //     // Finally!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+  //     // if (fault.fleetId.trimEnd() === fleetId.trimEnd()) {
+  //     //   // console.log('fault model ', fault.vmModel)
+  //     //   numberOfDowntime++
+  //     // }
+  //   })
+  //   return numberOfDowntime
+  // }
 
   ///////////////////////////////////////////
   //////////End Table//////////////////////
