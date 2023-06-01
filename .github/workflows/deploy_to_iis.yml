@@ -1,4 +1,4 @@
-name: Run Github-hosted runner for build and self-hosted runner deployment to IIS 
+name: Run Github-hosted runner for build and self-hosted runner deployment to IIS
 # Author: Yassine Hamadou Mounkaila
 on:
   push:
@@ -8,7 +8,7 @@ on:
 
 jobs:
   build-and-deploy:
-    runs-on: windows-latest
+    runs-on: self-hosted
 
     strategy:
       matrix:
@@ -49,13 +49,13 @@ jobs:
           # A list of files, directories, and wildcard patterns to cache and restore
           path: node_modules
           # An explicit key for restoring and saving the cache
-          key: node 
+          key: node
 
   deploy:
     runs-on: self-hosted
     needs: build-and-deploy
 
-    steps: 
+    steps:
       - name: Download artifact from build job
         uses: actions/download-artifact@v3
         with:

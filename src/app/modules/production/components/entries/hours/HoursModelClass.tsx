@@ -823,20 +823,28 @@ const HoursModelClass: any = () => {
                 }
                 //@ts-ignore
                 else if (dayjs(value).isBefore(dayjs(JSON.parse(localStorage.getItem('record'))?.date))) {
-                  return Promise.reject('Date cannot be before previous reading date');
+                  return new Promise((resolve, reject) => {
+                    reject('Date cannot be before previous reading date');
+                  });
                 } else if (dayjs(value).isAfter(dayjs())) {
-                  return Promise.reject('Date cannot be in the future');
-                } else return Promise.resolve();
+                  return new Promise((resolve, reject) => {
+                    reject('Date cannot be after today');
+                  });
+                } else {
+                  return new Promise((resolve, reject) => {
+                    resolve('Resolved');
+                  })
+                }
               }
-            },
+            } //end of validator
           }
         ]
       },
       // fieldProps: (form, {rowKey, rowIndex}) => {
-      //get this row's current reading
-      // const currentReading = form.getFieldValue(`${rowKey}`)
+      // // get this row's current reading
+      // // const currentReading = form.getFieldValue(`${rowKey}`)
       // console.log('currentReading', currentReading)
-      //validate that the current reading is greater than the previous reading
+      // // validate that the current reading is greater than the previous reading
       // form.validateFields([`${rowKey}`]).then(r => r)
       // },
     },
