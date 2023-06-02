@@ -29,6 +29,7 @@ import GroundEngagingTools from './components/entries/changeOut/get/GroundEngagi
 import {ErrorBoundary, PageLoading} from "@ant-design/pro-components";
 import {lazy, Suspense} from "react";
 import ReportComponent from "./components/report/ReportComponent/ReportComponent";
+import Backlog from './components/entries/backlog/Backlog'
 
 const EquipmentRegister = lazy(() => import('./components/equipment-register/EquipmentRegister'))
 const AddEquipRegister = lazy(() => import('./components/equipment-register/Add'))
@@ -107,6 +108,19 @@ const ProductionPage: React.FC = () => {
               <Suspense fallback={<PageLoading/>}>
                 <ErrorBoundary>
                   <EquipmentSchedule/>
+                </ErrorBoundary>
+              </Suspense>
+            </>
+          }
+        />
+        <Route
+          path='backlog'
+          element={
+            <>
+              <PageTitle breadcrumbs={accountBreadCrumbs}>Backlog</PageTitle>
+              <Suspense fallback={<PageLoading/>}>
+                <ErrorBoundary>
+                  <Backlog/>
                 </ErrorBoundary>
               </Suspense>
             </>
