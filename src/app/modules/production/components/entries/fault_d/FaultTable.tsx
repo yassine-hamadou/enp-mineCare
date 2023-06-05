@@ -22,6 +22,7 @@ import {ENP_URL, fetchFaults, getEquipment} from '../../../../../urls'
 import {useMutation, useQuery, useQueryClient} from 'react-query'
 import {ResolutionTable} from '../resolution/ResolutionTable'
 import {useAuth} from "../../../../auth";
+import DevexpressDashboardComponent from "../../../../../pages/dashboard/DevexpressDashboardComponent";
 
 export function dhm(t: any) {
   var cd = 24 * 60 * 60 * 1000,
@@ -626,6 +627,13 @@ const FaultTable = () => {
               </>
             ),
           },
+          {
+            label: <span className='me-4'>Analysis</span>,
+            key: '3',
+            children: (
+              <DevexpressDashboardComponent dashboardId={"faultSearchable"}/>
+            ),
+          }
         ]}
       />
 

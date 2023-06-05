@@ -32,7 +32,7 @@ jobs:
 
       - name: Heap size
         run: |
-          set NODE_OPTIONS=--max_old_space_size=4096 
+          set "NODE_OPTIONS=--max_old_space_size=4096" 
 
       - name: Build the project
         run: npm run ciBuild
@@ -43,6 +43,7 @@ jobs:
         with:
           name: build
           path: build
+
       - name: Cache
         uses: actions/cache@v3.2.6
         with:

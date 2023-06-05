@@ -47,6 +47,8 @@ const Backlog = () => {
       form.resetFields()
       setIsModalOpen(false)
       message.success('Fault reported successfully')
+      console.log("values", values)
+      addBacklog(values)
     } catch (error: any) {
       setSubmitLoading(false)
       message.error('Error reporting fault, Please try again')
@@ -64,6 +66,10 @@ const Backlog = () => {
     {
       title: 'BDate',
       dataIndex: 'bDate',
+    },
+    {
+      title: 'CDate',
+      dataIndex: 'cDate',
     },
     {
       title: 'Item',
@@ -84,10 +90,6 @@ const Backlog = () => {
     {
       title: 'Status',
       dataIndex: 'status',
-    },
-    {
-      title: 'CDate',
-      dataIndex: 'cDate',
     },
     {
       title: 'Action',
