@@ -81,7 +81,7 @@ export function getBacklogs(tenant: any) {
 }
 
 export function postBacklogs(data: any, tenantId: any) {
-  return axios.post(`${ENP_URL}/Backlogs`, data?.map((item: any) => ({...item, tenantId: tenantId})));
+  return axios.post(`${ENP_URL}/Backlogs`, data?.map((item: any) => ({...item, tenantId})));
 }
 
 export function getGroundEngagingTools(tenant: any) {
@@ -138,5 +138,29 @@ export function fetchUserApplications() {
 
 export const fetchCompanies = () => {
   return axios.get(`${USERS_ENDPOINTS}/Companies`)
+}
+
+export const getPriorities = (TenantId: any) => {
+  return axios.get(`${ENP_URL}/Priorities/tenant/${TenantId}`)
+}
+
+export const addPriorities = (data: any, tenantId: any) => {
+  return axios.post(`${ENP_URL}/Priorities`, data?.map((item: any) => ({...item, tenantId})))
+}
+
+export const updatePriorities = (data: any) => {
+  return axios.put(`${ENP_URL}/Priorities/${data.id}`, data)
+}
+
+export const getSources = (TenantId: any) => {
+  return axios.get(`${ENP_URL}/Sources/tenant/${TenantId}`)
+}
+
+export const addSources = (data: any, tenantId: any) => {
+  return axios.post(`${ENP_URL}/Sources`, data?.map((item: any) => ({...item, tenantId})))
+}
+
+export const updateSources = (data: any) => {
+  return axios.put(`${ENP_URL}/Sources/${data.id}`, data)
 }
 

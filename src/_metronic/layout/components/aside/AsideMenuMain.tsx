@@ -123,6 +123,14 @@ export function AsideMenuMain() {
           <AsideMenuItem to='/setup/lube-config' title='Lube Config' hasBullet={true}/>
           <AsideMenuItem to='/setup/refill' title='Refill Type' hasBullet={true}/>
         </AsideMenuItemWithSub>
+        <AsideMenuItemWithSub
+          to='#'
+          title='Backlog'
+          hasBullet={true}
+        >
+          <AsideMenuItem to='/setup/backlogs/priority' title='Priority' hasBullet={true}/>
+          <AsideMenuItem to='/setup/backlogs/source' title='Source' hasBullet={true}/>
+        </AsideMenuItemWithSub>
       </AsideMenuItemWithSub>
       <div className='menu-item'>
         <div className='menu-content'>

@@ -30,6 +30,8 @@ import {ErrorBoundary, PageLoading} from "@ant-design/pro-components";
 import {lazy, Suspense} from "react";
 import ReportComponent from "./components/report/ReportComponent/ReportComponent";
 import Backlog from './components/entries/backlog/Backlog'
+import Priority from './components/setup/backlogs/Priority'
+import Source from './components/setup/backlogs/Source'
 
 const EquipmentRegister = lazy(() => import('./components/equipment-register/EquipmentRegister'))
 const AddEquipRegister = lazy(() => import('./components/equipment-register/Add'))
@@ -389,6 +391,36 @@ const ProductionPage: React.FC = () => {
             </>
           }
         />
+        <Route
+          path='backlogs/*'
+          element={
+            <>
+              <ErrorBoundary>
+                <Outlet/>
+              </ErrorBoundary>
+            </>
+          }
+        >
+          <Route
+            path='priority'
+            element={
+              <>
+                <PageTitle breadcrumbs={accountBreadCrumbs}>Priorities</PageTitle>
+                <Priority/>
+              </>
+            }
+          />
+          <Route
+            path='source'
+            element={
+              <>
+                <PageTitle breadcrumbs={accountBreadCrumbs}>Sources</PageTitle>
+                <Source/>
+              </>
+            }
+          />
+
+        </Route>
         <Route index element={<Navigate to='/dashboard'/>}/>
       </Route>
       <Route
@@ -417,6 +449,16 @@ const ProductionPage: React.FC = () => {
             </>
           }
         >
+          <Route
+            path='all-metering'
+            element={
+              <>
+                <PageTitle breadcrumbs={accountBreadCrumbs}>All Metering</PageTitle>
+                {/*<MeteringByModelClassSummary/>*/}
+                <ReportComponent reportName={"AllMeteringReport"}/>
+              </>
+            }
+          />
           <Route
             path='MeteringByModelDetail'
             element={
@@ -484,6 +526,17 @@ const ProductionPage: React.FC = () => {
             }
           />
           <Route
+            path='summary'
+            element={
+              <>
+                <PageTitle breadcrumbs={accountBreadCrumbs}>All Change out</PageTitle>
+                <ReportComponent
+                  reportName={"AllChangeoutReport"}
+                />
+              </>
+            }
+          />
+          <Route
             path='ChangeoutByRefillTypeModel'
             element={
               <>
@@ -503,6 +556,18 @@ const ProductionPage: React.FC = () => {
             </>
           }
         >
+          <Route
+            path='all-schedules'
+            element={
+              <>
+                <PageTitle breadcrumbs={accountBreadCrumbs}>All Schedules</PageTitle>
+                {/*<ScheduleByModelSummaryReport/>*/}
+                <ReportComponent
+                  reportName={"AllSchedulesReport"}
+                />
+              </>
+            }
+          />
           <Route
             path='ScheduleByModelSummaryReport'
             element={
@@ -557,10 +622,22 @@ const ProductionPage: React.FC = () => {
           path='fault-summary-report'
           element={
             <>
-              <PageTitle breadcrumbs={accountBreadCrumbs}>All Fault Report</PageTitle>
+              <PageTitle breadcrumbs={accountBreadCrumbs}>Fault Summary Report</PageTitle>
               {/*<FaultEntryReport/>*/}
               <ReportComponent
                 reportName={"FaultEntrySummaryReport"}
+              />
+            </>
+          }
+        />
+        <Route
+          path='all-faults'
+          element={
+            <>
+              <PageTitle breadcrumbs={accountBreadCrumbs}>All Faults Report</PageTitle>
+              {/*<FaultEntryReport/>*/}
+              <ReportComponent
+                reportName={"AllFaultsReport"}
               />
             </>
           }
@@ -704,6 +781,7 @@ const ProductionPage: React.FC = () => {
             </>
           }
         />
+
         <Route
           path='hourly-report'
           element={

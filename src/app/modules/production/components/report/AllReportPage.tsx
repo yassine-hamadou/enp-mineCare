@@ -62,6 +62,7 @@ const AllReportPage = () => {
           <h3><span className="bullet me-5"></span><Link to="/report/fault-summary-report">Details</Link></h3>
           <h3><span className="bullet me-5"></span><Link to="/report/solved-report">Solved</Link></h3>
           <h3><span className="bullet me-5"></span><Link to="/report/pending-report">Pending</Link></h3>
+          <h3><span className="bullet me-5"></span><Link to="/report/all-faults">All faults</Link></h3>
           <h3><span className="bullet me-5"></span><Link to="/report/fleet-history-report">Equipment History</Link></h3>
           <h3><span className="bullet me-5"></span><Link to="/report/faultByModelSummary">Summary By Model</Link>
           </h3>
@@ -86,6 +87,7 @@ const AllReportPage = () => {
           <h2 style={{color: "GrayText"}}>Schedule</h2>
           <hr></hr>
           <h3><span className="bullet me-5"></span><Link to="#">Details</Link></h3>
+          <h3><span className="bullet me-5"></span><Link to="/report/schedules/all-schedules">All schedules</Link></h3>
           <h3><span className="bullet me-5"></span><Link to="/report/schedules/ScheduleByModelSummaryReport">Summary By
             Model</Link></h3>
           <h3><span className="bullet me-5"></span><Link to="/report/schedules/ScheduleByLocationReport">Summary By
@@ -107,7 +109,7 @@ const AllReportPage = () => {
           <hr></hr>
           {/*<h1>No Report</h1>*/}
           <h3><span className="bullet me-5"></span><Link to="/report/changeout/ChangeOutByModel">Model</Link></h3>
-          <h3><span className="bullet me-5"></span><Link to="#">Summary</Link></h3>
+          <h3><span className="bullet me-5"></span><Link to="/report/changeout/summary">Summary</Link></h3>
           <h3><span className="bullet me-5"></span><Link to="#">Equipment</Link></h3>
           <h3><span className="bullet me-5"></span><Link to="/report/changeout/ChangeoutByRefillTypeModel">
             By Refill Type Model
@@ -130,6 +132,8 @@ const AllReportPage = () => {
           <h3><span className="bullet me-5"></span><Link to="/report/metering/MeteringByModelSummary">Summary</Link>
           </h3>
           <h3><span className="bullet me-5"></span><Link to="/report/metering/MeteringByEquipment">Equipment</Link>
+          </h3>
+          <h3><span className="bullet me-5"></span><Link to="/report/metering/all-metering">All Metering</Link>
           </h3>
           <h3><span className="bullet me-5"></span><Link to="/report/meteringbymodelClassSummary">Model Class
             Summary</Link></h3>
