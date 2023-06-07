@@ -2,10 +2,11 @@
 import React, {useState} from 'react'
 import * as Yup from 'yup'
 import clsx from 'clsx'
-import {Link} from 'react-router-dom'
 import {useFormik} from 'formik'
-import {getUserByToken, login} from '../core/_requests'
+import {login, parseJwt} from '../core/_requests'
 import {useAuth} from '../core/Auth'
+import {useQuery} from "react-query";
+import {fetchCompanies, fetchUserApplications} from "../../../urls";
 
 const loginSchema = Yup.object().shape({
   username: Yup.string()
@@ -34,7 +35,10 @@ const initialValues = {
 
 export function Login() {
   const [loading, setLoading] = useState(false)
-  const {saveAuth, setCurrentUser} = useAuth()
+  const {saveAuth, setCurrentUser, saveTenant} = useAuth()
+  const {data: userApplications} = useQuery('userApplications', fetchUserApplications)
+  const {data: allCompanies} = useQuery('companies', fetchCompanies)
+
 
   const formik = useFormik({
     initialValues,
@@ -44,8 +48,20 @@ export function Login() {
       try {
         const {data: auth} = await login(values.username, values.password)
         saveAuth(auth)
-        // const {data: user} = await getUserByToken(auth.jwtToken)
-        setCurrentUser(auth.jwtToken)
+
+        const parsedToken: {
+          header: any,
+          payload: any,
+        } | undefined = parseJwt(auth.jwtToken)
+
+        const userDetails: any = parsedToken?.payload
+        setCurrentUser(userDetails)
+        saveTenant(values.tenantId)
+
+        const authorizedUserApps = userApplications?.data?.filter((application: any) => application.userId === parseInt(userDetails?.id))
+        console.log('userapplications', userApplications?.data)
+        console.log('authorizedUserApps', authorizedUserApps)
+        console.log('tenantId', values.tenantId)
       } catch (error) {
         console.error(error)
         setStatus('The login detail is incorrect')
@@ -54,6 +70,7 @@ export function Login() {
       }
     },
   })
+  // localStorage.setItem('tenant', formik.values.tenantId)
 
   return (
     <form
@@ -130,13 +147,12 @@ export function Login() {
                 formik.values.username === '' || formik.values.password === '' ?
                   '' :
                   <>
-                    <option></option>
-                    <option value='damangDivision'>EnP - DAMANG DIVISION</option>
-                    <option value='dzataDivision'>EnP - DZATA DIVISION</option>
-                    <option value='mpohorDivision'>EnP - MPOHOR DIVISION</option>
-                    <option value='headOffice'>EnP - HEAD OFFICE</option>
-                    <option value='salagaDivision'>EnP - SALAGA DIVISION</option>
-                    <option value='tarkwaDivision'>EnP - TARKWA DIVISION</option>
+                    <option>Select Company</option>
+                    {
+                      allCompanies?.data.map((item: any) => (
+                        <option value={item.name.toLowerCase()}>{item.description}</option>
+                      ))
+                    }
                   </>
               }
 
@@ -178,119 +194,4 @@ export function Login() {
     </form>
   )
 }
-
-/* eslint-disable jsx-a11y/anchor-is-valid */
-// import React, {useEffect, useState} from 'react'
-// import * as Yup from 'yup'
-// import clsx from 'clsx'
-// import {Link} from 'react-router-dom'
-// import {useFormik} from 'formik'
-// import {getUserByToken, login} from '../core/_requests'
-// import {useAuth} from '../core/Auth'
-// import axios from 'axios'
-
-
-// export function Login() {
-//   const [loading, setLoading] = useState(false)
-//   const {saveAuth, setCurrentUser} = useAuth()
-//   const [username, setUsername] = useState('');
-//   const [password, setPassword] = useState<any>('');
-
-
-//   useEffect(()=>{
-//     sessionStorage.clear();
-//   },[]);
-
-// const Login = async (password:any, username:any) => {
-// return axios.post('http://208.117.44.15/hrwebapi/api/Users/Login', {
-//   username, password
-// }).then((res)=>{
-//   if (res.data.jwtToken){
-//     localStorage.setItem('token', JSON.stringify(res.data.jwtToken))
-//   }
-//   return res.data
-// })
-// }
-
-// const handleLogin = (e:any) => {
-//   e.preventDefault()
-//   Login(password, username)
-// }
-
-
-//   return (
-//     <form
-//       className='form w-100'
-//       id='kt_login_signin_form'
-//       onSubmit={handleLogin}
-//     >
-//       <div className='fv-row mb-10'>
-//         <label className='form-label fs-6 fw-bolder text-dark'>USER ID</label>
-//         <input
-//           placeholder='User ID'
-//           // {...formik.getFieldProps('email')}
-//           value={username} onChange={e => setUsername(e.target.value)}
-//           className={clsx(
-//             'form-control form-control-lg form-control-solid',
-//           )}
-//           type='text'
-//           name='email'
-//           autoComplete='off'
-//         />
-//       </div>
-//       <div className='fv-row mb-10'>
-//         <div className='d-flex justify-content-between mt-n5'>
-//           <div className='d-flex flex-stack mb-2'>
-//             <label className='form-label fw-bolder text-dark fs-6 mb-0'>Password</label>
-//           </div>
-//         </div>
-//         <input
-//           type='password'
-//           autoComplete='off'
-//           value={password} onChange={e => setPassword(e.target.value)}
-//           className={clsx(
-//             'form-control form-control-lg form-control-solid',
-//           )}
-//         />
-//       </div>
-//       <div className='fv-row mb-10'>
-//         <div className='mb-10'>
-//           <label className='form-label fw-bold'>Company:</label>
-//           <div>
-//             <select
-//               className='form-select form-select-solid'
-//               data-kt-select2='true'
-//               data-placeholder='Select option'
-//               data-allow-clear='true'
-//               defaultValue={''}
-//             >
-//               <option></option>
-//               <option value='damangDivision'>Engineers and Planners - DAMANG DIVISION</option>
-//               <option value='dzataDivision'>Engineers and Planners - DZATA DIVISION</option>
-//               <option value='mpohorDivision'>Engineers and Planners - MPOHOR DIVISION</option>
-//               <option value='headOffice'>Engineers and Planners - HEAD OFFICE</option>
-//               <option value='salagaDivision'>Engineers and Planners - SALAGA DIVISION</option>
-//               <option value='tarkwaDivision'>Engineers and Planners - TARKWA DIVISION</option>
-//             </select>
-//           </div>
-//         </div>
-//       </div>
-//       <div className='text-center'>
-//         <button
-//           type='submit'
-//           id='kt_sign_in_submit'
-//           className='btn btn-lg btn-primary w-100 mb-5'
-//         >
-//           {!loading && <span className='indicator-label'>Continue</span>}
-//           {loading && (
-//             <span className='indicator-progress' style={{display: 'block'}}>
-//               Please wait...
-//               <span className='spinner-border spinner-border-sm align-middle ms-2'></span>
-//             </span>
-//           )}
-//         </button>
-//       </div>
-//     </form>
-//   )
-// }
 

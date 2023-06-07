@@ -1,10 +1,10 @@
-import {Button, Form, Input, Modal, Space, Table} from 'antd'
+import {Button, Form, Input, message, Modal, Space, Table} from 'antd'
 import {useEffect, useState} from 'react'
 import {KTCard, KTCardBody, KTSVG} from '../../../../../../_metronic/helpers'
 import {Link, useNavigate, useParams} from 'react-router-dom'
-import { ENP_URL, fetchGroups } from '../../../../../urls'
+import {ENP_URL, fetchGroups} from '../../../../../urls'
 import axios from 'axios'
-import { useQuery } from 'react-query'
+import {useQuery} from 'react-query'
 
 const ItemsPage = () => {
   const [gridData, setGridData] = useState([])
@@ -13,7 +13,7 @@ const ItemsPage = () => {
   let [filteredData] = useState([])
   const [form] = Form.useForm()
   const [submitLoading, setSubmitLoading] = useState(false)
-  const params:any  = useParams();
+  const params: any = useParams();
   // Modal functions
   const [isModalOpen, setIsModalOpen] = useState(false)
   const navigate = useNavigate();
@@ -50,6 +50,7 @@ const ItemsPage = () => {
   function handleDelete(element: any) {
     deleteData(element)
   }
+
   const columns: any = [
     {
       title: 'Group Items',
@@ -79,7 +80,7 @@ const ItemsPage = () => {
           <a onClick={() => handleDelete(record)} className='btn btn-light-danger btn-sm'>
             Delete
           </a>
-         
+
         </Space>
       ),
     },
@@ -100,24 +101,24 @@ const ItemsPage = () => {
   }
 
   useEffect(() => {
-    (async ()=>{
+    (async () => {
       let res = await getItemName(params.id)
       setItemName(res.name)
     })();
-    (async ()=>{
+    (async () => {
       let res = await getModel()
       setModelName(res.section.service.model)
     })();
-    (async ()=>{
+    (async () => {
       let res = await getModel()
       setServiceName(res.section.service.name)
     })();
-    (async ()=>{
+    (async () => {
       let res = await getModel()
       setSectionName(res.section.name)
     })();
     loadData()
-   
+
   }, [])
 
   const dataWithIndex = gridData.map((item: any, index) => ({
@@ -127,27 +128,27 @@ const ItemsPage = () => {
 
   const {data: allGroups} = useQuery('groups', fetchGroups, {cacheTime: 60000000})
 
-  const getModel=  () =>{
-    let newName=null
-     const   itemTest =  allGroups?.data.find((item:any) =>
-      item.id.toString()===params.id
+  const getModel = () => {
+    let newName = null
+    const itemTest = allGroups?.data.find((item: any) =>
+      item.id.toString() === params.id
     )
-     newName =  itemTest
+    newName = itemTest
     return newName
- }
- console.log(getModel())
-  const getItemName= async (param:any) =>{
+  }
+  console.log(getModel())
+  const getItemName = async (param: any) => {
 
-    let newName=null
-     const   itemTest = await allGroups?.data.find((item:any) =>
-      item.id.toString()===param
+    let newName = null
+    const itemTest = await allGroups?.data.find((item: any) =>
+      item.id.toString() === param
     )
-     newName = await itemTest
+    newName = await itemTest
     return newName
- }
-  
-  const dataByID = dataWithIndex.filter((section:any) =>{
-    return section.groupId.toString() ===params.id
+  }
+
+  const dataByID = dataWithIndex.filter((section: any) => {
+    return section.groupId.toString() === params.id
   })
   console.log(dataByID)
   const handleInputChange = (e: any) => {
@@ -163,9 +164,29 @@ const ItemsPage = () => {
       name: values.name,
       groupId: params.id,
     }
-console.log(data)
+    console.log(data)
     try {
-      const response = await axios.post(url, data)
+      const response: any = await axios.post(url, data).then(
+        (response) => {
+
+          //Create a default Item Value for the new item
+          const data = {
+            itemId: response.data.id,
+            name: "Default",
+          }
+
+          //Create the default item value
+          try {
+            axios.post(`${ENP_URL}/ItemValue`, data).then(
+              (response) => {
+                message.success("Item created successfully")
+              }
+            )
+          } catch (e) {
+            message.error("Error creating default value")
+          }
+        }
+      )
       console.log(data)
       setSubmitLoading(false)
       form.resetFields()
@@ -194,17 +215,19 @@ console.log(data)
       <KTCardBody className='py-4 '>
         <div className='table-responsive'>
           <br></br>
-          <h3 style={{fontWeight:"bolder"}}>
+          <h3 style={{fontWeight: "bolder"}}>
             {modelName}
-            <span style={{color: "blue", fontSize:"22px", fontWeight:"normal"}}> &gt; </span> 
+            <span style={{color: "blue", fontSize: "22px", fontWeight: "normal"}}> &gt; </span>
             {serviceName}
-            <span style={{color: "blue", fontSize:"22px", fontWeight:"normal"}}> &gt; </span> 
+            <span style={{color: "blue", fontSize: "22px", fontWeight: "normal"}}> &gt; </span>
             {sectionName}
-            <span style={{color: "blue", fontSize:"22px", fontWeight:"normal"}}> &gt; </span> 
+            <span style={{color: "blue", fontSize: "22px", fontWeight: "normal"}}> &gt; </span>
             {itemName}
-            </h3>
+          </h3>
           <br></br>
-        <button className='mb-3 btn btn-outline btn-outline-dashed btn-outline-primary btn-active-light-primary' onClick={() => navigate(-1)}>Back Groups</button>
+          <button className='mb-3 btn btn-outline btn-outline-dashed btn-outline-primary btn-active-light-primary'
+                  onClick={() => navigate(-1)}>Back Groups
+          </button>
 
           <div className='d-flex justify-content-between'>
             <Space style={{marginBottom: 16}}>
@@ -221,17 +244,17 @@ console.log(data)
             </Space>
             <Space style={{marginBottom: 16}}>
               <button type='button' className='btn btn-primary me-3' onClick={showModal}>
-                <KTSVG path='/media/icons/duotune/arrows/arr075.svg' className='svg-icon-2' />
+                <KTSVG path='/media/icons/duotune/arrows/arr075.svg' className='svg-icon-2'/>
                 Add
               </button>
-              
+
               <button type='button' className='btn btn-light-primary me-3'>
-                <KTSVG path='/media/icons/duotune/arrows/arr078.svg' className='svg-icon-2' />
+                <KTSVG path='/media/icons/duotune/arrows/arr078.svg' className='svg-icon-2'/>
                 Export
               </button>
             </Space>
           </div>
-          <Table columns={columns} dataSource={dataByID} loading={loading} />
+          <Table columns={columns} dataSource={dataByID} loading={loading}/>
           <Modal
             title='Add Items'
             open={isModalOpen}
@@ -264,9 +287,9 @@ console.log(data)
               onFinish={onFinish}
             >
               <Form.Item label='Name' name='name' rules={[{required: true}]}>
-                <Input />
+                <Input/>
               </Form.Item>
-              
+
             </Form>
           </Modal>
         </div>

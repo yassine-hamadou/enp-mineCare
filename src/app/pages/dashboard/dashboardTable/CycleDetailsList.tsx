@@ -1,19 +1,19 @@
-import {Button, Input, Space, Table} from 'antd'
-import {useEffect, useState} from 'react'
+import {useState} from 'react'
 import axios from 'axios'
-import {KTCard, KTCardBody, KTSVG} from '../../../../_metronic/helpers'
 import {ENP_URL} from '../../../urls'
 import {useQuery, useQueryClient} from 'react-query'
-import {uuid} from "@ant-design/plots/es/utils";
+import {useAuth} from "../../../modules/auth";
+import DevexpressDashboardComponent from "../DevexpressDashboardComponent";
 
 const DashboardTable = () => {
   const [gridData, setGridData] = useState([])
   const [searchText, setSearchText] = useState('')
+  const {tenant} = useAuth()
   let [filteredData] = useState([])
 
 
   const {data: listOfequipment} = useQuery('listOfEquipment', () =>
-    axios.get(`${ENP_URL}/equipments`)
+    axios.get(`${ENP_URL}/equipments/tenant/${tenant}`)
   )
 
   const {data: listOfequipmentModel, isLoading} = useQuery('listOfEquipmentModel', () =>
@@ -25,7 +25,7 @@ const DashboardTable = () => {
   )
 
   const {data: listOfFaults} = useQuery('listOfFaults', () =>
-    axios.get(`${ENP_URL}/faultentriesapi`)
+    axios.get(`${ENP_URL}/faultentriesapi/tenant/${tenant}`)
   )
 
   const columns: any = [
@@ -154,27 +154,27 @@ const DashboardTable = () => {
   ///////////////////////////////////////////
   //////////Right Table//////////////////////
   ///////////////////////////////////////////
-  const numberOfDownTime = (custodian: any) => {
-    //count number of down time from fault entries for this particular equipment
-    //@ts-ignore
-    // const modelName = queryClient.getQueryData('listOfEquipmentModel')?.data?.find((model: any) => model.modelId == modelId).name
-    console.log("custodian", custodian)
-    return 0
-    let numberOfDowntime = 0
-    listOfFaults?.data?.forEach((fault: any) => {
-      // console.log("fault.vmModel", fault.vmModel)
-      // console.log('modelName', modelName)
-
-      // Triming these two fucking strings because they made me debug for 2hours without identifying what the hell
-      // was wrong with my code. I really know how those trailing space got stored in the databases like that. What a mess!
-      // Finally!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-      // if (fault.fleetId.trimEnd() === fleetId.trimEnd()) {
-      //   // console.log('fault model ', fault.vmModel)
-      //   numberOfDowntime++
-      // }
-    })
-    return numberOfDowntime
-  }
+  // const numberOfDownTime = (custodian: any) => {
+  //   //count number of down time from fault entries for this particular equipment
+  //   //@ts-ignore
+  //   // const modelName = queryClient.getQueryData('listOfEquipmentModel')?.data?.find((model: any) => model.modelId == modelId).name
+  //   console.log("custodian", custodian)
+  //   // return 0
+  //   let numberOfDowntime = 0
+  //   listOfFaults?.data?.forEach((fault: any) => {
+  //     // console.log("fault.vmModel", fault.vmModel)
+  //     // console.log('modelName', modelName)
+  //
+  //     // Triming these two fucking strings because they made me debug for 2hours without identifying what the hell
+  //     // was wrong with my code. I really know how those trailing space got stored in the databases like that. What a mess!
+  //     // Finally!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+  //     // if (fault.fleetId.trimEnd() === fleetId.trimEnd()) {
+  //     //   // console.log('fault model ', fault.vmModel)
+  //     //   numberOfDowntime++
+  //     // }
+  //   })
+  //   return numberOfDowntime
+  // }
 
   ///////////////////////////////////////////
   //////////End Table//////////////////////
@@ -183,98 +183,100 @@ const DashboardTable = () => {
     <>
       <div className='row gy-5 g-xl-8'>
         <div className='col-xl-6'>
-          <KTCard>
-            <KTCardBody>
-              <div className='d-flex justify-content-between'>
-                <Space style={{marginBottom: 16}}>
-                  <Input
-                    placeholder='Enter Search Text'
-                    onChange={handleInputChange}
-                    type='text'
-                    allowClear
-                    value={searchText}
-                  />
-                  <Button type='primary' onClick={globalSearch}>
-                    Search
-                  </Button>
-                </Space>
-                <Space style={{marginBottom: 16}}>
-                  <button type='button' className='btn btn-light-primary me-3'>
-                    <KTSVG path='/media/icons/duotune/arrows/arr078.svg' className='svg-icon-2'/>
-                    Export
-                  </button>
-                </Space>
-              </div>
-              <Table columns={columns} dataSource={listOfequipmentModel?.data} bordered loading={isLoading}
-                     scroll={{x: 1500}}
-                     rowKey={() => uuid()}/>
-            </KTCardBody>
-          </KTCard>
+          {/*<KTCard>*/}
+          {/*  <KTCardBody>*/}
+          {/*    <div className='d-flex justify-content-between'>*/}
+          {/*      <Space style={{marginBottom: 16}}>*/}
+          {/*        <Input*/}
+          {/*          placeholder='Enter Search Text'*/}
+          {/*          onChange={handleInputChange}*/}
+          {/*          type='text'*/}
+          {/*          allowClear*/}
+          {/*          value={searchText}*/}
+          {/*        />*/}
+          {/*        <Button type='primary' onClick={globalSearch}>*/}
+          {/*          Search*/}
+          {/*        </Button>*/}
+          {/*      </Space>*/}
+          {/*      <Space style={{marginBottom: 16}}>*/}
+          {/*        <button type='button' className='btn btn-light-primary me-3'>*/}
+          {/*          <KTSVG path='/media/icons/duotune/arrows/arr078.svg' className='svg-icon-2'/>*/}
+          {/*          Export*/}
+          {/*        </button>*/}
+          {/*      </Space>*/}
+          {/*    </div>*/}
+          {/*    <Table*/}
+          {/*      columns={columns}*/}
+          {/*      dataSource={listOfequipmentModel?.data}*/}
+          {/*      bordered*/}
+          {/*      loading={isLoading}*/}
+          {/*      scroll={{x: 1500}}*/}
+          {/*      rowKey={() => uuid()}/>*/}
+          {/*  </KTCardBody>*/}
+          {/*</KTCard>*/}
+          <DevexpressDashboardComponent dashboardId={'dashboard4'}/>
         </div>
         <div className='col-xl-6'>
-          <KTCard>
-            <KTCardBody>
-              <div className='d-flex justify-content-between'>
-                <Space style={{marginBottom: 16}}>
-                  <Input
-                    placeholder='Enter Search Text'
-                    onChange={handleInputChange}
-                    type='text'
-                    allowClear
-                    value={searchText}
-                  />
-                  <Button type='primary' onClick={globalSearch}>
-                    Search
-                  </Button>
+          {/*<div className='d-flex justify-content-between'>*/}
+          {/*  <Space style={{marginBottom: 16}}>*/}
+          {/*    <Input*/}
+          {/*      placeholder='Enter Search Text'*/}
+          {/*      onChange={handleInputChange}*/}
+          {/*      type='text'*/}
+          {/*      allowClear*/}
+          {/*      value={searchText}*/}
+          {/*    />*/}
+          {/*    <Button type='primary' onClick={globalSearch}>*/}
+          {/*      Search*/}
+          {/*    </Button>*/}
 
-                </Space>
-                <Space style={{marginBottom: 16}}>
-                  <button type='button' className='btn btn-light-primary me-3'>
-                    <KTSVG path='/media/icons/duotune/arrows/arr078.svg' className='svg-icon-2'/>
-                    Export
-                  </button>
-                </Space>
-              </div>
-              <Table
-                columns={[
-                  {
-                    title: 'Custodian',
-                    dataIndex: 'custodian',
-                    sorter: (a: any, b: any) => {
-                      if (a.custodian < b.custodian) {
-                        return -1
-                      }
-                      if (a.custodian > b.custodian) {
-                        return 1
-                      }
-                      return 0
-                    },
-                  },
-                  {
-                    title: 'Model',
-                    dataIndex: 'vmModel',
-                  },
-                  {
-                    title: 'Number of Downtime',
-                    render: (apiData: any) => {
-                      return numberOfDownTime(apiData.custodian)
-                    },
-                  },
-                  {
-                    title: 'Total Downtime',
-                  },
-                  {
-                    title: 'Number of Schedule',
-                  },
-                  {
-                    title: 'Total Schedule',
-                  },
-                ]} bordered loading={isLoading} rowKey={
-                () => uuid()
-              } dataSource={listOfFaults?.data} scroll={{x: 1500}}
-              />
-            </KTCardBody>
-          </KTCard>
+          {/*  </Space>*/}
+          {/*  <Space style={{marginBottom: 16}}>*/}
+          {/*    <button type='button' className='btn btn-light-primary me-3'>*/}
+          {/*      <KTSVG path='/media/icons/duotune/arrows/arr078.svg' className='svg-icon-2'/>*/}
+          {/*      Export*/}
+          {/*    </button>*/}
+          {/*  </Space>*/}
+          {/*</div>*/}
+          {/*<Table*/}
+          {/*  columns={[*/}
+          {/*    {*/}
+          {/*      title: 'Custodian',*/}
+          {/*      dataIndex: 'custodian',*/}
+          {/*      sorter: (a: any, b: any) => {*/}
+          {/*        if (a.custodian < b.custodian) {*/}
+          {/*          return -1*/}
+          {/*        }*/}
+          {/*        if (a.custodian > b.custodian) {*/}
+          {/*          return 1*/}
+          {/*        }*/}
+          {/*        return 0*/}
+          {/*      },*/}
+          {/*    },*/}
+          {/*    {*/}
+          {/*      title: 'Model',*/}
+          {/*      dataIndex: 'vmModel',*/}
+          {/*    },*/}
+          {/*    {*/}
+          {/*      title: 'Number of Downtime',*/}
+          {/*      render: (apiData: any) => {*/}
+          {/*        return numberOfDownTime(apiData.custodian)*/}
+          {/*      },*/}
+          {/*    },*/}
+          {/*    {*/}
+          {/*      title: 'Total Downtime',*/}
+          {/*    },*/}
+          {/*    {*/}
+          {/*      title: 'Number of Schedule',*/}
+          {/*    },*/}
+          {/*    {*/}
+          {/*      title: 'Total Schedule',*/}
+          {/*    },*/}
+          {/*  ]} bordered loading={isLoading} rowKey={*/}
+          {/*  () => uuid()*/}
+          {/*} dataSource={listOfFaults?.data} scroll={{x: 1500}}*/}
+          {/*/>*/}
+          <DevexpressDashboardComponent dashboardId={'faultCount'}/>
         </div>
       </div>
     </>

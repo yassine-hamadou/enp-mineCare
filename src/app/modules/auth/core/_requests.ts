@@ -1,10 +1,10 @@
 import axios from 'axios'
-import {AuthModel, UserModel} from './_models'
+import {UserModel} from './_models'
 
 const API_URL = "http://208.117.44.15/hrwebapi/api/Users"
 // const API_URL = process.env.REACT_APP_API_URL
 
-export const GET_USER_BY_ACCESSTOKEN_URL = `${API_URL}/verify_token`
+export const GET_USER_BY_ACCESSTOKEN_URL = `${API_URL}/ `
 export const LOGIN_URL = `${API_URL}/Login`
 export const REGISTER_URL = `${API_URL}/register`
 export const REQUEST_PASSWORD_URL = `${API_URL}/forgot_password`
@@ -36,7 +36,7 @@ export function register(
 
 // Server should return object => { result: boolean } (Is Email in DB)
 export function requestPassword(email: string) {
-  return axios.post<{result: boolean}>(REQUEST_PASSWORD_URL, {
+  return axios.post<{ result: boolean }>(REQUEST_PASSWORD_URL, {
     email,
   })
 }
@@ -45,4 +45,22 @@ export function getUserByToken(token: string) {
   return axios.post<UserModel>(GET_USER_BY_ACCESSTOKEN_URL, {
     jwtToken: token,
   })
+}
+
+export function parseJwt(token: string) {
+  console.log('token', token)
+  if (!token) {
+    return;
+  }
+
+  const parts: string[] = token?.split('.');
+  if (parts.length !== 3) {
+    throw new Error('JWT must have 3 parts');
+  }
+  const header = JSON.parse(window.atob(parts[0]));
+  const payload = JSON.parse(window.atob(parts[1]));
+  return {
+    header,
+    payload
+  }
 }

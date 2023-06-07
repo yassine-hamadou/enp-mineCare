@@ -1,11 +1,13 @@
-import {Link, useLocation, useParams} from "react-router-dom";
+import {Link, useLocation} from "react-router-dom";
 import {KTCard, KTCardBody} from "../../../../../_metronic/helpers";
 import {Button, DatePicker, Form, Input, Modal, Select, Space, Table, Tabs} from "antd";
 import React, {useState} from "react";
 import dayjs from 'dayjs';
 import axios from "axios";
-import {useQuery, useQueryClient} from "react-query";
-import {ENP_URL, getModels} from "../../../../urls";
+import {useQuery} from "react-query";
+import {ENP_URL, fetchFaults, getModels} from "../../../../urls";
+import {getTenant, useAuth} from "../../../auth";
+import {fetchSchedules} from "../entries/equipment/calendar/requests";
 
 const UpdateRegister = () => {
   const location = useLocation();
@@ -14,20 +16,31 @@ const UpdateRegister = () => {
   let [showModal, setShowModal] = useState(false);
   const [showMeterModal, setShowMeterModal] = useState(false);
   const [showAgreementModal, setShowAgreementModal] = useState(false);
+  const {tenant} = useAuth();
+  console.log('tenant', getTenant());
 
   const {data: listOfComponents} = useQuery('listOfComponents', () => axios.get(`${ENP_URL}/components`));
+
   const {
     data: listOfAgreements,
     isLoading: isAgreementLoading
   } = useQuery('agreements', () => axios.get(`${ENP_URL}/agreements`));
+
   const {data: listOfMeters, isLoading} = useQuery('meters', () => axios.get(`${ENP_URL}/hoursentry`));
+
   const {
     data: listOfFaults,
     isLoading: isFaultLoading
-  } = useQuery('faults', () => axios.get(`${ENP_URL}/faultentriesapi`));
+  } = useQuery('faults', () => fetchFaults(tenant));
+
   const {data: listOfModels} = useQuery('listOfModels', getModels)
-  
-  const queryClient: any = useQueryClient();
+
+  const {
+    data: listOfPlannedMaintenance,
+    isLoading: isMaintenanceLoading
+  } = useQuery('listOfPlannedMaintenance', () => fetchSchedules(tenant));
+
+  console.log('list of models', listOfModels);
   const handleCancel = () => {
     setShowModal(false);
   }
@@ -52,7 +65,7 @@ const UpdateRegister = () => {
       title: 'Quantity',
       dataIndex: 'quantity',
     }
-  ];
+  ]
   const metersColumns: any = [
     // {
     //   title: 'Equipment ID',
@@ -71,7 +84,7 @@ const UpdateRegister = () => {
       title: 'Current Reading',
       dataIndex: 'currentReading',
     }
-  ];
+  ]
   const faultColumns: any = [
     {
       title: 'Down Type',
@@ -85,7 +98,11 @@ const UpdateRegister = () => {
     {
       title: 'Custodian',
       dataIndex: 'custodian',
-    }
+    },
+    {
+      title: 'Location',
+      dataIndex: 'locationId',
+    },
   ]
   const agreementColumns: any = [
     {
@@ -97,6 +114,43 @@ const UpdateRegister = () => {
       dataIndex: 'agreementDate',
     }
   ]
+  const maintenanceColumns: any = [
+    {
+      title: 'Service Type',
+      dataIndex: 'serviceType',
+      render: (serviceType: any) => serviceType?.name
+    },
+    {
+      title: 'Responsible',
+      dataIndex: 'responsible',
+    },
+    {
+      title: 'Location',
+      dataIndex: 'locationId',
+    },
+    {
+      title: 'Start Date',
+      dataIndex: 'timeStart',
+      render: (date: any) => new Date(date).toDateString(),
+    },
+    {
+      title: 'End Date',
+      dataIndex: 'timeEnd',
+      render: (date: any) => new Date(date).toDateString(),
+    }
+  ]
+  const bookingsColumns: any = [
+    {
+      title: 'Start Date',
+    },
+    {
+      title: 'End Date',
+    },
+    {
+      title: 'Location',
+    }
+  ]
+
 
   const [updateDetailsForm] = Form.useForm();
   const [generalInfoUpdateForm] = Form.useForm();
@@ -198,10 +252,13 @@ const UpdateRegister = () => {
                                    rules={[{required: true}]}>
                           <Select
                             placeholder='Select Model'
-                            className='form-control form-control-solid py-1'
+                            className='form-select form-select-solid py-1 px-0'
+                            showSearch
+                            defaultValue={equipmentData.modelId}
                           >
                             {listOfModels?.data?.map((item: any) => (
-                                <Select.Option value={item.code}>{item.manufacturer?.name} - {item.name}</Select.Option>
+                                <Select.Option
+                                  value={item.modelId}>{item.manufacturer?.name} - {item.name}</Select.Option>
                               )
                             )}
                           </Select>
@@ -279,7 +336,7 @@ const UpdateRegister = () => {
                       <div className='col-4 mb-7'>
                         <Form.Item name='meterType' label='Meter Type (Hours, Km)' rules={[{required: true}]}>
                           <Select
-                            className='form-control form-control-solid py-2'
+                            className='form-select form-select-solid py-1 px-0'
                             style={{width: '100%'}}
                           >
                             <Select.Option value='HOUR'>HOUR</Select.Option>
@@ -325,7 +382,7 @@ const UpdateRegister = () => {
               ),
             },
             {
-              label: `Component`,
+              label: `Components`,
               key: '3',
               children: (
                 <>
@@ -474,22 +531,50 @@ const UpdateRegister = () => {
               ),
             },
             {
-              label: `Fault`,
+              label: `Faults`,
               key: '5',
               children: (
                 <>
                   <Table
                     bordered
                     columns={faultColumns}
-                    dataSource={listOfFaults?.data?.filter((item: any) => item.fleetId.trim() === equipmentData?.equipmentId.trim() && item.status === 0)}
+                    dataSource={listOfFaults?.data?.filter((item: any) => item.fleetId.trim() === equipmentData?.equipmentId.trim())}
                     loading={isFaultLoading}
                   />
                 </>
               ),
             },
             {
-              label: `Agreement`,
+              label: `Scheduled Maintenance`,
               key: '6',
+              children: (
+                <>
+                  <Table
+                    bordered
+                    columns={maintenanceColumns}
+                    dataSource={listOfPlannedMaintenance?.data?.filter((item: any) => item.fleetId.trim() === equipmentData?.equipmentId.trim())}
+                    loading={isMaintenanceLoading}
+                  />
+                </>
+              ),
+            },
+            {
+              label: `Bookings`,
+              key: '7',
+              children: (
+                <>
+                  <Table
+                    bordered
+                    columns={bookingsColumns}
+                    dataSource={[]}
+                  />
+                </>
+              ),
+
+            },
+            {
+              label: `Agreements`,
+              key: '8',
               children: (
                 <>
                   <div className='d-flex justify-content-between'>
@@ -548,7 +633,7 @@ const UpdateRegister = () => {
                   />
                 </>
               ),
-            },
+            }
           ]}
         />
         <Modal

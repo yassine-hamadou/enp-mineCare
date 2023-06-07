@@ -660,13 +660,15 @@
 
 
 import type {ProColumns} from '@ant-design/pro-components';
-import {EditableProTable, ProCard, ProFormField} from '@ant-design/pro-components';
-import {Button, Input, InputNumber, message, Space} from 'antd';
-import React, {useState} from 'react';
+import {EditableProTable, ErrorBoundary, ProCard} from '@ant-design/pro-components';
+import {Button, Input, message, Space} from 'antd';
+import React, {useEffect, useState} from 'react';
 import {useMutation, useQuery, useQueryClient} from "react-query";
 import {addHours, fetchHours, getEquipment} from "../../../../../urls";
 import {useNavigate} from "react-router-dom";
-import {KTCard} from "../../../../../../_metronic/helpers";
+import {throwError} from "@syncfusion/ej2-base";
+import {useAuth} from "../../../../auth";
+import dayjs from "dayjs";
 
 type DataSourceType = {
   id: React.Key;
@@ -677,25 +679,15 @@ type DataSourceType = {
   children?: DataSourceType[];
 };
 
-// const defaultData: DataSourceType[] = new Array(20).fill(1).map((_, index) => {
-//   return {
-//     id: (Date.now() + index).toString(),
-//     title: `title${index}`,
-//     decs: 'description',
-//     state: 'open',
-//     created_at: '1590486176000',
-//   };
-// });
-
-
-const HoursPage = () => {
-  const {data: defaultData, isLoading} = useQuery('all-hours', fetchHours, {
+const HoursModelClass: any = () => {
+  const {tenant} = useAuth()
+  const {data: defaultData, isLoading} = useQuery('all-hours', () => fetchHours(tenant), {
     refetchOnWindowFocus: false
   })
 
   const queryClient = useQueryClient()
   const navigate = useNavigate()
-  // const {data: allEquipment} = useQuery('all-equipment', getEquipment)
+  const {data: allEquipment} = useQuery('all-equipment', () => getEquipment(tenant))
 
   const {mutate: mutateHours, isLoading: isHoursMutationLoading} =
     useMutation(addHours, {
@@ -706,6 +698,7 @@ const HoursPage = () => {
       },
       onError: (error: any) => {
         message.error(error.message).then(r => r)
+        throwError(error.message)
       }
     })
 
@@ -713,11 +706,11 @@ const HoursPage = () => {
     useState<readonly DataSourceType[]>(() => defaultData?.data);
 
   const [record, setRecord] =
-    useState<DataSourceType | undefined>(undefined);
+    useState<DataSourceType | any>(undefined);
+  const [allowSubmit, setAllowSubmit] = useState<boolean>(false)
 
   const [editableKeys, setEditableRowKeys] =
     useState<React.Key[]>(() => defaultData?.data?.map((item: any) => item.id));
-  console.log('editableKeys', editableKeys)
   // const equipHours: [] = allEquipment?.data?.map((equip: any) => {
   //   defaultData?.data?.map((hours: any) => {
   //       console.log('equip', equip)
@@ -732,7 +725,12 @@ const HoursPage = () => {
   //   )
   // })
   // console.log("sdsd", equipHours)
-
+  const [rowValues, setRowValues] = useState<any>({});
+  const [allSubmi, setAllowsubmi] = useState<any>({});
+  useEffect(() => {
+    setEditableRowKeys(() => defaultData?.data?.map((item: any) => item.id))
+    Object.values(allSubmi).every((item: any) => item === true) ? setAllowSubmit(true) : setAllowSubmit(false)
+  }, [defaultData?.data, record, allSubmi]);
 
   const columns: ProColumns<DataSourceType>[] = [
     {
@@ -740,6 +738,7 @@ const HoursPage = () => {
       dataIndex: 'fleetId',
       // width: '30%',
       editable: false,
+
       // formItemProps: {
       //   rules: [
       //     {
@@ -785,47 +784,164 @@ const HoursPage = () => {
       title: 'Previous Reading Date',
       dataIndex: 'date',
       valueType: 'date',
+      editable: false,
       fieldProps: {
         format: 'DD-MM-YYYY',
-      },
-      editable: false,
+      }
     },
     {
       title: 'Previous Reading',
       dataIndex: 'currentReading',
+      readonly: true,
       editable: false,
     },
     {
       title: 'Current Reading Date',
       valueType: 'date',
       dataIndex: 'today',
+      onCell: (record) => {
+        return {
+          onClick: (event) => {
+            localStorage.setItem('record', JSON.stringify(record))
+          }
+        }
+      },
       fieldProps: {
-        format: 'DD-MM-YYYY',
-      }
+        format: 'DD-MM-YYYY'
+      },
+      formItemProps: {
+        rules: [
+          {
+            validator(rule, value) {
+              console.log('rule', rule);
+              console.log('value', value);
+              //@ts-ignore
+              console.log('get field value', dayjs(JSON.parse(localStorage.getItem('record'))?.date))
+              if (localStorage.getItem('record')) {
+                if (!value) {
+                  return Promise.reject('Please select a date');
+                }
+                //@ts-ignore
+                else if (dayjs(value).isBefore(dayjs(JSON.parse(localStorage.getItem('record'))?.date))) {
+                  return new Promise((resolve, reject) => {
+                    reject('Date cannot be before previous reading date');
+                  });
+                } else if (dayjs(value).isAfter(dayjs())) {
+                  return new Promise((resolve, reject) => {
+                    reject('Date cannot be after today');
+                  });
+                } else {
+                  return new Promise((resolve, reject) => {
+                    resolve('Resolved');
+                  })
+                }
+              }
+            } //end of validator
+          }
+        ]
+      },
+      // fieldProps: (form, {rowKey, rowIndex}) => {
+      // // get this row's current reading
+      // // const currentReading = form.getFieldValue(`${rowKey}`)
+      // console.log('currentReading', currentReading)
+      // // validate that the current reading is greater than the previous reading
+      // form.validateFields([`${rowKey}`]).then(r => r)
+      // },
     },
     {
       title: 'Current Reading',
       valueType: 'digit',
       dataIndex: 'zeroReading',
-    },
-
-  ];
-  const saveAndContinue = () => {
-    dataSource?.map((item: any) => {
-      if (item.zeroReading) {
-        mutateHours({
-          fleetId: item.fleetId,
-          previousReading: item.currentReading,
-          date: item.today,
-          currentReading: item.zeroReading,
-        })
+      onCell: (record) => {
+        return {
+          onClick: () => {
+            setRecord(record)
+          },
+        }
+      },
+      formItemProps: {
+        rules: [
+          {
+            validator(rule, value) {
+              //@ts-ignore
+              if (record) {
+                if (!value) {
+                  setAllowsubmi((allowSubmit: any) => {
+                    return {
+                      ...allowSubmit,
+                      [record.id]: false, // Assuming each row has a unique `id` field
+                    };
+                  })
+                  return Promise.reject('Please enter a reading');
+                }
+                //@ts-ignore
+                else if (value <= record?.currentReading) {
+                  setAllowsubmi((allowSubmit: any) => {
+                    return {
+                      ...allowSubmit,
+                      [record.id]: false, // Assuming each row has a unique `id` field
+                    };
+                  })
+                  return Promise.reject('Reading should be more than previous reading');
+                } else {
+                  setAllowsubmi((allowSubmit: any) => {
+                    return {
+                      ...allowSubmit,
+                      [record.id]: true, // Assuming each row has a unique `id` field
+                    };
+                  })
+                  return Promise.resolve();
+                }
+              }
+            }
+          }
+        ]
       }
-    })
+
+      // fieldProps: (form, {rowKey, rowIndex}) => {
+      //get this row's current reading
+      // const currentReading = form.getFieldValue(`${rowKey}`)
+      //validate that the current reading is greater than the previous reading
+      // },
+    },
+  ];
+  const saveAndContinue = async () => {
+    try {
+      dataSource?.map((item: any) => {
+        if (item.zeroReading) {
+          mutateHours({
+            fleetId: item.fleetId,
+            previousReading: item.currentReading,
+            date: item.today,
+            currentReading: item.zeroReading,
+            tenantId: tenant
+          })
+        }
+        return 0
+      })
+    } catch (error) {
+      // Handle form validation error
+      message.error('Kindly resolve all issues before submitting!').then(r => r)
+    }
+
   }
+
+  const [searchText, setSearchText] = useState('');
+
+  const handleInputChange = (e: any) => {
+    setSearchText(e.target.value);
+  };
+  const filterData = (data: any) => {
+    if (!searchText) {
+      return data;
+    }
+    return data.filter((item: any) => {
+      return Object.values(item).join('').toLowerCase().includes(searchText?.toLowerCase())
+    });
+  };
+
   return (
-    // <KTCard>
     <ProCard>
-      {/*<ConfigProvider locale={en_US}>*/}
       <div className='d-flex justify-content-between'>
         <Space
           key="search"
@@ -835,10 +951,10 @@ const HoursPage = () => {
         >
           <Input
             placeholder='Enter Search Text'
-            // onChange={handleInputChange}
+            onChange={handleInputChange}
             type='text'
             allowClear
-            // value={searchText}
+            value={searchText}
           />
           <Button type='primary'>Search</Button>
         </Space>
@@ -852,79 +968,72 @@ const HoursPage = () => {
             type="primary"
             size={'large'}
             key="save"
-            onClick={record ? saveAndContinue : () => {
-              message.error('No Hours Entered').then(r => r)
-            }}
-            // onClick={saveAndContinue}
+            onClick={record ? () => {
+                console.log('submitt?', allSubmi)
+                console.log('allowSubmit', allowSubmit)
+                console.log('submitt?', Object.values(allSubmi).every((item: any) => item === true))
+                if (allowSubmit) {
+                  saveAndContinue()
+                } else {
+                  message.error('Kindly resolve all issues before submitting!').then(r => r)
+                }
+              }
+              : () => {
+                message.error('No Hours Entered').then(r => r)
+              }}
             loading={isHoursMutationLoading}
           >
             Save
           </Button>
         </Space>
       </div>
-      <EditableProTable<DataSourceType>
-        // headerTitle="Batch Entries"
-        columns={columns}
-        loading={isLoading}
-        rowKey="id"
-        scroll={{
-          x: 960,
-        }}
-        pagination={{
-          pageSize: 30,
-        }}
-        // value={defaultData?.data?.map(
-        //   (item: any) => {
-        //     return {
-        //       ...item,
-        //       zeroReading: 0,
-        //       today: new Date(),
-        //     }
-        //   }
-        // )}
-        value={defaultData?.data?.map(
-          (item: any) => {
-            return {
-              ...item,
-              zeroReading: 0,
-              today: new Date(),
+      <ErrorBoundary>
+        <EditableProTable<DataSourceType>
+          // headerTitle="Batch Entries"
+          columns={columns}
+          loading={isLoading}
+          rowKey="id"
+          scroll={{
+            x: 960,
+          }}
+          pagination={{
+            pageSize: 10,
+          }}
+          value={filterData(defaultData?.data?.map(
+            (item: any) => {
+              return {
+                ...item,
+                zeroReading: 0,
+                today: new Date(),
+              }
             }
-          }
-        )}
-        // onChange={setDataSource}
+          ).map((item: any) => ({
+            ...item,
+            ...rowValues[item.id], // Assuming each row has a unique `id` field
+          })))}
+          onChange={setDataSource}
+          //do not show add button
+          recordCreatorProps={false}
 
-        //do not show add button
-        recordCreatorProps={false}
-        // toolBarRender={() => {
-        //   return [];
-        // }}
-        editable={{
-          type: 'multiple',
-          editableKeys: defaultData?.data?.map((item: any) => item.id),
-          onValuesChange: (record, recordList) => {
-            setRecord(record)
-            setDataSource(recordList);
-          },
-          onChange: setEditableRowKeys,
-        }}
-      />
-      {/*<ProCard title="titleCard" headerBordered collapsible defaultCollapsed>*/}
-      {/*  <ProFormField*/}
-      {/*    ignoreFormItem*/}
-      {/*    fieldProps={{*/}
-      {/*      style: {*/}
-      {/*        width: '100%',*/}
-      {/*      },*/}
-      {/*    }}*/}
-      {/*    mode="read"*/}
-      {/*    valueType="jsonCode"*/}
-      {/*    text={JSON.stringify(dataSource)}*/}
-      {/*  />*/}
-      {/*</ProCard>*/}
-      {/*</ConfigProvider>*/}
+          editable={{
+            // type: 'multiple',
+            editableKeys: editableKeys ? editableKeys : defaultData?.data?.map((item: any) => item.id),
+            onValuesChange: (record, recordList) => {
+              setRecord(record)
+              setDataSource(recordList)
+              setRowValues((prevRowValues: any) => {
+                return {
+                  ...prevRowValues,
+                  [record.id]: record, // Assuming each row has a unique `id` field
+                };
+              });
+            },
+            onChange: setEditableRowKeys,
+          }}
+        />
+      </ErrorBoundary>
     </ProCard>
-    // </KTCard>
   );
 };
 
-export {HoursPage};
+export default HoursModelClass;

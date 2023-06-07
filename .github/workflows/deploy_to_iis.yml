@@ -1,50 +1,67 @@
-name: Run self hosted server and deploy to IIS folder
-# This workflow allows me to controls when the action will run. Triggers the workflow on push to the master branch
-# or manually from the Actions tab
+name: Run Github-hosted runner for build and self-hosted runner deployment to IIS
 # Author: Yassine Hamadou Mounkaila
 on:
   push:
     branches:
       - production
-  workflow_dispatch: # Allows you to run this workflow manually from the Actions tab
-  # A workflow run is made up of one or more jobs that can run sequentially or in parallel
+  workflow_dispatch: # Allows you to run this workflow manually from the Actions tab 
 
 jobs:
   build-and-deploy:
     runs-on: self-hosted
+
+    strategy:
+      matrix:
+        node-version: [ 18.x ]
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Setup Node.js
+      - name: Setup Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v3
         with:
-          node-version: '18.x'
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
 
-      #      install dependencies only if package.json has changed
-      - name: Cache node modules
-        # npm cache files on windows
-        uses: actions/cache@v3
-        with:
-          # A unique key for the cache based on package-lock.json
-          key: ${{ hashFiles('./package-lock.json') }}
-          # The path to the cache directory
-          path: C:\Windows\ServiceProfiles\NetworkService\AppData\Local\npm-cache
-          # The cache will be restored if the key matches
-          restore-keys: |
-            ${{ hashFiles('./package-lock.json') }}
-          # Checking if the cache hit is not true, if it is true then the dependencies are already installed otherwise we
-          # install the dependencies on windows server
 
       - name: Install Dependencies
-        if: steps.cache.outputs.cache-hit != 'true'
-        run: npm install --legacy-peer-deps
+        run: |
+          npm install
+          npm install cross-env
 
-      - name: Build
+      - name: Heap size
+        run: |
+          set "NODE_OPTIONS=--max_old_space_size=4096" 
+
+      - name: Build the project
         run: npm run ciBuild
 
-      - name: Remove the existing website files except for web.config file
-        run: get-childitem 'C:\inetpub\wwwroot\mine-care\' -Exclude *.config -recurse | remove-item -recurse -force
+      # upload artifact
+      - name: Upload artifact for deployment job
+        uses: actions/upload-artifact@v3
+        with:
+          name: build
+          path: build
+
+      - name: Cache
+        uses: actions/cache@v3.2.6
+        with:
+          # A list of files, directories, and wildcard patterns to cache and restore
+          path: node_modules
+          # An explicit key for restoring and saving the cache
+          key: node
+
+  deploy:
+    runs-on: self-hosted
+    needs: build-and-deploy
+
+    steps:
+      - name: Download artifact from build job
+        uses: actions/download-artifact@v3
+        with:
+          name: build
+          path: build
 
       - name: Copy build folder to the website folder
-        run: Copy-Item -Recurse -Force 'build\*' 'C:\inetpub\wwwroot\mine-care'
+        run: xcopy /Y /S /I build\* C:\inetpub\wwwroot\esms\

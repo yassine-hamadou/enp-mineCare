@@ -5,16 +5,13 @@ import {
   Input,
   InputNumber,
   Modal,
-  Radio,
   Select,
   Space,
   Table,
 } from 'antd'
 import {useState, useEffect} from 'react'
 import axios from 'axios'
-import {KTCard, KTCardBody, KTSVG} from '../../../../../../_metronic/helpers'
-import {ColumnsType} from 'antd/lib/table'
-import {Link} from 'react-router-dom'
+import {KTCardBody, KTSVG} from '../../../../../../_metronic/helpers'
 import {
   ENP_URL,
   fetchCompartments,
@@ -22,22 +19,19 @@ import {
   fetchLubeBrands,
   fetchLubeConfigs,
   fetchLubeGrade,
-  fetchModels,
   fetchRefillTypes
 } from '../../../../../urls'
 import {useQuery} from 'react-query'
-import Item from 'antd/es/list/Item'
 import {message} from 'antd';
+import moment from 'moment'
 
 const LubePage = () => {
   const [gridData, setGridData] = useState([])
-  const [allFleet, setFleetData] = useState([])
   const [loading, setLoading] = useState(false)
   const [searchText, setSearchText] = useState('')
   let [filteredData] = useState([])
   const [submitLoading, setSubmitLoading] = useState(false)
   const [form] = Form.useForm()
-  const [dataSource, setDataSource] = useState([])
   const [capa, setCapa] = useState("")
   const [newCompartData, setNewCompartData] = useState([])
   const {Option} = Select
@@ -223,6 +217,9 @@ const LubePage = () => {
     {
       title: 'Refill Date',
       dataIndex: 'refillDate',
+      render: (date: any) => {
+        return moment(date).format('DD-MM-YYYY')
+      },
       sorter: (a: any, b: any) => {
         if (a.refillDate > b.refillDate) {
           return 1
@@ -235,7 +232,6 @@ const LubePage = () => {
     },
     {
       title: 'Action',
-
       // dataIndex: 'faultDesc',
       // sorter: (a: any, b: any) => a.faultDesc - b.faultDesc,
       fixed: 'right',

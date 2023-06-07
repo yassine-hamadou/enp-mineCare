@@ -33,6 +33,7 @@ import {
 import {message, Space, Spin} from 'antd'
 import React from "react";
 import {getEquipment} from "../../../../../../urls";
+import {useAuth} from "../../../../../auth";
 
 /**
  *  Schedule editor custom fields sample
@@ -55,30 +56,24 @@ const Calendar = ({chosenLocationIdFromDropdown}) => {
     let scheduleObj
     let scheduleQueryClient = useQueryClient() // for refetching the schedules
     let serviceQueryClient = useQueryClient() // for refetching the service types
+    const {tenant} = useAuth()
 
     // React Query
     //Get
-    const {data: schedulesData} = useQuery('schedules', fetchSchedules, {
-        refetchOnWindowFocus: false,
-        staleTime: 300000,
+    const {data: schedulesData} = useQuery('schedules', () => fetchSchedules(tenant), {
+        refetchOnWindowFocus: true,
     })
-    const {data: vmequps} = useQuery('vmequps', fetchVmequps, {
-        refetchOnWindowFocus: false,
-        staleTime: Infinity,
-    })
+
     const {data: custodiansData} = useQuery('custodians', fetchCustodians, {
         refetchOnWindowFocus: false,
         staleTime: Infinity,
     })
-    const {data: serviceTypes} = useQuery('serviceTypes', fetchServiceTypes, {
-        refetchOnWindowFocus: false,
-        staleTime: Infinity,
-    })
+    const {data: serviceTypes, isLoading: servicesLoading} = useQuery('serviceTypes', () => fetchServiceTypes(tenant))
 
-    const {data: equipmentData} = useQuery('equipment', getEquipment, {
-        refetchOnWindowFocus: false,
-        staleTime: Infinity,
-    })
+    // const {data: equipmentData} = useQuery('equipment', getEquipment, {
+    //     refetchOnWindowFocus: false,
+    //     staleTime: Infinity,
+    // })
 
 
     //Create
@@ -118,6 +113,10 @@ const Calendar = ({chosenLocationIdFromDropdown}) => {
     const locationQuery = useQueryClient().getQueryData('Locations')
     // const vmQuery = useQueryClient().getQueryData('vmequps')
     let dropDownListObject;
+    console.log('Mao service', serviceTypes?.data?.map((service) => {
+        console.log('service', service)
+        return {text: `${service.name} For Model: ${service?.model}`, value: service.id}
+    }))
 
     function onEventRendered(args) {
         let categoryColor = {
@@ -202,7 +201,8 @@ const Calendar = ({chosenLocationIdFromDropdown}) => {
                             data-name='serviceTypeId'
                             className='e-field'
                             style={{width: '100%'}}
-                            dataSource={serviceTypes?.data.map((service) => {
+                            dataSource={serviceTypes?.data?.map((service) => {
+                                console.log('service', service)
                                 return {text: `${service.name} For Model: ${service?.model}`, value: service.id}
                             })}
                             fields={{text: 'text', value: 'value'}}
@@ -323,11 +323,12 @@ const Calendar = ({chosenLocationIdFromDropdown}) => {
                     locationId: schedule.locationId,
                     timeStart: schedule.StartTime,
                     timeEnd: schedule.EndTime,
-                    entryId: 0,
+                    entryId: schedule.entryId,
                     vmModel: 'null',
                     vmClass: 'null',
                     serviceTypeId: schedule.serviceTypeId,
                     responsible: schedule.responsible,
+                    tenantId: tenant,
                 }
             })
             //Since format is an array, I need to change it to the format that the API will understand which is an object

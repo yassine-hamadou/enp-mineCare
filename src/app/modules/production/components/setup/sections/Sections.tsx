@@ -1,20 +1,16 @@
-import {Button, Form, Input, Modal, Select, Space, Table} from 'antd'
+import {Button, Form, Input, Modal, Space, Table} from 'antd'
 import {useEffect, useState} from 'react'
 import {KTCardBody, KTSVG} from '../../../../../../_metronic/helpers'
 // import { AddWorkTypeForm } from './AddWorkTypeForm'
 import {Link, useNavigate, useParams} from 'react-router-dom'
 import axios from 'axios'
-import {ENP_URL, fetchSections, fetchServices} from '../../../../../urls'
-import { useQuery } from 'react-query'
+import {ENP_URL, fetchServices} from '../../../../../urls'
+import {useQuery} from 'react-query'
+import {useAuth} from "../../../../auth";
 
-
-
-interface TestItems {
-  id: string,
-  name: string,
-}
 
 const SectionsPage = () => {
+  const {tenant} = useAuth()
   const [gridData, setGridData] = useState<any>([])
   // const [serviceData, setServiceData] = useState([])
   const [loading, setLoading] = useState(false)
@@ -25,8 +21,8 @@ const SectionsPage = () => {
   const [form] = Form.useForm()
   const [submitLoading, setSubmitLoading] = useState(false)
 
-  
-  const params:any  = useParams();
+
+  const params: any = useParams();
   const navigate = useNavigate();
   // console.log(params.id)
   // Modal functions
@@ -61,6 +57,7 @@ const SectionsPage = () => {
   function handleDelete(element: any) {
     deleteData(element)
   }
+
   const columns: any = [
 
     {
@@ -89,20 +86,18 @@ const SectionsPage = () => {
           <Link to={`/setup/groups/${record.id}`}>
             <span className='btn btn-light-info btn-sm'>Groups</span>
           </Link>
-          <a href='#' className='btn btn-light-warning btn-sm '>
+          <Button href='#' className='btn btn-light-warning btn-sm '>
             Update
-          </a>
+          </Button>
           {/* <a href="#" className="btn btn-light-danger btn-sm">Delete</a> */}
-          <a onClick={() => handleDelete(record)} className='btn btn-light-danger btn-sm'>
+          <Button onClick={() => handleDelete(record)} className='btn btn-light-danger btn-sm'>
             Delete
-          </a>
+          </Button>
         </Space>
       ),
     },
     //console
   ]
-
-  const {Option} = Select
 
   const loadData = async () => {
     setLoading(true)
@@ -118,43 +113,18 @@ const SectionsPage = () => {
   }
 
 
-
-  const dataWithIndex = gridData.map((item: any, index:any) => ({
+  const dataWithIndex = gridData.map((item: any, index: any) => ({
     ...item,
     key: index,
   }))
 
-  const dataByID = dataWithIndex.filter((section:any) =>{
-    return section.serviceId.toString() ===params.id
+  const dataByID = dataWithIndex.filter((section: any) => {
+    return section.serviceId.toString() === params.id
   })
 
 
-  const {data: allServices} = useQuery('services', fetchServices, {cacheTime: 60000000})
-  const {data: allSections} = useQuery('sections', fetchSections, {cacheTime: 60000000})
+  const {data: allServices} = useQuery('services', () => fetchServices(tenant), {cacheTime: 60000000})
 
-
-const getItemName= async (param:any) =>{
-
-    let newName=null
-  
-     const   itemTest = await allServices?.data.find((item:any) =>
-      item.id.toString()===param
-    )
-     newName = await itemTest
-    return newName
- }
-
-
-const getModel=  () =>{
-    let newName=null
-     const   itemTest =  allServices?.data.find((item:any) =>
-      item.id.toString()===params.id
-    )
-     newName =  itemTest
-    return newName
- }
-
- 
 
   const handleInputChange = (e: any) => {
     setSearchText(e.target.value)
@@ -163,18 +133,38 @@ const getModel=  () =>{
     }
   }
   useEffect(() => {
-    (async ()=>{
+    const getModel = () => {
+      let newName
+      newName = allServices?.data.find((item: any) =>
+        item.id.toString() === params.id
+      )
+      return newName
+    }
+
+    const getItemName = async (param: any) => {
+
+      let newName
+
+      const itemTest = await allServices?.data.find((item: any) =>
+        item.id.toString() === param
+      )
+      newName = await itemTest
+      return newName
+    }
+
+    (async () => {
       let res = await getItemName(params.id)
       setItemName(res.name)
     })();
 
-    (async ()=>{
+    (async () => {
       let res = await getModel()
       setModelName(res.model)
     })();
 
+
     loadData()
-  }, [])
+  }, [allServices?.data, params.id])
   const globalSearch = () => {
     // @ts-ignore
     filteredData = dataWithVehicleNum.filter((value) => {
@@ -196,7 +186,7 @@ const getModel=  () =>{
 
     try {
       const response = await axios.post(url, data)
-      
+
       setSubmitLoading(false)
       form.resetFields()
       setIsModalOpen(false)
@@ -219,10 +209,13 @@ const getModel=  () =>{
     >
       <KTCardBody className='py-4 '>
         <div className='table-responsive'>
-          
-          <h3 style={{fontWeight:"bolder"}}>{modelName} <span style={{color: "blue", fontSize:"22px", fontWeight:"normal"}}> &gt; </span>  {itemName}</h3>
+
+          <h3 style={{fontWeight: "bolder"}}>{modelName} <span
+            style={{color: "blue", fontSize: "22px", fontWeight: "normal"}}> &gt; </span> {itemName}</h3>
           <br></br>
-          <button className='mb-3 btn btn-outline btn-outline-dashed btn-outline-primary btn-active-light-primary' onClick={() => navigate(-1)}>Back to Services</button>
+          <button className='mb-3 btn btn-outline btn-outline-dashed btn-outline-primary btn-active-light-primary'
+                  onClick={() => navigate(-1)}>Back to Services
+          </button>
           <div className='d-flex justify-content-between'>
             <Space style={{marginBottom: 16}}>
               <Input
@@ -238,20 +231,20 @@ const getModel=  () =>{
             </Space>
             <Space style={{marginBottom: 16}}>
               <button type='button' className='btn btn-primary me-3' onClick={showModal}>
-                <KTSVG path='/media/icons/duotune/arrows/arr075.svg' className='svg-icon-2' />
+                <KTSVG path='/media/icons/duotune/arrows/arr075.svg' className='svg-icon-2'/>
                 Add
               </button>
               <button type='button' className='btn btn-light-primary me-3'>
-                <KTSVG path='/media/icons/duotune/arrows/arr078.svg' className='svg-icon-2' />
+                <KTSVG path='/media/icons/duotune/arrows/arr078.svg' className='svg-icon-2'/>
                 Upload
               </button>
               <button type='button' className='btn btn-light-primary me-3'>
-                <KTSVG path='/media/icons/duotune/arrows/arr078.svg' className='svg-icon-2' />
+                <KTSVG path='/media/icons/duotune/arrows/arr078.svg' className='svg-icon-2'/>
                 Export
               </button>
             </Space>
           </div>
-          <Table columns={columns} dataSource={dataByID} loading={loading} />
+          <Table columns={columns} dataSource={dataByID} loading={loading}/>
 
           <Modal
             title='Add Section'
@@ -285,7 +278,7 @@ const getModel=  () =>{
               onFinish={onFinish}
             >
               <Form.Item label='Name' name='name' rules={[{required: true}]}>
-                <Input />
+                <Input/>
               </Form.Item>
             </Form>
           </Modal>

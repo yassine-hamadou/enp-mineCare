@@ -1,18 +1,37 @@
-import {Button, Col, DatePicker, Form, Input, Row, Select, Tabs} from "antd";
+import {Button, DatePicker, Form, Input, message, Select, Tabs} from "antd";
 import React from "react";
 import {KTCard, KTCardBody} from "../../../../../_metronic/helpers";
-import {ENP_URL, getModels} from "../../../../urls";
-import axios from "axios";
-import {useQuery} from "react-query";
+import {getModels, postEquipment} from "../../../../urls";
+import {useMutation, useQuery, useQueryClient} from "react-query";
 import {Link} from "react-router-dom";
 
 const AddEquipRegister = () => {
   let [form] = Form.useForm();
-  const {data: listOfModels} = useQuery('listOfModels', getModels)
+  let [generalInfo] = Form.useForm();
+  const queryClient = useQueryClient()
 
-  function onfinish(values: any) {
+  const {data: listOfModels} = useQuery('listOfModels', getModels)
+  const {mutate: addEquipment} = useMutation(postEquipment, {
+    onSuccess: () => {
+      queryClient.invalidateQueries('listOfEquipment')
+      message.success('Equipment Added Successfully')
+      form.resetFields()
+    },
+    onError: (error: any) => {
+      message.error(error?.message)
+    }
+  })
+
+  function onDetailsFinish(values: any) {
+    console.log('onfinish1');
+    console.log(values)
+    addEquipment(values)
+  }
+
+  function onGeneralInfoFinish(values: any) {
     console.log('onfinish');
     console.log(values)
+    addEquipment(values)
   }
 
 
@@ -44,7 +63,7 @@ const AddEquipRegister = () => {
                     name={'add-equip-register'}
                     layout={'vertical'}
                     form={form}
-                    onFinish={onfinish}
+                    onFinish={onDetailsFinish}
                     labelCol={{span: 8}}
                     wrapperCol={{span: 24}}
                     title='Add Equipment'
@@ -151,8 +170,8 @@ const AddEquipRegister = () => {
                   <Form
                     name={'general-info'}
                     layout={'vertical'}
-                    // form={generalInfo}
-                    onFinish={onfinish}
+                    form={generalInfo}
+                    onFinish={onGeneralInfoFinish}
                     labelCol={{span: 8}}
                     wrapperCol={{span: 24}}
                     title='Add General Info'
@@ -367,3 +386,4 @@ const AddEquipRegister = () => {
 }
 
 export default AddEquipRegister
+

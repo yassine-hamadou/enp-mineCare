@@ -1,42 +1,44 @@
 import {Button, Input, Modal, Space, Table} from 'antd'
-import {useEffect, useState} from 'react'
 import axios from 'axios'
 import {Link} from 'react-router-dom'
 import {KTCardBody, KTSVG} from '../../../../../../_metronic/helpers'
-import {ENP_URL} from '../../../../../urls'
+import {ENP_URL, getModels} from '../../../../../urls'
+import {useQuery} from "react-query";
 
 const WorkTypePage = () => {
-  const [gridData, setGridData] = useState([])
-  const [loading, setLoading] = useState(false)
-  const [searchText, setSearchText] = useState('')
-  const [isModalOpen, setIsModalOpen] = useState(false)
-
-  const showModal = () => {
-    setIsModalOpen(true)
-  }
-
-  const handleOk = () => {
-    setIsModalOpen(false)
-  }
-
-  const handleCancel = () => {
-    setIsModalOpen(false)
-  }
+  // const [gridData, setGridData] = useState([])
+  // const [loading, setLoading] = useState(false)
+  // const [searchText, setSearchText] = useState('')
+  // const [isModalOpen, setIsModalOpen] = useState(false)
+  const {data: equipModels, isLoading: equipModelLoading} = useQuery('equipmodels',
+    getModels
+  )
+  console.log(equipModels)
+  // const showModal = () => {
+  //   setIsModalOpen(true)
+  // }
+  //
+  // const handleOk = () => {
+  //   setIsModalOpen(false)
+  // }
+  //
+  // const handleCancel = () => {
+  //   setIsModalOpen(false)
+  // }
   // Modal functions end
 
   const columns: any = [
     {
       title: 'Manufacturer',
-      dataIndex: 'txmanf',
-      key: 'txmanf',
-      onFilter: (value: any, record: any) => {
-        return String(record.txmanf).toLowerCase().includes(value.toLowerCase())
+      dataIndex: 'manufacturer',
+      render: (manufacturer: any) => {
+        return manufacturer?.name
       },
       sorter: (a: any, b: any) => {
-        if (a.txmanf > b.txmanf) {
+        if (a.manufacturer?.name > b.manufacturer?.name) {
           return 1
         }
-        if (b.txmanf > a.txmanf) {
+        if (b.manufacturer?.name > a.manufacturer?.name) {
           return -1
         }
         return 0
@@ -45,20 +47,17 @@ const WorkTypePage = () => {
 
     {
       title: 'Model',
-      dataIndex: 'txmodel',
-      key: 'txmodel',
+      dataIndex: 'code',
+      key: 'code',
       sorter: (a: any, b: any) => {
-        if (a.txmodel > b.txmodel) {
+        if (a.code > b.code) {
           return 1
         }
-        if (b.txmodel > a.txmodel) {
+        if (b.code > a.code) {
           return -1
         }
         return 0
       },
-      // onFilter:(value:any, record:any)=>{
-      //   return String(record.vehicleNum).toLowerCase().includes(value.toLowerCase())
-      // },
     },
 
     {
@@ -71,7 +70,12 @@ const WorkTypePage = () => {
       render: (_: any, record: any) => (
         <Space size='middle'>
           {/* <a href="service" className="btn btn-light-info btn-sm">Services</a> */}
-          <Link to={`/setup/service/${record.txmodel}`}>
+          <Link to={`/setup/service/${record.code}`} state={
+            {
+              txmanf: record.manufacturer,
+              txmodl: record.code,
+            }
+          }>
             <span className='btn btn-light-info btn-sm'>Service</span>
           </Link>
           <a href='#' className='btn btn-light-warning btn-sm '>
@@ -85,35 +89,35 @@ const WorkTypePage = () => {
     },
   ]
 
-  const loadData = async () => {
-    setLoading(true)
-    try {
-      const response = await axios.get(`${ENP_URL}/VmmodlsApi`)
-      setGridData(response.data)
-      setLoading(false)
-    } catch (error) {
-      console.log(error)
-    }
-  }
+  // const loadData = async () => {
+  //   setLoading(true)
+  //   try {
+  //     const response = await axios.get(`${ENP_URL}/VmmodlsApi`)
+  //     setGridData(response.data)
+  //     setLoading(false)
+  //   } catch (error) {
+  //     console.log(error)
+  //   }
+  // }
+  //
+  // useEffect(() => {
+  //   loadData()
+  // }, [])
 
-  useEffect(() => {
-    loadData()
-  }, [])
-
-  const dataWithVehicleNum = gridData.map((item: any, index) => ({
+  const dataWithVehicleNum = equipModels?.data?.map((item: any, index: any) => ({
     ...item,
-    vehicleNum: Math.floor(Math.random() * 20) + 1,
-    downTime: `${Math.floor(Math.random() * 100) + 1}`,
-    numOfHrs: Math.floor(Math.random() * 20) + 1,
+    // vehicleNum: Math.floor(Math.random() * 20) + 1,
+    // downTime: `${Math.floor(Math.random() * 100) + 1}`,
+    // numOfHrs: Math.floor(Math.random() * 20) + 1,
     key: index,
   }))
 
-  const handleInputChange = (e: any) => {
-    setSearchText(e.target.value)
-    if (e.target.value === '') {
-      loadData()
-    }
-  }
+  // const handleInputChange = (e: any) => {
+  //   setSearchText(e.target.value)
+  //   if (e.target.value === '') {
+  //     loadData()
+  //   }
+  // }
 
   // const globalSearch = () => {
   //   // @ts-ignore
@@ -147,17 +151,17 @@ const WorkTypePage = () => {
               <Button type='primary'>Search</Button>
             </Space>
             <Space style={{marginBottom: 16}}>
-              
+
               <button type='button' className='btn btn-light-primary me-3'>
-                <KTSVG path='/media/icons/duotune/arrows/arr078.svg' className='svg-icon-2' />
+                <KTSVG path='/media/icons/duotune/arrows/arr078.svg' className='svg-icon-2'/>
                 Export
               </button>
             </Space>
           </div>
-          <Table columns={columns} dataSource={dataWithVehicleNum} loading={loading} rowKey="index"/>
-          <Modal title='Add Item' open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
-            {/* <AddWorkTypeForm /> */}
-          </Modal>
+          <Table columns={columns} dataSource={dataWithVehicleNum} loading={equipModelLoading} rowKey="index"/>
+          {/*<Modal title='Add Item' open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>*/}
+          {/*  /!* <AddWorkTypeForm /> *!/*/}
+          {/*</Modal>*/}
         </div>
       </KTCardBody>
     </div>

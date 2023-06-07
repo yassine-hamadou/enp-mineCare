@@ -1,12 +1,13 @@
 import {Button, DatePicker, Input, InputNumber, message, Modal, Select, TableColumnsType} from 'antd'
 import {Space, Table, Form} from 'antd'
-import React, {useEffect, useState} from 'react'
+import {useState} from 'react'
 import {useMutation, useQuery, useQueryClient} from "react-query";
 import {KTSVG} from '../../../../../../_metronic/helpers'
-import {addHours, fetchEquips, fetchHours} from '../../../../../urls'
+import {addHours, fetchHours} from '../../../../../urls'
 import {useLocation} from "react-router-dom";
+import {useAuth} from "../../../../auth";
 
-const HoursPage: React.FC = () => {
+const HoursPage = () => {
 
   const modelClassSelected: any = useLocation().state
   // modelClassSelected is an array of models
@@ -24,8 +25,8 @@ const HoursPage: React.FC = () => {
   const [form] = Form.useForm()
   const queryClient = useQueryClient()
   const [isModalOpen, setIsModalOpen] = useState(false)
-
-  const {data: allHours, isLoading} = useQuery('hours', fetchHours)
+  const {tenant} = useAuth()
+  const {data: allHours, isLoading} = useQuery('hours', () => fetchHours(tenant))
   console.log('allHours', allHours)
   const {mutate: mutateHours} = useMutation(addHours, {
     onSuccess: () => {
@@ -36,7 +37,7 @@ const HoursPage: React.FC = () => {
     },
     onError: (error: any) => {
       message.error(error.message)
-
+      throw error.ErrorBoundary
     }
   })
   const showModal = () => {

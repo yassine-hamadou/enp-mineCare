@@ -11,8 +11,9 @@ import {
 import {LayoutSplashScreen} from '../../../../_metronic/layout/core'
 import {AuthModel, UserModel} from './_models'
 import * as authHelper from './AuthHelpers'
-import {getUserByToken} from './_requests'
+import {parseJwt} from './_requests'
 import {WithChildren} from '../../../../_metronic/helpers'
+import {setTenant} from "./AuthHelpers";
 
 type AuthContextProps = {
   auth: AuthModel | undefined
@@ -20,14 +21,25 @@ type AuthContextProps = {
   currentUser: UserModel | undefined
   setCurrentUser: Dispatch<SetStateAction<UserModel | undefined>>
   logout: () => void
+  tenant: any
+  saveTenant: (tenant: any) => void
+  // setTenant: Dispatch<SetStateAction<any>>
 }
 
 const initAuthContextPropsState = {
   auth: authHelper.getAuth(),
-  saveAuth: () => {},
+  saveAuth: () => {
+  },
   currentUser: undefined,
-  setCurrentUser: () => {},
-  logout: () => {},
+  setCurrentUser: () => {
+  },
+  logout: () => {
+  },
+  tenant: undefined,
+  saveTenant: () => {
+  },
+  // setTenant: () => {
+  // }
 }
 
 const AuthContext = createContext<AuthContextProps>(initAuthContextPropsState)
@@ -39,10 +51,20 @@ const useAuth = () => {
 const AuthProvider: FC<WithChildren> = ({children}) => {
   const [auth, setAuth] = useState<AuthModel | undefined>(authHelper.getAuth())
   const [currentUser, setCurrentUser] = useState<UserModel | undefined>()
+  const [tenant, setTenant] = useState<string | undefined>(authHelper.getTenant())
   const saveAuth = (auth: AuthModel | undefined) => {
     setAuth(auth)
     if (auth) {
-      authHelper.setAuth(auth)
+      authHelper.setAuth(auth) // save auth  into local storage
+    } else {
+      authHelper.removeAuth()
+    }
+  }
+
+  const saveTenant = (tenant: any) => {
+    setTenant(tenant)
+    if (tenant) {
+      authHelper.setTenant(tenant) // save tenant  into local storage
     } else {
       authHelper.removeAuth()
     }
@@ -50,18 +72,19 @@ const AuthProvider: FC<WithChildren> = ({children}) => {
 
   const logout = () => {
     saveAuth(undefined)
+    saveTenant(undefined)
     setCurrentUser(undefined)
   }
 
   return (
-    <AuthContext.Provider value={{auth, saveAuth, currentUser, setCurrentUser, logout}}>
+    <AuthContext.Provider value={{auth, saveAuth, currentUser, setCurrentUser, tenant, saveTenant, logout}}>
       {children}
     </AuthContext.Provider>
   )
 }
 
 const AuthInit: FC<WithChildren> = ({children}) => {
-  const {auth, logout, setCurrentUser} = useAuth()
+  const {auth, logout, setCurrentUser, tenant} = useAuth()
   const didRequest = useRef(false)
   const [showSplashScreen, setShowSplashScreen] = useState(true)
   // We should request user by authToken (IN OUR EXAMPLE IT'S API_TOKEN) before rendering the application
@@ -69,9 +92,10 @@ const AuthInit: FC<WithChildren> = ({children}) => {
     const requestUser = async (apiToken: string) => {
       try {
         if (!didRequest.current) {
-          const {data} = await getUserByToken(apiToken)
-          if (data) {
-            setCurrentUser(data)
+          const data: any = parseJwt(apiToken)
+          if (data.payload) {
+            setCurrentUser(data.payload) // save user info into context
+            setTenant(tenant)
           }
         }
       } catch (error) {
@@ -95,7 +119,7 @@ const AuthInit: FC<WithChildren> = ({children}) => {
     // eslint-disable-next-line
   }, [])
 
-  return showSplashScreen ? <LayoutSplashScreen /> : <>{children}</>
+  return showSplashScreen ? <LayoutSplashScreen/> : <>{children}</>
 }
 
 export {AuthProvider, AuthInit, useAuth}

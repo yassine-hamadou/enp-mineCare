@@ -36,6 +36,7 @@ export function AsideMenuMain() {
         <AsideMenuItem to='entries/schedule' hasBullet={true} title='Equipment Schedule'/>
         <AsideMenuItem to='entries/fault' hasBullet={true} title='Fault'/>
         <AsideMenuItem to='entries/hours' hasBullet={true} title='Hours'/>
+        <AsideMenuItem to='entries/backlog' hasBullet={true} title='Backlog'/>
         <AsideMenuItemWithSub to='#' title={'Changeout'} hasBullet={true}>
           <AsideMenuItem to='/entries/changeout/lube' title='Lube' hasBullet={true}/>
           <AsideMenuItem to='/entries/changeout/ground-engaging-tools' title='GET' hasBullet={true}/>
@@ -122,24 +123,28 @@ export function AsideMenuMain() {
           <AsideMenuItem to='/setup/lube-config' title='Lube Config' hasBullet={true}/>
           <AsideMenuItem to='/setup/refill' title='Refill Type' hasBullet={true}/>
         </AsideMenuItemWithSub>
+        <AsideMenuItemWithSub
+          to='#'
+          title='Backlog'
+          hasBullet={true}
+        >
+          <AsideMenuItem to='/setup/backlogs/priority' title='Priority' hasBullet={true}/>
+          <AsideMenuItem to='/setup/backlogs/source' title='Source' hasBullet={true}/>
+        </AsideMenuItemWithSub>
       </AsideMenuItemWithSub>
       <div className='menu-item'>
         <div className='menu-content'>
           <div className='separator mx-1 my-4'></div>
         </div>
       </div>
-
-      <div className='menu-item'>
-        <Link
-          className={clsx('menu-link without-sub ml0', {active: isDashboardActive})}
-          to='/dashboard'
-        >
-          <span className='menu-icon'>
-            <KTSVG path='/media/icons/duotune/general/gen055.svg' className='svg-icon-2'/>
-          </span>
-          <span className='menu-title'>Configuration</span>
-        </Link>
-      </div>
+      <AsideMenuItemWithSub
+        to='#'
+        title='Configuration'
+        fontIcon='bi-archive'
+        icon='/media/icons/duotune/general/gen055.svg'
+      >
+        <AsideMenuItem to='/configuration/data-integrity' title='Data Integrity' hasBullet={true}/>
+      </AsideMenuItemWithSub>
     </>
   )
 }

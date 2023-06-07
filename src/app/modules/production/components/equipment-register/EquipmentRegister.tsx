@@ -1,18 +1,21 @@
-import {Button, Form, Input, Space, Table} from "antd";
+import {Button, Input, Space, Table} from "antd";
 import React, {useEffect, useState} from "react";
-import {Link, useParams} from "react-router-dom";
+import {Link} from "react-router-dom";
 import {KTCard, KTCardBody, KTSVG} from "../../../../../_metronic/helpers";
 import {useQuery} from "react-query";
 import axios from "axios";
 import {ENP_URL} from "../../../../urls";
+import {useAuth} from "../../../auth";
 
 const EquipmentRegister = () => {
   // const {manufacturerCode} = useParams();
+  const {tenant} = useAuth()
+  // const tenant = localStorage.getItem('tenant')
 
   const {data: listOfEquipments, isLoading} = useQuery('equipments',
-    () => axios.get(`${ENP_URL}/equipments`), {
-      refetchOnWindowFocus: false,
-      staleTime: Infinity
+    () => axios.get(`${ENP_URL}/equipments/tenant/${tenant}`), {
+      // refetchOnWindowFocus: false,
+      // staleTime: Infinity,
     }
   )
 
@@ -214,7 +217,7 @@ const EquipmentRegister = () => {
     {
       title: 'Action',
       width: 200,
-      fixed: true,
+      fixed: "right",
       render: (_: any, record: any) => (
         <Space>
           <Link
@@ -235,6 +238,7 @@ const EquipmentRegister = () => {
                 modelName: record.modelName,
                 modelClassName: record.modelClassName,
                 manufacturer: record.manufacturer,
+                modelId: record.modelId,
               }
             }
             to={`edit/${record.equipmentId}`}>
@@ -309,21 +313,7 @@ const EquipmentRegister = () => {
     const searchResult = beforeSearch?.filter((item: any) => {
       console.log('item', item)
       return (
-        item.description?.toLowerCase().includes(searchValue?.toLowerCase()) ||
-        item.equipmentId?.toLowerCase().includes(searchValue?.toLowerCase()) ||
-        item.serialNumber?.toLowerCase().includes(searchValue?.toLowerCase()) ||
-        item.manufactureDate?.toLowerCase().includes(searchValue?.toLowerCase()) ||
-        item.purchaseDate?.toLowerCase().includes(searchValue?.toLowerCase()) ||
-        item.endOfLifeDate?.toLowerCase().includes(searchValue?.toLowerCase()) ||
-        item.facode?.toLowerCase().includes(searchValue?.toLowerCase()) ||
-        item.note?.toLowerCase().includes(searchValue.toLowerCase()) ||
-        item.warrantyStartDate?.toLowerCase().includes(searchValue.toLowerCase()) ||
-        item.warrantyEndDate?.toLowerCase().includes(searchValue.toLowerCase()) ||
-        item.universalCode?.toLowerCase().includes(searchValue.toLowerCase()) ||
-        item.meterType?.toLowerCase().includes(searchValue.toLowerCase()) ||
-        item.modelName?.toLowerCase().includes(searchValue.toLowerCase()) ||
-        item.modelClassName?.toLowerCase().includes(searchValue.toLowerCase()) ||
-        item.manufacturer?.toLowerCase().includes(searchValue.toLowerCase())
+        Object.values(item).join('').toLowerCase().includes(searchValue?.toLowerCase())
       )
     })//search the grid data
     console.log('searchResult', searchResult)
@@ -336,7 +326,6 @@ const EquipmentRegister = () => {
       setGridData(beforeSearch)
     }
   }
-
   return <>
     <KTCard>
       <KTCardBody>
@@ -364,7 +353,9 @@ const EquipmentRegister = () => {
           bordered
           dataSource={gridData}
           loading={isLoading}
-          scroll={{x: 1500}}
+          scroll={
+            {x: 1500}
+          }
         />
       </KTCardBody>
     </KTCard>

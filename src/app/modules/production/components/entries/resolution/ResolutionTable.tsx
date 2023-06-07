@@ -4,10 +4,12 @@ import {KTSVG} from '../../../../../../_metronic/helpers'
 import {useQueryClient} from 'react-query'
 import {dhm} from '../fault_d/FaultTable'
 
-const ResolutionTable = () => {
-  let initialData: any = useQueryClient().getQueryData('faults')
+const ResolutionTable = (props: any) => {
+  // let initialData: any = useQueryClient().getQueryData('faults')
+  let initialData: any = props.faults
+
   const [gridData, setGridData] = useState(
-    initialData?.data.filter((fault: any) => fault.status === 1)
+    props.faults.filter((fault: any) => fault.status === 1)
   )
   const [loading] = useState(false)
 
@@ -198,7 +200,7 @@ const ResolutionTable = () => {
         columns={columns}
         //filter data for last 7 days
         dataSource={
-          gridData?.filter((fault: any) => {
+          props.faults.filter((fault: any) => fault.status === 1)?.filter((fault: any) => {
             return (
               new Date(fault.wtimeEnd).getTime() >
               new Date().getTime() - 7 * 24 * 60 * 60 * 1000
