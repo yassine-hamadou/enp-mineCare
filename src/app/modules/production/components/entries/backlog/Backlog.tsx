@@ -5,6 +5,7 @@ import TextArea from "antd/lib/input/TextArea";
 import {getBacklogs, getEquipment, postBacklogs} from "../../../../../urls";
 import {useAuth} from "../../../../auth";
 import {useMutation, useQuery} from "react-query";
+import DevexpressDashboardComponent from "../../../../../pages/dashboard/DevexpressDashboardComponent";
 
 const Backlog = () => {
   const {tenant} = useAuth()
@@ -21,7 +22,6 @@ const Backlog = () => {
       message.error('Error adding backlog, Please try again')
     }
   })
-  console.log(backlogData)
   const Option = Select.Option
   const showModal = () => {
     setIsModalOpen(true)
@@ -40,52 +40,74 @@ const Backlog = () => {
   const showModalSolve = () => {
     setIsCompleteModalOpen(true)
   }
+
   const onFinish = async (values: any) => {
     setSubmitLoading(true)
     try {
       setSubmitLoading(false)
       form.resetFields()
       setIsModalOpen(false)
-      message.success('Fault reported successfully')
-      console.log("values", values)
+      // console.log("values", values)
       addBacklog(values)
     } catch (error: any) {
       setSubmitLoading(false)
-      message.error('Error reporting fault, Please try again')
       return error.statusText
     }
   }
   const [form] = Form.useForm()
   const {data: equipmentData, isLoading: equipmentIsLoading} = useQuery('equipment', () => getEquipment(tenant))
-
+  console.log(equipmentData)
   let columns: any[] = [
     {
       title: 'Equipment ID',
       dataIndex: 'equipmentId',
+
     },
     {
       title: 'BDate',
-      dataIndex: 'bDate',
+      dataIndex: 'bdate',
+
+      render: (text: any, record: any) => (
+        new Date(record?.bdate)?.toDateString()
+      ),
     },
     {
       title: 'CDate',
-      dataIndex: 'cDate',
+      dataIndex: 'cdate',
+
+      render: (text: any, record: any) => (
+        new Date(record?.cdate)?.toDateString()
+      ),
     },
     {
       title: 'Item',
       dataIndex: 'item',
+
     },
     {
       title: 'Note',
       dataIndex: 'note',
+
     },
     {
       title: 'Comment',
       dataIndex: 'comment',
+
     },
     {
       title: 'Reference No',
-      dataIndex: 'referenceNo',
+      dataIndex: 'referenceId',
+
+    },
+    {
+      title: 'Source',
+      dataIndex: 'source',
+
+    },
+    {
+      title: 'Priority',
+      dataIndex: 'priority',
+      // width: 200,
     },
     {
       title: 'Status',
@@ -94,9 +116,11 @@ const Backlog = () => {
     {
       title: 'Action',
       dataIndex: 'action',
+      fixed: "right",
+      width: 220,
       render: (text: any, record: any) => (
         <Space size="middle">
-          <Button type="primary">Complete</Button>
+          <Button type="primary" className={'btn btn-light-success btn-sm'}>Complete</Button>
           <Button type="primary" danger>Delete</Button>
         </Space>
       ),
@@ -139,7 +163,7 @@ const Backlog = () => {
                     dataSource={backlogData?.data}
                     bordered
                     rowKey={(record: any) => record.entryId}
-                    scroll={{x: 1500}}
+                    scroll={{x: 2000}}
                     pagination={{
                       defaultPageSize: 10,
                     }}
@@ -153,10 +177,30 @@ const Backlog = () => {
               key: '2',
               children: (
                 <>
-                  {/*<ResolutionTable faults={''}/>*/}
+                  <Table
+                    columns={columns}
+                    dataSource={backlogData?.data?.filter((item: any) => item.status === 'Completed')}
+                    bordered
+                    rowKey={(record: any) => record.entryId}
+                    scroll={{x: 1500}}
+                    pagination={{
+                      defaultPageSize: 10,
+                    }}
+                  />
                 </>
               ),
             },
+            {
+              label: <Badge style={{backgroundColor: '#faad14'}} count={0}><span
+                className='me-4'>Analysis</span></Badge>,
+              key: '3',
+              children: (
+                <>
+                  <DevexpressDashboardComponent dashboardId={'backlogs'}/>
+                </>
+              ),
+
+            }
           ]}
         />
         <Modal
@@ -202,26 +246,53 @@ const Backlog = () => {
                 }
               </Select>
             </Form.Item>
-            <Form.Item name='Bdate' label='Backlog Date'>
+            <Form.Item name='bdate' label='Backlog Date'>
               <DatePicker showTime/>
             </Form.Item>
-            <Form.Item name='Item' label='Item' rules={[{required: true}]}>
+            <Form.Item name='item' label='Item' rules={[{required: true}]}>
               <Input/>
             </Form.Item>
-            <Form.Item name='Note' label='Note' rules={[{required: true}]}>
+            <Form.Item name='note' label='Note' rules={[{required: true}]}>
               <Input/>
             </Form.Item>
-            <Form.Item name='Comment' label='Comment' rules={[{required: true}]}>
+            <Form.Item name='comment' label='Comment' rules={[{required: true}]}>
               <TextArea/>
             </Form.Item>
-            <Form.Item name='ReferenceNo' label='Reference No'>
+            <Form.Item name='referenceId' label='Reference No'>
               <Input/>
             </Form.Item>
-            <Form.Item name='Status' label='Status'>
+            <Form.Item name='status' label='Status'>
               <Input/>
             </Form.Item>
-            <Form.Item name='CompletionDate' label='Completion Date'>
+            <Form.Item name='cdate' label='Completion Date'>
               <DatePicker showTime/>
+            </Form.Item>
+            <Form.Item name='priority' label='Source'>
+              <Select
+                showSearch
+                placeholder='Select a priority'
+              >
+                <Option value='High'>High</Option>
+                <Option value='Medium'>Medium</Option>
+              </Select>
+            </Form.Item>
+            <Form.Item name='source' label='Source'>
+              <Select
+                showSearch
+                placeholder='Select a source'
+              >
+                <Option value='High'>High</Option>
+                <Option value='Medium'>Medium</Option>
+              </Select>
+            </Form.Item>
+            <Form.Item name='downType' label='Down Type'>
+              <Select
+                showSearch
+                placeholder='Select a down type'
+              >
+                <Option value='High'>High</Option>
+                <Option value='Medium'>Medium</Option>
+              </Select>
             </Form.Item>
           </Form>
         </Modal>

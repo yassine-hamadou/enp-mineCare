@@ -63,6 +63,7 @@ const AllReportPage = () => {
           <h3><span className="bullet me-5"></span><Link to="/report/solved-report">Solved</Link></h3>
           <h3><span className="bullet me-5"></span><Link to="/report/pending-report">Pending</Link></h3>
           <h3><span className="bullet me-5"></span><Link to="/report/all-faults">All faults</Link></h3>
+          <h3><span className="bullet me-5"></span><Link to="/report/all-backlogs">All backlogs</Link></h3>
           <h3><span className="bullet me-5"></span><Link to="/report/fleet-history-report">Equipment History</Link></h3>
           <h3><span className="bullet me-5"></span><Link to="/report/faultByModelSummary">Summary By Model</Link>
           </h3>

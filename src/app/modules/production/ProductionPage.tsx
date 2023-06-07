@@ -637,7 +637,19 @@ const ProductionPage: React.FC = () => {
               <PageTitle breadcrumbs={accountBreadCrumbs}>All Faults Report</PageTitle>
               {/*<FaultEntryReport/>*/}
               <ReportComponent
-                reportName={"AllFaultsReport"}
+                reportName={"AllfaultsReport"}
+              />
+            </>
+          }
+        />
+        <Route
+          path='all-backlogs'
+          element={
+            <>
+              <PageTitle breadcrumbs={accountBreadCrumbs}>All Backlogs Report</PageTitle>
+              {/*<FaultEntryReport/>*/}
+              <ReportComponent
+                reportName={"AllBacklogsReport"}
               />
             </>
           }

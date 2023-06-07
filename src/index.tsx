@@ -16,6 +16,7 @@ import './_metronic/assets/sass/style.react.scss'
 import {AppRoutes} from './app/routing/AppRoutes'
 import {AuthProvider, setupAxios} from './app/modules/auth'
 import {QueryClient, QueryClientProvider} from "react-query";
+import {register} from './serviceWorker';
 
 /**
  * Creates `axios-mock-adapter` instance for provided `axios` instance, add
@@ -47,3 +48,8 @@ if (container) {
     </MetronicI18nProvider>
   )
 }
+
+// If you want your app to work offline and load faster, you can change
+// unregister() to register() below. Note this comes with some pitfalls.
+// Learn more about service workers: https://bit.ly/CRA-PWA
+register();

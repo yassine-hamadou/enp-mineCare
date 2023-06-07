@@ -8,8 +8,8 @@ import axios from 'axios';
 // export const ENP_URL = 'https://cors-anywhere.herokuapp.com/http://208.117.44.15/SmWebApi/api'
 export const USERS_ENDPOINTS = "http://208.117.44.15/userapi/api";
 const tenant: string | null = localStorage.getItem('tenant');
-export const ENP_URL = 'http://208.117.44.15/SmWebApi/api'
-// export const ENP_URL = 'https://localhost:7144/api'
+// export const ENP_URL = 'http://208.117.44.15/SmWebApi/api'
+export const ENP_URL = 'https://localhost:7144/api'
 
 export const fetchEmployee = () => {
   return axios.get(`${ENP_URL}/vmemplsApi`)
