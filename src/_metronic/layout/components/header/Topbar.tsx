@@ -1,5 +1,5 @@
 import clsx from 'clsx'
-import {KTSVG, toAbsoluteUrl} from '../../../helpers'
+import {toAbsoluteUrl} from '../../../helpers'
 import {HeaderUserMenu} from '../../../partials'
 import {useLayout} from '../../core'
 import {useAuth} from "../../../../app/modules/auth";
@@ -11,7 +11,7 @@ const toolbarButtonMarginClass = 'ms-1 ms-lg-3',
 
 const Topbar = () => {
   const {config} = useLayout()
-  const {tenant} = useAuth()
+  const {tenant, currentUser} = useAuth()
   return (
     <div className='d-flex align-items-stretch flex-shrink-0'>
       {/*/!* Search *!/*/}
@@ -62,20 +62,21 @@ const Topbar = () => {
         {/* end::Toggle */}
       </div>
       {/* end::User */}
-      {/*<div style={{paddingLeft: "20px"}} className='d-flex align-items-center fs-5'>*/}
-      {/*  {currentUser?.username}*/}
-      {/*</div>*/}
+      <div style={{paddingLeft: "10px"}} className='d-flex align-items-center fs-5'>
+        {/*{currentUser?.username}*/}
+        <strong>{currentUser?.username?.toLocaleUpperCase()}</strong>
+      </div>
       {/* begin::Aside Toggler */}
-      {config.header.left === 'menu' && (
-        <div className='d-flex align-items-center d-lg-none ms-2 me-n3' title='Show header menu'>
-          <div
-            className='btn btn-icon btn-active-light-primary w-30px h-30px w-md-40px h-md-40px'
-            id='kt_header_menu_mobile_toggle'
-          >
-            <KTSVG path='/media/icons/duotune/text/txt001.svg' className='svg-icon-1'/>
-          </div>
-        </div>
-      )}
+      {/*{config.header.left === 'menu' && (*/}
+      {/*  <div className='d-flex align-items-center d-lg-none ms-2 me-n3' title='Show header menu'>*/}
+      {/*    <div*/}
+      {/*      className='btn btn-icon btn-active-light-primary w-30px h-30px w-md-40px h-md-40px'*/}
+      {/*      id='kt_header_menu_mobile_toggle'*/}
+      {/*    >*/}
+      {/*      <KTSVG path='/media/icons/duotune/text/txt001.svg' className='svg-icon-1'/>*/}
+      {/*    </div>*/}
+      {/*  </div>*/}
+      {/*)}*/}
     </div>
   )
 }

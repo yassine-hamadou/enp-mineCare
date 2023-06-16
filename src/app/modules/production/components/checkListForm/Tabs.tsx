@@ -1,4 +1,4 @@
-import {Empty, Button, message, Steps, theme, Form, Input, DatePicker, Modal} from "antd";
+import {Button, DatePicker, Empty, Form, Input, message, Modal, Steps, theme} from "antd";
 import {useLocation, useParams} from "react-router-dom";
 import {useQuery} from "react-query";
 import {KTCard, KTCardBody} from "../../../../../_metronic/helpers";
@@ -144,7 +144,7 @@ const TabsTest: React.FC = () => {
                   setDefectModalOpen(true)
                 }}
               >
-                Defect
+                Backlog
               </Button>
               {current > 0 && (
                 <Button

@@ -5,8 +5,8 @@ import {toAbsoluteUrl} from '../../../helpers'
 
 const HeaderUserMenu: FC = () => {
   const {currentUser, tenant, logout} = useAuth() // <== this is a jwt token
-  console.log('currentUser', currentUser)
-  console.log('tenant', tenant)
+  // console.log('currentUser', currentUser)
+  // console.log('tenant', tenant)
 
   return (
     <div

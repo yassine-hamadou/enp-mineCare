@@ -1,29 +1,50 @@
-import {Button, Form, Input, Modal, Space, Table} from 'antd'
+import {Button, Form, Input, InputNumber, message, Modal, Popconfirm, Space, Table} from 'antd'
 import {useState} from 'react'
-import axios from 'axios'
-import {KTCardBody, KTSVG} from '../../../../../../_metronic/helpers'
+import {KTCard, KTCardBody, KTSVG} from '../../../../../../_metronic/helpers'
 import {Link, useLocation, useNavigate, useParams} from 'react-router-dom'
-import {ENP_URL, fetchServices} from '../../../../../urls'
-import {QueryClient, useQuery, useQueryClient} from 'react-query'
+import {deleteService, postService} from '../../../../../urls'
+import {useMutation, useQueryClient} from 'react-query'
 import {useAuth} from "../../../../auth";
+import {useForm} from "antd/es/form/Form";
 
 const ServicesPage = () => {
   const {tenant} = useAuth()
   const [gridData, setGridData] = useState<any>([])
-  const [loading] = useState(false)
   const [searchText] = useState('')
   let [filteredData] = useState([])
   const [submitLoading, setSubmitLoading] = useState(false)
-  const {data: services} = useQuery('services', () => fetchServices(tenant))
-  const [form] = Form.useForm()
-  const queryClient: QueryClient = useQueryClient()
+  const {mutate: addService} = useMutation((data: any) => postService(data, tenant), {
+    onSuccess: () => {
+      queryClient.invalidateQueries('services')
+      form.resetFields()
+      setIsModalOpen(false)
+      setSubmitLoading(false)
+      message.success('Service added successfully')
+    },
+    onError: (error) => {
+      setSubmitLoading(false)
+      message.error('Something went wrong').then(r => r)
+      console.log(error)
+    },
+  })
+  const {mutate: removeService, isLoading: isDeleteLoading,} = useMutation(deleteService, {
+    onSuccess: () => {
+      queryClient.refetchQueries(['equipmodels']).then(
+        message.success('Service deleted successfully')
+      )
+    },
+    onError: (error: any) => {
+      message.error('Something went wrong').then(r => r)
+      console.log(error)
+    },
+  })
+  const [form] = useForm()
+  const queryClient: any = useQueryClient()
 
   const routeParams: any = useParams();
   const navigate = useNavigate();
   const location: any = useLocation();
 
-  // console.log(routeParams)
-  // Modal functions
   const [isModalOpen, setIsModalOpen] = useState(false)
 
   const showModal = () => {
@@ -39,15 +60,16 @@ const ServicesPage = () => {
     setIsModalOpen(false)
   }
   // Modal functions end
-  const deleteData = async (element: any) => {
+  const deleteData = (element: any) => {
+    console.log("element", element)
     try {
-      const response = await axios.delete(`${ENP_URL}/services/${element.id}`)
-      // update the local state so that react can refecth and re-render the table with the new data
-      const newData = gridData.filter((item: any) => item.id !== element.id)
-      setGridData(newData)
-      return response.status
-    } catch (e) {
-      return e
+      removeService(element?.id)
+      queryClient.invalidateQueries('services').then(
+        message.success('Service deleted successfully')
+      )
+    } catch (error) {
+      message.error('Something went wrong').then(r => r)
+      console.log(error)
     }
   }
 
@@ -70,6 +92,7 @@ const ServicesPage = () => {
         return 0
       },
     },
+    {title: 'Hours', dataIndex: 'intervalForPm'},
     {
       title: 'Action',
       fixed: 'right',
@@ -83,51 +106,20 @@ const ServicesPage = () => {
           <Button href='#' className='btn btn-light-warning btn-sm'>
             Update
           </Button>
-          <Button onClick={() => handleDelete(record)} className='btn btn-light-danger btn-sm'>
-            Delete
-          </Button>
-
+          <Popconfirm title="Sure to delete?" onConfirm={() => handleDelete(record)}>
+            <Button key={record?.id} className='btn btn-light-danger btn-sm'>
+              Delete
+            </Button>
+          </Popconfirm>
         </Space>
       ),
     },
   ]
-  // const loadData = async () => {
-  //   setLoading(true)
-  //   try {
-  //
-  //     const response = await axios.get(`${ENP_URL}/Services`)
-  //     console.log('responssss', response.data)
-  //     setGridData(response.data)
-  //     setLoading(false)
-  //   } catch (error) {
-  //     console.log(error)
-  //   }
-  // }
-  // const loadModel = async () => {
-  //   setLoading(true)
-  //   try {
-  //
-  //     const response = await axios.get(`${ENP_URL}/VmmodlsApi`)
-  //     setModelData(response.data)
-  //     setLoading(false)
-  //   } catch (error) {
-  //     console.log(error)
-  //   }
-  // }
-  //
-  // const {Option} = Select
-  //
-  // useEffect(() => {
-  //   loadData()
-  //   // loadModel()
-  // }, [])
 
-  // const dataWithIndex = services?.data?.map((item: any, index: any) => ({
-  //   ...item,
-  //   key: index,
-  // }))
   const equipModel = location?.state?.txmodl
-  const dataByID = services?.data?.filter((service: any) => {
+  console.log("equipModel", equipModel)
+  console.log("services list form state", location?.state)
+  const dataByID = location?.state?.services?.filter((service: any) => {
     return service?.model?.trim() === equipModel?.trim()
   });
 
@@ -152,37 +144,15 @@ const ServicesPage = () => {
     setGridData(filteredData)
   }
 
-  const url = `${ENP_URL}/Services`
-  const onFinish = async (values: any) => {
+  const onFinish = (values: any) => {
     setSubmitLoading(true)
-    const data = {
-      name: values.name,
-      model: equipModel,
-    }
-
-
-    try {
-      const response = await axios.post(url, data)
-      setSubmitLoading(false)
-      form.resetFields()
-      setIsModalOpen(false)
-      await queryClient.invalidateQueries('services')
-      return response.statusText
-    } catch (error: any) {
-      setSubmitLoading(false)
-      return error.statusText
-    }
+    console.log("values", values)
+    const data: any = {...values, model: equipModel}
+    addService(data)
   }
 
   return (
-    <div
-      style={{
-        backgroundColor: 'white',
-        padding: '20px',
-        borderRadius: '5px',
-        boxShadow: '2px 2px 15px rgba(0,0,0,0.08)',
-      }}
-    >
+    <KTCard>
       <KTCardBody className='py-4 '>
         <div className='table-responsive'>
           {/* <Link to={'/setup/work-type'}>
@@ -223,7 +193,7 @@ const ServicesPage = () => {
               </button>
             </Space>
           </div>
-          <Table columns={columns} dataSource={dataByID} loading={loading}/>
+          <Table columns={columns} dataSource={dataByID}/>
           <Modal
             title='Add Service'
             open={isModalOpen}
@@ -246,7 +216,6 @@ const ServicesPage = () => {
               </Button>,
             ]}
           >
-            {/* <AddServiceForm /> */}
             <Form
               labelCol={{span: 7}}
               wrapperCol={{span: 14}}
@@ -259,23 +228,14 @@ const ServicesPage = () => {
               <Form.Item label='Name' name='name' rules={[{required: true}]}>
                 <Input/>
               </Form.Item>
-              {/* <Form.Item label='Model' name='modelID'>
-                <Input />
-              </Form.Item> */}
-              {/* <Form.Item name='model' label='Model'>
-                <Select placeholder='Search to Select'>
-                  {modeldData.map((item: any) => (
-                    <Option key={item.txmodel} value={item.txmodel}>
-                      {item.txmodel}
-                    </Option>
-                  ))}
-                </Select>
-              </Form.Item> */}
+              <Form.Item label='Hours' name='intervalForPm'>
+                <InputNumber/>
+              </Form.Item>
             </Form>
           </Modal>
         </div>
       </KTCardBody>
-    </div>
+    </KTCard>
   )
 }
 

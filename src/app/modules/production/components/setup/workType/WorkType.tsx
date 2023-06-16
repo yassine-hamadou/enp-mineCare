@@ -1,31 +1,14 @@
-import {Button, Input, Modal, Space, Table} from 'antd'
-import axios from 'axios'
+import {Button, Input, Space, Table} from 'antd'
 import {Link} from 'react-router-dom'
 import {KTCardBody, KTSVG} from '../../../../../../_metronic/helpers'
-import {ENP_URL, getModels} from '../../../../../urls'
+import {getModels} from '../../../../../urls'
 import {useQuery} from "react-query";
 
 const WorkTypePage = () => {
-  // const [gridData, setGridData] = useState([])
-  // const [loading, setLoading] = useState(false)
-  // const [searchText, setSearchText] = useState('')
-  // const [isModalOpen, setIsModalOpen] = useState(false)
   const {data: equipModels, isLoading: equipModelLoading} = useQuery('equipmodels',
     getModels
   )
   console.log(equipModels)
-  // const showModal = () => {
-  //   setIsModalOpen(true)
-  // }
-  //
-  // const handleOk = () => {
-  //   setIsModalOpen(false)
-  // }
-  //
-  // const handleCancel = () => {
-  //   setIsModalOpen(false)
-  // }
-  // Modal functions end
 
   const columns: any = [
     {
@@ -69,66 +52,39 @@ const WorkTypePage = () => {
       width: 100,
       render: (_: any, record: any) => (
         <Space size='middle'>
-          {/* <a href="service" className="btn btn-light-info btn-sm">Services</a> */}
-          <Link to={`/setup/service/${record.code}`} state={
+          <Link to={`/setup/sequence/${record.code?.replaceAll('/', '%2F')}`} state={
             {
+              ...record,
+              txmanf: record.manufacturer,
+              txmodl: record.code,
+            }}
+          >
+            <span className='btn btn-light-success btn-sm'>Sequence</span>
+          </Link>
+          <Link to={`/setup/service/${record.code?.replaceAll('/', '%2F')}`} state={
+            {
+              ...record,
               txmanf: record.manufacturer,
               txmodl: record.code,
             }
           }>
             <span className='btn btn-light-info btn-sm'>Service</span>
           </Link>
-          <a href='#' className='btn btn-light-warning btn-sm '>
+          <button className='btn btn-light-warning btn-sm '>
             Update
-          </a>
-          <a href='#' className='btn btn-light-danger btn-sm'>
+          </button>
+          <button className='btn btn-light-danger btn-sm'>
             Delete
-          </a>
+          </button>
         </Space>
       ),
     },
   ]
 
-  // const loadData = async () => {
-  //   setLoading(true)
-  //   try {
-  //     const response = await axios.get(`${ENP_URL}/VmmodlsApi`)
-  //     setGridData(response.data)
-  //     setLoading(false)
-  //   } catch (error) {
-  //     console.log(error)
-  //   }
-  // }
-  //
-  // useEffect(() => {
-  //   loadData()
-  // }, [])
-
   const dataWithVehicleNum = equipModels?.data?.map((item: any, index: any) => ({
     ...item,
-    // vehicleNum: Math.floor(Math.random() * 20) + 1,
-    // downTime: `${Math.floor(Math.random() * 100) + 1}`,
-    // numOfHrs: Math.floor(Math.random() * 20) + 1,
     key: index,
   }))
-
-  // const handleInputChange = (e: any) => {
-  //   setSearchText(e.target.value)
-  //   if (e.target.value === '') {
-  //     loadData()
-  //   }
-  // }
-
-  // const globalSearch = () => {
-  //   // @ts-ignore
-  //   filteredData = dataWithVehicleNum.filter((value) => {
-  //     return (
-  //       value.classDesc.toLowerCase().includes(searchText.toLowerCase()) ||
-  //       value.classCode.toLowerCase().includes(searchText.toLowerCase())
-  //     )
-  //   })
-  //   setGridData(filteredData)
-  // }
 
   return (
     <div
@@ -146,7 +102,6 @@ const WorkTypePage = () => {
               <Input
                 placeholder='Search...'
                 type='text'
-                // value={searchText}
               />
               <Button type='primary'>Search</Button>
             </Space>
@@ -159,13 +114,11 @@ const WorkTypePage = () => {
             </Space>
           </div>
           <Table columns={columns} dataSource={dataWithVehicleNum} loading={equipModelLoading} rowKey="index"/>
-          {/*<Modal title='Add Item' open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>*/}
-          {/*  /!* <AddWorkTypeForm /> *!/*/}
-          {/*</Modal>*/}
         </div>
       </KTCardBody>
     </div>
   )
 }
+
 
 export {WorkTypePage}

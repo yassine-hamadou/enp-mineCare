@@ -5,6 +5,11 @@ import {ENP_URL} from '../../../../../../urls'
 export const fetchSchedules = (tenant: any) => {
   return axios.get(`${ENP_URL}/FleetSchedulesApi/tenant/${tenant}`)
 }
+
+export const pendingSchedule = (tenant: any) => {
+  return axios.get(`${ENP_URL}/FleetSchedulesApi/pending/tenant/${tenant}`)
+}
+
 export const fetchVmequps = () => {
   return axios.get(`${ENP_URL}/VmequpsApi`)
 }
@@ -43,6 +48,7 @@ export const localData = (dataFromApi: any) => {
       location: {name: 'locationId'},
       startTime: {name: 'timeStart'},
       endTime: {name: 'timeEnd'},
+      status: {name: 'status'},
     },
   }
 }

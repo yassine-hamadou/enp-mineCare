@@ -32,6 +32,7 @@ import ReportComponent from "./components/report/ReportComponent/ReportComponent
 import Backlog from './components/entries/backlog/Backlog'
 import Priority from './components/setup/backlogs/Priority'
 import Source from './components/setup/backlogs/Source'
+import Sequence from './components/setup/service/sequence/Sequence'
 
 const EquipmentRegister = lazy(() => import('./components/equipment-register/EquipmentRegister'))
 const AddEquipRegister = lazy(() => import('./components/equipment-register/Add'))
@@ -162,21 +163,21 @@ const ProductionPage: React.FC = () => {
               <PageTitle breadcrumbs={accountBreadCrumbs}>Maintenance Schedule</PageTitle>
               <ScheduleInfo/>
               <br/>
-              <Outlet/>
             </>
           }
         >
-          <Route
-            path=':serviceId/:fleetId'
-            element={
-              <>
-                <ErrorBoundary>
-                  <TabsTest/>
-                </ErrorBoundary>
-              </>
-            }
-          />
+
         </ Route>
+        <Route
+          path='start-work/:serviceId/:fleetId'
+          element={
+            <>
+              <ErrorBoundary>
+                <TabsTest/>
+              </ErrorBoundary>
+            </>
+          }
+        />
         <Route
           path='fault/*'
           element={
@@ -245,6 +246,24 @@ const ProductionPage: React.FC = () => {
           </>
         }
       >
+        <Route
+          path='sequence/*'
+          element={
+            <>
+              <Outlet/>
+            </>
+          }
+        >
+          <Route
+            path=':modelId'
+            element={
+              <>
+                <PageTitle breadcrumbs={accountBreadCrumbs}>Sequence</PageTitle>
+                <Sequence/>
+              </>
+            }
+          />
+        </Route>
         <Route
           path='equipment/model-class'
           element={

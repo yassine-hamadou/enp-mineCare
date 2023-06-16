@@ -661,7 +661,7 @@
 
 import type {ProColumns} from '@ant-design/pro-components';
 import {EditableProTable, ErrorBoundary, ProCard} from '@ant-design/pro-components';
-import {Button, Input, message, Space} from 'antd';
+import {Button, Input, message, Space, Tabs} from 'antd';
 import React, {useEffect, useState} from 'react';
 import {useMutation, useQuery, useQueryClient} from "react-query";
 import {addHours, fetchHours, getEquipment} from "../../../../../urls";
@@ -669,6 +669,7 @@ import {useNavigate} from "react-router-dom";
 import {throwError} from "@syncfusion/ej2-base";
 import {useAuth} from "../../../../auth";
 import dayjs from "dayjs";
+import DevexpressDashboardComponent from "../../../../../pages/dashboard/DevexpressDashboardComponent";
 
 type DataSourceType = {
   id: React.Key;
@@ -941,98 +942,118 @@ const HoursModelClass: any = () => {
   };
 
   return (
-    <ProCard>
-      <div className='d-flex justify-content-between'>
-        <Space
-          key="search"
-          style={{
-            marginBottom: 16,
-          }}
-        >
-          <Input
-            placeholder='Enter Search Text'
-            onChange={handleInputChange}
-            type='text'
-            allowClear
-            value={searchText}
-          />
-          <Button type='primary'>Search</Button>
-        </Space>
-        <Space
-          key="button"
-          style={{
-            marginBottom: 16,
-          }}
-        >
-          <Button
-            type="primary"
-            size={'large'}
-            key="save"
-            onClick={record ? () => {
-                console.log('submitt?', allSubmi)
-                console.log('allowSubmit', allowSubmit)
-                console.log('submitt?', Object.values(allSubmi).every((item: any) => item === true))
-                if (allowSubmit) {
-                  saveAndContinue()
-                } else {
-                  message.error('Kindly resolve all issues before submitting!').then(r => r)
-                }
-              }
-              : () => {
-                message.error('No Hours Entered').then(r => r)
-              }}
-            loading={isHoursMutationLoading}
-          >
-            Save
-          </Button>
-        </Space>
-      </div>
-      <ErrorBoundary>
-        <EditableProTable<DataSourceType>
-          // headerTitle="Batch Entries"
-          columns={columns}
-          loading={isLoading}
-          rowKey="id"
-          scroll={{
-            x: 960,
-          }}
-          pagination={{
-            pageSize: 10,
-          }}
-          value={filterData(defaultData?.data?.map(
-            (item: any) => {
-              return {
-                ...item,
-                zeroReading: 0,
-                today: new Date(),
-              }
-            }
-          ).map((item: any) => ({
-            ...item,
-            ...rowValues[item.id], // Assuming each row has a unique `id` field
-          })))}
-          onChange={setDataSource}
-          //do not show add button
-          recordCreatorProps={false}
+    <Tabs
+      defaultActiveKey='1'
+      items={[
+        {
+          label: <span className='me-4'>Hours Entry</span>,
+          key: '1',
+          children: (
+            <ProCard>
+              <div className='d-flex justify-content-between'>
+                <Space
+                  key="search"
+                  style={{
+                    marginBottom: 16,
+                  }}
+                >
+                  <Input
+                    placeholder='Enter Search Text'
+                    onChange={handleInputChange}
+                    type='text'
+                    allowClear
+                    value={searchText}
+                  />
+                  <Button type='primary'>Search</Button>
+                </Space>
+                <Space
+                  key="button"
+                  style={{
+                    marginBottom: 16,
+                  }}
+                >
+                  <Button
+                    type="primary"
+                    size={'large'}
+                    key="save"
+                    onClick={record ? () => {
+                        console.log('submitt?', allSubmi)
+                        console.log('allowSubmit', allowSubmit)
+                        console.log('submitt?', Object.values(allSubmi).every((item: any) => item === true))
+                        if (allowSubmit) {
+                          saveAndContinue()
+                        } else {
+                          message.error('Kindly resolve all issues before submitting!').then(r => r)
+                        }
+                      }
+                      : () => {
+                        message.error('No Hours Entered').then(r => r)
+                      }}
+                    loading={isHoursMutationLoading}
+                  >
+                    Save
+                  </Button>
+                </Space>
+              </div>
+              <ErrorBoundary>
+                <EditableProTable<DataSourceType>
+                  // headerTitle="Batch Entries"
+                  columns={columns}
+                  loading={isLoading}
+                  rowKey="id"
+                  scroll={{
+                    x: 960,
+                  }}
+                  pagination={{
+                    pageSize: 10,
+                  }}
+                  value={filterData(defaultData?.data?.map(
+                    (item: any) => {
+                      return {
+                        ...item,
+                        zeroReading: 0,
+                        today: new Date(),
+                      }
+                    }
+                  ).map((item: any) => ({
+                    ...item,
+                    ...rowValues[item.id], // Assuming each row has a unique `id` field
+                  })))}
+                  onChange={setDataSource}
+                  //do not show add button
+                  recordCreatorProps={false}
 
-          editable={{
-            // type: 'multiple',
-            editableKeys: editableKeys ? editableKeys : defaultData?.data?.map((item: any) => item.id),
-            onValuesChange: (record, recordList) => {
-              setRecord(record)
-              setDataSource(recordList)
-              setRowValues((prevRowValues: any) => {
-                return {
-                  ...prevRowValues,
-                  [record.id]: record, // Assuming each row has a unique `id` field
-                };
-              });
-            },
-            onChange: setEditableRowKeys,
-          }}
-        />
-      </ErrorBoundary>
-    </ProCard>
+                  editable={{
+                    // type: 'multiple',
+                    editableKeys: editableKeys ? editableKeys : defaultData?.data?.map((item: any) => item.id),
+                    onValuesChange: (record, recordList) => {
+                      setRecord(record)
+                      setDataSource(recordList)
+                      setRowValues((prevRowValues: any) => {
+                        return {
+                          ...prevRowValues,
+                          [record.id]: record, // Assuming each row has a unique `id` field
+                        };
+                      });
+                    },
+                    onChange: setEditableRowKeys,
+                  }}
+                />
+              </ErrorBoundary>
+            </ProCard>
+          ),
+        },
+        {
+          label: <span className='me-4'>Analysis</span>,
+          key: '2',
+          children: (
+            <>
+              <DevexpressDashboardComponent dashboardId={'hoursAnalysis'}/>
+            </>
+          ),
+        },
+      ]}
+    />
   );
 };
 
