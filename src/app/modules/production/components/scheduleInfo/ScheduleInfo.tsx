@@ -239,7 +239,7 @@ export function ScheduleInfo() {
       dataIndex: 'entryId',
       width: 350,
       fixed: 'right',
-      render: (entryId: any) => {
+      render: (entryId: any, record: any) => {
         return (
           <Space size="middle">
             <button type={'button'} className='btn btn-light-primary btn-sm' onClick={() => onChecklist(entryId)}>
@@ -255,8 +255,7 @@ export function ScheduleInfo() {
               </button>
             </Popconfirm>
             <button type={'button'} className='btn btn-light-info btn-sm' onClick={
-              () => {
-              }
+              () => navigate(`/entries/backlog/${record.fleetId}`)
             }>
               View Backlogs
             </button>

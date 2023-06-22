@@ -33,6 +33,7 @@ import Backlog from './components/entries/backlog/Backlog'
 import Priority from './components/setup/backlogs/Priority'
 import Source from './components/setup/backlogs/Source'
 import Sequence from './components/setup/service/sequence/Sequence'
+import {ViewBacklog} from './components/entries/backlog/ViewBacklog'
 
 const EquipmentRegister = lazy(() => import('./components/equipment-register/EquipmentRegister'))
 const AddEquipRegister = lazy(() => import('./components/equipment-register/Add'))
@@ -117,18 +118,38 @@ const ProductionPage: React.FC = () => {
           }
         />
         <Route
-          path='backlog'
+          path='backlog/*'
           element={
             <>
-              <PageTitle breadcrumbs={accountBreadCrumbs}>Backlog</PageTitle>
               <Suspense fallback={<PageLoading/>}>
                 <ErrorBoundary>
-                  <Backlog/>
+                  <Outlet/>
                 </ErrorBoundary>
               </Suspense>
             </>
           }
-        />
+        >
+          <Route
+            path=''
+            element={
+              <>
+                <PageTitle breadcrumbs={accountBreadCrumbs}>Backlog</PageTitle>
+                <Backlog/>
+              </>
+            }
+          />
+          <Route
+            path=':fleetId'
+            element={
+              <>
+                <PageTitle breadcrumbs={accountBreadCrumbs}>
+                  {`View Backlog`}
+                </PageTitle>
+                <ViewBacklog/>
+              </>
+            }
+          />
+        </Route>
         <Route
           path='changeout/*'
           element={

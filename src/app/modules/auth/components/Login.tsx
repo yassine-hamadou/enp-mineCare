@@ -146,13 +146,21 @@ export function Login() {
               {
                 formik.values.username === '' || formik.values.password === '' ?
                   '' :
+                  // <>
+                  //   <option>Select Company</option>
+                  //   {
+                  //     allCompanies?.data.map((item: any) => (
+                  //       <option value={item.name.toLowerCase()}>{item.description}</option>
+                  //     ))
+                  //   }
+                  // </>
                   <>
-                    <option>Select Company</option>
-                    {
-                      allCompanies?.data.map((item: any) => (
-                        <option value={item.name.toLowerCase()}>{item.description}</option>
-                      ))
-                    }
+                    <option value='damang'>DAMANG DIVISION</option>
+                    <option value='dzata'>DZATA DIVISION</option>
+                    <option value='mpohor'>MPOHOR DIVISION</option>
+                    <option value='headOffice'>HEAD OFFICE</option>
+                    <option value='salaga'>SALAGA DIVISION</option>
+                    <option value='tarkwa'>TARKWA DIVISION</option>
                   </>
               }
 

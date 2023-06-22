@@ -18,7 +18,16 @@ import axios from 'axios'
 import React, {useEffect, useState} from 'react'
 import {v4 as uuidv4} from 'uuid'
 import {KTSVG} from '../../../../../../_metronic/helpers'
-import {concatToFaultDetails, ENP_URL, fetchFaults, getEquipment} from '../../../../../urls'
+import {
+  concatToFaultDetails,
+  ENP_URL,
+  fetchFaults,
+  getDowntypes,
+  getEquipment,
+  getPriority,
+  getSources,
+  postBacklogs
+} from '../../../../../urls'
 import {useMutation, useQuery, useQueryClient} from 'react-query'
 import {ResolutionTable} from '../resolution/ResolutionTable'
 import {useAuth} from "../../../../auth";
@@ -63,6 +72,26 @@ const FaultTable = () => {
   const [submitDefectLoading, setSubmitDefectLoading] = useState(false)
   const [isHovering, setIsHovering] = useState(false)
   const [detailsUpdate, setDetailsUpdate] = useState(false)
+  const {data: downTypeData} = useQuery('downtype', () => getDowntypes(tenant))
+  const {data: sourceData, isLoading: sourceIsLoading} = useQuery(
+    'source', () => getSources(tenant))
+  const {data: priorityData, isLoading: priorityIsLoading} = useQuery(
+    'priority', () => getPriority(tenant))
+  const {data: equipmentData, isLoading: equipmentIsLoading} = useQuery(
+    'equipment', () => getEquipment(tenant))
+  const {mutate: addBacklog} = useMutation('addBacklog',
+    (data) => postBacklogs(data, tenant), {
+      onSuccess: () => {
+        setIsDefectModalOpen(false)
+        message.success('Backlog added successfully')
+        setSubmitDefectLoading(false)
+        formDefect.resetFields()
+      },
+      onError: () => {
+        message.error('Error adding backlog, Please try again')
+        setSubmitDefectLoading(false)
+      }
+    })
 
   let QueryClient = useQueryClient()
   const {tenant} = useAuth()
@@ -233,6 +262,13 @@ const FaultTable = () => {
       sorter: (a: any, b: any) => new Date(a.downtime).getTime() - new Date(b.downtime).getTime(),
     },
     {
+      title: 'Time reported',
+      dataIndex: 'reportedDate',
+      render: (reportedDate: any) => (
+        reportedDate ? new Date(reportedDate).toLocaleString() : 'No Date'
+      )
+    },
+    {
       title: 'Custodian',
       dataIndex: 'custodian',
     },
@@ -321,11 +357,14 @@ const FaultTable = () => {
       vmModel: values.model,
       vmClass: values.desc,
       downType: values.dType,
-      downtime: new Date().toISOString(),
+      downtime: new Date(values.DateTime.$d).toISOString(),
       locationId: values.location,
       custodian: values.custodian,
       faultDetails: values.faultDetails,
+      reportedDate: new Date(values.ReportedDate.$d).toISOString(),
     }
+    console.log('Success:', data)
+    return
     const dataWithId = {...data, entryId: uuidv4(), tenantId: tenant}
     try {
       const response = await axios.post(url, dataWithId)
@@ -497,27 +536,18 @@ const FaultTable = () => {
     }
   }
   const onDefectFinish = async (values: any) => {
-    // setSubmitDefectLoading(true)
-    const data = {
-      fleetId: values.fleetId,
-      vmModel: values.model,
-      vmClass: values.desc,
-      downType: values.dType,
-      downtime: new Date().toISOString(),
-      locationId: values.location,
-      custodian: values.custodian,
-    }
+    setSubmitDefectLoading(true)
+    // const data = {
+    //   fleetId: values.fleetId,
+    //   vmModel: values.model,
+    //   vmClass: values.desc,
+    //   downType: values.dType,
+    //   downtime: new Date().toISOString(),
+    //   locationId: values.location,
+    //   custodian: values.custodian,
+    // }
     // const dataWithId = {...data, entryId: uuidv4()}
-    try {
-      // const response = await axios.post(url, dataWithId)
-      // setSubmitDefectLoading(false)
-      formDefect.resetFields()
-      setIsDefectModalOpen(false)
-      // return response.statusText
-    } catch (error: any) {
-      // setSubmitDefectLoading(false)
-      // return error.statusText
-    }
+    addBacklog(values)
   }
   // {/* End Elements to Post */}
 
@@ -730,7 +760,7 @@ const FaultTable = () => {
           onFinish={onFinish}
         >
           <Form.Item name='fleetId' label='Equipment ID' rules={[{required: true}]}>
-            <Select placeholder='Select an Equipment' onChange={onFleetIdChange}>
+            <Select showSearch placeholder='Select an Equipment' onChange={onFleetIdChange}>
               {allEquipment?.data?.map((item: any) => (
                 <Option key={item.equipmentId} value={item.equipmentId}>
                   {item.equipmentId} - {item.model?.name} - {item.model?.modelClass?.name}
@@ -748,7 +778,7 @@ const FaultTable = () => {
             <InputNumber min={1}/>
           </Form.Item>
           <Form.Item name='dType' label='Down Type' rules={[{required: true}]}>
-            <Select placeholder='Select Down Type'>
+            <Select placeholder='Select Down Type' showSearch={true}>
               {faultType?.map((item: any) => (
                 <Option key={uuidv4()} value={item.name}>
                   {item.name}
@@ -756,17 +786,52 @@ const FaultTable = () => {
               ))}
             </Select>
           </Form.Item>
-          <Form.Item name='DateTime' label='Down Date and Time' rules={[{required: true}]}>
+          <Form.Item
+            name='DateTime'
+            label='Down Date and Time'
+            rules={[
+              {required: true},
+              ({getFieldValue}) => ({
+                validator(rule, value) {
+                  console.log("value", value)
+                  // rule.warningOnly = true
+                  if (!value) {
+                    return Promise.reject();
+                  } else if (value.$d.getTime() < new Date().getTime() - 7 * 24 * 60 * 60 * 1000) {
+                    //give a warning if the date is more than 7 days old
+                    return Promise.reject('Date is more than 7 days old');
+                  }
+                  return Promise.resolve();
+                }
+              })
+            ]}
+          >
+
             <DatePicker showTime/>
           </Form.Item>
-          <Form.Item name='DateTimereported' label='Time Reported' rules={[{required: true}]}>
+          <Form.Item name='ReportedDate' label='Time Reported' rules={[{required: true},
+            ({getFieldValue}) => ({
+              validator(rule, value) {
+                if (!value) {
+                  return Promise.reject();
+                } else if (value.$d.getTime() > new Date().getTime()) {
+                  return Promise.reject('Reported Date more than Current Date');
+                } else if (value.$d.getTime() >= new Date(getFieldValue('DateTime')).getTime()) {
+                  return Promise.resolve();
+                } else {
+                  return Promise.reject('Reported Date more than Down Date');
+                }
+                // return Promise.reject('Reported Date more than Down Date');
+              }
+            })
+          ]}>
             <DatePicker showTime/>
           </Form.Item>
           <Form.Item name='faultDetails' label='Fault Details' rules={[{required: true}]}>
             <Input.TextArea rows={4}/>
           </Form.Item>
           <Form.Item name='mType' label='Maintenance Type' rules={[{required: true}]}>
-            <Select placeholder='Maintenance Type'>
+            <Select placeholder='Maintenance Type' showSearch={true}>
               <Option value={'Scheduled'}>Scheduled</Option>
               <Option value={'Unscheduled'}>Unscheduled</Option>
               <Option value={'Operational'}>Operational</Option>
@@ -775,7 +840,7 @@ const FaultTable = () => {
             </Select>
           </Form.Item>
           <Form.Item label='Custodian' name='custodian' rules={[{required: true}]}>
-            <Select>
+            <Select showSearch={true}>
               {custodian.map((item: any) => (
                 <Option
                   // @ts-ignore
@@ -788,7 +853,7 @@ const FaultTable = () => {
             </Select>
           </Form.Item>
           <Form.Item label='Location' name='location' rules={[{required: true}]}>
-            <Select>
+            <Select showSearch={true}>
               {location.map((item: any) => (
                 <Option
                   // @ts-ignore
@@ -905,7 +970,7 @@ const FaultTable = () => {
                   },
                 ]}
               >
-                <Select placeholder='Resolution Type'>
+                <Select showSearch={true} placeholder='Resolution Type'>
                   <Option value={'Scheduled'}>Scheduled</Option>
                   <Option value={'Unscheduled'}>Unscheduled</Option>
                   <Option value={'Operational'}>Operational</Option>
@@ -918,7 +983,7 @@ const FaultTable = () => {
                 label='Down Status'
                 rules={[{required: true, message: 'Down Status is required'}]}
               >
-                <Select placeholder='Select Down Status'>
+                <Select showSearch={true} placeholder='Select Down Status'>
                   <Option value={'progress'}>In Progress</Option>
                   <Option value={'awaiting'}>Awaiting Parts</Option>
                   <Option value={'awaitinglabour'}>Awaiting Labour</Option>
@@ -974,7 +1039,7 @@ const FaultTable = () => {
 
       {/*Defect*/}
       <Modal
-        title='Defect'
+        title='Backlog'
         open={isDefectModalOpen}
         onCancel={handleDefectCancel}
         closable={true}
@@ -1001,20 +1066,66 @@ const FaultTable = () => {
           name='control-hooks'
           labelCol={{span: 8}}
           wrapperCol={{span: 14}}
-          title='Defect'
+          title={'Add Backlog'}
           onFinish={onDefectFinish}
+          layout={'horizontal'}
         >
-          <Form.Item hidden={true} name='fleetId' label='Equipment ID' rules={[{required: true}]}>
-            <Input disabled style={{color: 'black'}}/>
+          <Form.Item name='id' label='ID' hidden={true}>
+            <Input/>
           </Form.Item>
-          <Form.Item name='Defect Date' label='Expected Date' rules={[{required: true}]}>
+          <Form.Item name='equipmentId' label='Equipment ID'>
+            <Select
+              showSearch
+              placeholder='Select an equipment'
+            >
+              {
+                equipmentData?.data?.map((equipment: any) => (
+                  <Option value={equipment.equipmentId}>{equipment.equipmentId}</Option>
+                ))
+              }
+            </Select>
+          </Form.Item>
+          <Form.Item name='bdate' label='Backlog Date'>
             <DatePicker showTime/>
           </Form.Item>
-          <Form.Item name='Item' label='Item' rules={[{required: true}]}>
-            <TextArea/>
+          <Form.Item name='item' label='Item' rules={[{required: true}]}>
+            <Input/>
           </Form.Item>
-          <Form.Item name='Comment' label='Comment' rules={[{required: true}]}>
-            <TextArea/>
+          <Form.Item name='note' label='Note' rules={[{required: true}]}>
+            <Input/>
+          </Form.Item>
+          <Form.Item name='referenceId' label='Reference No'>
+            <Input/>
+          </Form.Item>
+          <Form.Item name='priority' label='Priority'>
+            <Select
+              showSearch
+              placeholder='Select a priority'
+            >
+              {priorityData?.data?.map((priority: any) => (
+                <Option value={priority?.priorityId}>{priority.name}</Option>
+              ))}
+            </Select>
+          </Form.Item>
+          <Form.Item name='source' label='Source'>
+            <Select
+              showSearch
+              placeholder='Select a source'
+            >
+              {sourceData?.data?.map((source: any) => (
+                <Option value={source?.id}>{source.name}</Option>
+              ))}
+            </Select>
+          </Form.Item>
+          <Form.Item name='downType' label='Down Type'>
+            <Select
+              showSearch
+              placeholder='Select a down type'
+            >
+              {downTypeData?.data?.map((downType: any) => (
+                <Option value={downType?.id}>{downType.name}</Option>
+              ))}
+            </Select>
           </Form.Item>
         </Form>
       </Modal>

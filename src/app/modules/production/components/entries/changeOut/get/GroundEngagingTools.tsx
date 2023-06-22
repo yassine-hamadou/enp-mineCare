@@ -566,6 +566,13 @@ export default () => {
       }
     },
     {
+      title: "Item/Type of GET",
+      dataIndex: "itemType",
+      renderFormItem: (_, {type, defaultRender, ...rest}, form) => {
+        return <TextArea required className="w-100 text-black"/>;
+      }
+    },
+    {
       title: "Previous Hours",
       dataIndex: "previousHours",
       renderFormItem: (_, {type, defaultRender, ...rest}, form) => {

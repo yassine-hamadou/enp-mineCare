@@ -1,6 +1,5 @@
 import {Divider, Empty, Form, message, Select} from "antd";
-import {useEffect, useState} from "react";
-import React from "react";
+import React, {useEffect, useState} from "react";
 import {useMutation} from "react-query";
 import {postScheduleTransactions} from "../../../../urls";
 
@@ -164,6 +163,7 @@ const CheckListForm = (props) => {
                                                             {item.name ? item.name : null}
                                                         </label>
                                                         <Select
+                                                            showSearch={true}
                                                             className='form-control form-control-solid mb-3 px-2'
                                                             placeholder={'Select one option'}
                                                             onSelect={(value) => {

@@ -1,15 +1,5 @@
-import {
-  Button,
-  DatePicker,
-  Form,
-  Input,
-  InputNumber,
-  Modal,
-  Select,
-  Space,
-  Table,
-} from 'antd'
-import {useState, useEffect} from 'react'
+import {Button, DatePicker, Form, Input, InputNumber, message, Modal, Select, Space, Table,} from 'antd'
+import {useEffect, useState} from 'react'
 import axios from 'axios'
 import {KTCardBody, KTSVG} from '../../../../../../_metronic/helpers'
 import {
@@ -22,7 +12,6 @@ import {
   fetchRefillTypes
 } from '../../../../../urls'
 import {useQuery} from 'react-query'
-import {message} from 'antd';
 import moment from 'moment'
 
 const LubePage = () => {
@@ -507,7 +496,7 @@ const LubePage = () => {
               {contextHolder}
               {messageHolder}
               <Form.Item name='fleetId' label='fleetId'>
-                <Select placeholder='Select' onChange={onFleetIdChange}>
+                <Select showSearch={true} placeholder='Select' onChange={onFleetIdChange}>
                   {allEquips?.data.map((item: any) => (
                     <Option key={item.fleetID} value={item.fleetID}>
                       {item.fleetID}- {item.modlName}

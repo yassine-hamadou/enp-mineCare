@@ -104,6 +104,7 @@ const AddEquipRegister = () => {
                         <Form.Item name='model' label='Model'
                                    rules={[{required: true}]}>
                           <Select
+                            showSearch={true}
                             placeholder='Select Model'
                             className='form-control form-control-solid py-1'
                           >
@@ -189,6 +190,7 @@ const AddEquipRegister = () => {
                       <div className='col-4 mb-7'>
                         <Form.Item name='Meter Type' label='Meter Type (Hours, Km)' rules={[{required: true}]}>
                           <Select
+                            showSearch={true}
                             placeholder='Select Meter Type'
                             className='form-control form-control-solid py-1'
                           >

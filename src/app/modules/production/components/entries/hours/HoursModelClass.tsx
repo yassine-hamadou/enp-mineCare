@@ -905,6 +905,16 @@ const HoursModelClass: any = () => {
       //validate that the current reading is greater than the previous reading
       // },
     },
+    {
+      title: 'Adjustment',
+      dataIndex: 'adjustment',
+      valueType: 'digit',
+    },
+    {
+      title: 'Comment',
+      dataIndex: 'comment',
+      valueType: 'textarea',
+    }
   ];
   const saveAndContinue = async () => {
     try {
@@ -915,7 +925,9 @@ const HoursModelClass: any = () => {
             previousReading: item.currentReading,
             date: item.today,
             currentReading: item.zeroReading,
-            tenantId: tenant
+            tenantId: tenant,
+            adjustment: item.adjustment,
+            comment: item.comment
           })
         }
         return 0
