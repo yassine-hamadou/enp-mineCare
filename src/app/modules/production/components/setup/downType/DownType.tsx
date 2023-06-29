@@ -1,24 +1,24 @@
 import {Button, Input, Space, Table} from 'antd'
-import {useEffect, useState} from 'react'
-import axios from 'axios'
+import {useState} from 'react'
 import {KTCardBody, KTSVG} from '../../../../../../_metronic/helpers'
-import {ENP_URL} from '../../../../../urls'
+import {getDowntypes} from '../../../../../urls'
+import {useQuery} from 'react-query'
+import {useAuth} from '../../../../auth'
 
 const DownTypePage = () => {
-  const [gridData, setGridData] = useState([])
-  const [loading, setLoading] = useState(false)
+  const {tenant} = useAuth()
   const [searchText, setSearchText] = useState('')
-  let [filteredData] = useState([])
+  const {data: downTypes, isLoading} = useQuery('downTypes', () => getDowntypes(tenant))
 
   const columns: any = [
     {
-      title: 'Code',
-      dataIndex: 'faultCode',
+      title: 'ID',
+      dataIndex: 'id',
       sorter: (a: any, b: any) => {
-        if (a.classCode > b.classCode) {
+        if (a.id > b.id) {
           return 1
         }
-        if (b.classCode > a.classCode) {
+        if (b.id > a.id) {
           return -1
         }
         return 0
@@ -27,51 +27,28 @@ const DownTypePage = () => {
 
     {
       title: 'Name',
-      dataIndex: 'faultDesc',
-      sorter: (a: any, b: any) => a.classDesc - b.classDesc,
+      dataIndex: 'name',
+      sorter: (a: any, b: any) => a.name - b.name,
     },
   ]
 
-  const loadData = async () => {
-    setLoading(true)
-    try {
-      const response = await axios.get(`${ENP_URL}/vmfaltsapi`)
-
-      setGridData(response.data)
-      setLoading(false)
-    } catch (error) {
-      console.log(error)
-    }
-  }
-
-  useEffect(() => {
-    loadData()
-  }, [])
-
-  const dataWithVehicleNum = gridData.map((item: any, index) => ({
-    ...item,
-    vehicleNum: Math.floor(Math.random() * 20) + 1,
-    downTime: `${Math.floor(Math.random() * 100) + 1}`,
-    numOfHrs: Math.floor(Math.random() * 20) + 1,
-    key: index,
-  }))
 
   const handleInputChange = (e: any) => {
     setSearchText(e.target.value)
     if (e.target.value === '') {
-      loadData()
+      // loadData()
     }
   }
 
   const globalSearch = () => {
-    // @ts-ignore
-    filteredData = dataWithVehicleNum.filter((value) => {
-      return (
-        value.faultCode.toLowerCase().includes(searchText.toLowerCase()) ||
-        value.faultDesc.toLowerCase().includes(searchText.toLowerCase())
-      )
-    })
-    setGridData(filteredData)
+    // // @ts-ignore
+    // filteredData = dataWithVehicleNum.filter((value) => {
+    //   return (
+    //     value.faultCode.toLowerCase().includes(searchText.toLowerCase()) ||
+    //     value.faultDesc.toLowerCase().includes(searchText.toLowerCase())
+    //   )
+    // })
+    // setGridData(filteredData)
   }
 
   return (
@@ -100,12 +77,12 @@ const DownTypePage = () => {
             </Space>
             <Space style={{marginBottom: 16}}>
               <button type='button' className='btn btn-primary me-3'>
-                <KTSVG path='/media/icons/duotune/arrows/arr078.svg' className='svg-icon-2' />
+                <KTSVG path='/media/icons/duotune/arrows/arr078.svg' className='svg-icon-2'/>
                 Export
               </button>
             </Space>
           </div>
-          <Table columns={columns} dataSource={dataWithVehicleNum} bordered loading={loading} />
+          <Table columns={columns} dataSource={downTypes?.data} bordered loading={isLoading}/>
         </div>
       </KTCardBody>
     </div>

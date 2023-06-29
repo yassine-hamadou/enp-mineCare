@@ -333,7 +333,7 @@ const ProductionPage: React.FC = () => {
           path='down-type'
           element={
             <>
-              <PageTitle breadcrumbs={accountBreadCrumbs}>All Down Type</PageTitle>
+              <PageTitle breadcrumbs={accountBreadCrumbs}>All Down Types</PageTitle>
               {/*<Overview />*/}
               <DownTypePage/>
             </>

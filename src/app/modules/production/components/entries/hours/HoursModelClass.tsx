@@ -802,9 +802,11 @@ const HoursModelClass: any = () => {
       dataIndex: 'today',
       onCell: (record) => {
         return {
-          onClick: (event) => {
-            localStorage.setItem('record', JSON.stringify(record))
-          }
+          onFocus: () => {
+            setRecord(record)
+            console.log('record during date', record)
+          },
+
         }
       },
       fieldProps: {
@@ -817,25 +819,58 @@ const HoursModelClass: any = () => {
               console.log('rule', rule);
               console.log('value', value);
               //@ts-ignore
-              console.log('get field value', dayjs(JSON.parse(localStorage.getItem('record'))?.date))
-              if (localStorage.getItem('record')) {
-                if (!value) {
-                  return Promise.reject('Please select a date');
-                }
+              // console.log('get field value', dayjs(JSON.parse(localStorage.getItem('record'))?.date))
+              // if (localStorage.getItem('record')) {
+              //   if (!value) {
+              //     return Promise.reject('Please select a date');
+              //   }
+              //   //@ts-ignore
+              //   else if (dayjs(value).isBefore(dayjs(JSON.parse(localStorage.getItem('record'))?.date))) {
+              //     return Promise.reject('Date cannot be before previous reading date');
+              //   } else if (dayjs(value).isAfter(dayjs())) {
+              //     return Promise.reject('Date cannot be after today');
+              //   } else {
+              //     return Promise.resolve('Resolved');
+              //   }
+              // }
+
+
+              //new code
+              if (!value) {
+                setAllowsubmi((allowSubmit: any) => {
+                  return {
+                    ...allowSubmit,
+                    [record.id]: false, // Assuming each row has a unique `id` field
+                  };
+                })
+                return Promise.reject('Please select a date');
+              }
                 //@ts-ignore
-                else if (dayjs(value).isBefore(dayjs(JSON.parse(localStorage.getItem('record'))?.date))) {
-                  return new Promise((resolve, reject) => {
-                    reject('Date cannot be before previous reading date');
-                  });
-                } else if (dayjs(value).isAfter(dayjs())) {
-                  return new Promise((resolve, reject) => {
-                    reject('Date cannot be after today');
-                  });
-                } else {
-                  return new Promise((resolve, reject) => {
-                    resolve('Resolved');
-                  })
-                }
+              // else if (dayjs(value).isBefore(dayjs(JSON.parse(localStorage.getItem('record'))?.date))) {
+              else if (dayjs(value).isBefore(dayjs(record?.date))) {
+                setAllowsubmi((allowSubmit: any) => {
+                  return {
+                    ...allowSubmit,
+                    [record.id]: false, // Assuming each row has a unique `id` field
+                  };
+                })
+                return Promise.reject('Date cannot be before previous reading date');
+              } else if (dayjs(value).isAfter(dayjs())) {
+                setAllowsubmi((allowSubmit: any) => {
+                  return {
+                    ...allowSubmit,
+                    [record.id]: false, // Assuming each row has a unique `id` field
+                  };
+                })
+                return Promise.reject('Date cannot be after today');
+              } else {
+                setAllowsubmi((allowSubmit: any) => {
+                  return {
+                    ...allowSubmit,
+                    [record.id]: true, // Assuming each row has a unique `id` field
+                  };
+                })
+                return Promise.resolve('Resolved');
               }
             } //end of validator
           }
@@ -855,9 +890,10 @@ const HoursModelClass: any = () => {
       dataIndex: 'zeroReading',
       onCell: (record) => {
         return {
-          onClick: () => {
+          onChange: () => {
             setRecord(record)
-          },
+            console.log('record being changed', record)
+          }
         }
       },
       formItemProps: {
@@ -865,34 +901,61 @@ const HoursModelClass: any = () => {
           {
             validator(rule, value) {
               //@ts-ignore
-              if (record) {
-                if (!value) {
-                  setAllowsubmi((allowSubmit: any) => {
-                    return {
-                      ...allowSubmit,
-                      [record.id]: false, // Assuming each row has a unique `id` field
-                    };
-                  })
-                  return Promise.reject('Please enter a reading');
-                }
-                //@ts-ignore
-                else if (value <= record?.currentReading) {
-                  setAllowsubmi((allowSubmit: any) => {
-                    return {
-                      ...allowSubmit,
-                      [record.id]: false, // Assuming each row has a unique `id` field
-                    };
-                  })
-                  return Promise.reject('Reading should be more than previous reading');
-                } else {
-                  setAllowsubmi((allowSubmit: any) => {
-                    return {
-                      ...allowSubmit,
-                      [record.id]: true, // Assuming each row has a unique `id` field
-                    };
-                  })
-                  return Promise.resolve();
-                }
+              // if (record) {
+              //   if (!value) {
+              //     setAllowsubmi((allowSubmit: any) => {
+              //       return {
+              //         ...allowSubmit,
+              //         [record.id]: false, // Assuming each row has a unique `id` field
+              //       };
+              //     })
+              //     return Promise.reject('Please enter a reading');
+              //   }
+              //   //@ts-ignore
+              //   else if (value <= record?.currentReading) {
+              //     setAllowsubmi((allowSubmit: any) => {
+              //       return {
+              //         ...allowSubmit,
+              //         [record.id]: false, // Assuming each row has a unique `id` field
+              //       };
+              //     })
+              //     return Promise.reject('Reading should be more than previous reading');
+              //   } else {
+              //     setAllowsubmi((allowSubmit: any) => {
+              //       return {
+              //         ...allowSubmit,
+              //         [record.id]: true, // Assuming each row has a unique `id` field
+              //       };
+              //     })
+              //     return Promise.resolve();
+              //   }
+              // }
+
+              //new code
+              if (!value) {
+                setAllowsubmi((allowSubmit: any) => {
+                  return {
+                    ...allowSubmit,
+                    [record.id]: false, // Assuming each row has a unique `id` field
+                  };
+                })
+                return Promise.reject('Please enter a reading');
+              } else if (value <= record?.currentReading) {
+                setAllowsubmi((allowSubmit: any) => {
+                  return {
+                    ...allowSubmit,
+                    [record.id]: false, // Assuming each row has a unique `id` field
+                  };
+                })
+                return Promise.reject('Reading should be more than previous reading');
+              } else {
+                setAllowsubmi((allowSubmit: any) => {
+                  return {
+                    ...allowSubmit,
+                    [record.id]: true, // Assuming each row has a unique `id` field
+                  };
+                })
+                return Promise.resolve();
               }
             }
           }
@@ -917,13 +980,14 @@ const HoursModelClass: any = () => {
     }
   ];
   const saveAndContinue = async () => {
+    console.log('dataSource', dataSource)
     try {
       dataSource?.map((item: any) => {
         if (item.zeroReading) {
           mutateHours({
             fleetId: item.fleetId,
             previousReading: item.currentReading,
-            date: item.today,
+            date: new Date(item.today),
             currentReading: item.zeroReading,
             tenantId: tenant,
             adjustment: item.adjustment,

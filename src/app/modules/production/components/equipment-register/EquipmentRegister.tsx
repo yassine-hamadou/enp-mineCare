@@ -23,6 +23,7 @@ const EquipmentRegister = () => {
     axios.get(`${ENP_URL}/models`)
   )
 
+
   const {data: modelClasses} = useQuery('listOfModelClass',
     () => axios.get(`${ENP_URL}/modelClasses`)
   )
@@ -239,6 +240,7 @@ const EquipmentRegister = () => {
                 modelClassName: record.modelClassName,
                 manufacturer: record.manufacturer,
                 modelId: record.modelId,
+                ...record,
               }
             }
             to={`edit/${record.equipmentId}`}>
@@ -320,11 +322,15 @@ const EquipmentRegister = () => {
     setGridData(searchResult) //set the grid data to the search result
   }
   const handleInputChange = (e: any) => {
+
     console.log('e.target.value', e.target.value)
     globalSearch(e.target.value)
     if (e.target.value === '') {
       setGridData(beforeSearch)
     }
+  }
+  const handleAddEquipment = () => {
+
   }
   return <>
     <KTCard>

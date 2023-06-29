@@ -8,8 +8,8 @@ import axios from 'axios';
 // export const ENP_URL = 'https://cors-anywhere.herokuapp.com/http://208.117.44.15/SmWebApi/api'
 export const USERS_ENDPOINTS = "http://208.117.44.15/userapi/api";
 const tenant: string | null = localStorage.getItem('tenant');
-// export const ENP_URL = 'http://208.117.44.15/SmWebApi/api'
-export const ENP_URL = 'https://localhost:7144/api'
+export const ENP_URL = 'http://208.117.44.15/SmWebApi/api'
+// export const ENP_URL = 'https://localhost:7144/api'
 // export const ENP_URL = 'https://app.sipconsult.net/smwebapi/api'
 
 export const fetchEmployee = () => {
@@ -240,4 +240,10 @@ export const patchSchedule = (entryId: any) => {
         'Content-Type': 'application/json-patch+json'
       }
     })
+}
+
+export const addComponentToEquipment = (data: any) => {
+  console.log('data in from' +
+    '', data)
+  return axios.post(`${ENP_URL}/Components`, data)
 }
