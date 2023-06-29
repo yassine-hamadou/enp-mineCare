@@ -1,6 +1,6 @@
 import {Link, useLocation} from "react-router-dom";
 import {KTCard, KTCardBody} from "../../../../../_metronic/helpers";
-import {Button, DatePicker, Form, Input, InputNumber, message, Modal, Select, Space, Table, Tabs} from "antd";
+import {Button, DatePicker, Form, Input, InputNumber, message, Modal, Popconfirm, Select, Space, Table, Tabs} from "antd";
 import React, {useState} from "react";
 import dayjs from 'dayjs';
 import axios from "axios";
@@ -10,6 +10,7 @@ import {useAuth} from "../../../auth";
 import {fetchSchedules} from "../entries/equipment/calendar/requests";
 
 const UpdateRegister = () => {
+  const [gridData, setGridData] = useState([])
   const location = useLocation();
   let [showModal, setShowModal] = useState(false);
   const [showMeterModal, setShowMeterModal] = useState(false);
@@ -70,6 +71,20 @@ const UpdateRegister = () => {
     addComponent(data);
     setShowModal(false);
   }
+  const deletesData = async (element: any) => {
+    try {
+      const response = await axios.delete(`${ENP_URL}/Components/${element.id}`)
+      const newData = gridData.filter((item: any) => item.id !== element.id)
+      setGridData(newData)
+      return response.status
+    } catch (e) {
+      return e
+    }
+  }
+
+  function handleDelete(element: any) {
+    deletesData(element)
+  }
 
   const componentColumns: any = [
     {
@@ -104,6 +119,26 @@ const UpdateRegister = () => {
     {
       title: 'Component Hours',
       dataIndex: 'componentHours',
+    },
+    {
+      title: 'Action',
+    fixed: 'right',
+      Width: 100,
+      render: (_:any, record: any) =>(
+        <Space size="middle">
+          <a href='#' className='btn btn-light-primary btn-sm'>
+            Update
+          </a>
+          <Popconfirm title='Sure to delete?' onConfirm={() => handleDelete(record)}>
+          <button onClick={() => handleDelete(record)} className='btn btn-light-danger btn-sm'>
+            Delete
+          </button>
+          </Popconfirm>
+        </Space>
+
+
+
+      ),
     },
   ]
   const metersColumns: any = [

@@ -219,29 +219,29 @@ const LubePage = () => {
         return 0
       },
     },
-    {
-      title: 'Action',
-      // dataIndex: 'faultDesc',
-      // sorter: (a: any, b: any) => a.faultDesc - b.faultDesc,
-      fixed: 'right',
-      width: 100,
-      render: (_: any, record: any) => (
-        <Space size='middle'>
-          {/* <a href="sections" className="btn btn-light-info btn-sm">Sections</a> */}
-          {/* <Link to={`/setup/sections/${record.id}`}>
-          <span  className="btn btn-light-info btn-sm">
-          Sections
-            </span></Link> */}
-          <a href='#' className='btn btn-light-warning btn-sm'>
-            Update
-          </a>
-          <a onClick={() => handleDelete(record)} className='btn btn-light-danger btn-sm'>
-            Delete
-          </a>
-          {/* <a>Edit </a> */}
-        </Space>
-      ),
-    },
+  {
+    title: 'Action',
+    // dataIndex: 'faultDesc',
+    // sorter: (a: any, b: any) => a.faultDesc - b.faultDesc,
+    fixed: 'right',
+    width: 100,
+    render: (_: any, record: any) => (
+      <Space size='middle'>
+        {/* <a href="sections" className="btn btn-light-info btn-sm">Sections</a> */}
+        {/* <Link to={`/setup/sections/${record.id}`}>
+        <span  className="btn btn-light-info btn-sm">
+        Sections
+          </span></Link> */}
+        <a href='#' className='btn btn-light-warning btn-sm'>
+          Update
+        </a>
+        <a onClick={() => handleDelete(record)} className='btn btn-light-danger btn-sm'>
+          Delete
+        </a>
+        {/* <a>Edit </a> */}
+      </Space>
+    ),
+  },
   ]
 
   const loadData = async () => {
