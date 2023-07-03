@@ -218,7 +218,6 @@ const CheckListForm = (props) => {
                                         <span
                                             className='text-danger fw-bold fs-6'
                                         >No groups found for this section. Kindly setup new groups for this section.</span>
-
                                     }
                                 />
                             </>
