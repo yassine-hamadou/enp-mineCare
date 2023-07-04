@@ -1,9 +1,7 @@
-import {Divider, Empty, Form, message, Select} from "antd";
-import {useEffect, useState} from "react";
-import React from "react";
+import {Checkbox, Col, Divider, Empty, Form, message, Row} from "antd";
+import React, {useState} from "react";
 import {useMutation} from "react-query";
 import {postScheduleTransactions} from "../../../../urls";
-
 
 const CheckListForm = (props) => {
     const {mutate: mutateScheduleTransactions} = useMutation(postScheduleTransactions)
@@ -29,9 +27,6 @@ const CheckListForm = (props) => {
     //     )
     // }
 
-    useEffect(() => {
-        console.log('checkList', checkList)
-    }, [checkList])
     // When the button is clicked
     const onSectionFinish = (values) => {
         console.log('values', values)
@@ -55,6 +50,7 @@ const CheckListForm = (props) => {
 
     return (
         <>
+
             <div
                 style={{
                     backgroundColor: 'white',
@@ -76,11 +72,11 @@ const CheckListForm = (props) => {
                             <strong>{String(`${props.sections.name}`).toUpperCase()}</strong>
                         </h1>
                     </div>
-                    <div className='d-flex justify-content-center mb-7'>
-                    <span className='fst-itali fs-5 text-danger'>
-                      Please read each label carefully and select the appropriate option
-                    </span>
-                    </div>
+                    {/*<div className='d-flex justify-content-center mb-7'>*/}
+                    {/*<span className='fst-itali fs-5 text-danger'>*/}
+                    {/*  Please read each label carefully and select the appropriate option*/}
+                    {/*</span>*/}
+                    {/*</div>*/}
                     {props.sections.groups.length > 0 ? props.sections.groups.map((group, indexGroup) => {
                             return (
                                 <>
@@ -150,41 +146,75 @@ const CheckListForm = (props) => {
                                         {/*map through the items*/}
                                         {group.items.length > 0 ? group.items.map((item, index) => {
                                             return (
+                                                // <div className='col-4 mb-7'>
+                                                //     <Form.Item
+                                                //         name={props.sections.groups[indexGroup].items[index].id}
+                                                //         rules={[
+                                                //             {
+                                                //                 required: true,
+                                                //                 message: 'Please select an option',
+                                                //             }
+                                                //         ]}
+                                                //     >
+                                                //         <label className='required fw-bold fs-6 mb-2'>
+                                                //             {item.name ? item.name : null}
+                                                //         </label>
+                                                //         <Select
+                                                //             showSearch={true}
+                                                //             className='form-control form-control-solid mb-3 px-2'
+                                                //             placeholder={'Select one option'}
+                                                //             onSelect={(value) => {
+                                                //                 checkListForm.setFieldsValue({
+                                                //                     [props.sections.groups[indexGroup].items[index].id]: value
+                                                //                 })
+                                                //             }}
+                                                //         >
+                                                //             {item.itemValues.length > 0 ? item.itemValues.map((itemValue, index) => {
+                                                //                     console.log('itemValue', itemValue)
+                                                //                     return (
+                                                //                         <Select.Option
+                                                //                             key={index}
+                                                //                             value={itemValue.id}
+                                                //                         >
+                                                //                             {itemValue.name ? itemValue.name : 'Default Ok'}
+                                                //                         </Select.Option>
+                                                //                     )
+                                                //                 }) :
+                                                //                 <Select.Option key={index}
+                                                //                                value={'default'}>Default</Select.Option>
+                                                //             }
+                                                //         </Select>
+                                                //     </Form.Item>
+                                                // </div>
                                                 <div className='col-4 mb-7'>
-                                                    <Form.Item
-                                                        name={props.sections.groups[indexGroup].items[index].id}
-                                                        rules={[
-                                                            {
-                                                                required: true,
-                                                                message: 'Please select an option',
-                                                            }
-                                                        ]}
-                                                    >
-                                                        <label className='required fw-bold fs-6 mb-2'>
-                                                            {item.name ? item.name : null}
-                                                        </label>
-                                                        <Select
-                                                            className='form-control form-control-solid mb-3 px-2'
-                                                            placeholder={'Select one option'}
-                                                            onSelect={(value) => {
-                                                                checkListForm.setFieldsValue({
-                                                                    [props.sections.groups[indexGroup].items[index].id]: value
-                                                                })
-                                                            }}
-                                                        >
+                                                    <h1 className='required fw-bold mb-2'>
+                                                        {item.name ? item.name : null}
+                                                    </h1>
+                                                    <Checkbox.Group style={
+                                                        {
+                                                            width: '100%'
+                                                        }
+                                                    }>
+                                                        <Row style={{width: '100%'}}>
                                                             {item.itemValues.length > 0 ? item.itemValues.map((itemValue, index) => {
                                                                     console.log('itemValue', itemValue)
                                                                     return (
-                                                                        <Select.Option key={index} value={
-                                                                            itemValue.id
-                                                                        }>{itemValue.name ? itemValue.name : 'Default Ok'}</Select.Option>
+                                                                        <Col span={24}>
+                                                                            <Checkbox>
+                                                                                <span
+                                                                                    className={'fs-5'}>{itemValue.name ? itemValue.name : 'Default Ok'}</span>
+                                                                            </Checkbox>
+                                                                        </Col>
+
                                                                     )
+
                                                                 }) :
-                                                                <Select.Option key={index}
-                                                                               value={'default'}>Default</Select.Option>
+                                                                <Col span={8}>
+                                                                    <Checkbox>Defaults</Checkbox>
+                                                                </Col>
                                                             }
-                                                        </Select>
-                                                    </Form.Item>
+                                                        </Row>
+                                                    </Checkbox.Group>
                                                 </div>
                                             )
                                         }) : (
@@ -218,7 +248,6 @@ const CheckListForm = (props) => {
                                         <span
                                             className='text-danger fw-bold fs-6'
                                         >No groups found for this section. Kindly setup new groups for this section.</span>
-
                                     }
                                 />
                             </>

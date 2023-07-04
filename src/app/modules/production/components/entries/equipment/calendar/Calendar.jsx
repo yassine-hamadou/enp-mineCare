@@ -1,12 +1,5 @@
 import {L10n} from '@syncfusion/ej2-base'
-import {
-    ScheduleComponent,
-    Day,
-    Week,
-    Month,
-    Agenda,
-    Inject,
-} from "@syncfusion/ej2-react-schedule";
+import {Agenda, Day, Inject, Month, ScheduleComponent, Week,} from "@syncfusion/ej2-react-schedule";
 import {DateTimePickerComponent} from '@syncfusion/ej2-react-calendars'
 import {DropDownListComponent} from '@syncfusion/ej2-react-dropdowns'
 import {useMutation, useQuery, useQueryClient} from 'react-query'
@@ -20,19 +13,9 @@ import '@syncfusion/ej2-popups/styles/material.css'
 import '@syncfusion/ej2-splitbuttons/styles/material.css'
 import '@syncfusion/ej2-react-schedule/styles/material.css'
 import '@syncfusion/ej2-buttons/styles/material.css'
-import {
-    addSchedule,
-    deleteSchedule,
-    fetchCustodians,
-    fetchSchedules,
-    fetchServiceTypes,
-    fetchVmequps,
-    localData,
-    updateSchedule,
-} from './requests'
+import {addSchedule, deleteSchedule, fetchCustodians, localData, pendingSchedule, updateSchedule,} from './requests'
 import {message, Space, Spin} from 'antd'
 import React from "react";
-import {getEquipment} from "../../../../../../urls";
 import {useAuth} from "../../../../../auth";
 
 /**
@@ -56,19 +39,25 @@ const Calendar = ({chosenLocationIdFromDropdown}) => {
     let scheduleObj
     let scheduleQueryClient = useQueryClient() // for refetching the schedules
     let serviceQueryClient = useQueryClient() // for refetching the service types
+
     const {tenant} = useAuth()
 
     // React Query
     //Get
-    const {data: schedulesData} = useQuery('schedules', () => fetchSchedules(tenant), {
-        refetchOnWindowFocus: true,
-    })
+    // const {data: schedulesData} = useQuery('schedules', () => fetchSchedules(tenant), {
+    //     refetchOnWindowFocus: true,
+    // })
 
+    const {data: schedulesData} = useQuery('schedules', () => pendingSchedule(tenant), {
+        refetchOnWindowFocus: false,
+        staleTime: Infinity,
+    })
+    const serviceTypes = serviceQueryClient.getQueryData('serviceTypes')
     const {data: custodiansData} = useQuery('custodians', fetchCustodians, {
         refetchOnWindowFocus: false,
         staleTime: Infinity,
     })
-    const {data: serviceTypes, isLoading: servicesLoading} = useQuery('serviceTypes', () => fetchServiceTypes(tenant))
+    // const {data: serviceTypes, isLoading: servicesLoading} = useQuery('serviceTypes', () => fetchServiceTypes(tenant))
 
     // const {data: equipmentData} = useQuery('equipment', getEquipment, {
     //     refetchOnWindowFocus: false,
@@ -441,9 +430,10 @@ const Calendar = ({chosenLocationIdFromDropdown}) => {
                             schedulesData &&
                             localData(
                                 chosenLocationIdFromDropdown
-                                    ? schedulesData.data.filter(
-                                        (schedule) => schedule.locationId === chosenLocationIdFromDropdown
-                                    )
+                                    ? schedulesData.data
+                                        ?.filter(
+                                            (schedule) => schedule.locationId === chosenLocationIdFromDropdown
+                                        )
                                     : schedulesData.data
                             )
                         }

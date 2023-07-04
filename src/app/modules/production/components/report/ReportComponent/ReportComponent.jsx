@@ -24,7 +24,7 @@ const ReportViewer = (props) => {
                 requestOptions,
                 callbacks: {
                     customizeParameterLookUpSource: function (s, e) {
-                        if (s.name.toLowerCase() === 'tenantid') {
+                        if (s?.name?.toLowerCase() === 'tenantid') {
                             var parametersModel = e.filter(x => x.value === tenant);
                             return parametersModel
                         }

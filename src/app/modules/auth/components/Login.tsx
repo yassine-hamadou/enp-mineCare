@@ -154,6 +154,14 @@ export function Login() {
                       ))
                     }
                   </>
+                // <>
+                //   <option value='damang'>DAMANG DIVISION</option>
+                //   <option value='dzata'>DZATA DIVISION</option>
+                //   <option value='mpohor'>MPOHOR DIVISION</option>
+                //   <option value='headOffice'>HEAD OFFICE</option>
+                //   <option value='salaga'>SALAGA DIVISION</option>
+                //   <option value='tarkwa'>TARKWA DIVISION</option>
+                // </>
               }
 
 

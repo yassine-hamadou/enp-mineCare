@@ -4,12 +4,13 @@ import {KTCard, KTCardBody} from "../../../../../_metronic/helpers";
 import {getModels, postEquipment} from "../../../../urls";
 import {useMutation, useQuery, useQueryClient} from "react-query";
 import {Link} from "react-router-dom";
+import {useAuth} from "../../../auth";
 
 const AddEquipRegister = () => {
   let [form] = Form.useForm();
   let [generalInfo] = Form.useForm();
   const queryClient = useQueryClient()
-
+  const {tenant} = useAuth()
   const {data: listOfModels} = useQuery('listOfModels', getModels)
   const {mutate: addEquipment} = useMutation(postEquipment, {
     onSuccess: () => {
@@ -24,8 +25,15 @@ const AddEquipRegister = () => {
 
   function onDetailsFinish(values: any) {
     console.log('onfinish1');
+    console.log(listOfModels?.data)
     console.log(values)
-    addEquipment(values)
+    const dataToPost = {
+      ...values,
+      modelId: values.model,
+      tenantId: tenant,
+    }
+    console.log("dataToPost", dataToPost)
+    addEquipment(dataToPost)
   }
 
   function onGeneralInfoFinish(values: any) {
@@ -104,11 +112,13 @@ const AddEquipRegister = () => {
                         <Form.Item name='model' label='Model'
                                    rules={[{required: true}]}>
                           <Select
+                            showSearch={true}
                             placeholder='Select Model'
                             className='form-control form-control-solid py-1'
                           >
                             {listOfModels?.data?.map((item: any) => (
-                                <Select.Option value={item.code}>{item.manufacturer?.name} - {item.name}</Select.Option>
+                                <Select.Option
+                                  value={item.modelId}>{item.manufacturer?.name} - {item.name}</Select.Option>
                               )
                             )}
                           </Select>
@@ -189,6 +199,7 @@ const AddEquipRegister = () => {
                       <div className='col-4 mb-7'>
                         <Form.Item name='Meter Type' label='Meter Type (Hours, Km)' rules={[{required: true}]}>
                           <Select
+                            showSearch={true}
                             placeholder='Select Meter Type'
                             className='form-control form-control-solid py-1'
                           >
@@ -231,6 +242,10 @@ const AddEquipRegister = () => {
                     <Button
                       type='primary'
                       htmlType='submit'
+                      onClick={
+                        () => {
+                          console.log(generalInfo.getFieldsValue());
+                        }}
                     >
                       Submit
                     </Button>

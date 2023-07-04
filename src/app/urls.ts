@@ -8,8 +8,9 @@ import axios from 'axios';
 // export const ENP_URL = 'https://cors-anywhere.herokuapp.com/http://208.117.44.15/SmWebApi/api'
 export const USERS_ENDPOINTS = "http://208.117.44.15/userapi/api";
 const tenant: string | null = localStorage.getItem('tenant');
-// export const ENP_URL = 'http://208.117.44.15/SmWebApi/api'
-export const ENP_URL = 'https://localhost:7144/api'
+export const ENP_URL = 'http://208.117.44.15/SmWebApi/api'
+// export const ENP_URL = 'https://localhost:7144/api'
+// export const ENP_URL = 'https://app.sipconsult.net/smwebapi/api'
 
 export const fetchEmployee = () => {
   return axios.get(`${ENP_URL}/vmemplsApi`)
@@ -54,6 +55,15 @@ export const fetchSections = () => {
 export const fetchServices = (tenant: string) => {
   return axios.get(`${ENP_URL}/Services/tenant/${tenant}`)
 }
+export const postService = (data: any, tenantId: string) => {
+  const dataWithTenant = {...data, tenantId};
+  return axios.post(`${ENP_URL}/Services`, dataWithTenant)
+}
+
+export const deleteService = (id: any) => {
+  console.log('id', id)
+  return axios.delete(`${ENP_URL}/Services/${id}`)
+}
 export const fetchGroups = () => {
   return axios.get(`${ENP_URL}/Groups`)
 }
@@ -81,7 +91,18 @@ export function getBacklogs(tenant: any) {
 }
 
 export function postBacklogs(data: any, tenantId: any) {
-  return axios.post(`${ENP_URL}/Backlogs`, data?.map((item: any) => ({...item, tenantId})));
+  const dataWithTenant = {...data, tenantId};
+  console.info('dataWithTenant', dataWithTenant)
+  return axios.post(`${ENP_URL}/Backlogs`, dataWithTenant);
+}
+
+export function putBacklog(data: any) {
+  console.log("data in put", data)
+  return axios.put(`${ENP_URL}/Backlogs/${data.id}`, data);
+}
+
+export function deleteBacklog(id: any) {
+  return axios.delete(`${ENP_URL}/Backlogs/${id}`);
 }
 
 export function getGroundEngagingTools(tenant: any) {
@@ -140,27 +161,89 @@ export const fetchCompanies = () => {
   return axios.get(`${USERS_ENDPOINTS}/Companies`)
 }
 
-export const getPriorities = (TenantId: any) => {
+export const getPriority = (TenantId: any) => {
   return axios.get(`${ENP_URL}/Priorities/tenant/${TenantId}`)
 }
 
 export const addPriorities = (data: any, tenantId: any) => {
-  return axios.post(`${ENP_URL}/Priorities`, data?.map((item: any) => ({...item, tenantId})))
+  return axios.post(`${ENP_URL}/Priorities`, {...data, tenantId})
 }
 
-export const updatePriorities = (data: any) => {
-  return axios.put(`${ENP_URL}/Priorities/${data.id}`, data)
+export const putPriority = (data: any) => {
+  console.log('data update', data)
+  return axios.put(`${ENP_URL}/Priorities/${data.priorityId}`, data)
 }
 
+export const deletePriority = (id: any) => {
+  return axios.delete(`${ENP_URL}/Priorities/${id}`)
+}
 export const getSources = (TenantId: any) => {
   return axios.get(`${ENP_URL}/Sources/tenant/${TenantId}`)
 }
 
 export const addSources = (data: any, tenantId: any) => {
-  return axios.post(`${ENP_URL}/Sources`, data?.map((item: any) => ({...item, tenantId})))
+  return axios.post(`${ENP_URL}/Sources`, {...data, tenantId})
 }
 
-export const updateSources = (data: any) => {
+export const getDowntypes = (TenantId: any) => {
+  return axios.get(`${ENP_URL}/Downtypes/tenant/${TenantId}`)
+}
+
+export const putSources = (data: any) => {
+  console.log('data update', data)
   return axios.put(`${ENP_URL}/Sources/${data.id}`, data)
 }
 
+export const deleteSources = (id: any) => {
+  return axios.delete(`${ENP_URL}/Sources/${id}`)
+}
+
+export const getSequences = (modelId: any, TenantId: any) => {
+  return axios.get(`${ENP_URL}/Sequences/tenant/${TenantId}/equipModel/${modelId}`)
+}
+
+export const postSequence = (data: any) => {
+  return axios.post(`${ENP_URL}/Sequences`, data)
+}
+
+export const deleteSequence = (tenantId: any, model: any) => {
+  return axios.delete(`${ENP_URL}/Sequences/tenant/${tenantId}/equipModel/${model}`)
+}
+
+export const concatToFaultDetails = (data: any) => {
+  return axios.patch(`${ENP_URL}/FaultEntriesApi/${data?.entryId}`,
+    [
+      {
+        "op": "replace",
+        "path": "/faultDetails",
+        "value": data?.faultDetails
+      }
+    ]
+    , {
+      headers: {
+        'Content-Type': 'application/json-patch+json'
+      }
+    })
+}
+
+export const patchSchedule = (entryId: any) => {
+  return axios.patch(`${ENP_URL}/FleetSchedulesApi/${entryId}`,
+    [
+      {
+        "op": "replace",
+        "path": "/status",
+        "value": "Completed"
+      }
+    ]
+    , {
+      headers: {
+        'Content-Type': 'application/json-patch+json'
+      }
+    })
+}
+
+export const addComponentToEquipment = (data: any) => {
+  console.log('data in from' +
+    '', data)
+  return axios.post(`${ENP_URL}/Components`, data)
+}

@@ -1,15 +1,5 @@
-import {
-  Button,
-  DatePicker,
-  Form,
-  Input,
-  InputNumber,
-  Modal,
-  Select,
-  Space,
-  Table,
-} from 'antd'
-import {useState, useEffect} from 'react'
+import {Button, DatePicker, Form, Input, InputNumber, message, Modal, Select, Space, Table,} from 'antd'
+import {useEffect, useState} from 'react'
 import axios from 'axios'
 import {KTCardBody, KTSVG} from '../../../../../../_metronic/helpers'
 import {
@@ -22,7 +12,6 @@ import {
   fetchRefillTypes
 } from '../../../../../urls'
 import {useQuery} from 'react-query'
-import {message} from 'antd';
 import moment from 'moment'
 
 const LubePage = () => {
@@ -230,29 +219,29 @@ const LubePage = () => {
         return 0
       },
     },
-    {
-      title: 'Action',
-      // dataIndex: 'faultDesc',
-      // sorter: (a: any, b: any) => a.faultDesc - b.faultDesc,
-      fixed: 'right',
-      width: 100,
-      render: (_: any, record: any) => (
-        <Space size='middle'>
-          {/* <a href="sections" className="btn btn-light-info btn-sm">Sections</a> */}
-          {/* <Link to={`/setup/sections/${record.id}`}>
-          <span  className="btn btn-light-info btn-sm">
-          Sections
-            </span></Link> */}
-          <a href='#' className='btn btn-light-warning btn-sm'>
-            Update
-          </a>
-          <a onClick={() => handleDelete(record)} className='btn btn-light-danger btn-sm'>
-            Delete
-          </a>
-          {/* <a>Edit </a> */}
-        </Space>
-      ),
-    },
+  {
+    title: 'Action',
+    // dataIndex: 'faultDesc',
+    // sorter: (a: any, b: any) => a.faultDesc - b.faultDesc,
+    fixed: 'right',
+    width: 100,
+    render: (_: any, record: any) => (
+      <Space size='middle'>
+        {/* <a href="sections" className="btn btn-light-info btn-sm">Sections</a> */}
+        {/* <Link to={`/setup/sections/${record.id}`}>
+        <span  className="btn btn-light-info btn-sm">
+        Sections
+          </span></Link> */}
+        <a href='#' className='btn btn-light-warning btn-sm'>
+          Update
+        </a>
+        <a onClick={() => handleDelete(record)} className='btn btn-light-danger btn-sm'>
+          Delete
+        </a>
+        {/* <a>Edit </a> */}
+      </Space>
+    ),
+  },
   ]
 
   const loadData = async () => {
@@ -507,7 +496,7 @@ const LubePage = () => {
               {contextHolder}
               {messageHolder}
               <Form.Item name='fleetId' label='fleetId'>
-                <Select placeholder='Select' onChange={onFleetIdChange}>
+                <Select showSearch={true} placeholder='Select' onChange={onFleetIdChange}>
                   {allEquips?.data.map((item: any) => (
                     <Option key={item.fleetID} value={item.fleetID}>
                       {item.fleetID}- {item.modlName}

@@ -1,7 +1,6 @@
-import {Button, Input, Space, Table} from 'antd'
+import {Input, Space, Table} from 'antd'
 import {useState} from 'react'
 import {KTSVG} from '../../../../../../_metronic/helpers'
-import {useQueryClient} from 'react-query'
 import {dhm} from '../fault_d/FaultTable'
 
 const ResolutionTable = (props: any) => {
@@ -67,6 +66,10 @@ const ResolutionTable = (props: any) => {
         }
         return 0
       }
+    },
+    {
+      title: 'Fault Details',
+      dataIndex: 'faultDetails',
     },
     {
       title: 'Custodian',

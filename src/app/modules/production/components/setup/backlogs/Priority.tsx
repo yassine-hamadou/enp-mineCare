@@ -1,34 +1,51 @@
-import {useMutation, useQuery} from "react-query";
-import {Button, Form, Input, message, Modal, Space, Table} from "antd";
+import {useMutation, useQuery, useQueryClient} from "react-query";
+import {Button, Form, Input, InputNumber, message, Modal, Popconfirm, Space, Table} from "antd";
 import {KTCard, KTCardBody, KTSVG} from "../../../../../../_metronic/helpers";
-import {addPriorities, getPriorities, updatePriorities} from "../../../../../urls";
+import {addPriorities, deletePriority, getPriority, putPriority} from "../../../../../urls";
 import {useAuth} from "../../../../auth";
 import React, {useState} from "react";
 
 const Priority = () => {
   const {tenant} = useAuth()
-  const {data: priorities, isLoading} = useQuery('priorities', getPriorities)
+  const queryClient: any = useQueryClient()
+  const {data: priorities, isLoading} = useQuery('priorities', () => getPriority(tenant))
+  console.log("priorities", priorities)
   const {mutate: addPriority} = useMutation('addPriority', (data) => addPriorities(data, tenant), {
     onSuccess: () => {
       message.success('Priority added successfully')
+      queryClient.invalidateQueries('priorities')
+      form.resetFields()
+      setIsModalOpen(false)
     },
     onError: () => {
       message.error('Error adding priority, Please try again')
     }
   })
-  const {mutate: updatePriority} = useMutation('updatePriority', updatePriorities, {
+  const {mutate: updatePriority} = useMutation('updatePriority', putPriority, {
     onSuccess: () => {
       message.success('Priority updated successfully')
+      queryClient.invalidateQueries('priorities')
+      form.resetFields()
+      setIsModalOpen(false)
+      setIsUpdating(false)
     },
     onError: () => {
       message.error('Error updating priority, Please try again')
     }
   })
-
+  const {mutate: removePriority} = useMutation('deletePriority', deletePriority, {
+    onSuccess: () => {
+      message.success('Priority deleted successfully')
+      queryClient.invalidateQueries('priorities')
+    },
+    onError: () => {
+      message.error('Error deleting priority, Please try again')
+    }
+  })
   const columns = [
     {
       title: 'Code',
-      dataIndex: 'code',
+      dataIndex: 'priorityId',
     },
     {
       title: 'Name',
@@ -36,23 +53,31 @@ const Priority = () => {
     },
     {
       title: 'Action',
-      render: () => (
+      render: (_: any, record: any) => (
         <Space size='middle'>
           <Button type='primary' ghost onClick={
             () => {
               setIsModalOpen(true)
               setIsUpdating(true)
               form.setFieldsValue({
-                code: 'test',
-                name: 'test'
+                ...record
               })
             }
           }>
             Edit
           </Button>
-          <Button type={'primary'} danger>
-            Delete
-          </Button>
+          <Popconfirm
+            title={`Are you sure you want to delete 
+            ${record.name} 
+            ?`}
+            onConfirm={() => {
+              removePriority(record.priorityId)
+            }
+            }>
+            <Button type={'primary'} danger>
+              Delete
+            </Button>
+          </Popconfirm>
         </Space>
       )
     }
@@ -66,6 +91,8 @@ const Priority = () => {
 
   function handleCancel() {
     setIsModalOpen(false);
+    form.resetFields();
+    setIsUpdating(false)
   }
 
   function handleModalSubmit() {
@@ -73,6 +100,7 @@ const Priority = () => {
   }
 
   function onFinish(values: any) {
+
     setSubmitLoading(true)
     console.log(values)
     try {
@@ -88,6 +116,11 @@ const Priority = () => {
     }
   }
 
+  function openAdd() {
+    setIsUpdating(false)
+    setIsModalOpen(true)
+  }
+
   return (
     <KTCard>
       <KTCardBody>
@@ -95,13 +128,12 @@ const Priority = () => {
           <Space style={{marginBottom: 16}}>
             <Input
               placeholder='Enter Search Text'
-              // onChange={handleInputChange}
               type='text'
               allowClear
             />
           </Space>
           <Space style={{marginBottom: 16}}>
-            <button type='button' className='btn btn-primary me-3' onClick={() => setIsModalOpen(true)}>
+            <button type='button' className='btn btn-primary me-3' onClick={openAdd}>
               <KTSVG path='/media/icons/duotune/arrows/arr075.svg' className='svg-icon-2'/>
               Add
             </button>
@@ -114,7 +146,7 @@ const Priority = () => {
           loading={isLoading}
         />
         <Modal
-          title='Add'
+          title={isUpdating ? 'Update Priority' : 'Add Priority'}
           open={isModalOpen}
           onCancel={handleCancel}
           footer={
@@ -138,6 +170,11 @@ const Priority = () => {
             title='Add'
             onFinish={onFinish}
           >
+            {isUpdating &&
+                <Form.Item label='Code' name='priorityId' hidden={true} required={true}>
+                    <InputNumber disabled={true}/>
+                </Form.Item>
+            }
             <Form.Item label='Name' name='name' rules={[{required: true}]}>
               <Input
                 placeholder='Enter Name'
@@ -145,6 +182,17 @@ const Priority = () => {
                 allowClear
               />
             </Form.Item>
+            {isUpdating &&
+                <Form.Item label='Tenant' name='tenantId' hidden required={true}>
+                    <Input
+                        placeholder='Enter Name'
+                        type='text'
+                        allowClear
+                        value={tenant}
+                        disabled={true}
+                    />
+                </Form.Item>
+            }
           </Form>
         </Modal>
       </KTCardBody>

@@ -2,6 +2,8 @@ import axios from 'axios'
 import {UserModel} from './_models'
 
 const API_URL = "http://208.117.44.15/hrwebapi/api/Users"
+// const API_URL = "https://app.sipconsult.net/hrwebapi/api/Users"
+
 // const API_URL = process.env.REACT_APP_API_URL
 
 export const GET_USER_BY_ACCESSTOKEN_URL = `${API_URL}/ `

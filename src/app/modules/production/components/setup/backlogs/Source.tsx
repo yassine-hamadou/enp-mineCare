@@ -1,34 +1,51 @@
-import {useMutation, useQuery} from "react-query";
-import {Button, Form, Input, message, Modal, Space, Table} from "antd";
+import {useMutation, useQuery, useQueryClient} from "react-query";
+import {Button, Form, Input, InputNumber, message, Modal, Popconfirm, Space, Table} from "antd";
 import {KTCard, KTCardBody, KTSVG} from "../../../../../../_metronic/helpers";
-import {addSources, getSources, updateSources} from "../../../../../urls";
+import {addSources, deleteSources, getSources, putSources} from "../../../../../urls";
 import {useAuth} from "../../../../auth";
 import React, {useState} from "react";
 
 const Source = () => {
   const {tenant} = useAuth()
-  const {data: sources, isLoading} = useQuery('sources', getSources)
+  const queryClient: any = useQueryClient()
+  const {data: sources, isLoading} = useQuery('sources', () => getSources(tenant))
+  console.log("sources", sources)
   const {mutate: addSource} = useMutation('addSource', (data) => addSources(data, tenant), {
     onSuccess: () => {
       message.success('Source added successfully')
+      queryClient.invalidateQueries('sources')
+      form.resetFields()
+      setIsModalOpen(false)
     },
     onError: () => {
       message.error('Error adding source, Please try again')
     }
   })
-  const {mutate: updateSource} = useMutation('updateSource', updateSources, {
+  const {mutate: updateSource} = useMutation('updateSource', putSources, {
     onSuccess: () => {
       message.success('Source updated successfully')
+      queryClient.invalidateQueries('sources')
+      form.resetFields()
+      setIsModalOpen(false)
+      setIsUpdating(false)
     },
     onError: () => {
       message.error('Error updating source, Please try again')
     }
   })
-
+  const {mutate: removeSource} = useMutation('deleteSource', deleteSources, {
+    onSuccess: () => {
+      message.success('Source deleted successfully')
+      queryClient.invalidateQueries('sources')
+    },
+    onError: () => {
+      message.error('Error deleting source, Please try again')
+    }
+  })
   const columns = [
     {
       title: 'Code',
-      dataIndex: 'code',
+      dataIndex: 'id',
     },
     {
       title: 'Name',
@@ -36,23 +53,31 @@ const Source = () => {
     },
     {
       title: 'Action',
-      render: () => (
+      render: (_: any, record: any) => (
         <Space size='middle'>
           <Button type='primary' ghost onClick={
             () => {
               setIsModalOpen(true)
               setIsUpdating(true)
               form.setFieldsValue({
-                code: 'test',
-                name: 'test'
+                ...record
               })
             }
           }>
             Edit
           </Button>
-          <Button type={'primary'} danger>
-            Delete
-          </Button>
+          <Popconfirm
+            title={`Are you sure you want to delete 
+            ${record.name} 
+            ?`}
+            onConfirm={() => {
+              removeSource(record.id)
+            }
+            }>
+            <Button type={'primary'} danger>
+              Delete
+            </Button>
+          </Popconfirm>
         </Space>
       )
     }
@@ -66,6 +91,8 @@ const Source = () => {
 
   function handleCancel() {
     setIsModalOpen(false);
+    form.resetFields();
+    setIsUpdating(false)
   }
 
   function handleModalSubmit() {
@@ -73,6 +100,7 @@ const Source = () => {
   }
 
   function onFinish(values: any) {
+
     setSubmitLoading(true)
     console.log(values)
     try {
@@ -88,6 +116,11 @@ const Source = () => {
     }
   }
 
+  function openAdd() {
+    setIsUpdating(false)
+    setIsModalOpen(true)
+  }
+
   return (
     <KTCard>
       <KTCardBody>
@@ -95,13 +128,12 @@ const Source = () => {
           <Space style={{marginBottom: 16}}>
             <Input
               placeholder='Enter Search Text'
-              // onChange={handleInputChange}
               type='text'
               allowClear
             />
           </Space>
           <Space style={{marginBottom: 16}}>
-            <button type='button' className='btn btn-primary me-3' onClick={() => setIsModalOpen(true)}>
+            <button type='button' className='btn btn-primary me-3' onClick={openAdd}>
               <KTSVG path='/media/icons/duotune/arrows/arr075.svg' className='svg-icon-2'/>
               Add
             </button>
@@ -114,7 +146,7 @@ const Source = () => {
           loading={isLoading}
         />
         <Modal
-          title='Add'
+          title={isUpdating ? 'Update Source' : 'Add Source'}
           open={isModalOpen}
           onCancel={handleCancel}
           footer={
@@ -138,6 +170,11 @@ const Source = () => {
             title='Add'
             onFinish={onFinish}
           >
+            {isUpdating &&
+                <Form.Item label='Code' name='id' hidden={true} required={true}>
+                    <InputNumber disabled={true}/>
+                </Form.Item>
+            }
             <Form.Item label='Name' name='name' rules={[{required: true}]}>
               <Input
                 placeholder='Enter Name'
@@ -145,6 +182,17 @@ const Source = () => {
                 allowClear
               />
             </Form.Item>
+            {isUpdating &&
+                <Form.Item label='Tenant' name='tenantId' hidden required={true}>
+                    <Input
+                        placeholder='Enter Name'
+                        type='text'
+                        allowClear
+                        value={tenant}
+                        disabled={true}
+                    />
+                </Form.Item>
+            }
           </Form>
         </Modal>
       </KTCardBody>

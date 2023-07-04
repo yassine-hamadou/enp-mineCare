@@ -1,5 +1,7 @@
 import {createRoot} from 'react-dom/client'
 import {registerLicense, validateLicense} from "@syncfusion/ej2-base";
+import * as serviceWorkerRegistration from './serviceWorkerRegistration';
+
 // Axios
 import axios from 'axios'
 import {Chart, registerables} from 'chart.js'
@@ -16,7 +18,6 @@ import './_metronic/assets/sass/style.react.scss'
 import {AppRoutes} from './app/routing/AppRoutes'
 import {AuthProvider, setupAxios} from './app/modules/auth'
 import {QueryClient, QueryClientProvider} from "react-query";
-import {register} from './serviceWorker';
 
 /**
  * Creates `axios-mock-adapter` instance for provided `axios` instance, add
@@ -52,4 +53,4 @@ if (container) {
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.
 // Learn more about service workers: https://bit.ly/CRA-PWA
-register();
+serviceWorkerRegistration.register()

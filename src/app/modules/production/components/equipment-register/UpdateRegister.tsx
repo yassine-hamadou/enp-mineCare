@@ -1,25 +1,36 @@
 import {Link, useLocation} from "react-router-dom";
 import {KTCard, KTCardBody} from "../../../../../_metronic/helpers";
-import {Button, DatePicker, Form, Input, Modal, Select, Space, Table, Tabs} from "antd";
+import {Button, DatePicker, Form, Input, InputNumber, message, Modal, Popconfirm, Select, Space, Table, Tabs} from "antd";
 import React, {useState} from "react";
 import dayjs from 'dayjs';
 import axios from "axios";
-import {useQuery} from "react-query";
-import {ENP_URL, fetchFaults, getModels} from "../../../../urls";
-import {getTenant, useAuth} from "../../../auth";
+import {useMutation, useQuery, useQueryClient} from "react-query";
+import {addComponentToEquipment, ENP_URL, fetchFaults, getModels} from "../../../../urls";
+import {useAuth} from "../../../auth";
 import {fetchSchedules} from "../entries/equipment/calendar/requests";
 
 const UpdateRegister = () => {
+  const [gridData, setGridData] = useState([])
   const location = useLocation();
-  const equipmentData: any = location.state;
-  console.log('equip data', equipmentData);
   let [showModal, setShowModal] = useState(false);
   const [showMeterModal, setShowMeterModal] = useState(false);
   const [showAgreementModal, setShowAgreementModal] = useState(false);
+  const [componentSubmitLoading, setComponentSubmitLoading] = useState(false);
   const {tenant} = useAuth();
-  console.log('tenant', getTenant());
-
-  const {data: listOfComponents} = useQuery('listOfComponents', () => axios.get(`${ENP_URL}/components`));
+  const queryClient = useQueryClient();
+  const {mutate: addComponent} = useMutation(addComponentToEquipment, {
+    onSuccess: (data) => {
+      queryClient.refetchQueries('equipments').then(() => {
+        message.success('Component added successfully');
+      })
+      setComponentsGridData((prev: any) => [...prev, data?.data]);
+      setComponentSubmitLoading(false);
+    },
+    onError: () => {
+      message.error('Error adding component');
+      setComponentSubmitLoading(false);
+    }
+  })
 
   const {
     data: listOfAgreements,
@@ -51,11 +62,42 @@ const UpdateRegister = () => {
     setShowAgreementModal(false);
   }
 
+  const onComponentFinish = (values: any) => {
+    setComponentSubmitLoading(true);
+    const data = {
+      ...values,
+      tenantId: tenant,
+    }
+    addComponent(data);
+    setShowModal(false);
+  }
+  const deletesData = async (element: any) => {
+    try {
+      const response = await axios.delete(`${ENP_URL}/Components/${element.id}`)
+      const newData = gridData.filter((item: any) => item.id !== element.id)
+      setGridData(newData)
+      return response.status
+    } catch (e) {
+      return e
+    }
+  }
+
+  function handleDelete(element: any) {
+    deletesData(element)
+  }
 
   const componentColumns: any = [
     {
       title: 'Serial Number',
       dataIndex: 'serialNumber',
+    },
+    {
+      title: 'Part Number',
+      dataIndex: 'partNumber',
+    },
+    {
+      title: 'Install Date',
+      dataIndex: 'installDate',
     },
     {
       title: 'Description',
@@ -64,7 +106,40 @@ const UpdateRegister = () => {
     {
       title: 'Quantity',
       dataIndex: 'quantity',
-    }
+    },
+    {
+      title: 'Reason for Change',
+      dataIndex: 'reasonForChange',
+    },
+    {
+      title: 'Last C/D Date',
+      dataIndex: 'lastChangeDate',
+      // render: (date: any) => new Date(date).toDateString(),
+    },
+    {
+      title: 'Component Hours',
+      dataIndex: 'componentHours',
+    },
+    {
+      title: 'Action',
+    fixed: 'right',
+      Width: 100,
+      render: (_:any, record: any) =>(
+        <Space size="middle">
+          <a href='#' className='btn btn-light-primary btn-sm'>
+            Update
+          </a>
+          <Popconfirm title='Sure to delete?' onConfirm={() => handleDelete(record)}>
+          <button onClick={() => handleDelete(record)} className='btn btn-light-danger btn-sm'>
+            Delete
+          </button>
+          </Popconfirm>
+        </Space>
+
+
+
+      ),
+    },
   ]
   const metersColumns: any = [
     // {
@@ -157,6 +232,16 @@ const UpdateRegister = () => {
   const [componentUpdateForm] = Form.useForm();
   const [meterUpdateForm] = Form.useForm();
   const [agreementUpdateForm] = Form.useForm();
+
+  const equipmentsQuery: any = queryClient.getQueryData(['equipments'])
+  console.log('equipments', equipmentsQuery);
+  const equipsData = equipmentsQuery?.data;
+  console.log('equipment', equipsData);
+  const equipmentData: any = location.state;
+  console.log('equipment data', equipmentData);
+  const componentEquipData = equipsData ? equipsData?.find((equip: any) => equip.equipmentId === equipmentData.equipmentId) : equipmentData;
+  const [gridComponentsData, setComponentsGridData] = useState<any>(componentEquipData?.components);
+
 
   updateDetailsForm.setFieldsValue({
     equipmentId: equipmentData.equipmentId.trim(),
@@ -396,13 +481,17 @@ const UpdateRegister = () => {
                     <Form
                       layout={'vertical'}
                       form={componentUpdateForm}
-                      // onFinish={onfinish}
+                      onFinish={onComponentFinish}
                       labelCol={{span: 8}}
                       wrapperCol={{span: 24}}
                       title='Add Component'
                     >
-                      <Form.Item name='equipmentId' className={'d-none'} label='Equipment ID'
-                                 rules={[{required: true}]}>
+                      <Form.Item
+                        name='equipmentId'
+                        className={'d-none'}
+                        label='Equipment ID'
+                        rules={[{required: true}]}
+                      >
                         <Input
                           readOnly
                           disabled
@@ -410,29 +499,60 @@ const UpdateRegister = () => {
                           className='form-control form-control-solid'
                         />
                       </Form.Item>
-                      <Form.Item name='Serial Number' label='Serial Number' rules={[{required: true}]}>
+                      <Form.Item name='serialNumber' label='Serial Number' rules={[{required: true}]}>
                         <Input
                           placeholder='Enter Serial Number'
                           type='text'
                           className='form-control form-control-solid'
                         />
                       </Form.Item>
-                      <Form.Item name='Quantity' label='Quantity' rules={[{required: true}]}>
-                        <Input
+                      <Form.Item name='quantity' label='Quantity' rules={[{required: true}]}>
+                        <InputNumber
                           placeholder='Enter Quantity'
-                          type='number'
+                          min={1}
                           className='form-control form-control-solid'
                         />
                       </Form.Item>
-                      <Form.Item name='Description' label='Description' rules={[{required: true}]}>
+                      <Form.Item name='description' label='Description' rules={[{required: true}]}>
                         <Input.TextArea
                           placeholder='Enter Description'
+                          className='form-control form-control-solid'
+                        />
+                      </Form.Item>
+                      <Form.Item name='installDate' label='Install Date' rules={[{required: true}]}>
+                        <DatePicker
+                          showTime
+                          className='form-control form-control-solid'
+                        />
+                      </Form.Item>
+                      <Form.Item name='partNumber' label='Part Number' rules={[{required: true}]}>
+                        <Input.TextArea
+                          placeholder='Enter Part Number'
+                          className='form-control form-control-solid'
+                        />
+                      </Form.Item>
+                      <Form.Item name='reasonForChange' label='Reason For Change' rules={[{required: true}]}>
+                        <Input.TextArea
+                          placeholder='Enter the reason for change'
+                          className='form-control form-control-solid'
+                        />
+                      </Form.Item>
+                      <Form.Item name='lastChangeDate' label='Last Change Date' rules={[{required: true}]}>
+                        <DatePicker
+                          showTime
+                          className='form-control form-control-solid'
+                        />
+                      </Form.Item>
+                      <Form.Item name='componentHours' label='Component Hours' rules={[{required: true}]}>
+                        <InputNumber
+                          type='number'
                           className='form-control form-control-solid'
                         />
                       </Form.Item>
                       <Button
                         type='primary'
                         htmlType='submit'
+                        loading={componentSubmitLoading}
                       >
                         Submit
                       </Button>
@@ -447,13 +567,17 @@ const UpdateRegister = () => {
                       {/*/>*/}
                     </Space>
                     <Space style={{marginBottom: 16}}>
-                      <Button type={"primary"} onClick={() => setShowModal(true)}>Add Component</Button>
+                      <Button
+                        type={"primary"}
+                        onClick={() => setShowModal(true)}>
+                        Add Component
+                      </Button>
                     </Space>
                   </div>
                   <Table
                     columns={componentColumns}
                     bordered
-                    dataSource={listOfComponents?.data}
+                    dataSource={gridComponentsData}
                   />
                 </>
               ),

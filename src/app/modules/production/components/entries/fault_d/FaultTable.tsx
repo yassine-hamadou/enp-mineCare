@@ -18,7 +18,16 @@ import axios from 'axios'
 import React, {useEffect, useState} from 'react'
 import {v4 as uuidv4} from 'uuid'
 import {KTSVG} from '../../../../../../_metronic/helpers'
-import {ENP_URL, fetchFaults, getEquipment} from '../../../../../urls'
+import {
+  concatToFaultDetails,
+  ENP_URL,
+  fetchFaults,
+  getDowntypes,
+  getEquipment,
+  getPriority,
+  getSources,
+  postBacklogs
+} from '../../../../../urls'
 import {useMutation, useQuery, useQueryClient} from 'react-query'
 import {ResolutionTable} from '../resolution/ResolutionTable'
 import {useAuth} from "../../../../auth";
@@ -62,6 +71,28 @@ const FaultTable = () => {
   const [submitSolveLoading, setSubmitSolveLoading] = useState(false)
   const [submitDefectLoading, setSubmitDefectLoading] = useState(false)
   const [isHovering, setIsHovering] = useState(false)
+  const [detailsUpdate, setDetailsUpdate] = useState(false)
+  const {data: downTypeData} = useQuery('downtype', () => getDowntypes(tenant))
+  const {data: sourceData, isLoading: sourceIsLoading} = useQuery(
+    'source', () => getSources(tenant))
+  const {data: priorityData, isLoading: priorityIsLoading} = useQuery(
+    'priority', () => getPriority(tenant))
+  const {data: equipmentData, isLoading: equipmentIsLoading} = useQuery(
+    'equipment', () => getEquipment(tenant))
+  const {mutate: addBacklog} = useMutation('addBacklog',
+    (data) => postBacklogs(data, tenant), {
+      onSuccess: () => {
+        setIsDefectModalOpen(false)
+        message.success('Backlog added successfully')
+        setSubmitDefectLoading(false)
+        formDefect.resetFields()
+      },
+      onError: () => {
+        message.error('Error adding backlog, Please try again')
+        setSubmitDefectLoading(false)
+      }
+    })
+
   let QueryClient = useQueryClient()
   const {tenant} = useAuth()
   const handleInputChange = (e: any) => {
@@ -90,6 +121,16 @@ const FaultTable = () => {
 
   const showModalSolve = () => {
     setIsSolveModalOpen(true)
+  }
+
+  const detailsOpen = (record: any) => {
+    setDetailsUpdate(true)
+    console.log("record", record)
+    formSolve.setFieldsValue({
+      entryId: record.entryId,
+      faultDetails: record.faultDetails,
+    })
+    showModalSolve()
   }
   const showModalDefect = () => {
     setIsDefectModalOpen(true)
@@ -211,10 +252,21 @@ const FaultTable = () => {
       dataIndex: 'downType',
     },
     {
+      title: 'Fault Details',
+      dataIndex: 'faultDetails',
+    },
+    {
       title: 'Down Date and Time',
       dataIndex: 'formattedDate',
       defaultSortOrder: 'descend',
       sorter: (a: any, b: any) => new Date(a.downtime).getTime() - new Date(b.downtime).getTime(),
+    },
+    {
+      title: 'Time reported',
+      dataIndex: 'reportedDate',
+      render: (reportedDate: any) => (
+        reportedDate ? new Date(reportedDate).toLocaleString() : 'No Date'
+      )
     },
     {
       title: 'Custodian',
@@ -233,48 +285,57 @@ const FaultTable = () => {
       dataIndex: 'action',
       render: (_: any, record: any) =>
         <>
-          <button
-            className='btn btn-light-success btn-sm'
-            onClick={() => {
-              formSolve.setFieldsValue({
-                entryId: record.entryId,
-                fleetId: record.fleetId,
-                model: record.vmModel,
-                desc: record.vmClass,
-                dType: record.downType,
-                custodian: record.custodian,
-                location: record.locationId,
-                dtime: record.duration,
-                downTime: new Date(record.downtime).toDateString(),
-              })
-              handleSolve(record)
+          <Space size='middle'>
+            <button type={'button'} className='btn btn-light-primary btn-sm' onClick={() => detailsOpen(record)}>
+              Details
+            </button>
+            <button
+              className='btn btn-light-success btn-sm'
+              onClick={() => {
+                formSolve.setFieldsValue({
+                  entryId: record.entryId,
+                  fleetId: record.fleetId,
+                  model: record.vmModel,
+                  desc: record.vmClass,
+                  dType: record.downType,
+                  custodian: record.custodian,
+                  location: record.locationId,
+                  faultDetails: record.faultDetails,
+                  dtime: record.duration,
+                  downTime: new Date(record.downtime).toDateString(),
+                })
+                handleSolve(record)
 
-              //set the defect fleet id to the selected row
-              formDefect.setFieldsValue({
-                fleetId: record.fleetId,
-              })
-            }}
-          >
-            Solve
-          </button>
-          <Popconfirm title='Sure to delete?' onConfirm={() => handleDelete(record)}>
-            <button className='btn btn-light-danger btn-sm'>Delete</button>
-          </Popconfirm>
+                //set the defect fleet id to the selected row
+                formDefect.setFieldsValue({
+                  fleetId: record.fleetId,
+                })
+              }}
+            >
+              Solve
+            </button>
+            <Popconfirm title='Sure to delete?' onConfirm={() => handleDelete(record)}>
+              <button className='btn btn-light-danger btn-sm'>Delete</button>
+            </Popconfirm>
+          </Space>
         </>
     },
   ]
 
   function handleCancel() {
+    setDetailsUpdate(false)
     form.resetFields()
     setIsModalOpen(false)
   }
 
   function handleSolveCancel() {
+    setDetailsUpdate(false)
     formSolve.resetFields()
     setIsSolveModalOpen(false)
   }
 
   function handleDefectCancel() {
+    setDetailsUpdate(false)
     formDefect.resetFields()
     setIsDefectModalOpen(false)
   }
@@ -296,10 +357,14 @@ const FaultTable = () => {
       vmModel: values.model,
       vmClass: values.desc,
       downType: values.dType,
-      downtime: new Date().toISOString(),
+      downtime: new Date(values.DateTime.$d).toISOString(),
       locationId: values.location,
       custodian: values.custodian,
+      faultDetails: values.faultDetails,
+      reportedDate: new Date(values.ReportedDate.$d).toISOString(),
     }
+    console.log('Success:', data)
+    return
     const dataWithId = {...data, entryId: uuidv4(), tenantId: tenant}
     try {
       const response = await axios.post(url, dataWithId)
@@ -384,80 +449,105 @@ const FaultTable = () => {
     }
   )
 
-  const onSolveFinish = async (values: any) => {
-    console.log('Solve values', values)
-    setSubmitSolveLoading(true)
-    const data = {
-      entryId: values.entryId,
-      // fleetId: values.fleetId,
-      // vmModel: values.model,
-      // vmClass: values.desc,
-      // downType: values.dType,
-      // downtime: values.dtime,
-      // locationId: values.location,
-      // custodian: values.custodian,
-      //New columns being filled to the table
-      resolutionId: uuidv4(),
-      resolutionType: values.resolutionType,
-      downStatus: values.dStatus,
-      comment: values.comment,
-      wtimeStart: values.timeStarted,
-      wtimeEnd: values.timeCompleted,
-      status: 1,
-    }
-    try {
-      //if time completed is less than time started, do not submit but rather
-      //show an error message
-      if (new Date(data.wtimeEnd).getTime() < new Date(data.wtimeStart).getTime()) {
-        setSubmitSolveLoading(false) //stop loading
-        formSolve.setFields(
-          //set warning message
-          [
-            {
-              name: 'timeCompleted',
-              errors: ['Sorry Time completed cannot be less than Time Started'],
-            },
-          ]
-        )
-        return message.error('Sorry Time completed cannot be less than Time Started')
-      }
-      solveFault(data)
-
-      console.log('Data, to repost in fault', data)
-      console.log('Solve fault', solveFault)
-
-      setSubmitSolveLoading(false)
+  const {mutate: addToFaultDetails} = useMutation(concatToFaultDetails, {
+    onSuccess: () => {
+      QueryClient.invalidateQueries('faults')
+      setDetailsUpdate(false)
       formSolve.resetFields()
       setIsSolveModalOpen(false)
-    } catch (error: any) {
-      console.log('Error in cath ', error)
       setSubmitSolveLoading(false)
-      formSolve.resetFields()
-      return error.statusText
+      message.success('Added to fault details successfully!')
+    },
+    onError: () => {
+      message.error('Error adding to fault details')
+      setSubmitSolveLoading(false)
+    },
+  })
+
+  const onSolveFinish = async (values: any) => {
+    setSubmitSolveLoading(true)
+    if (!detailsUpdate) {
+      console.log('Solve values', values)
+      const data = {
+        entryId: values.entryId,
+        resolutionId: uuidv4(),
+        resolutionType: values.resolutionType,
+        downStatus: values.dStatus,
+        comment: values.comment,
+        wtimeStart: values.timeStarted,
+        wtimeEnd: values.timeCompleted,
+        status: 1,
+      }
+      try {
+        //if time completed is less than time started, do not submit but rather
+        //show an error message
+        if (new Date(data.wtimeEnd).getTime() < new Date(data.wtimeStart).getTime()) {
+          setSubmitSolveLoading(false) //stop loading
+          formSolve.setFields(
+            //set warning message
+            [
+              {
+                name: 'timeCompleted',
+                errors: ['Sorry Time completed cannot be less than Time Started'],
+              },
+            ]
+          )
+          return message.error('Sorry Time completed cannot be less than Time Started')
+        }
+        solveFault(data)
+
+        console.log('Data, to repost in fault', data)
+        console.log('Solve fault', solveFault)
+
+        setSubmitSolveLoading(false)
+        formSolve.resetFields()
+        setIsSolveModalOpen(false)
+      } catch (error: any) {
+        console.log('Error in cath ', error)
+        setSubmitSolveLoading(false)
+        formSolve.resetFields()
+        return error.statusText
+      }
+    } else {
+      //if detailsUpdate is true, then we are updating the details of the fault
+      //so we need to send a patch request
+      try {
+        //concate the existing fault details with the new ones
+        const newDetails = values?.faultDetails + values?.addToFaultDetails + '\n|----End----|\n'
+        console.log('New details', newDetails)
+        const data = {
+          entryId: values.entryId,
+          faultDetails: newDetails,
+        }
+        addToFaultDetails(data)
+
+        console.log('Data, to repost in fault', data)
+        console.log('Solve fault', solveFault)
+
+        setSubmitSolveLoading(false)
+        formSolve.resetFields()
+        setIsSolveModalOpen(false)
+      } catch (error: any) {
+        console.log('Error in cath ', error)
+        setSubmitSolveLoading(false)
+        formSolve.resetFields()
+        return error.statusText
+      }
     }
   }
   const onDefectFinish = async (values: any) => {
-    // setSubmitDefectLoading(true)
-    const data = {
-      fleetId: values.fleetId,
-      vmModel: values.model,
-      vmClass: values.desc,
-      downType: values.dType,
-      downtime: new Date().toISOString(),
-      locationId: values.location,
-      custodian: values.custodian,
-    }
+    setSubmitDefectLoading(true)
+    // const data = {
+    //   fleetId: values.fleetId,
+    //   vmModel: values.model,
+    //   vmClass: values.desc,
+    //   downType: values.dType,
+    //   downtime: new Date().toISOString(),
+    //   locationId: values.location,
+    //   custodian: values.custodian,
+    // }
     // const dataWithId = {...data, entryId: uuidv4()}
-    try {
-      // const response = await axios.post(url, dataWithId)
-      // setSubmitDefectLoading(false)
-      formDefect.resetFields()
-      setIsDefectModalOpen(false)
-      // return response.statusText
-    } catch (error: any) {
-      // setSubmitDefectLoading(false)
-      // return error.statusText
-    }
+    addBacklog(values)
   }
   // {/* End Elements to Post */}
 
@@ -474,7 +564,7 @@ const FaultTable = () => {
   }
   const loadFaultType = async () => {
     try {
-      const response = await axios.get(`${ENP_URL}/vmfaltsapi`)
+      const response = await axios.get(`${ENP_URL}/downTypes/tenant/${tenant}`)
       setFaultType(response.data)
     } catch (error: any) {
       return error.statusText
@@ -670,7 +760,7 @@ const FaultTable = () => {
           onFinish={onFinish}
         >
           <Form.Item name='fleetId' label='Equipment ID' rules={[{required: true}]}>
-            <Select placeholder='Select an Equipment' onChange={onFleetIdChange}>
+            <Select showSearch placeholder='Select an Equipment' onChange={onFleetIdChange}>
               {allEquipment?.data?.map((item: any) => (
                 <Option key={item.equipmentId} value={item.equipmentId}>
                   {item.equipmentId} - {item.model?.name} - {item.model?.modelClass?.name}
@@ -688,25 +778,60 @@ const FaultTable = () => {
             <InputNumber min={1}/>
           </Form.Item>
           <Form.Item name='dType' label='Down Type' rules={[{required: true}]}>
-            <Select placeholder='Select Down Type'>
-              {faultType.map((item: any) => (
-                <Option key={uuidv4()} value={item.faultDesc}>
-                  {item.faultDesc}
+            <Select placeholder='Select Down Type' showSearch={true}>
+              {faultType?.map((item: any) => (
+                <Option key={uuidv4()} value={item.name}>
+                  {item.name}
                 </Option>
               ))}
             </Select>
           </Form.Item>
-          <Form.Item name='DateTime' label='Down Date and Time' rules={[{required: true}]}>
+          <Form.Item
+            name='DateTime'
+            label='Down Date and Time'
+            rules={[
+              {required: true},
+              ({getFieldValue}) => ({
+                validator(rule, value) {
+                  console.log("value", value)
+                  // rule.warningOnly = true
+                  if (!value) {
+                    return Promise.reject();
+                  } else if (value.$d.getTime() < new Date().getTime() - 7 * 24 * 60 * 60 * 1000) {
+                    //give a warning if the date is more than 7 days old
+                    return Promise.reject('Date is more than 7 days old');
+                  }
+                  return Promise.resolve();
+                }
+              })
+            ]}
+          >
+
             <DatePicker showTime/>
           </Form.Item>
-          <Form.Item name='DateTimereported' label='Time Reported' rules={[{required: true}]}>
+          <Form.Item name='ReportedDate' label='Time Reported' rules={[{required: true},
+            ({getFieldValue}) => ({
+              validator(rule, value) {
+                if (!value) {
+                  return Promise.reject();
+                } else if (value.$d.getTime() > new Date().getTime()) {
+                  return Promise.reject('Reported Date more than Current Date');
+                } else if (value.$d.getTime() >= new Date(getFieldValue('DateTime')).getTime()) {
+                  return Promise.resolve();
+                } else {
+                  return Promise.reject('Reported Date more than Down Date');
+                }
+                // return Promise.reject('Reported Date more than Down Date');
+              }
+            })
+          ]}>
             <DatePicker showTime/>
           </Form.Item>
-          <Form.Item name='' label='Fault details'>
-            <TextArea/>
+          <Form.Item name='faultDetails' label='Fault Details' rules={[{required: true}]}>
+            <Input.TextArea rows={4}/>
           </Form.Item>
           <Form.Item name='mType' label='Maintenance Type' rules={[{required: true}]}>
-            <Select placeholder='Maintenance Type'>
+            <Select placeholder='Maintenance Type' showSearch={true}>
               <Option value={'Scheduled'}>Scheduled</Option>
               <Option value={'Unscheduled'}>Unscheduled</Option>
               <Option value={'Operational'}>Operational</Option>
@@ -715,7 +840,7 @@ const FaultTable = () => {
             </Select>
           </Form.Item>
           <Form.Item label='Custodian' name='custodian' rules={[{required: true}]}>
-            <Select>
+            <Select showSearch={true}>
               {custodian.map((item: any) => (
                 <Option
                   // @ts-ignore
@@ -728,7 +853,7 @@ const FaultTable = () => {
             </Select>
           </Form.Item>
           <Form.Item label='Location' name='location' rules={[{required: true}]}>
-            <Select>
+            <Select showSearch={true}>
               {location.map((item: any) => (
                 <Option
                   // @ts-ignore
@@ -746,24 +871,26 @@ const FaultTable = () => {
 
       {/*Solve*/}
       <Modal
-        title='Solve'
+        title={detailsUpdate ? 'Add to fault details' : 'Solve Fault'}
         open={isSolveModalOpen}
         onCancel={handleSolveCancel}
         closable={true}
         footer={[
           <Space style={{display: 'flex', justifyContent: 'space-between'}}>
-            <Button
-              onClick={showModalDefect}
-              type='dashed'
-              style={{
-                border: isHovering ? '1px solid orange' : '1px dashed orange',
-                color: isHovering ? 'orange' : 'black',
-              }}
-              onMouseEnter={ApplyHover}
-              onMouseLeave={RemoveHover}
-            >
-              Defect
-            </Button>
+            {!detailsUpdate &&
+              (<Button
+                  onClick={showModalDefect}
+                  type='dashed'
+                  style={{
+                    border: isHovering ? '1px solid orange' : '1px dashed orange',
+                    color: isHovering ? 'orange' : 'black',
+                  }}
+                  onMouseEnter={ApplyHover}
+                  onMouseLeave={RemoveHover}
+                >
+                  Backlog
+                </Button>
+              )}
             <Space>
               <Button key='back' onClick={handleSolveCancel}>
                 Cancel
@@ -778,7 +905,7 @@ const FaultTable = () => {
                   formSolve.submit()
                 }}
               >
-                Solve
+                {detailsUpdate ? 'Add Details' : 'Solve'}
               </Button>
             </Space>
           </Space>,
@@ -792,112 +919,127 @@ const FaultTable = () => {
           title='Solve'
           onFinish={onSolveFinish}
         >
-          <Form.Item name='fleetId' label='Equipment ID'>
-            <Input disabled style={{color: 'black'}}/>
-          </Form.Item>
           <Form.Item name='entryId' label='EntryID' hidden>
             <Input disabled/>
           </Form.Item>
-          <Form.Item name='model' label='Model'>
+          {!detailsUpdate && (<><Form.Item name='fleetId' label='Equipment ID'>
             <Input disabled style={{color: 'black'}}/>
           </Form.Item>
-          <Form.Item name='desc' label='Description'>
-            <Input disabled style={{color: 'black'}}/>
-          </Form.Item>
+            <Form.Item name='model' label='Model'>
+              <Input disabled style={{color: 'black'}}/>
+            </Form.Item>
+            <Form.Item name='desc' label='Description'>
+              <Input disabled style={{color: 'black'}}/>
+            </Form.Item>
 
-          <Form.Item name='dType' label='Down Type'>
-            <Input disabled style={{color: 'black'}}/>
+            <Form.Item name='dType' label='Down Type'>
+              <Input disabled style={{color: 'black'}}/>
+            </Form.Item>
+            <Form.Item name='downTime' label='Down Time'>
+              <Input disabled style={{color: 'black'}}/>
+            </Form.Item>
+            <Form.Item name='dtime' label='Duration'>
+              <Input disabled style={{color: 'black'}}/>
+            </Form.Item>
+            <Form.Item label='Custodian' name='custodian'>
+              <Input disabled style={{color: 'black'}}/>
+            </Form.Item>
+            <Form.Item label='Location' name='location'>
+              <Input disabled style={{color: 'black'}}/>
+            </Form.Item>
+          </>)}
+          <Form.Item label={'Fault Details'} name='faultDetails'>
+            <Input.TextArea rows={4} disabled style={{color: 'black'}}/>
           </Form.Item>
-          <Form.Item name='downTime' label='Down Time'>
-            <Input disabled style={{color: 'black'}}/>
-          </Form.Item>
-          <Form.Item name='dtime' label='Duration'>
-            <Input disabled style={{color: 'black'}}/>
-          </Form.Item>
-          <Form.Item label='Custodian' name='custodian'>
-            <Input disabled style={{color: 'black'}}/>
-          </Form.Item>
-          <Form.Item label='Location' name='location'>
-            <Input disabled style={{color: 'black'}}/>
-          </Form.Item>
-          <Form.Item
-            name='resolutionType'
-            label='Resolution Type'
-            rules={[
-              {
-                required: true,
-                message: 'Resolution Type is required',
-              },
-            ]}
-          >
-            <Select placeholder='Resolution Type'>
-              <Option value={'Scheduled'}>Scheduled</Option>
-              <Option value={'Unscheduled'}>Unscheduled</Option>
-              <Option value={'Operational'}>Operational</Option>
-              <Option value={'Damages'}>Damages</Option>
-              <Option value={'Warranty'}>Warranty</Option>
-            </Select>
-          </Form.Item>
-          <Form.Item
-            name='dStatus'
-            label='Down Status'
-            rules={[{required: true, message: 'Down Status is required'}]}
-          >
-            <Select placeholder='Select Down Status'>
-              <Option value={'progress'}>In Progress</Option>
-              <Option value={'awaiting'}>Awaiting Parts</Option>
-              <Option value={'awaitinglabour'}>Awaiting Labour</Option>
-              <Option value={'completed'}>Completed</Option>
-              <Option value={'others'}>Others</Option>
-            </Select>
-          </Form.Item>
-          <Form.Item name='comment' label='Comment' rules={[{required: true, message: 'Comment is Required'}]}>
-            <TextArea/>
-          </Form.Item>
-          <Form.Item
-            id='SolveTimeStarted'
-            name='timeStarted'
-            label='Time Started'
-            rules={[
-              {required: true, message: 'Time Started is required'},
-              ({getFieldValue}) => ({
-                validator(rule, value) {
-                  console.log('value', value);
-                  if (!value || new Date(getFieldValue('downTime')).getTime() < value.$d.getTime()) {
-                    return Promise.resolve();
-                  }
-                  return Promise.reject('Time Started must be after Down Time');
-                }
-              })
-            ]}
-          >
-            <DatePicker showTime/>
-          </Form.Item>
-          <Form.Item
-            id='solveTimeCompleted'
-            name='timeCompleted'
-            label='Time Completed'
-            rules={[
-              {required: true, message: 'Time Completed is required'},
-              ({getFieldValue}) => ({
-                validator(rule, value) {
-                  if (!value || value.$d.getTime() > new Date(getFieldValue('timeStarted')).getTime()) {
-                    return Promise.resolve();
-                  }
-                  return Promise.reject('Time Completed must be after Time Started');
-                }
-              })
-            ]}
-          >
-            <DatePicker showTime/>
-          </Form.Item>
+          {detailsUpdate && (
+            <>
+              <Form.Item label={'Add to fault details'} name='addToFaultDetails' rules={[{required: true}]}>
+                <Input.TextArea rows={4} style={{color: 'black'}}/>
+              </Form.Item>
+            </>
+          )}
+          {!detailsUpdate && (
+            <>
+              <Form.Item
+                name='resolutionType'
+                label='Resolution Type'
+                rules={[
+                  {
+                    required: true,
+                    message: 'Resolution Type is required',
+                  },
+                ]}
+              >
+                <Select showSearch={true} placeholder='Resolution Type'>
+                  <Option value={'Scheduled'}>Scheduled</Option>
+                  <Option value={'Unscheduled'}>Unscheduled</Option>
+                  <Option value={'Operational'}>Operational</Option>
+                  <Option value={'Damages'}>Damages</Option>
+                  <Option value={'Warranty'}>Warranty</Option>
+                </Select>
+              </Form.Item>
+              <Form.Item
+                name='dStatus'
+                label='Down Status'
+                rules={[{required: true, message: 'Down Status is required'}]}
+              >
+                <Select showSearch={true} placeholder='Select Down Status'>
+                  <Option value={'progress'}>In Progress</Option>
+                  <Option value={'awaiting'}>Awaiting Parts</Option>
+                  <Option value={'awaitinglabour'}>Awaiting Labour</Option>
+                  <Option value={'completed'}>Completed</Option>
+                  <Option value={'others'}>Others</Option>
+                </Select>
+              </Form.Item>
+              <Form.Item name='comment' label='Comment' rules={[{required: true, message: 'Comment is Required'}]}>
+                <TextArea/>
+              </Form.Item>
+              <Form.Item
+                id='SolveTimeStarted'
+                name='timeStarted'
+                label='Time Started'
+                rules={[
+                  {required: true, message: 'Time Started is required'},
+                  ({getFieldValue}) => ({
+                    validator(rule, value) {
+                      console.log('value', value);
+                      if (!value || new Date(getFieldValue('downTime')).getTime() < value.$d.getTime()) {
+                        return Promise.resolve();
+                      }
+                      return Promise.reject('Time Started must be after Down Time');
+                    }
+                  })
+                ]}
+              >
+                <DatePicker showTime/>
+              </Form.Item>
+              <Form.Item
+                id='solveTimeCompleted'
+                name='timeCompleted'
+                label='Time Completed'
+                rules={[
+                  {required: true, message: 'Time Completed is required'},
+                  ({getFieldValue}) => ({
+                    validator(rule, value) {
+                      if (!value || value.$d.getTime() > new Date(getFieldValue('timeStarted')).getTime()) {
+                        return Promise.resolve();
+                      }
+                      return Promise.reject('Time Completed must be after Time Started');
+                    }
+                  })
+                ]}
+              >
+                <DatePicker showTime/>
+              </Form.Item>
+            </>
+          )}
         </Form>
       </Modal>
       {/*Solve End*/}
 
       {/*Defect*/}
       <Modal
-        title='Defect'
+        title='Backlog'
         open={isDefectModalOpen}
         onCancel={handleDefectCancel}
         closable={true}
@@ -924,20 +1066,66 @@ const FaultTable = () => {
           name='control-hooks'
           labelCol={{span: 8}}
           wrapperCol={{span: 14}}
-          title='Defect'
+          title={'Add Backlog'}
           onFinish={onDefectFinish}
+          layout={'horizontal'}
         >
-          <Form.Item hidden={true} name='fleetId' label='Equipment ID' rules={[{required: true}]}>
-            <Input disabled style={{color: 'black'}}/>
+          <Form.Item name='id' label='ID' hidden={true}>
+            <Input/>
           </Form.Item>
-          <Form.Item name='Defect Date' label='Expected Date' rules={[{required: true}]}>
+          <Form.Item name='equipmentId' label='Equipment ID'>
+            <Select
+              showSearch
+              placeholder='Select an equipment'
+            >
+              {
+                equipmentData?.data?.map((equipment: any) => (
+                  <Option value={equipment.equipmentId}>{equipment.equipmentId}</Option>
+                ))
+              }
+            </Select>
+          </Form.Item>
+          <Form.Item name='bdate' label='Backlog Date'>
             <DatePicker showTime/>
           </Form.Item>
-          <Form.Item name='Item' label='Item' rules={[{required: true}]}>
-            <TextArea/>
+          <Form.Item name='item' label='Item' rules={[{required: true}]}>
+            <Input/>
           </Form.Item>
-          <Form.Item name='Comment' label='Comment' rules={[{required: true}]}>
-            <TextArea/>
+          <Form.Item name='note' label='Note' rules={[{required: true}]}>
+            <Input/>
+          </Form.Item>
+          <Form.Item name='referenceId' label='Reference No'>
+            <Input/>
+          </Form.Item>
+          <Form.Item name='priority' label='Priority'>
+            <Select
+              showSearch
+              placeholder='Select a priority'
+            >
+              {priorityData?.data?.map((priority: any) => (
+                <Option value={priority?.priorityId}>{priority.name}</Option>
+              ))}
+            </Select>
+          </Form.Item>
+          <Form.Item name='source' label='Source'>
+            <Select
+              showSearch
+              placeholder='Select a source'
+            >
+              {sourceData?.data?.map((source: any) => (
+                <Option value={source?.id}>{source.name}</Option>
+              ))}
+            </Select>
+          </Form.Item>
+          <Form.Item name='downType' label='Down Type'>
+            <Select
+              showSearch
+              placeholder='Select a down type'
+            >
+              {downTypeData?.data?.map((downType: any) => (
+                <Option value={downType?.id}>{downType.name}</Option>
+              ))}
+            </Select>
           </Form.Item>
         </Form>
       </Modal>

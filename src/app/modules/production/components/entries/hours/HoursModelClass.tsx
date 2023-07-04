@@ -661,7 +661,7 @@
 
 import type {ProColumns} from '@ant-design/pro-components';
 import {EditableProTable, ErrorBoundary, ProCard} from '@ant-design/pro-components';
-import {Button, Input, message, Space} from 'antd';
+import {Button, Input, message, Space, Tabs} from 'antd';
 import React, {useEffect, useState} from 'react';
 import {useMutation, useQuery, useQueryClient} from "react-query";
 import {addHours, fetchHours, getEquipment} from "../../../../../urls";
@@ -669,6 +669,7 @@ import {useNavigate} from "react-router-dom";
 import {throwError} from "@syncfusion/ej2-base";
 import {useAuth} from "../../../../auth";
 import dayjs from "dayjs";
+import DevexpressDashboardComponent from "../../../../../pages/dashboard/DevexpressDashboardComponent";
 
 type DataSourceType = {
   id: React.Key;
@@ -801,9 +802,11 @@ const HoursModelClass: any = () => {
       dataIndex: 'today',
       onCell: (record) => {
         return {
-          onClick: (event) => {
-            localStorage.setItem('record', JSON.stringify(record))
-          }
+          onFocus: () => {
+            setRecord(record)
+            console.log('record during date', record)
+          },
+
         }
       },
       fieldProps: {
@@ -816,25 +819,58 @@ const HoursModelClass: any = () => {
               console.log('rule', rule);
               console.log('value', value);
               //@ts-ignore
-              console.log('get field value', dayjs(JSON.parse(localStorage.getItem('record'))?.date))
-              if (localStorage.getItem('record')) {
-                if (!value) {
-                  return Promise.reject('Please select a date');
-                }
+              // console.log('get field value', dayjs(JSON.parse(localStorage.getItem('record'))?.date))
+              // if (localStorage.getItem('record')) {
+              //   if (!value) {
+              //     return Promise.reject('Please select a date');
+              //   }
+              //   //@ts-ignore
+              //   else if (dayjs(value).isBefore(dayjs(JSON.parse(localStorage.getItem('record'))?.date))) {
+              //     return Promise.reject('Date cannot be before previous reading date');
+              //   } else if (dayjs(value).isAfter(dayjs())) {
+              //     return Promise.reject('Date cannot be after today');
+              //   } else {
+              //     return Promise.resolve('Resolved');
+              //   }
+              // }
+
+
+              //new code
+              if (!value) {
+                setAllowsubmi((allowSubmit: any) => {
+                  return {
+                    ...allowSubmit,
+                    [record.id]: false, // Assuming each row has a unique `id` field
+                  };
+                })
+                return Promise.reject('Please select a date');
+              }
                 //@ts-ignore
-                else if (dayjs(value).isBefore(dayjs(JSON.parse(localStorage.getItem('record'))?.date))) {
-                  return new Promise((resolve, reject) => {
-                    reject('Date cannot be before previous reading date');
-                  });
-                } else if (dayjs(value).isAfter(dayjs())) {
-                  return new Promise((resolve, reject) => {
-                    reject('Date cannot be after today');
-                  });
-                } else {
-                  return new Promise((resolve, reject) => {
-                    resolve('Resolved');
-                  })
-                }
+              // else if (dayjs(value).isBefore(dayjs(JSON.parse(localStorage.getItem('record'))?.date))) {
+              else if (dayjs(value).isBefore(dayjs(record?.date))) {
+                setAllowsubmi((allowSubmit: any) => {
+                  return {
+                    ...allowSubmit,
+                    [record.id]: false, // Assuming each row has a unique `id` field
+                  };
+                })
+                return Promise.reject('Date cannot be before previous reading date');
+              } else if (dayjs(value).isAfter(dayjs())) {
+                setAllowsubmi((allowSubmit: any) => {
+                  return {
+                    ...allowSubmit,
+                    [record.id]: false, // Assuming each row has a unique `id` field
+                  };
+                })
+                return Promise.reject('Date cannot be after today');
+              } else {
+                setAllowsubmi((allowSubmit: any) => {
+                  return {
+                    ...allowSubmit,
+                    [record.id]: true, // Assuming each row has a unique `id` field
+                  };
+                })
+                return Promise.resolve('Resolved');
               }
             } //end of validator
           }
@@ -854,9 +890,10 @@ const HoursModelClass: any = () => {
       dataIndex: 'zeroReading',
       onCell: (record) => {
         return {
-          onClick: () => {
+          onChange: () => {
             setRecord(record)
-          },
+            console.log('record being changed', record)
+          }
         }
       },
       formItemProps: {
@@ -864,34 +901,61 @@ const HoursModelClass: any = () => {
           {
             validator(rule, value) {
               //@ts-ignore
-              if (record) {
-                if (!value) {
-                  setAllowsubmi((allowSubmit: any) => {
-                    return {
-                      ...allowSubmit,
-                      [record.id]: false, // Assuming each row has a unique `id` field
-                    };
-                  })
-                  return Promise.reject('Please enter a reading');
-                }
-                //@ts-ignore
-                else if (value <= record?.currentReading) {
-                  setAllowsubmi((allowSubmit: any) => {
-                    return {
-                      ...allowSubmit,
-                      [record.id]: false, // Assuming each row has a unique `id` field
-                    };
-                  })
-                  return Promise.reject('Reading should be more than previous reading');
-                } else {
-                  setAllowsubmi((allowSubmit: any) => {
-                    return {
-                      ...allowSubmit,
-                      [record.id]: true, // Assuming each row has a unique `id` field
-                    };
-                  })
-                  return Promise.resolve();
-                }
+              // if (record) {
+              //   if (!value) {
+              //     setAllowsubmi((allowSubmit: any) => {
+              //       return {
+              //         ...allowSubmit,
+              //         [record.id]: false, // Assuming each row has a unique `id` field
+              //       };
+              //     })
+              //     return Promise.reject('Please enter a reading');
+              //   }
+              //   //@ts-ignore
+              //   else if (value <= record?.currentReading) {
+              //     setAllowsubmi((allowSubmit: any) => {
+              //       return {
+              //         ...allowSubmit,
+              //         [record.id]: false, // Assuming each row has a unique `id` field
+              //       };
+              //     })
+              //     return Promise.reject('Reading should be more than previous reading');
+              //   } else {
+              //     setAllowsubmi((allowSubmit: any) => {
+              //       return {
+              //         ...allowSubmit,
+              //         [record.id]: true, // Assuming each row has a unique `id` field
+              //       };
+              //     })
+              //     return Promise.resolve();
+              //   }
+              // }
+
+              //new code
+              if (!value) {
+                setAllowsubmi((allowSubmit: any) => {
+                  return {
+                    ...allowSubmit,
+                    [record.id]: false, // Assuming each row has a unique `id` field
+                  };
+                })
+                return Promise.reject('Please enter a reading');
+              } else if (value <= record?.currentReading) {
+                setAllowsubmi((allowSubmit: any) => {
+                  return {
+                    ...allowSubmit,
+                    [record.id]: false, // Assuming each row has a unique `id` field
+                  };
+                })
+                return Promise.reject('Reading should be more than previous reading');
+              } else {
+                setAllowsubmi((allowSubmit: any) => {
+                  return {
+                    ...allowSubmit,
+                    [record.id]: true, // Assuming each row has a unique `id` field
+                  };
+                })
+                return Promise.resolve();
               }
             }
           }
@@ -904,17 +968,30 @@ const HoursModelClass: any = () => {
       //validate that the current reading is greater than the previous reading
       // },
     },
+    {
+      title: 'Adjustment',
+      dataIndex: 'adjustment',
+      valueType: 'digit',
+    },
+    {
+      title: 'Comment',
+      dataIndex: 'comment',
+      valueType: 'textarea',
+    }
   ];
   const saveAndContinue = async () => {
+    console.log('dataSource', dataSource)
     try {
       dataSource?.map((item: any) => {
         if (item.zeroReading) {
           mutateHours({
             fleetId: item.fleetId,
             previousReading: item.currentReading,
-            date: item.today,
+            date: new Date(item.today),
             currentReading: item.zeroReading,
-            tenantId: tenant
+            tenantId: tenant,
+            adjustment: item.adjustment,
+            comment: item.comment
           })
         }
         return 0
@@ -941,98 +1018,118 @@ const HoursModelClass: any = () => {
   };
 
   return (
-    <ProCard>
-      <div className='d-flex justify-content-between'>
-        <Space
-          key="search"
-          style={{
-            marginBottom: 16,
-          }}
-        >
-          <Input
-            placeholder='Enter Search Text'
-            onChange={handleInputChange}
-            type='text'
-            allowClear
-            value={searchText}
-          />
-          <Button type='primary'>Search</Button>
-        </Space>
-        <Space
-          key="button"
-          style={{
-            marginBottom: 16,
-          }}
-        >
-          <Button
-            type="primary"
-            size={'large'}
-            key="save"
-            onClick={record ? () => {
-                console.log('submitt?', allSubmi)
-                console.log('allowSubmit', allowSubmit)
-                console.log('submitt?', Object.values(allSubmi).every((item: any) => item === true))
-                if (allowSubmit) {
-                  saveAndContinue()
-                } else {
-                  message.error('Kindly resolve all issues before submitting!').then(r => r)
-                }
-              }
-              : () => {
-                message.error('No Hours Entered').then(r => r)
-              }}
-            loading={isHoursMutationLoading}
-          >
-            Save
-          </Button>
-        </Space>
-      </div>
-      <ErrorBoundary>
-        <EditableProTable<DataSourceType>
-          // headerTitle="Batch Entries"
-          columns={columns}
-          loading={isLoading}
-          rowKey="id"
-          scroll={{
-            x: 960,
-          }}
-          pagination={{
-            pageSize: 10,
-          }}
-          value={filterData(defaultData?.data?.map(
-            (item: any) => {
-              return {
-                ...item,
-                zeroReading: 0,
-                today: new Date(),
-              }
-            }
-          ).map((item: any) => ({
-            ...item,
-            ...rowValues[item.id], // Assuming each row has a unique `id` field
-          })))}
-          onChange={setDataSource}
-          //do not show add button
-          recordCreatorProps={false}
+    <Tabs
+      defaultActiveKey='1'
+      items={[
+        {
+          label: <span className='me-4'>Hours Entry</span>,
+          key: '1',
+          children: (
+            <ProCard>
+              <div className='d-flex justify-content-between'>
+                <Space
+                  key="search"
+                  style={{
+                    marginBottom: 16,
+                  }}
+                >
+                  <Input
+                    placeholder='Enter Search Text'
+                    onChange={handleInputChange}
+                    type='text'
+                    allowClear
+                    value={searchText}
+                  />
+                  <Button type='primary'>Search</Button>
+                </Space>
+                <Space
+                  key="button"
+                  style={{
+                    marginBottom: 16,
+                  }}
+                >
+                  <Button
+                    type="primary"
+                    size={'large'}
+                    key="save"
+                    onClick={record ? () => {
+                        console.log('submitt?', allSubmi)
+                        console.log('allowSubmit', allowSubmit)
+                        console.log('submitt?', Object.values(allSubmi).every((item: any) => item === true))
+                        if (allowSubmit) {
+                          saveAndContinue()
+                        } else {
+                          message.error('Kindly resolve all issues before submitting!').then(r => r)
+                        }
+                      }
+                      : () => {
+                        message.error('No Hours Entered').then(r => r)
+                      }}
+                    loading={isHoursMutationLoading}
+                  >
+                    Save
+                  </Button>
+                </Space>
+              </div>
+              <ErrorBoundary>
+                <EditableProTable<DataSourceType>
+                  // headerTitle="Batch Entries"
+                  columns={columns}
+                  loading={isLoading}
+                  rowKey="id"
+                  scroll={{
+                    x: 960,
+                  }}
+                  pagination={{
+                    pageSize: 10,
+                  }}
+                  value={filterData(defaultData?.data?.map(
+                    (item: any) => {
+                      return {
+                        ...item,
+                        zeroReading: 0,
+                        today: new Date(),
+                      }
+                    }
+                  ).map((item: any) => ({
+                    ...item,
+                    ...rowValues[item.id], // Assuming each row has a unique `id` field
+                  })))}
+                  onChange={setDataSource}
+                  //do not show add button
+                  recordCreatorProps={false}
 
-          editable={{
-            // type: 'multiple',
-            editableKeys: editableKeys ? editableKeys : defaultData?.data?.map((item: any) => item.id),
-            onValuesChange: (record, recordList) => {
-              setRecord(record)
-              setDataSource(recordList)
-              setRowValues((prevRowValues: any) => {
-                return {
-                  ...prevRowValues,
-                  [record.id]: record, // Assuming each row has a unique `id` field
-                };
-              });
-            },
-            onChange: setEditableRowKeys,
-          }}
-        />
-      </ErrorBoundary>
-    </ProCard>
+                  editable={{
+                    // type: 'multiple',
+                    editableKeys: editableKeys ? editableKeys : defaultData?.data?.map((item: any) => item.id),
+                    onValuesChange: (record, recordList) => {
+                      setRecord(record)
+                      setDataSource(recordList)
+                      setRowValues((prevRowValues: any) => {
+                        return {
+                          ...prevRowValues,
+                          [record.id]: record, // Assuming each row has a unique `id` field
+                        };
+                      });
+                    },
+                    onChange: setEditableRowKeys,
+                  }}
+                />
+              </ErrorBoundary>
+            </ProCard>
+          ),
+        },
+        {
+          label: <span className='me-4'>Analysis</span>,
+          key: '2',
+          children: (
+            <>
+              <DevexpressDashboardComponent dashboardId={'hoursAnalysis'}/>
+            </>
+          ),
+        },
+      ]}
+    />
   );
 };
 

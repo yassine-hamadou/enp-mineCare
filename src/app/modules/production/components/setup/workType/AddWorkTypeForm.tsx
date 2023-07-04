@@ -44,7 +44,7 @@ const AddWorkTypeForm = () => {
   return (
     <Form labelCol={{span: 7}} wrapperCol={{span: 14}} layout='horizontal' title='Add WorkType'>
       <Form.Item label='FleetID'>
-        <Select onSelect={(e: any) => getEqupId(e)}>
+        <Select showSearch={true} onSelect={(e: any) => getEqupId(e)}>
           {dataSource.map((item: any) => (
             <Select.Option
               // @ts-ignore
@@ -56,20 +56,20 @@ const AddWorkTypeForm = () => {
         </Select>
       </Form.Item>
       <Form.Item label='Previous Reading'>
-        <Input disabled={true} contentEditable={false} />
+        <Input disabled={true} contentEditable={false}/>
       </Form.Item>
       <Form.Item label='Date'>
-        <DatePicker />
+        <DatePicker/>
       </Form.Item>
       <Form.Item label='Daily Hours Worked'>
-        <InputNumber />
+        <InputNumber/>
       </Form.Item>
 
       <Form.Item label='New Reading'>
-        <InputNumber />
+        <InputNumber/>
       </Form.Item>
       <Form.Item label='Comment'>
-        <Input />
+        <Input/>
       </Form.Item>
     </Form>
   )
