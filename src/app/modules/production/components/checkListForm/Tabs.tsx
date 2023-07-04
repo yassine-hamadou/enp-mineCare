@@ -1,7 +1,7 @@
-import {Button, DatePicker, Empty, Form, Input, Modal, Space, theme} from "antd";
+import {Button, DatePicker, Empty, Form, Input, message, Modal, Steps, theme} from "antd";
 import {useLocation, useParams} from "react-router-dom";
 import {useQuery} from "react-query";
-import {KTCard, KTCardBody, KTSVG} from "../../../../../_metronic/helpers";
+import {KTCard, KTCardBody} from "../../../../../_metronic/helpers";
 import React, {CSSProperties, useState} from "react";
 import {CheckListForm} from "./CheckListForm";
 import TextArea from "antd/lib/input/TextArea";
@@ -9,8 +9,6 @@ import {useForm} from "antd/es/form/Form";
 import {ErrorBoundary} from "@ant-design/pro-components";
 import {fetchServices} from "../../../../urls";
 import {useAuth} from "../../../auth";
-
-import './CheckListForm.css';
 
 
 const TabsTest: React.FC = () => {
@@ -38,7 +36,7 @@ const TabsTest: React.FC = () => {
     const [checkListForm] = useForm();
     const steps = sections?.map((s: any) => {
         return {
-            title: String(`${s?.name}`).toUpperCase(),
+            title: String(`${s.name}`).toUpperCase(),
             //passing the form hook from here to the child component so that we can use it to submit the form from here
             content: <CheckListForm sections={s} form={checkListForm} equipmentId={fleetId} referenceId={referenceId}/>,
         }
@@ -81,7 +79,6 @@ const TabsTest: React.FC = () => {
     }
 
     let [submitLoading] = useState(false);
-    // @ts-ignore
     return sections?.length > 0 ? (
       <>
           <Modal
@@ -130,86 +127,54 @@ const TabsTest: React.FC = () => {
               </Form>
           </Modal>
           <ErrorBoundary>
-              <div className='d-flex justify-content-between'>
-                  <Space style={{marginBottom: 16}}>
-                      {/*
-                      Print the webpage on button click but remove the button from the
-                        print preview by using the media query
-                      */}
-                      <button
-                        type='button'
-                        className='btn btn-light-primary me-3 no-print'
-                        onClick={
-                            () => {
-                                window.print()
-                            }
-                        }>
-                          <KTSVG path='/media/icons/duotune/arrows/arr078.svg' className='svg-icon-2'/>
-                          Print
-                      </button>
-                  </Space>
-              </div>
-
               <KTCard>
                   <KTCardBody>
-                      <div className='d-flex justify-content-center mb-7'>
-                        <span className='fst-itali fs-5 text-danger'>
-                          Please read each label carefully and select the appropriate option
-                        </span>
+                      <Steps current={current} items={items}/>
+                      <div style={contentStyle}>{steps[current].content}</div>
+                      <div
+                        style={{
+                            marginTop: 24,
+                        }}
+                      >
+                          <Button
+                            style={{
+                                margin: '0 8px',
+                            }}
+                            onClick={() => {
+                                setDefectModalOpen(true)
+                            }}
+                          >
+                              Backlog
+                          </Button>
+                          {current > 0 && (
+                            <Button
+                              style={{
+                                  margin: '0 8px',
+                              }}
+                              onClick={() => prev()}
+                            >
+                                Previous
+                            </Button>
+                          )}
+                          {current < steps.length - 1 && (
+                            <Button type="primary" onClick={() => {
+                                checkListForm.validateFields().then(() => {
+                                    submitForm()
+                                    next()
+                                }).catch(() => {
+                                    message.error({content: "Please fill all the required fields", duration: 2})
+                                })
+                            }
+                            }>
+                                Next
+                            </Button>
+                          )}
+                          {current === steps.length - 1 && (
+                            <Button type="primary" onClick={() => message.success('Processing complete!')}>
+                                Done
+                            </Button>
+                          )}
                       </div>
-                      {/*<Steps current={current} items={items}/>*/}
-                      {/*<div style={contentStyle}>{steps[current].content}</div>*/}
-                      {steps?.map((step: any, index: any) => {
-                          return (
-                            <div style={contentStyle}>{steps[index].content}</div>
-                          )
-                      })}
-
-
-                      {/*<div*/}
-                      {/*  style={{*/}
-                      {/*      marginTop: 24,*/}
-                      {/*  }}*/}
-                      {/*>*/}
-                      {/*    <Button*/}
-                      {/*      style={{*/}
-                      {/*          margin: '0 8px',*/}
-                      {/*      }}*/}
-                      {/*      onClick={() => {*/}
-                      {/*          setDefectModalOpen(true)*/}
-                      {/*      }}*/}
-                      {/*    >*/}
-                      {/*        Backlog*/}
-                      {/*    </Button>*/}
-                      {/*    {current > 0 && (*/}
-                      {/*      <Button*/}
-                      {/*        style={{*/}
-                      {/*            margin: '0 8px',*/}
-                      {/*        }}*/}
-                      {/*        onClick={() => prev()}*/}
-                      {/*      >*/}
-                      {/*          Previous*/}
-                      {/*      </Button>*/}
-                      {/*    )}*/}
-                      {/*    {current < steps.length - 1 && (*/}
-                      {/*      <Button type="primary" onClick={() => {*/}
-                      {/*          checkListForm.validateFields().then(() => {*/}
-                      {/*              submitForm()*/}
-                      {/*              next()*/}
-                      {/*          }).catch(() => {*/}
-                      {/*              message.error({content: "Please fill all the required fields", duration: 2})*/}
-                      {/*          })*/}
-                      {/*      }*/}
-                      {/*      }>*/}
-                      {/*          Next*/}
-                      {/*      </Button>*/}
-                      {/*    )}*/}
-                      {/*    {current === steps.length - 1 && (*/}
-                      {/*      <Button type="primary" onClick={() => message.success('Processing complete!')}>*/}
-                      {/*          Done*/}
-                      {/*      </Button>*/}
-                      {/*    )}*/}
-                      {/*</div>*/}
 
                   </KTCardBody>
               </KTCard>
@@ -237,4 +202,4 @@ const TabsTest: React.FC = () => {
     )
 }
 
-export default TabsTest;
+export {TabsTest}
