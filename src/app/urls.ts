@@ -11,7 +11,8 @@ const tenant: string | null = localStorage.getItem('tenant');
 // export const ENP_URL = 'http://208.117.44.15/SmWebApi/api'
 // export const ENP_URL = 'https://localhost:7144/api'
 // export const ENP_URL = 'https://app.sipconsult.net/smwebapi/api'
-export const ENP_URL = 'http://208.117.44.15:8080/api'
+export const ENP_URL = 'http://208.117.44.15:5002/api'
+
 
 export const fetchEmployee = () => {
     return axios.get(`${ENP_URL}/vmemplsApi`)

@@ -24,7 +24,7 @@ const DashboardPage = () => (
                     style={{height: '100%', width: '100%'}}
                 >
                     <Tabs.TabPane tab="Fault" key="1">
-                        <DevexpressDashboardComponent dashboardId={"dashboard3"}/>
+                        <DevexpressDashboardComponent workingMode={"Designer"} dashboardId={"dashboard2"}/>
                         <br/>
                         <br/>
                         <DashboardTable/>
