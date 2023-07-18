@@ -19,7 +19,7 @@ const UpdateRegister = () => {
   const {tenant} = useAuth();
   const queryClient = useQueryClient();
   const {mutate: addComponent} = useMutation(addComponentToEquipment, {
-    onSuccess: (data) => {
+    onSuccess: (data: any) => {
       queryClient.refetchQueries('equipments').then(() => {
         message.success('Component added successfully');
       })
