@@ -24,18 +24,16 @@ const DashboardPage = () => (
                     style={{height: '100%', width: '100%'}}
                 >
                     <Tabs.TabPane tab="Fault" key="1">
-                        <DevexpressDashboardComponent workingMode={"Designer"} dashboardId={"dashboard2"}/>
+                        <DevexpressDashboardComponent dashboardId={"dashboard2"}/>
                         <br/>
                         <br/>
                         <DashboardTable/>
                     </Tabs.TabPane>
                     <Tabs.TabPane tab="Backlog" key="2">
                         <DevexpressDashboardComponent dashboardId={"backlogDashboard"}/>
-
                     </Tabs.TabPane>
                     <Tabs.TabPane tab="Hours" key="3">
                         <DevexpressDashboardComponent dashboardId={"equipmentsAvailability"}/>
-
                     </Tabs.TabPane>
                 </Tabs>
             </KTCardBody>
