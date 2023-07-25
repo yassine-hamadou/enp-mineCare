@@ -164,121 +164,122 @@ import {useAuth} from "../../../auth";
 import {pendingSchedule} from "../entries/equipment/calendar/requests";
 
 export function ScheduleInfo() {
-  const {tenant} = useAuth()
-  const navigate = useNavigate()
-  const [scheduleToworkOn, setScheduleToWorkOn] = useState<any>([])
+    const {tenant} = useAuth()
+    const navigate = useNavigate()
+    const [scheduleToworkOn, setScheduleToWorkOn] = useState<any>([])
 
 
-  const {data: loadSchedule, isLoading}: any = useQuery('loadSchedule', () => pendingSchedule(tenant))
+    const {data: loadSchedule, isLoading}: any = useQuery('loadSchedule', () => pendingSchedule(tenant))
 
-  const {data: serviceType}: any = useQuery('serviceType', () => fetchServices(tenant))
-  const queryClient: any = useQueryClient()
-  const onChecklist = (e: any) => {
+    const {data: serviceType}: any = useQuery('serviceType', () => fetchServices(tenant))
+    const queryClient: any = useQueryClient()
+    const onChecklist = (e: any) => {
 
-    const entryID = parseInt(e)
-    const schedule = loadSchedule?.data.find((s: any) => s.entryId === entryID)
-    console.log('scheduleSelect', schedule)
-    setScheduleToWorkOn(schedule)
-    if (schedule?.serviceTypeId === null || schedule?.serviceTypeId === undefined) {
-      navigate(`/entries/start-work`)
-    } else {
-      navigate(`/entries/start-work/${schedule?.serviceTypeId}/${schedule?.fleetId}`, {state: {schedule: schedule}})
+        const entryID = parseInt(e)
+        const schedule = loadSchedule?.data.find((s: any) => s.entryId === entryID)
+        console.log('scheduleSelect', schedule)
+        setScheduleToWorkOn(schedule)
+        if (schedule?.serviceTypeId === null || schedule?.serviceTypeId === undefined) {
+            navigate(`/entries/start-work`)
+        } else {
+            navigate(`/entries/start-work/${schedule?.serviceTypeId}/${schedule?.fleetId}`, {state: {schedule: schedule}})
+        }
     }
-  }
 
-  const {mutate: completeSchedule} = useMutation(
-    patchSchedule, {
-      onSuccess: () => {
-        queryClient.invalidateQueries('loadSchedule')
-        message.success('Schedule completed successfully')
-      },
-      onError: (error: any) => {
-        message.error(error)
+    const {mutate: completeSchedule} = useMutation(
+      patchSchedule, {
+          onSuccess: () => {
+              queryClient.invalidateQueries('loadSchedule')
+              message.success('Schedule completed successfully')
+          },
+          onError: (error: any) => {
+              message.error(error)
+          }
       }
-    }
-  )
+    )
 
-  const columns: any = [
-    {
-      title: 'Fleet ID',
-      dataIndex: 'fleetId',
-    },
-    {
-      title: 'Location',
-      dataIndex: 'locationId',
-    },
-    {
-      title: 'From',
-      dataIndex: 'timeStart',
-      render: (timeStart: any) => {
-        return new Date(timeStart).toUTCString()
-      }
-    },
-    {
-      title: 'To',
-      dataIndex: 'timeEnd',
-      render: (timeEnd: any) => {
-        return new Date(timeEnd).toUTCString()
-      }
-    },
-    {
-      title: 'Cusdian',
-      dataIndex: 'responsible',
-    },
-    {
-      title: 'Service Type',
-      dataIndex: 'serviceTypeId',
-      render: (serviceTypeId: any) => {
-        return serviceType?.data.find(
-          (service: any) => service.id === serviceTypeId
-        )?.name
-      }
-    },
-    {
-      title: 'Action',
-      dataIndex: 'entryId',
-      width: 350,
-      fixed: 'right',
-      render: (entryId: any, record: any) => {
-        return (
-          <Space size="middle">
-            <button type={'button'} className='btn btn-light-primary btn-sm' onClick={() => onChecklist(entryId)}>
-              Checklist
-            </button>
-            <Popconfirm title={'Are you sure this schedule is completed?'} onConfirm={() => {
-              completeSchedule(entryId)
-              console.log('record', entryId)
+    const columns: any = [
+        {
+            title: 'Fleet ID',
+            dataIndex: 'fleetId',
+        },
+        {
+            title: 'Location',
+            dataIndex: 'locationId',
+        },
+        {
+            title: 'From',
+            dataIndex: 'timeStart',
+            render: (timeStart: any) => {
+                return new Date(timeStart).toUTCString()
             }
-            }>
-              <button type={'button'} className='btn btn-light-success btn-sm'>
-                Complete
-              </button>
-            </Popconfirm>
-            <button type={'button'} className='btn btn-light-info btn-sm' onClick={
-              () => navigate(`/entries/backlog/${record.fleetId}`)
-            }>
-              View Backlogs
-            </button>
-          </Space>
-        )
-      }
-    }
-  ]
+        },
+        {
+            title: 'To',
+            dataIndex: 'timeEnd',
+            render: (timeEnd: any) => {
+                return new Date(timeEnd).toUTCString()
+            }
+        },
+        {
+            title: 'Custodian',
+            dataIndex: 'responsible',
+        },
+        {
+            title: 'Service Type',
+            dataIndex: 'serviceTypeId',
+            render: (serviceTypeId: any) => {
+                return serviceType?.data.find(
+                  (service: any) => service.id === serviceTypeId
+                )?.name
+            }
+        },
+        {
+            title: 'Action',
+            dataIndex: 'entryId',
+            width: 350,
+            fixed: 'right',
+            render: (entryId: any, record: any) => {
+                return (
+                  <Space size="middle">
+                      <button type={'button'} className='btn btn-light-primary btn-sm'
+                              onClick={() => onChecklist(entryId)}>
+                          Checklist
+                      </button>
+                      <Popconfirm title={'Are you sure this schedule is completed?'} onConfirm={() => {
+                          completeSchedule(entryId)
+                          console.log('record', entryId)
+                      }
+                      }>
+                          <button type={'button'} className='btn btn-light-success btn-sm'>
+                              Complete
+                          </button>
+                      </Popconfirm>
+                      <button type={'button'} className='btn btn-light-info btn-sm' onClick={
+                          () => navigate(`/entries/backlog/${record.fleetId}`)
+                      }>
+                          View Backlogs
+                      </button>
+                  </Space>
+                )
+            }
+        }
+    ]
 
-  return (
-    <>
-      <KTCard>
-        <KTCardBody>
-          <Table
-            columns={columns}
-            dataSource={loadSchedule?.data}
-            loading={isLoading}
-            rowKey={'entryId'}
-            bordered
-            scroll={{x: 1000}}
-          />
-        </KTCardBody>
-      </KTCard> {/*end::Card*/}
-    </>
-  )
+    return (
+      <>
+          <KTCard>
+              <KTCardBody>
+                  <Table
+                    columns={columns}
+                    dataSource={loadSchedule?.data}
+                    loading={isLoading}
+                    rowKey={'entryId'}
+                    bordered
+                    scroll={{x: 1000}}
+                  />
+              </KTCardBody>
+          </KTCard> {/*end::Card*/}
+      </>
+    )
 }

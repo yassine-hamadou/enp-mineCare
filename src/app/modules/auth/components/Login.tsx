@@ -6,7 +6,8 @@ import {useFormik} from 'formik'
 import {login, parseJwt} from '../core/_requests'
 import {useAuth} from '../core/Auth'
 import {useQuery} from "react-query";
-import {fetchCompanies, fetchUserApplications} from "../../../urls";
+import {ESMS_APP_ID, fetchCompanies, fetchUserApplications, fetchUserCompanies} from "../../../urls";
+import {Select} from "antd";
 
 const loginSchema = Yup.object().shape({
     username: Yup.string()
@@ -37,8 +38,9 @@ export function Login() {
     const [loading, setLoading] = useState(false)
     const {saveAuth, setCurrentUser, saveTenant} = useAuth()
     const {data: userApplications} = useQuery('userApplications', fetchUserApplications)
-    const {data: allCompanies} = useQuery('companies', fetchCompanies)
-
+    const {data: allCompanies, isLoading: allCompaniesLoading} = useQuery('companies', fetchCompanies)
+    const {data: userCompanies} = useQuery('userCompanies', fetchUserCompanies)
+    console.log('allCompanies', allCompanies)
 
     const formik = useFormik({
         initialValues,
@@ -46,6 +48,7 @@ export function Login() {
         onSubmit: async (values, {setStatus, setSubmitting}) => {
             setLoading(true)
             try {
+
                 const {data: auth} = await login(values.username, values.password)
                 saveAuth(auth)
 
@@ -55,13 +58,44 @@ export function Login() {
                 } | undefined = parseJwt(auth.jwtToken)
 
                 const userDetails: any = parsedToken?.payload
+
+                const userApps = userApplications?.data?.filter((item: any) => parseInt(item.userId) === parseInt(userDetails?.id)).map((filteredItem: any) => {
+                    return filteredItem?.applicationId
+                })
+                const userSites: [] = userCompanies?.data?.filter((item: any) => parseInt(item.userId) === parseInt(userDetails?.id)).map((filteredItem: any) => {
+                    return filteredItem?.companyId
+                })?.map((companyId: any) => {
+                    return allCompanies?.data?.find((item: any) => parseInt(item.id) === parseInt(companyId))
+                })
+
+                const userAllowedApps = userApps?.find((applicationId: any) => {
+                    return parseInt(applicationId) === ESMS_APP_ID
+                })
+                console.log('userAllowedApps', userAllowedApps)
+
+                if (!userAllowedApps) {
+                    setStatus("You can't access this application, contact your Administrator!")
+                    setSubmitting(false)
+                    setLoading(false)
+                    return
+                } else if (!userSites || userSites.length === 0) {
+                    setStatus("You have not been assigned to a site, contact your Administrator!")
+                    setSubmitting(false)
+                    setLoading(false)
+                    return
+                } else {
+                    const userSite = userSites?.find((item: any) => item.name?.toLowerCase() === (allCompanies?.data?.find((item: any) => item.name?.toLowerCase() === values.tenantId)?.name?.toLowerCase()))
+                    console.log('userSite', userSite)
+                    if (!userSite) {
+                        setStatus("You can't access this site, contact your Administrator!")
+                        setSubmitting(false)
+                        setLoading(false)
+                        return
+                    }
+                }
                 setCurrentUser(userDetails)
                 saveTenant(values.tenantId)
 
-                const authorizedUserApps = userApplications?.data?.filter((application: any) => application.userId === parseInt(userDetails?.id))
-                console.log('userapplications', userApplications?.data)
-                console.log('authorizedUserApps', authorizedUserApps)
-                console.log('tenantId', values.tenantId)
             } catch (error) {
                 console.error(error)
                 setStatus('The login detail is incorrect')
@@ -136,43 +170,56 @@ export function Login() {
               <div className='mb-10'>
                   <label className='form-label fw-bold'>Company:</label>
                   <div>
-                      <select
-                        className='form-select form-select-solid'
-                        data-kt-select2='true'
-                        data-placeholder='Select option'
-                        data-allow-clear='true'
-                        {...formik.getFieldProps('tenantId')}
+                      <Select
+                        className='form-select form-select-solid py-2 px-0'
+                        onChange={(e) => {
+                            formik.setFieldValue('tenantId', e)
+                        }}
+                        loading={allCompaniesLoading}
+                        allowClear={true}
+                        placeholder='Select'
                       >
                           {
                               formik.values.username === '' || formik.values.password === '' ?
                                 '' :
-                                // <>
-                                //     <option>Select Company</option>
-                                //     {
-                                //         allCompanies?.data.map((item: any) => (
-                                //           <option value={item.name.toLowerCase()}>{item.description}</option>
-                                //         ))
-                                //     }
-                                // </>
                                 <>
-                                    <option value='damang'>DAMANG DIVISION</option>
-                                    {/*<option value='dzata'>DZATA DIVISION</option>*/}
-                                    {/*<option value='mpohor'>MPOHOR DIVISION</option>*/}
-                                    {/*<option value='headOffice'>HEAD OFFICE</option>*/}
-                                    <option value='cardinal'>CARDINAL DIVISION</option>
-                                    <option value='tarkwa'>TARKWA DIVISION</option>
+                                    {
+                                        allCompanies?.data.map((item: any) => (
+                                          <option value={item.name.toLowerCase()}>{item.description}</option>
+                                        ))
+                                    }
                                 </>
                           }
+                      </Select>
+                      {/*<select*/}
+                      {/*  className='form-select form-select-solid'*/}
+                      {/*  data-kt-select2='true'*/}
+                      {/*  data-placeholder='Select option'*/}
+                      {/*  data-allow-clear='true'*/}
+                      {/*  {...formik.getFieldProps('tenantId')}*/}
+                      {/*>*/}
+                      {/*    {*/}
+                      {/*        formik.values.username === '' || formik.values.password === '' ?*/}
+                      {/*          '' :*/}
+                      {/*          <>*/}
+                      {/*              <option>Select</option>*/}
+                      {/*              {*/}
+                      {/*                  allCompanies?.data.map((item: any) => (*/}
+                      {/*                    <option value={item.name.toLowerCase()}>{item.description}</option>*/}
+                      {/*                  ))*/}
+                      {/*              }*/}
+                      {/*          </>*/}
+                      {/*        // <>*/}
+                      {/*        //     <option value='damang'>DAMANG DIVISION</option>*/}
+                      {/*        //     /!*<option value='dzata'>DZATA DIVISION</option>*!/*/}
+                      {/*        //     /!*<option value='mpohor'>MPOHOR DIVISION</option>*!/*/}
+                      {/*        //     /!*<option value='headOffice'>HEAD OFFICE</option>*!/*/}
+                      {/*        //     <option value='cardinal'>CARDINAL DIVISION</option>*/}
+                      {/*        //     <option value='tarkwa'>TARKWA DIVISION</option>*/}
+                      {/*        // </>*/}
+                      {/*    }*/}
 
-
-                          {/* <option></option>
-              <option value='damangDivision'>EnP - DAMANG DIVISION</option>
-              <option value='dzataDivision'>EnP - DZATA DIVISION</option>
-              <option value='mpohorDivision'>EnP - MPOHOR DIVISION</option>
-              <option value='headOffice'>EnP - HEAD OFFICE</option>
-              <option value='salagaDivision'>EnP - SALAGA DIVISION</option>
-              <option value='tarkwaDivision'>EnP - TARKWA DIVISION</option> */}
-                      </select>
+                      {/*</select>*/}
                   </div>
                   {formik.touched.tenantId && formik.errors.tenantId && (
                     <div className='fv-plugins-message-container'>

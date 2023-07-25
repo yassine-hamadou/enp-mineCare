@@ -2,10 +2,8 @@
 import React from 'react'
 import {useIntl} from 'react-intl'
 import {PageTitle} from '../../../_metronic/layout/core'
-import {DashboardTable} from './dashboardTable/CycleDetailsList'
+import {DashboardTable} from "./dashboardTable/CycleDetailsList";
 // import DevexpressDashboardComponent from "./DevexpressDashboardComponent";
-import {Tabs} from "antd";
-import {KTCard, KTCardBody} from "../../../_metronic/helpers";
 
 const DevexpressDashboardComponent = React.lazy(() => import("./DevexpressDashboardComponent"));
 
@@ -16,28 +14,32 @@ const DevexpressDashboardComponent = React.lazy(() => import("./DevexpressDashbo
 const DashboardPage = () => (
 
     <>
-        <KTCard>
-            <KTCardBody>
-                <Tabs
-                    defaultActiveKey="1"
-                    tabPosition={'top'}
-                    style={{height: '100%', width: '100%'}}
-                >
-                    <Tabs.TabPane tab="Fault" key="1">
-                        <DevexpressDashboardComponent dashboardId={"dashboard2"}/>
-                        <br/>
-                        <br/>
-                        <DashboardTable/>
-                    </Tabs.TabPane>
-                    <Tabs.TabPane tab="Backlog" key="2">
-                        <DevexpressDashboardComponent dashboardId={"backlogDashboard"}/>
-                    </Tabs.TabPane>
-                    <Tabs.TabPane tab="Hours" key="3">
-                        <DevexpressDashboardComponent dashboardId={"equipmentsAvailability"}/>
-                    </Tabs.TabPane>
-                </Tabs>
-            </KTCardBody>
-        </KTCard>
+        <DevexpressDashboardComponent dashboardId={"dashboard3"}/>
+        <br/>
+        <br/>
+        <DashboardTable/>
+        {/*<KTCard>*/}
+        {/*    <KTCardBody>*/}
+        {/*        <Tabs*/}
+        {/*            defaultActiveKey="1"*/}
+        {/*            tabPosition={'top'}*/}
+        {/*            style={{height: '100%', width: '100%'}}*/}
+        {/*        >*/}
+        {/*            <Tabs.TabPane tab="Fault" key="1">*/}
+        {/*                <DevexpressDashboardComponent dashboardId={"dashboard3"}/>*/}
+        {/*                <br/>*/}
+        {/*                <br/>*/}
+        {/*                <DashboardTable/>*/}
+        {/*            </Tabs.TabPane>*/}
+        {/*            <Tabs.TabPane tab="Backlog" key="2">*/}
+        {/*                <DevexpressDashboardComponent dashboardId={"backlogDashboard"}/>*/}
+        {/*            </Tabs.TabPane>*/}
+        {/*            <Tabs.TabPane tab="Hours" key="3">*/}
+        {/*                <DevexpressDashboardComponent dashboardId={"equipmentsAvailability"}/>*/}
+        {/*            </Tabs.TabPane>*/}
+        {/*        </Tabs>*/}
+        {/*    </KTCardBody>*/}
+        {/*</KTCard>*/}
 
     </>
 )

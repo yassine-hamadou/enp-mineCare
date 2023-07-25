@@ -7,6 +7,7 @@ import axios from 'axios';
 // export const ENP_URL = 'http://localhost:3001'
 // export const ENP_URL = 'https://cors-anywhere.herokuapp.com/http://208.117.44.15/SmWebApi/api'
 export const USERS_ENDPOINTS = "http://208.117.44.15/userapi/api";
+export const ESMS_APP_ID = 3;
 // export const USERS_ENDPOINTS = "https://app.sipconsult.net/userapi/api";
 
 const tenant: string | null = localStorage.getItem('tenant');
@@ -32,7 +33,7 @@ export const fetchBrands = () => {
     return axios.get(`${ENP_URL}/LubeBrands`)
 }
 
-export const fetchHours = (tenant: any) => {
+export const getHours = (tenant: any) => {
     return axios.get(`${ENP_URL}/HoursEntry/tenant/${tenant}`)
 }
 export const putHours = (data: any) => {
@@ -126,17 +127,24 @@ export function deleteGroundEngagingTools(id: any) {
     return axios.delete(`${ENP_URL}/groundEngagingTools/${id}`);
 }
 
-export function getManufacturers() {
-    return axios.get(`${ENP_URL}/manufacturers`);
+export function getManufacturers(tenantId: any) {
+    return axios.get(`${ENP_URL}/manufacturers/tenant/${tenantId}`);
 }
 
-export function getModelClasses() {
-    return axios.get(`${ENP_URL}/modelClasses`);
+export const postManufacturer = (data: any, tenantId: any) => {
+    return axios.post(`${ENP_URL}/Manufacturers`, {...data, tenantId})
+}
+
+export const deleteManufacturer = (id: any) => {
+    return axios.delete(`${ENP_URL}/Manufacturers/${id}`)
+}
+
+export function getModelClasses(tenantId: any) {
+    return axios.get(`${ENP_URL}/modelClasses/tenant/${tenantId}`);
 }
 
 export function getModels(tenant: any) {
-    return axios.get(`${ENP_URL}/models`)
-    // return axios.get(`${ENP_URL}/models/tenant/${tenant}`);
+    return axios.get(`${ENP_URL}/models/tenant/${tenant}`);
 }
 
 export function addHours(data: any) {
@@ -163,6 +171,10 @@ export function fetchUserApplications() {
 
 export const fetchCompanies = () => {
     return axios.get(`${USERS_ENDPOINTS}/Companies`)
+}
+
+export const fetchUserCompanies = () => {
+    return axios.get(`${USERS_ENDPOINTS}/UserCompanies`)
 }
 
 export const getPriority = (TenantId: any) => {
@@ -250,4 +262,200 @@ export const addComponentToEquipment = (data: any) => {
     console.log('data in from' +
       '', data)
     return axios.post(`${ENP_URL}/Components`, data)
+}
+
+export const getLocations = (tenantId: any) => {
+    return axios.get(`${ENP_URL}/Locations/tenant/${tenantId}`)
+}
+
+export const postLocation = (data: any, tenantId: any) => {
+    return axios.post(`${ENP_URL}/Locations`, {...data[0], tenantId, id: 0})
+}
+
+export const putLocation = (data: any, tenantId: any) => {
+    return axios.put(`${ENP_URL}/Locations/${data.id}`, data)
+}
+
+export const patchLocation = (data: any) => {
+    return axios.patch(`${ENP_URL}/Locations/${data?.id}`,
+      [
+          {
+              "op": "replace",
+              "path": "/name",
+              "value": data?.name
+          },
+          {
+              "op": "replace",
+              "path": "/description",
+              "value": data?.description
+          }
+      ]
+      , {
+          headers: {
+              'Content-Type': 'application/json-patch+json'
+          }
+      })
+}
+
+export const deleteLocation = (id: any) => {
+    return axios.delete(`${ENP_URL}/Locations/${id}`)
+}
+
+export const getCustodians = (tenantId: any) => {
+    return axios.get(`${ENP_URL}/Custodians/tenant/${tenantId}`)
+}
+
+export const postCustodian = (data: any, tenantId: any) => {
+    // return axios.post(`${ENP_URL}/Custodians`, {...data[0], tenantId, id: 0})
+    return axios.post(`${ENP_URL}/Custodians`, {...data, tenantId, id: 0})
+}
+
+export const putCustodian = (data: any, tenantId: any) => {
+    return axios.put(`${ENP_URL}/Custodians/${data.id}`, {...data, tenantId})
+}
+
+export const patchCustodian = (data: any) => {
+    return axios.patch(`${ENP_URL}/Custodians/${data?.id}`,
+      [
+          {
+              "op": "replace",
+              "path": "/name",
+              "value": data?.name
+          },
+          {
+              "op": "replace",
+              "path": "/description",
+              "value": data?.description
+          }
+      ]
+      , {
+          headers: {
+              'Content-Type': 'application/json-patch+json'
+          }
+      })
+}
+
+export const deleteCustodian = (id: any) => {
+    return axios.delete(`${ENP_URL}/Custodians/${id}`)
+}
+
+
+export const getDownStatuses = (tenantId: any) => {
+    return axios.get(`${ENP_URL}/DownStatuses/tenant/${tenantId}`)
+}
+
+export const postDownStatus = (data: any, tenantId: any) => {
+    // return axios.post(`${ENP_URL}/DownStatuses`, {...data[0], tenantId, id: 0}) // this is for DX react grid
+    return axios.post(`${ENP_URL}/DownStatuses`, {...data, tenantId, id: 0})
+}
+
+export const putDownStatus = (data: any, tenantId: any) => {
+    console.log('data in put', {...data, tenantId})
+    return axios.put(`${ENP_URL}/DownStatuses/${data.id}`, {...data, tenantId})
+}
+
+export const patchDownStatus = (data: any) => {
+    return axios.patch(`${ENP_URL}/DownStatuses/${data?.id}`,
+      [
+          {
+              "op": "replace",
+              "path": "/name",
+              "value": data?.name
+          },
+          {
+              "op": "replace",
+              "path": "/description",
+              "value": data?.description
+          }
+      ]
+      , {
+          headers: {
+              'Content-Type': 'application/json-patch+json'
+          }
+      })
+}
+
+export const deleteDownStatus = (id: any) => {
+    return axios.delete(`${ENP_URL}/DownStatuses/${id}`)
+}
+
+export const postModel = (data: any, tenantId: any) => {
+    console.log('data in post', data)
+    const formData = new FormData();
+    formData.append('code', data?.code);
+    formData.append('name', data?.name);
+    formData.append('modelClassId', data?.modelClassId);
+    formData.append('manufacturerId', data?.manufacturerId);
+    formData.append('tenantId', tenantId);
+    return axios.post(`${ENP_URL}/Models`, formData, {
+        headers: {
+            'Content-Type': 'multipart/form-data',
+        }
+    })
+}
+
+export const putModel = (data: any, tenantId: any) => {
+    console.log('data in put', data)
+    console.log('tenantId in put', {...data, tenantId})
+    return axios.put(`${ENP_URL}/Models/${data.modelId}`, {...data, tenantId})
+}
+
+export const patchModel = (data: any) => {
+    return axios.patch(`${ENP_URL}/Models/${data?.id}`,
+      [
+          {
+              "op": "replace",
+              "path": "/name",
+              "value": data?.name
+          },
+          {
+              "op": "replace",
+              "path": "/description",
+              "value": data?.description
+          }
+      ]
+      , {
+          headers: {
+              'Content-Type': 'application/json-patch+json'
+          }
+      })
+}
+
+export const deleteModel = (id: any) => {
+    return axios.delete(`${ENP_URL}/Models/${id}`)
+}
+
+
+export const postModelClass = (data: any, tenantId: any) => {
+    console.log('data in post', {...data, tenantId, id: 0})
+    return axios.post(`${ENP_URL}/ModelClasses`, {...data, tenantId, id: 0})
+}
+
+export const putModelClass = (data: any, tenantId: any) => {
+    return axios.put(`${ENP_URL}/ModelClasses/${data.modelClassId}`, {...data, tenantId})
+}
+
+export const patchModelClass = (data: any) => {
+    return axios.patch(`${ENP_URL}/ModelClasses/${data?.id}`,
+      [
+          {
+              "op": "replace",
+              "path": "/name",
+              "value": data?.name
+          },
+          {
+              "op": "replace",
+              "path": "/description",
+              "value": data?.description
+          }
+      ]
+      , {
+          headers: {
+              'Content-Type': 'application/json-patch+json'
+          }
+      })
+}
+
+export const deleteModelClass = (id: any) => {
+    return axios.delete(`${ENP_URL}/ModelClasses/${id}`)
 }

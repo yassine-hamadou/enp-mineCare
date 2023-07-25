@@ -498,16 +498,16 @@ import {DatePicker, InputNumber, message, Select} from 'antd';
 import React, {useState} from 'react';
 import {KTCard, KTCardBody} from "../../../../../../../_metronic/helpers";
 import {useQuery} from "react-query";
-import {fetchHours, getEquipment} from "../../../../../../urls";
+import {getEquipment, getHours} from "../../../../../../urls";
 import {useAuth} from "../../../../../auth";
 import TextArea from "antd/lib/input/TextArea";
 
 const waitTime = (time: number = 100) => {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      resolve(true);
-    }, time);
-  });
+    return new Promise((resolve) => {
+        setTimeout(() => {
+            resolve(true);
+        }, time);
+    });
 };
 
 
@@ -516,146 +516,146 @@ const defaultData: any = [];
 
 // eslint-disable-next-line import/no-anonymous-default-export
 export default () => {
-  const {data: equipmentData} = useQuery('equipments', () => getEquipment(tenant));
-  const {data: hoursData, isLoading} = useQuery('all-hours', () => fetchHours(tenant), {
-    refetchOnWindowFocus: false
-  })
-  const columns: ProColumns<any>[] = [
-    {
-      title: "Equipment ID",
-      dataIndex: "equipmentId",
-      renderFormItem: (_, {type, defaultRender, recordKey, record, ...rest}, form) => {
-        console.log('form', form.getFieldValue('equipmentId'))
-        console.log('_', _)
-        return (
-          <Select
-            placeholder='Select Equipment ID'
-            className={'w-100'}
-            allowClear
-            showSearch
-            onChange={(value) => {
-              const rowData = form.getFieldsValue(); // Get the values of all form fields in the row
-              console.log('rowData', rowData) //rowData is an object with key value pairs
-
-              // Object.values(rowData)[0].previousHours = 12; //set previous hours in this row
-
-              //set previous hours in this row
-              const equipment = hoursData?.data?.find((equipment: any) => equipment?.fleetId === value);
-              //@ts-ignore
-              rowData[recordKey].previousHours = equipment?.previousReading ? equipment?.previousReading : 0; //set previous hours in this row
-              console.log('equiData', value)
-              console.log('hours', hoursData)
-              console.log('equipment outseide', equipment)
-              if (equipment) {
-                form.setFieldsValue({ // Set the value of the "previousHours" field
-                  ...rowData,
-                });
-              }
-            }}
-          >
-            {equipmentData?.data?.map((equipment: any) => {
+    const {data: equipmentData} = useQuery('equipments', () => getEquipment(tenant));
+    const {data: hoursData, isLoading} = useQuery('all-hours', () => getHours(tenant), {
+        refetchOnWindowFocus: false
+    })
+    const columns: ProColumns<any>[] = [
+        {
+            title: "Equipment ID",
+            dataIndex: "equipmentId",
+            renderFormItem: (_, {type, defaultRender, recordKey, record, ...rest}, form) => {
+                console.log('form', form.getFieldValue('equipmentId'))
+                console.log('_', _)
                 return (
-                  <Select.Option key={equipment.equipmentId} value={equipment.equipmentId}>
-                    {equipment.equipmentId}
-                  </Select.Option>
+                  <Select
+                    placeholder='Select Equipment ID'
+                    className={'w-100'}
+                    allowClear
+                    showSearch
+                    onChange={(value) => {
+                        const rowData = form.getFieldsValue(); // Get the values of all form fields in the row
+                        console.log('rowData', rowData) //rowData is an object with key value pairs
+
+                        // Object.values(rowData)[0].previousHours = 12; //set previous hours in this row
+
+                        //set previous hours in this row
+                        const equipment = hoursData?.data?.find((equipment: any) => equipment?.fleetId === value);
+                        //@ts-ignore
+                        rowData[recordKey].previousHours = equipment?.previousReading ? equipment?.previousReading : 0; //set previous hours in this row
+                        console.log('equiData', value)
+                        console.log('hours', hoursData)
+                        console.log('equipment outseide', equipment)
+                        if (equipment) {
+                            form.setFieldsValue({ // Set the value of the "previousHours" field
+                                ...rowData,
+                            });
+                        }
+                    }}
+                  >
+                      {equipmentData?.data?.map((equipment: any) => {
+                            return (
+                              <Select.Option key={equipment.equipmentId} value={equipment.equipmentId}>
+                                  {equipment.equipmentId}
+                              </Select.Option>
+                            );
+                        }
+                      )}
+                  </Select>
                 );
-              }
-            )}
-          </Select>
-        );
-      }
-    },
-    {
-      title: "Item/Type of GET",
-      dataIndex: "itemType",
-      renderFormItem: (_, {type, defaultRender, ...rest}, form) => {
-        return <TextArea required className="w-100 text-black"/>;
-      }
-    },
-    {
-      title: "Previous Hours",
-      dataIndex: "previousHours",
-      renderFormItem: (_, {type, defaultRender, ...rest}, form) => {
-        return <InputNumber min={1} className="w-100 text-black" disabled/>;
-      },
-    },
-    {
-      title: "Current Hours",
-      dataIndex: "currentHours",
-      renderFormItem: (_, {type, defaultRender, ...rest}, form) => {
-        return <InputNumber required min={1} className="w-100 text-black"/>;
-      },
+            }
+        },
+        {
+            title: "Item/Type of GET",
+            dataIndex: "itemType",
+            renderFormItem: (_, {type, defaultRender, ...rest}, form) => {
+                return <TextArea required className="w-100 text-black"/>;
+            }
+        },
+        {
+            title: "Previous Hours",
+            dataIndex: "previousHours",
+            renderFormItem: (_, {type, defaultRender, ...rest}, form) => {
+                return <InputNumber min={1} className="w-100 text-black" disabled/>;
+            },
+        },
+        {
+            title: "Current Hours",
+            dataIndex: "currentHours",
+            renderFormItem: (_, {type, defaultRender, ...rest}, form) => {
+                return <InputNumber required min={1} className="w-100 text-black"/>;
+            },
 
-    },
-    {
-      title: "Quantity",
-      dataIndex: "quantity",
-      renderFormItem: (_, {type, defaultRender, ...rest}, form) => {
-        return <InputNumber required min={1} className="w-100 text-black"/>;
-      },
-    },
-    {
-      title: "Reason",
-      dataIndex: "reason",
-      renderFormItem: (_, {type, defaultRender, ...rest}, form) => {
-        return <TextArea required className="w-100 text-black"/>;
-      },
-    },
-    {
-      title: "Date",
-      dataIndex: "date",
-      renderFormItem: (_, {type, defaultRender, ...rest}, form) => {
-        return <DatePicker format={'DD-MM-YYYY'}/>;
-      },
-    },
-    {
-      title: 'Action',
-      valueType: 'option',
-    },
-  ];
+        },
+        {
+            title: "Quantity",
+            dataIndex: "quantity",
+            renderFormItem: (_, {type, defaultRender, ...rest}, form) => {
+                return <InputNumber required min={1} className="w-100 text-black"/>;
+            },
+        },
+        {
+            title: "Reason",
+            dataIndex: "reason",
+            renderFormItem: (_, {type, defaultRender, ...rest}, form) => {
+                return <TextArea required className="w-100 text-black"/>;
+            },
+        },
+        {
+            title: "Date",
+            dataIndex: "date",
+            renderFormItem: (_, {type, defaultRender, ...rest}, form) => {
+                return <DatePicker format={'DD-MM-YYYY'}/>;
+            },
+        },
+        {
+            title: 'Action',
+            valueType: 'option',
+        },
+    ];
 
-  const {tenant} = useAuth();
-  const [editableKeys, setEditableRowKeys] = useState<React.Key[]>(() =>
-    defaultData.map((item: any) => item.id),
-  );
-  const [form] = ProForm.useForm();
-  return (
-    <KTCard>
-      <KTCardBody>
-        <ProForm
-          form={form}
-          onFinish={async (values) => {
-            await waitTime(2000);
-            console.log(values);
-            message.success('success');
-            form.resetFields();
-          }}
-        >
-          <ProForm.Item name="dataSource" trigger="onValuesChange">
-            <EditableProTable<any>
-              rowKey="id"
-              toolBarRender={false}
-              columns={columns}
-              bordered
-              recordCreatorProps={{
-                newRecordType: 'dataSource',
-                position: 'top',
-                record: () => ({
-                  id: Date.now(),
-                }),
-              }}
-              editable={{
-                type: 'multiple',
-                editableKeys,
-                onChange: setEditableRowKeys,
-                actionRender: (row, _, dom) => {
-                  return [dom.delete];
-                },
-              }}
-            />
-          </ProForm.Item>
-        </ProForm>
-      </KTCardBody>
-    </KTCard>
-  );
+    const {tenant} = useAuth();
+    const [editableKeys, setEditableRowKeys] = useState<React.Key[]>(() =>
+      defaultData.map((item: any) => item.id),
+    );
+    const [form] = ProForm.useForm();
+    return (
+      <KTCard>
+          <KTCardBody>
+              <ProForm
+                form={form}
+                onFinish={async (values) => {
+                    await waitTime(2000);
+                    console.log(values);
+                    message.success('success');
+                    form.resetFields();
+                }}
+              >
+                  <ProForm.Item name="dataSource" trigger="onValuesChange">
+                      <EditableProTable<any>
+                        rowKey="id"
+                        toolBarRender={false}
+                        columns={columns}
+                        bordered
+                        recordCreatorProps={{
+                            newRecordType: 'dataSource',
+                            position: 'top',
+                            record: () => ({
+                                id: Date.now(),
+                            }),
+                        }}
+                        editable={{
+                            type: 'multiple',
+                            editableKeys,
+                            onChange: setEditableRowKeys,
+                            actionRender: (row, _, dom) => {
+                                return [dom.delete];
+                            },
+                        }}
+                      />
+                  </ProForm.Item>
+              </ProForm>
+          </KTCardBody>
+      </KTCard>
+    );
 };

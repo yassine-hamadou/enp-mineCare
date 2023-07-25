@@ -18,9 +18,7 @@ import {OilTypePage} from './components/setup/oilType/OilType'
 import {FaultTable} from './components/entries/fault_d/FaultTable'
 import {LubeConfig} from './components/setup/lubeConfig/LubeConfig'
 import {ItemValuePage} from './components/setup/itemValue/ItemValuePage'
-import ModelClass from "./components/setup/equipment/ModelClass";
 import Manufacturer from "./components/setup/equipment/Manufacturer";
-import ModelsForManufacturer from "./components/setup/equipment/ModelsForManufacturer";
 import EquipmentSchedule from "./components/entries/equipment/EquipmentSchedule";
 import {AllReportPage} from './components/report/AllReportPage'
 import {CategorySetup} from './components/setup/category/CategorySetup'
@@ -33,6 +31,9 @@ import Priority from './components/setup/backlogs/Priority'
 import Source from './components/setup/backlogs/Source'
 import Sequence from './components/setup/service/sequence/Sequence'
 import {ViewBacklog} from './components/entries/backlog/ViewBacklog'
+import {DownStatusPage} from './components/setup/downType/DownStatus'
+import {ModelsForManufacturer} from "./components/setup/equipment/ModelsForManufacturer";
+import {ModelClass} from './components/setup/equipment/ModelClass'
 
 const EquipmentRegister = lazy(() => import('./components/equipment-register/EquipmentRegister'))
 const AddEquipRegister = lazy(() => import('./components/equipment-register/Add'))
@@ -338,6 +339,16 @@ const ProductionPage: React.FC = () => {
                         <PageTitle breadcrumbs={accountBreadCrumbs}>All Down Types</PageTitle>
                         {/*<Overview />*/}
                         <DownTypePage/>
+                    </>
+                }
+              />
+              <Route
+                path='down-status'
+                element={
+                    <>
+                        <PageTitle breadcrumbs={accountBreadCrumbs}>All Down Statuses</PageTitle>
+                        {/*<Overview />*/}
+                        <DownStatusPage/>
                     </>
                 }
               />

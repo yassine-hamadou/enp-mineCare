@@ -12,25 +12,25 @@ import {ErrorBoundary} from '@ant-design/pro-components'
 
 const queryClient = new QueryClient()
 const App = () => {
-  return (
-    <ErrorBoundary>
-      <ConfigProvider locale={en_US}>
-        <QueryClientProvider client={queryClient}>
-          <Suspense fallback={<LayoutSplashScreen/>}>
-            <I18nProvider>
-              <LayoutProvider>
-                <AuthInit>
-                  <Outlet/>
-                  <MasterInit/>
-                </AuthInit>
-              </LayoutProvider>
-            </I18nProvider>
-          </Suspense>
-          <ReactQueryDevtools initialIsOpen={false}/>
-        </QueryClientProvider>
-      </ConfigProvider>
-    </ErrorBoundary>
-  )
+    return (
+      <ErrorBoundary>
+          <ConfigProvider locale={en_US}>
+              <QueryClientProvider client={queryClient}>
+                  <Suspense fallback={<LayoutSplashScreen/>}>
+                      <I18nProvider>
+                          <LayoutProvider>
+                              <AuthInit>
+                                  <Outlet/>
+                                  <MasterInit/>
+                              </AuthInit>
+                          </LayoutProvider>
+                      </I18nProvider>
+                  </Suspense>
+                  <ReactQueryDevtools initialIsOpen={false}/>
+              </QueryClientProvider>
+          </ConfigProvider>
+      </ErrorBoundary>
+    )
 }
 
 export {App}
