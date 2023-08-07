@@ -185,7 +185,10 @@ export function Login() {
                                 <>
                                     {
                                         allCompanies?.data.map((item: any) => (
-                                          <option value={item.name.toLowerCase()}>{item.description}</option>
+                                          <Select.Option
+                                            value={item.name.toLowerCase()}
+                                            key={item.id}>{item.description}
+                                          </Select.Option>
                                         ))
                                     }
                                 </>

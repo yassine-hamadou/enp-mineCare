@@ -1,18 +1,58 @@
 import {Button, DatePicker, Form, Input, message, Select, Tabs} from "antd";
-import React from "react";
+import React, {useState} from "react";
 import {KTCard, KTCardBody} from "../../../../../_metronic/helpers";
 import {getModels, postEquipment} from "../../../../urls";
 import {useMutation, useQuery, useQueryClient} from "react-query";
 import {Link} from "react-router-dom";
 import {useAuth} from "../../../auth";
+import {
+    CopyOutlined,
+    DeleteOutlined,
+    HeartOutlined,
+    HomeOutlined,
+    PlusOutlined,
+    SettingFilled,
+    SmileOutlined,
+    SyncOutlined
+} from "@ant-design/icons";
 
+
+const IconMap = {
+    PlusOutlined,
+    HeartOutlined,
+    DeleteOutlined,
+    CopyOutlined,
+    HomeOutlined,
+    SettingFilled,
+    SmileOutlined,
+    SyncOutlined,
+};
+const initialValue = {
+    copyIconProps: {
+        show: true,
+        Icon: 'CopyOutlined',
+        tooltipText: '复制此行',
+    },
+    deleteIconProps: {
+        show: true,
+        Icon: 'DeleteOutlined',
+        tooltipText: '删除此行',
+    },
+    creatorButtonProps: {
+        show: true,
+        creatorButtonText: '新建一行',
+        position: 'button',
+        type: 'dashed',
+        icon: 'PlusOutlined',
+    },
+};
 const AddEquipRegister = () => {
     let [form] = Form.useForm();
     let [generalInfo] = Form.useForm();
     const queryClient = useQueryClient()
     const {tenant} = useAuth()
     const {data: listOfModels} = useQuery('listOfModels', () => getModels(tenant))
-    const {mutate: addEquipment} = useMutation(postEquipment, {
+    const {mutate: addEquipment} = useMutation((data) => postEquipment(data, tenant), {
         onSuccess: () => {
             queryClient.invalidateQueries('listOfEquipment')
             message.success('Equipment Added Successfully')
@@ -42,21 +82,19 @@ const AddEquipRegister = () => {
         addEquipment(values)
     }
 
-
+    const [stateValue, setStateValue] = useState({});
     return <>
         <KTCard>
             <KTCardBody>
                 <div className='row mb-0'>
-                    <div className=''>
-                        <Link to='/equipment-register'>
-                            <button
-                              className='btn btn-outline btn-outline-dashed btn-outline-primary btn-active-light-primary'>
-                                <i className='la la-arrow-left'/>
-                                Equipment Register
-                            </button>
-                        </Link>
+                    <Link to='/equipment-register'>
+                        <button
+                          className='btn btn-outline btn-outline-dashed btn-outline-primary btn-active-light-primary'>
+                            <i className='la la-arrow-left'/>
+                            Equipment Register
+                        </button>
+                    </Link>
 
-                    </div>
                 </div>
 
 
@@ -76,6 +114,7 @@ const AddEquipRegister = () => {
                                   labelCol={{span: 8}}
                                   wrapperCol={{span: 24}}
                                   title='Add Equipment'
+
                                 >
                                     <div className='row mb-0'>
                                         <div className='col-4 mb-7'>

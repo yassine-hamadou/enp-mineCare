@@ -284,5 +284,5 @@ const OilGradePage = () => {
     )
 }
 
-export {OilGradePage};
+export default OilGradePage
 

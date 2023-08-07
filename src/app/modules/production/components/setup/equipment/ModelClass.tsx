@@ -236,7 +236,7 @@ const ModelClass = () => {
     )
 }
 
-export {ModelClass}
+export default ModelClass
 
 
 // import React, {useState} from 'react';

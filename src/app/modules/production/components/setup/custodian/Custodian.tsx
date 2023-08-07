@@ -276,7 +276,7 @@ const CustodianPage = () => {
     )
 }
 
-export {CustodianPage}
+export default CustodianPage
 
 
 // import React, {useState} from 'react';

@@ -155,5 +155,5 @@ const AllReportPage = () => {
     )
 }
 
-export {AllReportPage}
+export default AllReportPage
 

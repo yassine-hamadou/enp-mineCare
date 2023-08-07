@@ -123,4 +123,4 @@ const WorkTypePage = () => {
 }
 
 
-export {WorkTypePage}
+export default WorkTypePage

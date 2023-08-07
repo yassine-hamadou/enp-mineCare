@@ -3,14 +3,15 @@ import {Badge, Button, DatePicker, Form, Input, message, Modal, Popconfirm, Sele
 import {KTCard, KTCardBody, KTSVG} from "../../../../../../_metronic/helpers";
 import TextArea from "antd/lib/input/TextArea";
 import {
-  deleteBacklog,
-  getBacklogs,
-  getDowntypes,
-  getEquipment,
-  getPriority,
-  getSources,
-  postBacklogs,
-  putBacklog
+    deleteBacklog,
+    getBacklogs,
+    getCompletedBacklogs,
+    getDowntypes,
+    getEquipment,
+    getPriority,
+    getSources,
+    postBacklogs,
+    putBacklog
 } from "../../../../../urls";
 import {useAuth} from "../../../../auth";
 import {useMutation, useQuery, useQueryClient} from "react-query";
@@ -19,18 +20,33 @@ import dayjs from "dayjs";
 
 
 const Backlog = () => {
-    const {tenant} = useAuth()
     const Option = Select.Option
-    const [form] = Form.useForm()
-    const queryClient = useQueryClient()
     let columns: any[] = [
         {
             title: 'Equipment ID',
             dataIndex: 'equipmentId',
+            sorter: (a: any, b: any) => {
+                if (a.equipmentId > b.equipmentId) {
+                    return 1
+                }
+                if (b.equipmentId > a.equipmentId) {
+                    return -1
+                }
+                return 0
+            }
         },
         {
             title: 'BDate',
             dataIndex: 'bdate',
+            sorter: (a: any, b: any) => {
+                if (a.bdate > b.bdate) {
+                    return 1
+                }
+                if (b.bdate > a.bdate) {
+                    return -1
+                }
+                return 0
+            },
             render: (text: any, record: any) => (
               new Date(record?.bdate)?.toDateString()
             ),
@@ -38,7 +54,15 @@ const Backlog = () => {
         {
             title: 'Item',
             dataIndex: 'item',
-
+            sorter: (a: any, b: any) => {
+                if (a.item > b.item) {
+                    return 1
+                }
+                if (b.item > a.item) {
+                    return -1
+                }
+                return 0
+            },
         },
         {
             title: 'Note',
@@ -48,16 +72,41 @@ const Backlog = () => {
         {
             title: 'Reference No',
             dataIndex: 'referenceId',
-
+            sorter: (a: any, b: any) => {
+                if (a.referenceId > b.referenceId) {
+                    return 1
+                }
+                if (b.referenceId > a.referenceId) {
+                    return -1
+                }
+                return 0
+            }
         },
         {
             title: 'Source',
             dataIndex: 'source',
-
+            sorter: (a: any, b: any) => {
+                if (a.source > b.source) {
+                    return 1
+                }
+                if (b.source > a.source) {
+                    return -1
+                }
+                return 0
+            }
         },
         {
             title: 'Down Type',
             dataIndex: 'downType',
+            sorter: (a: any, b: any) => {
+                if (a.downType > b.downType) {
+                    return 1
+                }
+                if (b.downType > a.downType) {
+                    return -1
+                }
+                return 0
+            }
         },
         {
             title: 'Priority',
@@ -87,11 +136,28 @@ const Backlog = () => {
         {
             title: 'Equipment ID',
             dataIndex: 'equipmentId',
+            sorter: (a: any, b: any) => {
+                if (a.equipmentId > b.equipmentId) {
+                    return 1
+                }
+                if (b.equipmentId > a.equipmentId) {
+                    return -1
+                }
+                return 0
+            }
         },
         {
             title: 'BDate',
             dataIndex: 'bdate',
-
+            sorter: (a: any, b: any) => {
+                if (a.bdate > b.bdate) {
+                    return 1
+                }
+                if (b.bdate > a.bdate) {
+                    return -1
+                }
+                return 0
+            },
             render: (text: any, record: any) => (
               new Date(record?.bdate)?.toDateString()
             ),
@@ -99,7 +165,15 @@ const Backlog = () => {
         {
             title: 'CDate',
             dataIndex: 'cdate',
-
+            sorter: (a: any, b: any) => {
+                if (a.cdate > b.cdate) {
+                    return 1
+                }
+                if (b.cdate > a.cdate) {
+                    return -1
+                }
+                return 0
+            },
             render: (text: any, record: any) => (
               new Date(record?.cdate)?.toDateString()
             ),
@@ -212,9 +286,15 @@ const Backlog = () => {
         },
     ];
 
+    const {tenant} = useAuth()
+    const [form] = Form.useForm()
+    const queryClient = useQueryClient()
+
     const [isModalOpen, setIsModalOpen] = useState(false)
     const [submitLoading, setSubmitLoading] = useState(false)
     const [isCompleting, setIsCompleting] = useState(false)
+    const [currentPage, setCurrentPage] = useState(1)
+    const [totalItems, setTotalItems] = useState(0);
 
     const {data: equipmentData, isLoading: equipmentIsLoading} = useQuery(
       'equipment', () => getEquipment(tenant))
@@ -228,6 +308,10 @@ const Backlog = () => {
 
     const {data: backlogData, isLoading: backlogIsLoading} = useQuery(
       'backlog', () => getBacklogs(tenant))
+
+    const {data: completedBacklogs, isLoading: completedBacklogsIsLoading} = useQuery(
+      'completedBacklogs', () => getCompletedBacklogs(tenant, currentPage, 10))
+
     const {mutate: addBacklog} = useMutation('addBacklog',
       (data) => postBacklogs(data, tenant), {
           onSuccess: () => {
@@ -296,6 +380,7 @@ const Backlog = () => {
         removeBacklog(record?.id)
     }
 
+
     return (
       <KTCard>
           <KTCardBody>
@@ -347,12 +432,20 @@ const Backlog = () => {
                           <>
                               <Table
                                 columns={completedColumns}
-                                dataSource={backlogData?.data?.filter((item: any) => item?.status === 'Completed')}
+                                dataSource={completedBacklogs?.data}
                                 bordered
+                                loading={completedBacklogsIsLoading}
                                 rowKey={(record: any) => record?.id}
                                 scroll={{x: 1500}}
                                 pagination={{
-                                    defaultPageSize: 10,
+                                    defaultCurrent: currentPage,
+                                    total: 50,
+                                    // defaultPageSize: 10,
+                                    onChange: (pageNumber, pageSize) => {
+                                        console.log('asdad', completedBacklogs?.data?.[0]?.totalItems)
+                                        setCurrentPage(pageNumber)
+                                        completedBacklogs?.data?.length > 0 && setTotalItems(completedBacklogs?.data?.[0]?.totalItems)
+                                    },
                                 }}
                               />
                           </>

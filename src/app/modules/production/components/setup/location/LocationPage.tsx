@@ -223,7 +223,7 @@ const LocationPage = () => {
     )
 }
 
-export {LocationPage}
+export default LocationPage
 
 
 // const getRowId = (row: any) => row?.id;
