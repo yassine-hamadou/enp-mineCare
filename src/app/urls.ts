@@ -7,6 +7,7 @@ import axios from 'axios';
 // export const ENP_URL = 'http://localhost:3001'
 // export const ENP_URL = 'https://cors-anywhere.herokuapp.com/http://208.117.44.15/SmWebApi/api'
 export const USERS_ENDPOINTS = "http://208.117.44.15/userapi/api";
+export const USER_URL = "http://208.117.44.15/hrwebapi/api";
 export const ESMS_APP_ID = 3;
 // export const USERS_ENDPOINTS = "https://app.sipconsult.net/userapi/api";
 
@@ -19,6 +20,10 @@ export const ENP_URL = 'http://208.117.44.15/esmsapi/api'
 
 export const fetchEmployee = () => {
     return axios.get(`${ENP_URL}/vmemplsApi`)
+}
+
+export const fetchUsers = () => {
+    return axios.get(`${USERS_ENDPOINTS}/Users`)
 }
 
 export const fetchEquips = () => {

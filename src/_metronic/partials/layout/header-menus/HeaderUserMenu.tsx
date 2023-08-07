@@ -2,6 +2,7 @@
 import {FC} from 'react'
 import {useAuth} from '../../../../app/modules/auth'
 import {toAbsoluteUrl} from '../../../helpers'
+import ChangePasswordModal from '../../../../app/modules/auth/components/ChangePasswordModal'
 
 const HeaderUserMenu: FC = () => {
   const {currentUser, tenant, logout} = useAuth() // <== this is a jwt token
@@ -38,6 +39,9 @@ const HeaderUserMenu: FC = () => {
       {/*    My Profile*/}
       {/*  </Link>*/}
       {/*</div>*/}
+      <div className='menu-item px-5'>
+       <ChangePasswordModal />
+      </div>
 
       <div className='menu-item px-5'>
         <a onClick={logout} className='menu-link px-5'>

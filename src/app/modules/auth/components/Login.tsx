@@ -8,6 +8,7 @@ import {useAuth} from '../core/Auth'
 import {useQuery} from "react-query";
 import {ESMS_APP_ID, fetchCompanies, fetchUserApplications, fetchUserCompanies} from "../../../urls";
 import {Select} from "antd";
+import ForgotPasswordModal from './ForgotPasswordModal'
 
 const loginSchema = Yup.object().shape({
     username: Yup.string()
@@ -165,6 +166,8 @@ export function Login() {
                     </div>
                 </div>
               )}
+              <br></br>
+            <ForgotPasswordModal />
           </div>
           <div className='fv-row mb-10'>
               <div className='mb-10'>
