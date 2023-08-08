@@ -163,7 +163,7 @@ import {useNavigate} from "react-router-dom";
 import {useAuth} from "../../../auth";
 import {pendingSchedule} from "../entries/equipment/calendar/requests";
 
-export function ScheduleInfo() {
+export default function ScheduleInfo() {
     const {tenant} = useAuth()
     const navigate = useNavigate()
     const [scheduleToworkOn, setScheduleToWorkOn] = useState<any>([])
@@ -202,21 +202,57 @@ export function ScheduleInfo() {
         {
             title: 'Fleet ID',
             dataIndex: 'fleetId',
+            sorter: (a: any, b: any) => {
+                if (a.fleetId > b.fleetId) {
+                    return 1
+                }
+                if (b.fleetId > a.fleetId) {
+                    return -1
+                }
+                return 0
+            }
         },
         {
             title: 'Location',
             dataIndex: 'locationId',
+            sorter: (a: any, b: any) => {
+                if (a.locationId > b.locationId) {
+                    return 1
+                }
+                if (b.locationId > a.locationId) {
+                    return -1
+                }
+                return 0
+            }
         },
         {
             title: 'From',
             dataIndex: 'timeStart',
             render: (timeStart: any) => {
                 return new Date(timeStart).toUTCString()
+            },
+            sorter: (a: any, b: any) => {
+                if (a.timeStart > b.timeStart) {
+                    return 1
+                }
+                if (b.timeStart > a.timeStart) {
+                    return -1
+                }
+                return 0
             }
         },
         {
             title: 'To',
             dataIndex: 'timeEnd',
+            sorter: (a: any, b: any) => {
+                if (a.timeEnd > b.timeEnd) {
+                    return 1
+                }
+                if (b.timeEnd > a.timeEnd) {
+                    return -1
+                }
+                return 0
+            },
             render: (timeEnd: any) => {
                 return new Date(timeEnd).toUTCString()
             }
@@ -224,10 +260,28 @@ export function ScheduleInfo() {
         {
             title: 'Custodian',
             dataIndex: 'responsible',
+            sorter: (a: any, b: any) => {
+                if (a.responsible > b.responsible) {
+                    return 1
+                }
+                if (b.responsible > a.responsible) {
+                    return -1
+                }
+                return 0
+            }
         },
         {
             title: 'Service Type',
             dataIndex: 'serviceTypeId',
+            sorter: (a: any, b: any) => {
+                if (a.serviceTypeId > b.serviceTypeId) {
+                    return 1
+                }
+                if (b.serviceTypeId > a.serviceTypeId) {
+                    return -1
+                }
+                return 0
+            },
             render: (serviceTypeId: any) => {
                 return serviceType?.data.find(
                   (service: any) => service.id === serviceTypeId
@@ -270,6 +324,25 @@ export function ScheduleInfo() {
       <>
           <KTCard>
               <KTCardBody>
+                  <div className='row mb-0'>
+                      {/*<div className='mb-3'>*/}
+                      {/*    <h3 className='mb-0'>*/}
+                      {/*        <span className='text-danger'> {dataFromManufacturer[0].name}</span>*/}
+                      {/*    </h3>*/}
+                      {/*</div>*/}
+                      <div>
+                          <button
+                            className='btn btn-outline btn-outline-dashed btn-outline-primary btn-active-light-primary mb-3'
+                            onClick={() => {
+                                navigate(-1)
+                            }}
+                          >
+                              <i className='la la-arrow-left'/>
+                              Back
+                          </button>
+
+                      </div>
+                  </div>
                   <Table
                     columns={columns}
                     dataSource={loadSchedule?.data}

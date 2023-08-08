@@ -27,12 +27,12 @@ const entries = {
 function mainConfig() {
     return {
         // enabled/disable optimizations
-        mode: 'development',
+        mode: 'production',
         // console logs output, https://webpack.js.org/configuration/stats/
         stats: 'errors-only',
         performance: {
             // disable warnings hint
-            hints: "warning",
+            hints: "none",
         },
         entry: entries,
         output: {

@@ -1,19 +1,25 @@
 import {Button, Form, Input, message, Modal, Popconfirm, Select, Space, Table} from "antd";
 import {KTCard, KTCardBody, KTSVG} from "../../../../../../_metronic/helpers";
 import React, {useState} from "react";
-import {useLocation} from "react-router-dom";
+import {useLocation, useNavigate} from "react-router-dom";
 import {useAuth} from "../../../../auth";
 import {useMutation, useQuery, useQueryClient} from "react-query";
-import {deleteModel, getModelClasses, getModels, postModel, putModel} from "../../../../../urls";
+import {deleteModel, getManufacturers, getModelClasses, getModels, postModel, putModel} from "../../../../../urls";
 
 const ModelsForManufacturer = () => {
     const {tenant} = useAuth()
     const queryClient = useQueryClient()
+    const navigate = useNavigate()
     const {data: modelData, isLoading: isModelDataLoading} = useQuery('modelQuery',
       () => getModels(tenant))
 
     const {data: modelClassData, isLoading: isModelClassLoading} = useQuery('modelClassQuery',
       () => getModelClasses(tenant))
+
+    const {
+        data: manufacturers,
+        isLoading: isManuLoading
+    } = useQuery('manufacturersQuery', () => getManufacturers(tenant))
 
     const {mutate: addModel} = useMutation(
       (data: any) => postModel(data, tenant), {
@@ -127,6 +133,7 @@ const ModelsForManufacturer = () => {
                   <button className={'btn btn-light-primary'} onClick={() => {
                       setIsUpdating(true)
                       setIsModalOpen(true)
+                      console.log("model", _)
                       form.setFieldsValue(_)
                   }
                   }>
@@ -156,13 +163,10 @@ const ModelsForManufacturer = () => {
 
     const onFinish = async (values: any) => {
         setSubmitLoading(true)
-        isUpdating ? updateModel({...values, manufacturerId: dataFromManufacturer[0].manufacturerId}) : addModel({
-            ...values,
-            manufacturerId: dataFromManufacturer[0].manufacturerId
-        })
+        isUpdating ? updateModel(values) : addModel({...values, manufacturerId: dataFromManufacturer[0].manufacturerId})
         setIsUpdating(false)
-
     }
+    console.log("dataFromManufacturer", dataFromManufacturer)
 
     function handleCancel() {
         form.resetFields()
@@ -173,6 +177,25 @@ const ModelsForManufacturer = () => {
     return (
       <KTCard>
           <KTCardBody>
+              <div className='row mb-0'>
+                  <div className='mb-3'>
+                      <h3 className='mb-0'>
+                          <span className='text-danger'> {dataFromManufacturer[0].name}</span>
+                      </h3>
+                  </div>
+                  <div>
+                      <button
+                        className='btn btn-outline btn-outline-dashed btn-outline-primary btn-active-light-primary'
+                        onClick={() => {
+                            navigate(-1)
+                        }}
+                      >
+                          <i className='la la-arrow-left'/>
+                          Back
+                      </button>
+
+                  </div>
+              </div>
               <div className='d-flex justify-content-between'>
                   <Space style={{marginBottom: 16}}>
                       <Input
@@ -274,6 +297,28 @@ const ModelsForManufacturer = () => {
                               ))}
                           </Select>
                       </Form.Item>
+
+                      <Form.Item
+                        name='manufacturerId'
+                        label='Manufacturer'
+                        // rules={[{required: true}]}
+                        hidden={!isUpdating}
+                      >
+                          <Select
+                            placeholder='Change Manufacturer'
+                            allowClear
+                            loading={isManuLoading}
+                          >
+                              {manufacturers?.data?.map((manufacturer: any) => (
+                                <Select.Option
+                                  key={manufacturer.manufacturerId}
+                                  value={manufacturer.manufacturerId}
+                                >
+                                    {manufacturer.name}
+                                </Select.Option>
+                              ))}
+                          </Select>
+                      </Form.Item>
                   </Form>
               </Modal>
           </KTCardBody>
@@ -281,7 +326,7 @@ const ModelsForManufacturer = () => {
     )
 }
 
-export {ModelsForManufacturer}
+export default ModelsForManufacturer
 
 
 // import React, {useState} from 'react';

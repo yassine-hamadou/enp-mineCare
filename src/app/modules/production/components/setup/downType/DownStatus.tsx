@@ -421,4 +421,4 @@ const DownStatusPage = () => {
     )
 }
 
-export {DownStatusPage}
+export default DownStatusPage

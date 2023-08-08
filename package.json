@@ -113,7 +113,7 @@
   "scripts": {
     "start": "set PORT=3000 && react-scripts start",
     "startL": "PORT=3000 react-scripts start",
-    "build": "react-scripts build",
+    "build": "set GENERATE_SOURCEMAP=false&&react-scripts build",
     "buildOnENP": "set BUILD_PATH=../../mine-care && react-scripts build",
     "ciBuild": "set \"CI=false\" && react-scripts build",
     "test": "react-scripts test",

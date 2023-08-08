@@ -57,7 +57,7 @@ const UpdateRegister = () => {
         isLoading: isFaultLoading
     } = useQuery('faults', () => fetchFaults(tenant));
 
-    const {data: listOfModels} = useQuery('listOfModels', getModels)
+    const {data: listOfModels} = useQuery('listOfModels', () => getModels(tenant))
 
     const {
         data: listOfPlannedMaintenance,
@@ -290,7 +290,7 @@ const UpdateRegister = () => {
                             <span className='text-danger'> {equipmentData.equipmentId}</span>
                         </h3>
                     </div>
-                    <div className=''>
+                    <div>
                         <Link to='/equipment-register'>
                             <button
                               className='btn btn-outline btn-outline-dashed btn-outline-primary btn-active-light-primary'>
@@ -614,67 +614,6 @@ const UpdateRegister = () => {
                           key: '4',
                           children: (
                             <>
-                                <div className='d-flex justify-content-between'>
-                                    <Space style={{marginBottom: 16}}>
-                                        <Button type={"primary"} onClick={() => setShowMeterModal(true)}>Add
-                                            Meter</Button>
-                                    </Space>
-                                    <Modal
-                                      title='Add Meter'
-                                      open={showMeterModal}
-                                      onCancel={handleMeterCancel}
-                                      closable={true}
-                                      footer={null}
-                                    >
-                                        <Form
-                                          layout={'vertical'}
-                                          form={meterUpdateForm}
-                                          // onFinish={onfinish}
-                                          labelCol={{span: 8}}
-                                          wrapperCol={{span: 24}}
-                                          title='Add Meter'
-                                        >
-                                            <Form.Item name='equipmentId' className={'d-none'} label='Equipment ID'
-                                                       rules={[{required: true}]}>
-                                                <Input
-                                                  readOnly
-                                                  disabled
-                                                  type='text'
-                                                  className='form-control form-control-solid'
-                                                />
-                                            </Form.Item>
-                                            <Form.Item name='date' label='Date' rules={[{required: true}]}>
-                                                <DatePicker
-                                                  className='form-control form-control-solid'
-                                                />
-                                            </Form.Item>
-                                            <Form.Item name='previousReading' label='Previous Reading'
-                                                       rules={[{required: true}]}>
-                                                <Input
-                                                  placeholder='Enter Previous Reading'
-                                                  type='number'
-                                                  min={0}
-                                                  className='form-control form-control-solid'
-                                                />
-                                            </Form.Item>
-                                            <Form.Item name='currentReading' label='Current Reading'
-                                                       rules={[{required: true}]}>
-                                                <Input
-                                                  placeholder='Enter Current Reading'
-                                                  type='number'
-                                                  min={0}
-                                                  className='form-control form-control-solid'
-                                                />
-                                            </Form.Item>
-                                            <Button
-                                              type='primary'
-                                              htmlType='submit'
-                                            >
-                                                Submit
-                                            </Button>
-                                        </Form>
-                                    </Modal>
-                                </div>
                                 <Table
                                   bordered
                                   columns={metersColumns}
@@ -790,62 +729,9 @@ const UpdateRegister = () => {
                                 />
                             </>
                           ),
-                      }
+                      },
                   ]}
                 />
-                <Modal
-                  title='Add Meter'
-                  open={showMeterModal}
-                  onCancel={handleMeterCancel}
-                  closable={true}
-                  footer={null}
-                >
-                    <Form
-                      layout={'vertical'}
-                      form={meterUpdateForm}
-                      // onFinish={onfinish}
-                      labelCol={{span: 8}}
-                      wrapperCol={{span: 24}}
-                      title='Add Meter'
-                    >
-                        <Form.Item name='equipmentId' className={'d-none'} label='Equipment ID'
-                                   rules={[{required: true}]}>
-                            <Input
-                              readOnly
-                              disabled
-                              type='text'
-                              className='form-control form-control-solid'
-                            />
-                        </Form.Item>
-                        <Form.Item name='date' label='Date' rules={[{required: true}]}>
-                            <DatePicker
-                              className='form-control form-control-solid'
-                            />
-                        </Form.Item>
-                        <Form.Item name='previousReading' label='Previous Reading' rules={[{required: true}]}>
-                            <Input
-                              placeholder='Enter Previous Reading'
-                              type='number'
-                              min={0}
-                              className='form-control form-control-solid'
-                            />
-                        </Form.Item>
-                        <Form.Item name='currentReading' label='Current Reading' rules={[{required: true}]}>
-                            <Input
-                              placeholder='Enter Current Reading'
-                              type='number'
-                              min={0}
-                              className='form-control form-control-solid'
-                            />
-                        </Form.Item>
-                        <Button
-                          type='primary'
-                          htmlType='submit'
-                        >
-                            Submit
-                        </Button>
-                    </Form>
-                </Modal>
             </KTCardBody>
         </KTCard>
     </>

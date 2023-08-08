@@ -44,18 +44,20 @@ export const getHours = (tenant: any) => {
 export const putHours = (data: any) => {
     return axios.put(`${ENP_URL}/HoursEntry/${data.id}`, data)
 }
-export const fetchCompartments = () => {
-    return axios.get(`${ENP_URL}/Compartment`)
+export const fetchCompartments = (tenantId: string) => {
+    return axios.get(`${ENP_URL}/Compartment/tenant/${tenantId}`)
 }
 export const fetchLubeBrands = () => {
     return axios.get(`${ENP_URL}/LubeBrands`)
 }
-export const fetchRefillTypes = () => {
-    return axios.get(`${ENP_URL}/RefillType`)
+export const fetchRefillTypes = (tenantId: any) => {
+    return axios.get(`${ENP_URL}/RefillType/tenant/${tenantId}`)
 }
+
 export const fetchLubeConfigs = () => {
     return axios.get(`${ENP_URL}/LubeConfigs`)
 }
+
 export const fetchLubeGrade = () => {
     return axios.get(`${ENP_URL}/LubeGrades`)
 }
@@ -88,16 +90,22 @@ export const fetchFaults = (tenant: any) => {
     return axios.get(`${ENP_URL}/FaultEntriesApi/tenant/${tenant}`)
 }
 
-export function getEquipment(tenant: any) {
-    return axios.get(`${ENP_URL}/equipments/tenant/${tenant}`);
+export function getEquipment(tenantId: any) {
+    return axios.get(`${ENP_URL}/equipments/tenant/${tenantId}`);
 }
 
-export function postEquipment(data: any) {
+export function postEquipment(data: any, tenantId: any) {
     return axios.post(`${ENP_URL}/equipments`, data);
 }
 
-export function getBacklogs(tenant: any) {
-    return axios.get(`${ENP_URL}/backlogs/tenant/${tenant}`);
+export function getBacklogs(tenantId: any) {
+    return axios.get(`${ENP_URL}/backlogs/tenant/${tenantId}`);
+}
+
+export function getCompletedBacklogs(tenantId: any, pageNumber: any, pageSize: any) {
+    console.log('pageNumber', pageNumber)
+    console.log('pageSize', pageSize)
+    return axios.get(`${ENP_URL}/backlogs/tenant/${tenantId}/status/Completed?pageNumber=${pageNumber}&pageSize=${pageSize}`);
 }
 
 export function postBacklogs(data: any, tenantId: any) {

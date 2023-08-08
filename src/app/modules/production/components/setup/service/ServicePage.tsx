@@ -240,4 +240,4 @@ const ServicesPage = () => {
     )
 }
 
-export {ServicesPage}
+export default ServicesPage

@@ -1,5 +1,4 @@
 /* eslint-disable react/jsx-no-target-blank */
-import {useIntl} from 'react-intl'
 import {AsideMenuItemWithSub} from './AsideMenuItemWithSub'
 import {AsideMenuItem} from './AsideMenuItem'
 import {Link} from 'react-router-dom'
@@ -8,21 +7,20 @@ import {checkIsActive, KTSVG} from '../../../helpers'
 import {useLocation} from 'react-router'
 
 export function AsideMenuMain() {
-    const intl = useIntl()
     const {pathname} = useLocation()
     const isDashboardActive = checkIsActive(pathname, '/dashboard')
-
+ 
     return (
       <>
           <div className='menu-item'>
               <Link
-                className={clsx('menu-link without-sub ml0', {active: isDashboardActive})}
+                className={clsx('menu-link without-sub', {active: isDashboardActive})}
                 to='/dashboard'
               >
           <span className='menu-icon'>
             <KTSVG path='/media/icons/duotune/art/art002.svg' className='svg-icon-2'/>
           </span>
-                  <span className='menu-title'>{intl.formatMessage({id: 'MENU.DASHBOARD'})}</span>
+                  <span className='menu-title'>{"Dashboard"}</span>
               </Link>
           </div>
           <AsideMenuItem to={'equipment-register'} title={'Equipment Register'} fontIcon='bi-archive'

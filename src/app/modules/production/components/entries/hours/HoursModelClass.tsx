@@ -657,12 +657,10 @@
 /////////////////////////////////////////////
 ////////////////////////////////////////////
 /////`HoursPage.tsx`////////////////////////
-
-
 import type {ProColumns} from '@ant-design/pro-components';
 import {EditableProTable, ErrorBoundary, ProCard} from '@ant-design/pro-components';
 import {Button, Input, message, Space, Tabs} from 'antd';
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import {useMutation, useQuery, useQueryClient} from "react-query";
 import {addHours, getEquipment, getHours} from "../../../../../urls";
 import {useNavigate} from "react-router-dom";
@@ -672,11 +670,11 @@ import dayjs from "dayjs";
 import DevexpressDashboardComponent from "../../../../../pages/dashboard/DevexpressDashboardComponent";
 
 type DataSourceType = {
+    date: string;
+    currentReading: number;
+    allowRowSubmit: boolean;
     id: React.Key;
-    title?: string;
-    decs?: string;
     state?: string;
-    created_at?: string;
     children?: DataSourceType[];
 };
 
@@ -685,6 +683,7 @@ const HoursModelClass: any = () => {
     const {data: defaultData, isLoading} = useQuery('all-hours', () => getHours(tenant), {
         refetchOnWindowFocus: false
     })
+
 
     const queryClient = useQueryClient()
     const navigate = useNavigate()
@@ -708,79 +707,20 @@ const HoursModelClass: any = () => {
 
     const [record, setRecord] =
       useState<DataSourceType | any>(undefined);
-    const [allowSubmit, setAllowSubmit] = useState<boolean>(false)
 
     const [editableKeys, setEditableRowKeys] =
       useState<React.Key[]>(() => defaultData?.data?.map((item: any) => item.id));
-    // const equipHours: [] = allEquipment?.data?.map((equip: any) => {
-    //   defaultData?.data?.map((hours: any) => {
-    //       console.log('equip', equip)
-    //       console.log('hours', hours)
-    //       if (equip.equipmentId.trim() === hours.fleetId.trim()) {
-    //         return {
-    //           ...hours,
-    //           fleetId: equip.equipmentId
-    //         }
-    //       }
-    //     }
-    //   )
-    // })
-    // console.log("sdsd", equipHours)
     const [rowValues, setRowValues] = useState<any>({});
-    const [allSubmi, setAllowsubmi] = useState<any>({});
-    useEffect(() => {
-        setEditableRowKeys(() => defaultData?.data?.map((item: any) => item.id))
-        Object.values(allSubmi).every((item: any) => item === true) ? setAllowSubmit(true) : setAllowSubmit(false)
-    }, [defaultData?.data, record, allSubmi]);
-
+    // useEffect(() => {
+    //     setEditableRowKeys(() => defaultData?.data?.map((item: any) => item.id))
+    //     Object.values(allSubmi).every((item: any) => item === true) ? setAllowSubmit(true) : setAllowSubmit(false)
+    // }, [allSubmi, defaultData?.data]);
     const columns: ProColumns<DataSourceType>[] = [
         {
             title: 'Equipment ID',
             dataIndex: 'fleetId',
-            // width: '30%',
             editable: false,
-
-            // formItemProps: {
-            //   rules: [
-            //     {
-            //       required: true,
-            //       whitespace: true,
-            //       message: 'message',
-            //     },
-            //     {
-            //       message: 'message',
-            //       pattern: /[0-9]/,
-            //     },
-            //     {
-            //       max: 16,
-            //       whitespace: true,
-            //       message: '1',
-            //     },
-            //     {
-            //       min: 6,
-            //       whitespace: true,
-            //       message: '6',
-            //     },
-            //   ],
-            // },
         },
-        // {
-        //   title: 'Model & Manufacturer',
-        //   key: 'state',
-        //   dataIndex: 'state',
-        //   valueType: 'select',
-        //   valueEnum: {
-        //     all: {text: 'text', status: 'Default'},
-        //     open: {
-        //       text: 'text',
-        //       status: 'Error',
-        //     },
-        //     closed: {
-        //       text: 'text',
-        //       status: 'Success',
-        //     },
-        //   },
-        // },
         {
             title: 'Previous Reading Date',
             dataIndex: 'date',
@@ -802,87 +742,54 @@ const HoursModelClass: any = () => {
             dataIndex: 'today',
             onCell: (record) => {
                 return {
-                    onFocus: () => {
+                    onFocus: (value) => {
                         setRecord(record)
                         console.log('record during date', record)
                     },
-
                 }
-            },
-            fieldProps: {
-                format: 'DD-MM-YYYY'
             },
             formItemProps: {
                 rules: [
                     {
                         validator(rule, value) {
-                            console.log('rule', rule);
-                            console.log('value', value);
-                            //@ts-ignore
-                            // console.log('get field value', dayjs(JSON.parse(localStorage.getItem('record'))?.date))
-                            // if (localStorage.getItem('record')) {
-                            //   if (!value) {
-                            //     return Promise.reject('Please select a date');
-                            //   }
-                            //   //@ts-ignore
-                            //   else if (dayjs(value).isBefore(dayjs(JSON.parse(localStorage.getItem('record'))?.date))) {
-                            //     return Promise.reject('Date cannot be before previous reading date');
-                            //   } else if (dayjs(value).isAfter(dayjs())) {
-                            //     return Promise.reject('Date cannot be after today');
-                            //   } else {
-                            //     return Promise.resolve('Resolved');
-                            //   }
-                            // }
 
-
-                            //new code
+                            //new
                             if (!value) {
-                                setAllowsubmi((allowSubmit: any) => {
-                                    return {
-                                        ...allowSubmit,
-                                        [record.id]: false, // Assuming each row has a unique `id` field
-                                    };
-                                })
                                 return Promise.reject('Please select a date');
-                            }
-                              //@ts-ignore
-                            // else if (dayjs(value).isBefore(dayjs(JSON.parse(localStorage.getItem('record'))?.date))) {
-                            else if (dayjs(value).isBefore(dayjs(record?.date))) {
-                                setAllowsubmi((allowSubmit: any) => {
-                                    return {
-                                        ...allowSubmit,
-                                        [record.id]: false, // Assuming each row has a unique `id` field
-                                    };
-                                })
+                            } else if (dayjs(value).isBefore(dayjs(record?.date))) {
                                 return Promise.reject('Date cannot be before previous reading date');
                             } else if (dayjs(value).isAfter(dayjs())) {
-                                setAllowsubmi((allowSubmit: any) => {
-                                    return {
-                                        ...allowSubmit,
-                                        [record.id]: false, // Assuming each row has a unique `id` field
-                                    };
-                                })
                                 return Promise.reject('Date cannot be after today');
                             } else {
-                                setAllowsubmi((allowSubmit: any) => {
-                                    return {
-                                        ...allowSubmit,
-                                        [record.id]: true, // Assuming each row has a unique `id` field
-                                    };
-                                })
                                 return Promise.resolve('Resolved');
                             }
                         } //end of validator
                     }
                 ]
             },
-            // fieldProps: (form, {rowKey, rowIndex}) => {
-            // // get this row's current reading
-            // // const currentReading = form.getFieldValue(`${rowKey}`)
-            // console.log('currentReading', currentReading)
-            // // validate that the current reading is greater than the previous reading
-            // form.validateFields([`${rowKey}`]).then(r => r)
-            // },
+            fieldProps: (form, {rowKey, rowIndex, entity}) => {
+                // get this row's current reading
+                console.log('entity', entity)
+                console.log('rowIndex', rowIndex)
+
+
+                const prevReadingOnTable = entity?.currentReading
+                const prevReadingDateOnTable = entity?.date
+
+                // Get the value of the "Current Reading" field
+                const currentReadingEntered = form.getFieldValue(`${rowKey}`)?.zeroReading;
+                // Get the value of the "Current Reading Date" field
+                const currentReadingDateEntered = form.getFieldValue(`${rowKey}`)?.today;
+
+                // Perform cross-field validation
+                if (currentReadingEntered && currentReadingDateEntered) {
+                    if (dayjs(currentReadingDateEntered).isBefore(dayjs(prevReadingDateOnTable))) {
+                        entity.allowRowSubmit = false
+                    } else if (dayjs(currentReadingDateEntered).isAfter(dayjs())) {
+                        entity.allowRowSubmit = false
+                    } else entity.allowRowSubmit = currentReadingEntered > prevReadingOnTable;
+                }
+            },
         },
         {
             title: 'Current Reading',
@@ -900,67 +807,54 @@ const HoursModelClass: any = () => {
                 rules: [
                     {
                         validator(rule, value) {
-                            //@ts-ignore
-                            // if (record) {
-                            //   if (!value) {
-                            //     setAllowsubmi((allowSubmit: any) => {
-                            //       return {
-                            //         ...allowSubmit,
-                            //         [record.id]: false, // Assuming each row has a unique `id` field
-                            //       };
-                            //     })
-                            //     return Promise.reject('Please enter a reading');
-                            //   }
-                            //   //@ts-ignore
-                            //   else if (value <= record?.currentReading) {
-                            //     setAllowsubmi((allowSubmit: any) => {
-                            //       return {
-                            //         ...allowSubmit,
-                            //         [record.id]: false, // Assuming each row has a unique `id` field
-                            //       };
-                            //     })
-                            //     return Promise.reject('Reading should be more than previous reading');
-                            //   } else {
-                            //     setAllowsubmi((allowSubmit: any) => {
-                            //       return {
-                            //         ...allowSubmit,
-                            //         [record.id]: true, // Assuming each row has a unique `id` field
-                            //       };
-                            //     })
-                            //     return Promise.resolve();
-                            //   }
-                            // }
-
                             //new code
                             if (!value) {
-                                setAllowsubmi((allowSubmit: any) => {
-                                    return {
-                                        ...allowSubmit,
-                                        [record.id]: false, // Assuming each row has a unique `id` field
-                                    };
-                                })
                                 return Promise.reject('Please enter a reading');
                             } else if (value <= record?.currentReading) {
-                                setAllowsubmi((allowSubmit: any) => {
-                                    return {
-                                        ...allowSubmit,
-                                        [record.id]: false, // Assuming each row has a unique `id` field
-                                    };
-                                })
                                 return Promise.reject('Reading should be more than previous reading');
                             } else {
-                                setAllowsubmi((allowSubmit: any) => {
-                                    return {
-                                        ...allowSubmit,
-                                        [record.id]: true, // Assuming each row has a unique `id` field
-                                    };
-                                })
-                                return Promise.resolve();
+                                let formattedTodayDate = dayjs(record?.today).format()
+                                let formattedPreviousDate = dayjs(record?.date).format()
+                                console.log('formattedTodayDate', formattedTodayDate)
+                                console.log('formattedPreviousDate', formattedPreviousDate)
+                                let totalHoursBetweenLastReadingAndTodayDate = dayjs(formattedTodayDate).diff(dayjs(formattedPreviousDate), 'hour')
+                                console.log('totalHoursBetweenLastReadingAndTodayDate', totalHoursBetweenLastReadingAndTodayDate)
+                                if (value > (record?.currentReading + totalHoursBetweenLastReadingAndTodayDate)) {
+                                    return Promise.reject(`Reading cannot be more than ${record?.currentReading + totalHoursBetweenLastReadingAndTodayDate}`);
+                                } else {
+                                    return Promise.resolve();
+                                }
                             }
                         }
                     }
                 ]
-            }
+            },
+            fieldProps: (form, {rowKey, rowIndex, entity}) => {
+                // get this row's current reading
+                console.log('rowKey ', rowKey)
+                console.log('entity', entity)
+                console.log('rowIndex', rowIndex)
+
+                const prevReadingOnTable = entity?.currentReading
+                const prevReadingDateOnTable = entity?.date
+
+                // Get the value of the "Current Reading" field
+                const currentReadingEntered = form.getFieldValue(`${rowKey}`)?.zeroReading;
+                // Get the value of the "Current Reading Date" field
+                const currentReadingDateEntered = form.getFieldValue(`${rowKey}`)?.today;
+
+                // Perform cross-field validation
+                let formattedTodayDate = dayjs(currentReadingDateEntered).format()
+                let formattedPreviousDate = dayjs(prevReadingDateOnTable).format()
+                let totalHoursBetweenLastReadingAndTodayDate = dayjs(formattedTodayDate).diff(dayjs(formattedPreviousDate), 'hour')
+                entity.allowRowSubmit = !!(currentReadingEntered && currentReadingDateEntered &&
+                  !(dayjs(currentReadingDateEntered).isBefore(dayjs(prevReadingDateOnTable))) &&
+                  !(dayjs(currentReadingDateEntered).isAfter(dayjs())) &&
+                  !(currentReadingEntered > (prevReadingOnTable + totalHoursBetweenLastReadingAndTodayDate)) &&
+                  !(currentReadingEntered < prevReadingOnTable)
+                );
+
+            },
 
             // fieldProps: (form, {rowKey, rowIndex}) => {
             //get this row's current reading
@@ -979,10 +873,12 @@ const HoursModelClass: any = () => {
             valueType: 'textarea',
         }
     ];
-    const saveAndContinue = async () => {
-        console.log('dataSource', dataSource)
+
+    const saveAndContinue = async (rowsToBeSubmitted: any) => {
+        console.log('rowsToBeSubmitted', rowsToBeSubmitted)
+        console.log('datasource', dataSource)
         try {
-            dataSource?.map((item: any) => {
+            rowsToBeSubmitted?.map((item: any) => {
                 if (item.zeroReading) {
                     mutateHours({
                         fleetId: item.fleetId,
@@ -1053,14 +949,21 @@ const HoursModelClass: any = () => {
                                 size={'large'}
                                 key="save"
                                 onClick={record ? () => {
-                                      console.log('submitt?', allSubmi)
-                                      console.log('allowSubmit', allowSubmit)
-                                      console.log('submitt?', Object.values(allSubmi).every((item: any) => item === true))
-                                      if (allowSubmit) {
-                                          saveAndContinue()
+
+
+                                      const rowsToBeSubmitted = dataSource?.filter((item: any) => item.allowRowSubmit === true)
+                                      console.log('rowsToBeSubmitted', rowsToBeSubmitted)
+                                      console.log('datasource outside save', dataSource)
+                                      if (rowsToBeSubmitted?.length > 0) {
+                                          saveAndContinue(rowsToBeSubmitted)
                                       } else {
                                           message.error('Kindly resolve all issues before submitting!').then(r => r)
                                       }
+                                      // if (allowSubmit) {
+                                      //     saveAndContinue()
+                                      // } else {
+                                      //     message.error('Kindly resolve all issues before submitting!').then(r => r)
+                                      // }
                                   }
                                   : () => {
                                       message.error('No Hours Entered').then(r => r)
@@ -1073,32 +976,29 @@ const HoursModelClass: any = () => {
                       </div>
                       <ErrorBoundary>
                           <EditableProTable<DataSourceType>
-                            // headerTitle="Batch Entries"
                             columns={columns}
                             loading={isLoading}
                             rowKey="id"
                             scroll={{
-                                x: 960,
+                                x: 1200,
                             }}
                             pagination={{
                                 pageSize: 10,
+                                showSizeChanger: false,
                             }}
-                            value={filterData(defaultData?.data?.map(
-                              (item: any) => {
+                            value={filterData(defaultData?.data?.map((item: any) => {
                                   return {
                                       ...item,
                                       zeroReading: 0,
                                       today: new Date(),
+                                      allowRowSubmit: false, // Allow row submit only if all fields are valid
+                                      ...rowValues[item.id], //necessary for to get the value of the row when the user enters a value
                                   }
-                              }
-                            ).map((item: any) => ({
-                                ...item,
-                                ...rowValues[item.id], // Assuming each row has a unique `id` field
-                            })))}
+                              })
+                            )}
                             onChange={setDataSource}
                             //do not show add button
                             recordCreatorProps={false}
-
                             editable={{
                                 // type: 'multiple',
                                 editableKeys: editableKeys ? editableKeys : defaultData?.data?.map((item: any) => item.id),
@@ -1108,9 +1008,9 @@ const HoursModelClass: any = () => {
                                     setRowValues((prevRowValues: any) => {
                                         return {
                                             ...prevRowValues,
-                                            [record.id]: record, // Assuming each row has a unique `id` field
+                                            [record?.id]: record, // Assuming each row has a unique `id` field
                                         };
-                                    });
+                                    }); // Store the latest value for the changed row
                                 },
                                 onChange: setEditableRowKeys,
                             }}

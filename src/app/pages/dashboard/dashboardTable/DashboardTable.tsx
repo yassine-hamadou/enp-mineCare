@@ -15,4 +15,4 @@ const DashboardTable = () => {
     )
 }
 
-export {DashboardTable}
+export default DashboardTable
