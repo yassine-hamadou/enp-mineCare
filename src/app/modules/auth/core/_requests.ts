@@ -13,10 +13,10 @@ export const REQUEST_PASSWORD_URL = `${API_URL}/forgot_password`
 
 // Server should return AuthModel
 export function login(username: string, password: string) {
-  return axios.post(LOGIN_URL, {
-    username,
-    password,
-  })
+    return axios.post(LOGIN_URL, {
+        username,
+        password,
+    })
 }
 
 // Server should return AuthModel
@@ -27,42 +27,42 @@ export function register(
   password: string,
   password_confirmation: string
 ) {
-  return axios.post(REGISTER_URL, {
-    email,
-    first_name: firstname,
-    last_name: lastname,
-    password,
-    password_confirmation,
-  })
+    return axios.post(REGISTER_URL, {
+        email,
+        first_name: firstname,
+        last_name: lastname,
+        password,
+        password_confirmation,
+    })
 }
 
 // Server should return object => { result: boolean } (Is Email in DB)
 export function requestPassword(email: string) {
-  return axios.post<{ result: boolean }>(REQUEST_PASSWORD_URL, {
-    email,
-  })
+    return axios.post<{ result: boolean }>(REQUEST_PASSWORD_URL, {
+        email,
+    })
 }
 
 export function getUserByToken(token: string) {
-  return axios.post<UserModel>(GET_USER_BY_ACCESSTOKEN_URL, {
-    jwtToken: token,
-  })
+    return axios.post<UserModel>(GET_USER_BY_ACCESSTOKEN_URL, {
+        jwtToken: token,
+    })
 }
 
 export function parseJwt(token: string) {
-  console.log('token', token)
-  if (!token) {
-    return;
-  }
+    console.log('token', token)
+    if (!token) {
+        return;
+    }
 
-  const parts: string[] = token?.split('.');
-  if (parts.length !== 3) {
-    throw new Error('JWT must have 3 parts');
-  }
-  const header = JSON.parse(window.atob(parts[0]));
-  const payload = JSON.parse(window.atob(parts[1]));
-  return {
-    header,
-    payload
-  }
+    const parts: string[] = token?.split('.');
+    if (parts.length !== 3) {
+        throw new Error('JWT must have 3 parts');
+    }
+    const header = JSON.parse(window.atob(parts[0]));
+    const payload = JSON.parse(window.atob(parts[1]));
+    return {
+        header,
+        payload
+    }
 }

@@ -289,4 +289,4 @@ const SectionsPage = () => {
     )
 }
 
-export {SectionsPage}
+export default SectionsPage

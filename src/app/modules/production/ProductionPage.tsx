@@ -1,38 +1,41 @@
 import {Navigate, Outlet, Route, Routes} from 'react-router-dom'
 import {PageLink, PageTitle} from '../../../_metronic/layout/core'
-import {ScheduleInfo} from './components/scheduleInfo/ScheduleInfo'
-import {WorkTypePage} from './components/setup/workType/WorkType'
-import {DownTypePage} from './components/setup/downType/DownType'
-import {CustodianPage} from './components/setup/custodian/Custodian'
-import {LocationPage} from './components/setup/location/LocationPage'
-import {FleetPage} from './components/setup/fleet/FleetPage'
-import {ServicesPage} from './components/setup/service/ServicePage'
-import {GroupsPage} from './components/setup/groups/GroupsPage'
-import {ItemsPage} from './components/setup/items/ItemPage'
-import {SectionsPage} from './components/setup/sections/Sections'
-import {LubePage} from './components/setup/lube/Lube'
-import {CompartmentPage} from './components/setup/compartment/Compartment'
-import {RefillPage} from './components/setup/refill/Refill'
-import {OilGradePage} from './components/setup/oilGrade/OilGrade'
-import {OilTypePage} from './components/setup/oilType/OilType'
-import {FaultTable} from './components/entries/fault_d/FaultTable'
-import {LubeConfig} from './components/setup/lubeConfig/LubeConfig'
-import {ItemValuePage} from './components/setup/itemValue/ItemValuePage'
-import ModelClass from "./components/setup/equipment/ModelClass";
-import Manufacturer from "./components/setup/equipment/Manufacturer";
-import ModelsForManufacturer from "./components/setup/equipment/ModelsForManufacturer";
-import EquipmentSchedule from "./components/entries/equipment/EquipmentSchedule";
-import {AllReportPage} from './components/report/AllReportPage'
-import {CategorySetup} from './components/setup/category/CategorySetup'
-import GroundEngagingTools from './components/entries/changeOut/get/GroundEngagingTools'
+import TopBarProgress from 'react-topbar-progress-indicator'
 import {ErrorBoundary, PageLoading} from "@ant-design/pro-components";
-import {lazy, Suspense} from "react";
-import ReportComponent from "./components/report/ReportComponent/ReportComponent";
-import Backlog from './components/entries/backlog/Backlog'
-import Priority from './components/setup/backlogs/Priority'
-import Source from './components/setup/backlogs/Source'
-import Sequence from './components/setup/service/sequence/Sequence'
-import {ViewBacklog} from './components/entries/backlog/ViewBacklog'
+import React, {lazy, Suspense} from "react";
+
+const ScheduleInfo = lazy(() => import('./components/scheduleInfo/ScheduleInfo'))
+const WorkTypePage = lazy(() => import('./components/setup/workType/WorkType'))
+const DownTypePage = lazy(() => import('./components/setup/downType/DownType'))
+const CustodianPage = lazy(() => import('./components/setup/custodian/Custodian'))
+const LocationPage = lazy(() => import('./components/setup/location/LocationPage'))
+const FleetPage = lazy(() => import('./components/setup/fleet/FleetPage'))
+const ServicesPage = lazy(() => import('./components/setup/service/ServicePage'))
+const GroupsPage = lazy(() => import('./components/setup/groups/GroupsPage'))
+const ItemsPage = lazy(() => import('./components/setup/items/ItemPage'))
+const SectionsPage = lazy(() => import('./components/setup/sections/Sections'))
+const LubePage = lazy(() => import('./components/setup/lube/Lube'))
+const CompartmentPage = lazy(() => import('./components/setup/compartment/Compartment'))
+const RefillPage = lazy(() => import('./components/setup/refill/Refill'))
+const OilGradePage = lazy(() => import('./components/setup/oilGrade/OilGrade'))
+const OilTypePage = lazy(() => import('./components/setup/oilType/OilType'))
+const FaultTable = lazy(() => import('./components/entries/fault_d/FaultTable'))
+const LubeConfig = lazy(() => import('./components/setup/lubeConfig/LubeConfig'))
+const ItemValuePage = lazy(() => import('./components/setup/itemValue/ItemValuePage'))
+const Manufacturer = lazy(() => import('./components/setup/equipment/Manufacturer'))
+const EquipmentSchedule = lazy(() => import('./components/entries/equipment/EquipmentSchedule'))
+const AllReportPage = lazy(() => import('./components/report/AllReportPage'))
+const CategorySetup = lazy(() => import('./components/setup/category/CategorySetup'))
+const GroundEngagingTools = lazy(() => import('./components/entries/changeOut/get/GroundEngagingTools'))
+const ReportComponent = lazy(() => import('./components/report/ReportComponent/ReportComponent'))
+const Backlog = lazy(() => import('./components/entries/backlog/Backlog'))
+const Priority = lazy(() => import('./components/setup/backlogs/Priority'))
+const Source = lazy(() => import('./components/setup/backlogs/Source'))
+const Sequence = lazy(() => import('./components/setup/service/sequence/Sequence'))
+const ViewBacklog = lazy(() => import('./components/entries/backlog/ViewBacklog'))
+const DownStatusPage = lazy(() => import('./components/setup/downType/DownStatus'))
+const ModelsForManufacturer = lazy(() => import('./components/setup/equipment/ModelsForManufacturer'))
+const ModelClass = lazy(() => import('./components/setup/equipment/ModelClass'))
 
 const EquipmentRegister = lazy(() => import('./components/equipment-register/EquipmentRegister'))
 const AddEquipRegister = lazy(() => import('./components/equipment-register/Add'))
@@ -58,12 +61,11 @@ const ProductionPage: React.FC = () => {
                 element={
                     <>
                         <PageTitle breadcrumbs={accountBreadCrumbs}>Equipment Register</PageTitle>
-                        <Suspense fallback={<PageLoading/>}>
+                        <Suspense fallback={<TopBarProgress/>}>
                             <ErrorBoundary>
                                 <EquipmentRegister/>
                             </ErrorBoundary>
                         </Suspense>
-                        {/*dfs*/}
                     </>
                 }
               />
@@ -72,7 +74,7 @@ const ProductionPage: React.FC = () => {
                 element={
                     <>
                         <PageTitle breadcrumbs={accountBreadCrumbs}>Add Equipment</PageTitle>
-                        <Suspense fallback={<PageLoading/>}>
+                        <Suspense fallback={<TopBarProgress/>}>
                             <ErrorBoundary>
                                 <AddEquipRegister/>
                             </ErrorBoundary>
@@ -85,7 +87,7 @@ const ProductionPage: React.FC = () => {
                 element={
                     <>
                         <PageTitle breadcrumbs={accountBreadCrumbs}>Update Equipment</PageTitle>
-                        <Suspense fallback={<PageLoading/>}>
+                        <Suspense fallback={<TopBarProgress/>}>
                             <ErrorBoundary>
                                 <UpdateRegister/>
                             </ErrorBoundary>
@@ -107,8 +109,7 @@ const ProductionPage: React.FC = () => {
                 element={
                     <>
                         <PageTitle breadcrumbs={accountBreadCrumbs}>Equipment Schedule</PageTitle>
-                        {/*<Overview />*/}
-                        <Suspense fallback={<PageLoading/>}>
+                        <Suspense fallback={<TopBarProgress/>}>
                             <ErrorBoundary>
                                 <EquipmentSchedule/>
                             </ErrorBoundary>
@@ -133,7 +134,11 @@ const ProductionPage: React.FC = () => {
                     element={
                         <>
                             <PageTitle breadcrumbs={accountBreadCrumbs}>Backlog</PageTitle>
-                            <Backlog/>
+                            <Suspense fallback={<TopBarProgress/>}>
+                                <ErrorBoundary>
+                                    <Backlog/>
+                                </ErrorBoundary>
+                            </Suspense>
                         </>
                     }
                   />
@@ -144,7 +149,11 @@ const ProductionPage: React.FC = () => {
                             <PageTitle breadcrumbs={accountBreadCrumbs}>
                                 {`View Backlog`}
                             </PageTitle>
-                            <ViewBacklog/>
+                            <Suspense fallback={<TopBarProgress/>}>
+                                <ErrorBoundary>
+                                    <ViewBacklog/>
+                                </ErrorBoundary>
+                            </Suspense>
                         </>
                     }
                   />
@@ -162,7 +171,11 @@ const ProductionPage: React.FC = () => {
                     element={
                         <>
                             <PageTitle breadcrumbs={accountBreadCrumbs}>Change Out</PageTitle>
-                            <LubePage/>
+                            <Suspense fallback={<TopBarProgress/>}>
+                                <ErrorBoundary>
+                                    <LubePage/>
+                                </ErrorBoundary>
+                            </Suspense>
                         </>
                     }
                   />
@@ -171,7 +184,11 @@ const ProductionPage: React.FC = () => {
                     element={
                         <>
                             <PageTitle breadcrumbs={accountBreadCrumbs}>Ground Engaging Tools</PageTitle>
-                            <GroundEngagingTools/>
+                            <Suspense fallback={<TopBarProgress/>}>
+                                <ErrorBoundary>
+                                    <GroundEngagingTools/>
+                                </ErrorBoundary>
+                            </Suspense>
                         </>
                     }
                   />
@@ -181,8 +198,11 @@ const ProductionPage: React.FC = () => {
                 element={
                     <>
                         <PageTitle breadcrumbs={accountBreadCrumbs}>Maintenance Schedule</PageTitle>
-                        <ScheduleInfo/>
-                        <br/>
+                        <Suspense fallback={<TopBarProgress/>}>
+                            <ErrorBoundary>
+                                <ScheduleInfo/>
+                            </ErrorBoundary>
+                        </Suspense>
                     </>
                 }
               >
@@ -214,19 +234,14 @@ const ProductionPage: React.FC = () => {
                   <Route path='' element={
                       <>
                           <PageTitle breadcrumbs={accountBreadCrumbs}>Fault/Resolution</PageTitle>
-                          <FaultTable/>
+                          <Suspense fallback={<TopBarProgress/>}>
+                              <ErrorBoundary>
+                                  <FaultTable/>
+                              </ErrorBoundary>
+                          </Suspense>
                       </>
                   }/>
               </Route>
-              {/*<Route*/}
-              {/*  path='resolution'*/}
-              {/*  element={*/}
-              {/*    <>*/}
-              {/*      <PageTitle breadcrumbs={accountBreadCrumbs}>All Resolution</PageTitle>*/}
-              {/*      <ResolutionTable />*/}
-              {/*    </>*/}
-              {/*  }*/}
-              {/*/>*/}
               <Route
                 path={'hours/*'}
                 element={
@@ -244,19 +259,14 @@ const ProductionPage: React.FC = () => {
                     element={
                         <>
                             <PageTitle breadcrumbs={accountBreadCrumbs}>Hours Entries</PageTitle>
-                            <HoursModelClass/>
+                            <Suspense fallback={<TopBarProgress/>}>
+                                <ErrorBoundary>
+                                    <HoursModelClass/>
+                                </ErrorBoundary>
+                            </Suspense>
                         </>
                     }
                   />
-                  {/*<Route*/}
-                  {/*  path=':modelClassId'*/}
-                  {/*  element={*/}
-                  {/*    <>*/}
-                  {/*      <PageTitle breadcrumbs={accountBreadCrumbs}>All Entries</PageTitle>*/}
-                  {/*      <HoursPage/>*/}
-                  {/*    </>*/}
-                  {/*  }*/}
-                  {/*/>*/}
               </Route>
               <Route index element={<Navigate to='/dashboard'/>}/>
           </Route>
@@ -264,7 +274,6 @@ const ProductionPage: React.FC = () => {
             path='/setup/*'
             element={
                 <>
-                    {/*<ProductionHeader />*/}
                     <Outlet/>
                 </>
             }
@@ -282,7 +291,11 @@ const ProductionPage: React.FC = () => {
                     element={
                         <>
                             <PageTitle breadcrumbs={accountBreadCrumbs}>Sequence</PageTitle>
-                            <Sequence/>
+                            <Suspense fallback={<TopBarProgress/>}>
+                                <ErrorBoundary>
+                                    <Sequence/>
+                                </ErrorBoundary>
+                            </Suspense>
                         </>
                     }
                   />
@@ -291,9 +304,12 @@ const ProductionPage: React.FC = () => {
                 path='equipment/model-class'
                 element={
                     <>
-                        <PageTitle breadcrumbs={accountBreadCrumbs}>All Model Class</PageTitle>
-                        <ModelClass/>
-                        {/*<FleetPage />*/}
+                        <PageTitle breadcrumbs={accountBreadCrumbs}>All Model Class </PageTitle>
+                        <Suspense fallback={<TopBarProgress/>}>
+                            <ErrorBoundary>
+                                <ModelClass/>
+                            </ErrorBoundary>
+                        </Suspense>
                     </>
                 }
               />
@@ -307,16 +323,24 @@ const ProductionPage: React.FC = () => {
               >
                   <Route path='' element={
                       <>
-                          <PageTitle breadcrumbs={accountBreadCrumbs}>All Manufacturers</PageTitle>
-                          <Manufacturer/>
+                          <PageTitle breadcrumbs={accountBreadCrumbs}>All Manufacturers </PageTitle>
+                          <Suspense fallback={<TopBarProgress/>}>
+                              <ErrorBoundary>
+                                  <Manufacturer/>
+                              </ErrorBoundary>
+                          </Suspense>
                       </>
                   }/>
                   <Route
                     path=':manufacturerCode'
                     element={
                         <>
-                            <PageTitle breadcrumbs={accountBreadCrumbs}>Models</PageTitle>
-                            <ModelsForManufacturer/>
+                            <PageTitle breadcrumbs={accountBreadCrumbs}>Models For Manufacturer </PageTitle>
+                            <Suspense fallback={<TopBarProgress/>}>
+                                <ErrorBoundary>
+                                    <ModelsForManufacturer/>
+                                </ErrorBoundary>
+                            </Suspense>
                         </>
                     }
                   />
@@ -325,9 +349,13 @@ const ProductionPage: React.FC = () => {
                 path='fleet'
                 element={
                     <>
-                        <PageTitle breadcrumbs={accountBreadCrumbs}>All Fleets</PageTitle>
-                        {/*<Overview />*/}
-                        <FleetPage/>
+                        <PageTitle breadcrumbs={accountBreadCrumbs}>All Fleets </PageTitle>
+                        <Suspense fallback={<TopBarProgress/>}>
+                            <ErrorBoundary>
+                                <FleetPage/>
+
+                            </ErrorBoundary>
+                        </Suspense>
                     </>
                 }
               />
@@ -335,9 +363,27 @@ const ProductionPage: React.FC = () => {
                 path='down-type'
                 element={
                     <>
-                        <PageTitle breadcrumbs={accountBreadCrumbs}>All Down Types</PageTitle>
-                        {/*<Overview />*/}
-                        <DownTypePage/>
+                        <PageTitle breadcrumbs={accountBreadCrumbs}>All Down Types </PageTitle>
+                        <Suspense fallback={<TopBarProgress/>}>
+                            <ErrorBoundary>
+                                <DownTypePage/>
+
+                            </ErrorBoundary>
+                        </Suspense>
+                    </>
+                }
+              />
+              <Route
+                path='down-status'
+                element={
+                    <>
+                        <PageTitle breadcrumbs={accountBreadCrumbs}>All Down Statuses </PageTitle>
+                        <Suspense fallback={<TopBarProgress/>}>
+                            <ErrorBoundary>
+                                <DownStatusPage/>
+
+                            </ErrorBoundary>
+                        </Suspense>
                     </>
                 }
               />
@@ -345,9 +391,13 @@ const ProductionPage: React.FC = () => {
                 path='custodian'
                 element={
                     <>
-                        <PageTitle breadcrumbs={accountBreadCrumbs}>All Custodians</PageTitle>
-                        {/*<Overview />*/}
-                        <CustodianPage/>
+                        <PageTitle breadcrumbs={accountBreadCrumbs}>All Custodians </PageTitle>
+                        <Suspense fallback={<TopBarProgress/>}>
+                            <ErrorBoundary>
+                                <CustodianPage/>
+
+                            </ErrorBoundary>
+                        </Suspense>
                     </>
                 }
               />
@@ -356,8 +406,12 @@ const ProductionPage: React.FC = () => {
                 element={
                     <>
                         <PageTitle breadcrumbs={accountBreadCrumbs}>All Locations</PageTitle>
-                        {/*<Overview />*/}
-                        <LocationPage/>
+                        <Suspense fallback={<TopBarProgress/>}>
+                            <ErrorBoundary>
+                                <LocationPage/>
+
+                            </ErrorBoundary>
+                        </Suspense>
                     </>
                 }
               />
@@ -366,8 +420,12 @@ const ProductionPage: React.FC = () => {
                 element={
                     <>
                         <PageTitle breadcrumbs={accountBreadCrumbs}>All Compartment</PageTitle>
-                        {/*<Overview />*/}
-                        <CompartmentPage/>
+                        <Suspense fallback={<TopBarProgress/>}>
+                            <ErrorBoundary>
+                                <CompartmentPage/>
+
+                            </ErrorBoundary>
+                        </Suspense>
                     </>
                 }
               />
@@ -376,8 +434,12 @@ const ProductionPage: React.FC = () => {
                 element={
                     <>
                         <PageTitle breadcrumbs={accountBreadCrumbs}>All Categories</PageTitle>
-                        {/*<Overview />*/}
-                        <CategorySetup/>
+                        <Suspense fallback={<TopBarProgress/>}>
+                            <ErrorBoundary>
+                                <CategorySetup/>
+
+                            </ErrorBoundary>
+                        </Suspense>
                     </>
                 }
               />
@@ -386,8 +448,12 @@ const ProductionPage: React.FC = () => {
                 element={
                     <>
                         <PageTitle breadcrumbs={accountBreadCrumbs}>All RefillTypes</PageTitle>
-                        {/*<Overview />*/}
-                        <RefillPage/>
+                        <Suspense fallback={<TopBarProgress/>}>
+                            <ErrorBoundary>
+                                <RefillPage/>
+
+                            </ErrorBoundary>
+                        </Suspense>
                     </>
                 }
               />
@@ -396,8 +462,12 @@ const ProductionPage: React.FC = () => {
                 element={
                     <>
                         <PageTitle breadcrumbs={accountBreadCrumbs}>All Grades</PageTitle>
-                        {/*<Overview />*/}
-                        <OilGradePage/>
+                        <Suspense fallback={<TopBarProgress/>}>
+                            <ErrorBoundary>
+                                <OilGradePage/>
+
+                            </ErrorBoundary>
+                        </Suspense>
                     </>
                 }
               />
@@ -406,8 +476,12 @@ const ProductionPage: React.FC = () => {
                 element={
                     <>
                         <PageTitle breadcrumbs={accountBreadCrumbs}>Lube Configurations</PageTitle>
-                        {/*<Overview />*/}
-                        <LubeConfig/>
+                        <Suspense fallback={<TopBarProgress/>}>
+                            <ErrorBoundary>
+                                <LubeConfig/>
+
+                            </ErrorBoundary>
+                        </Suspense>
                     </>
                 }
               />
@@ -416,8 +490,12 @@ const ProductionPage: React.FC = () => {
                 element={
                     <>
                         <PageTitle breadcrumbs={accountBreadCrumbs}>All Brands</PageTitle>
-                        {/*<Overview />*/}
-                        <OilTypePage/>
+                        <Suspense fallback={<TopBarProgress/>}>
+                            <ErrorBoundary>
+                                <OilTypePage/>
+
+                            </ErrorBoundary>
+                        </Suspense>
                     </>
                 }
               />
@@ -426,10 +504,13 @@ const ProductionPage: React.FC = () => {
                 element={
                     <>
                         <PageTitle breadcrumbs={accountBreadCrumbs}>All Service Types</PageTitle>
-                        {/*<Overview />*/}
-                        <ErrorBoundary>
-                            <WorkTypePage/>
-                        </ErrorBoundary>
+                        <Suspense fallback={<TopBarProgress/>}>
+                            <ErrorBoundary>
+
+                                <WorkTypePage/>
+
+                            </ErrorBoundary>
+                        </Suspense>
                     </>
                 }
               />
@@ -448,7 +529,11 @@ const ProductionPage: React.FC = () => {
                     element={
                         <>
                             <PageTitle breadcrumbs={accountBreadCrumbs}>Priorities</PageTitle>
-                            <Priority/>
+                            <Suspense fallback={<TopBarProgress/>}>
+                                <ErrorBoundary>
+                                    <Priority/>
+                                </ErrorBoundary>
+                            </Suspense>
                         </>
                     }
                   />
@@ -457,7 +542,11 @@ const ProductionPage: React.FC = () => {
                     element={
                         <>
                             <PageTitle breadcrumbs={accountBreadCrumbs}>Sources</PageTitle>
-                            <Source/>
+                            <Suspense fallback={<TopBarProgress/>}>
+                                <ErrorBoundary>
+                                    <Source/>
+                                </ErrorBoundary>
+                            </Suspense>
                         </>
                     }
                   />
@@ -479,7 +568,11 @@ const ProductionPage: React.FC = () => {
                 element={
                     <>
                         <PageTitle breadcrumbs={accountBreadCrumbs}>All Reports</PageTitle>
-                        <AllReportPage/>
+                        <Suspense fallback={<TopBarProgress/>}>
+                            <ErrorBoundary>
+                                <AllReportPage/>
+                            </ErrorBoundary>
+                        </Suspense>
                     </>
                 }
               />
@@ -496,8 +589,12 @@ const ProductionPage: React.FC = () => {
                     element={
                         <>
                             <PageTitle breadcrumbs={accountBreadCrumbs}>All Metering</PageTitle>
-                            {/*<MeteringByModelClassSummary/>*/}
-                            <ReportComponent reportName={"AllMeteringReport"}/>
+                            <Suspense fallback={<TopBarProgress/>}>
+                                <ErrorBoundary>
+                                    {/*<MeteringByModelClassSummary/>*/}
+                                    <ReportComponent reportName={"AllMeteringReport"}/>
+                                </ErrorBoundary>
+                            </Suspense>
                         </>
                     }
                   />
@@ -506,10 +603,15 @@ const ProductionPage: React.FC = () => {
                     element={
                         <>
                             <PageTitle breadcrumbs={accountBreadCrumbs}>Metering By Model Detail</PageTitle>
-                            {/*<MeteringByModelDetail/>*/}
-                            <ReportComponent
-                              reportName={"MeteringbyModelDetail"}
-                            />
+                            <Suspense fallback={<TopBarProgress/>}>
+                                <ErrorBoundary>
+                                    {/*<MeteringByModelDetail/>*/}
+                                    <ReportComponent
+                                      reportName={"MeteringbyModelDetail"}/>
+
+                                </ErrorBoundary>
+                            </Suspense>
+
                         </>
                     }
                   />
@@ -518,10 +620,13 @@ const ProductionPage: React.FC = () => {
                     element={
                         <>
                             <PageTitle breadcrumbs={accountBreadCrumbs}>Metering By Equipment</PageTitle>
-                            {/*<MeteringByEquipment/>*/}
-                            <ReportComponent
-                              reportName={"MeteringByEquipment"}
-                            />
+                            <Suspense fallback={<TopBarProgress/>}>
+                                <ErrorBoundary>
+                                    <ReportComponent
+                                      reportName={"MeteringByEquipment"}/>
+
+                                </ErrorBoundary>
+                            </Suspense>
                         </>
                     }
                   />
@@ -530,10 +635,13 @@ const ProductionPage: React.FC = () => {
                     element={
                         <>
                             <PageTitle breadcrumbs={accountBreadCrumbs}>Metering By Model Summary</PageTitle>
-                            {/*<MeteringByModelSummary/>*/}
-                            <ReportComponent
-                              reportName={"Meteringbymodelsummary"}
-                            />
+                            <Suspense fallback={<TopBarProgress/>}>
+                                <ErrorBoundary>
+                                    <ReportComponent
+                                      reportName={"Meteringbymodelsummary"}/>
+
+                                </ErrorBoundary>
+                            </Suspense>
                         </>
                     }
                   />
@@ -542,7 +650,10 @@ const ProductionPage: React.FC = () => {
                     element={
                         <>
                             <PageTitle breadcrumbs={accountBreadCrumbs}>Metering By Model Equipment</PageTitle>
-                            {/*<MeteringByModelEquipment/>*/}
+                            <Suspense fallback={<TopBarProgress/>}>
+                                <ErrorBoundary>
+                                </ErrorBoundary>
+                            </Suspense>
                         </>
                     }
                   />
@@ -560,10 +671,14 @@ const ProductionPage: React.FC = () => {
                     element={
                         <>
                             <PageTitle breadcrumbs={accountBreadCrumbs}>Change Out By Model</PageTitle>
-                            {/*<ChangeoutByModel/>*/}
-                            <ReportComponent
-                              reportName={"ChangeoutByModel"}
-                            />
+                            <Suspense fallback={<TopBarProgress/>}>
+                                <ErrorBoundary>
+                                    {/*<ChangeoutByModel/>*/}
+                                    <ReportComponent
+                                      reportName={"ChangeoutByModel"}/>
+
+                                </ErrorBoundary>
+                            </Suspense>
                         </>
                     }
                   />
@@ -572,9 +687,13 @@ const ProductionPage: React.FC = () => {
                     element={
                         <>
                             <PageTitle breadcrumbs={accountBreadCrumbs}>All Change out</PageTitle>
-                            <ReportComponent
-                              reportName={"AllChangeoutReport"}
-                            />
+                            <Suspense fallback={<TopBarProgress/>}>
+                                <ErrorBoundary>
+                                    <ReportComponent
+                                      reportName={"AllChangeoutReport"}/>
+
+                                </ErrorBoundary>
+                            </Suspense>
                         </>
                     }
                   />
@@ -583,9 +702,13 @@ const ProductionPage: React.FC = () => {
                     element={
                         <>
                             <PageTitle breadcrumbs={accountBreadCrumbs}>Changeout By Refill Type Model</PageTitle>
-                            <ReportComponent
-                              reportName={"Changeoutbyrefilltypemodel"}
-                            />
+                            <Suspense fallback={<TopBarProgress/>}>
+                                <ErrorBoundary>
+                                    <ReportComponent
+                                      reportName={"Changeoutbyrefilltypemodel"}/>
+
+                                </ErrorBoundary>
+                            </Suspense>
                         </>
                     }
                   />
@@ -603,10 +726,14 @@ const ProductionPage: React.FC = () => {
                     element={
                         <>
                             <PageTitle breadcrumbs={accountBreadCrumbs}>All Schedules</PageTitle>
-                            {/*<ScheduleByModelSummaryReport/>*/}
-                            <ReportComponent
-                              reportName={"AllSchedulesReport"}
-                            />
+                            <Suspense fallback={<TopBarProgress/>}>
+                                <ErrorBoundary>
+                                    {/*<ScheduleByModelSummaryReport/>*/}
+                                    <ReportComponent
+                                      reportName={"AllSchedulesReport"}/>
+
+                                </ErrorBoundary>
+                            </Suspense>
                         </>
                     }
                   />
@@ -614,11 +741,15 @@ const ProductionPage: React.FC = () => {
                     path='ScheduleByModelSummaryReport'
                     element={
                         <>
-                            <PageTitle breadcrumbs={accountBreadCrumbs}>Schedule By Model Summary Report</PageTitle>
-                            {/*<ScheduleByModelSummaryReport/>*/}
-                            <ReportComponent
-                              reportName={"ScheduleByModelSummaryReport"}
-                            />
+                            <PageTitle breadcrumbs={accountBreadCrumbs}>Schedule By Model Summary Report </PageTitle>
+                            <Suspense fallback={<TopBarProgress/>}>
+                                <ErrorBoundary>
+                                    {/*<ScheduleByModelSummaryReport/>*/}
+                                    <ReportComponent
+                                      reportName={"ScheduleByModelSummaryReport"}/>
+
+                                </ErrorBoundary>
+                            </Suspense>
                         </>
                     }
                   />
@@ -626,11 +757,14 @@ const ProductionPage: React.FC = () => {
                     path='ScheduleByServiceTypeReport'
                     element={
                         <>
-                            <PageTitle breadcrumbs={accountBreadCrumbs}>Schedule By Model Service Type</PageTitle>
-                            {/*<ScheduleByServiceTypeReport/>*/}
-                            <ReportComponent
-                              reportName={"ScheduleByServiceTypeReport"}
-                            />
+                            <PageTitle breadcrumbs={accountBreadCrumbs}>Schedule By Model Service Type </PageTitle>
+                            <Suspense fallback={<TopBarProgress/>}>
+                                <ErrorBoundary>
+                                    <ReportComponent
+                                      reportName={"ScheduleByServiceTypeReport"}/>
+
+                                </ErrorBoundary>
+                            </Suspense>
                         </>
                     }
                   />
@@ -638,11 +772,15 @@ const ProductionPage: React.FC = () => {
                     path={'ScheduleByLocationReport'}
                     element={
                         <>
-                            <PageTitle breadcrumbs={accountBreadCrumbs}>Schedule By Location Report</PageTitle>
-                            {/*<ScheduleByLocationReport/>*/}
-                            <ReportComponent
-                              reportName={"ScheduleByLocationSummaryReport"}
-                            />
+                            <PageTitle breadcrumbs={accountBreadCrumbs}>Schedule By Location Report </PageTitle>
+                            <Suspense fallback={<TopBarProgress/>}>
+                                <ErrorBoundary>
+                                    {/*<ScheduleByLocationReport/>*/}
+                                    <ReportComponent
+                                      reportName={"ScheduleByLocationSummaryReport"}/>
+
+                                </ErrorBoundary>
+                            </Suspense>
                         </>
                     }
                   />
@@ -652,11 +790,14 @@ const ProductionPage: React.FC = () => {
                 path='equipment-transactions'
                 element={
                     <>
-                        <PageTitle breadcrumbs={accountBreadCrumbs}>Equipment transactions</PageTitle>
-                        {/*<FaultEntryReport/>*/}
-                        <ReportComponent
-                          reportName={"EquipmentTransactionReport"}
-                        />
+                        <PageTitle breadcrumbs={accountBreadCrumbs}>Equipment transactions </PageTitle>
+                        <Suspense fallback={<TopBarProgress/>}>
+                            <ErrorBoundary>
+                                <ReportComponent
+                                  reportName={"EquipmentTransactionReport"}
+                                />
+                            </ErrorBoundary>
+                        </Suspense>
                     </>
                 }
               />
@@ -664,11 +805,14 @@ const ProductionPage: React.FC = () => {
                 path='fault-summary-report'
                 element={
                     <>
-                        <PageTitle breadcrumbs={accountBreadCrumbs}>Fault Summary Report</PageTitle>
-                        {/*<FaultEntryReport/>*/}
-                        <ReportComponent
-                          reportName={"FaultEntrySummaryReport"}
-                        />
+                        <PageTitle breadcrumbs={accountBreadCrumbs}>Fault Summary Report </PageTitle>
+                        <Suspense fallback={<TopBarProgress/>}>
+                            <ErrorBoundary>
+                                <ReportComponent
+                                  reportName={"FaultEntrySummaryReport"}
+                                />
+                            </ErrorBoundary>
+                        </Suspense>
                     </>
                 }
               />
@@ -676,11 +820,14 @@ const ProductionPage: React.FC = () => {
                 path='all-faults'
                 element={
                     <>
-                        <PageTitle breadcrumbs={accountBreadCrumbs}>All Faults Report</PageTitle>
-                        {/*<FaultEntryReport/>*/}
-                        <ReportComponent
-                          reportName={"AllfaultsReport"}
-                        />
+                        <PageTitle breadcrumbs={accountBreadCrumbs}>All Faults Report </PageTitle>
+                        <Suspense fallback={<TopBarProgress/>}>
+                            <ErrorBoundary>
+                                <ReportComponent
+                                  reportName={"AllfaultsReport"}
+                                />
+                            </ErrorBoundary>
+                        </Suspense>
                     </>
                 }
               />
@@ -688,11 +835,15 @@ const ProductionPage: React.FC = () => {
                 path='all-backlogs'
                 element={
                     <>
-                        <PageTitle breadcrumbs={accountBreadCrumbs}>All Backlogs Report</PageTitle>
-                        {/*<FaultEntryReport/>*/}
-                        <ReportComponent
-                          reportName={"AllBacklogsReport"}
-                        />
+                        <PageTitle breadcrumbs={accountBreadCrumbs}>All Backlogs Report </PageTitle>
+                        <Suspense fallback={<TopBarProgress/>}>
+                            <ErrorBoundary>
+                                {/*<FaultEntryReport/>*/}
+                                <ReportComponent
+                                  reportName={"AllBacklogsReport"}
+                                />
+                            </ErrorBoundary>
+                        </Suspense>
                     </>
                 }
               />
@@ -700,11 +851,15 @@ const ProductionPage: React.FC = () => {
                 path='FaultByCustodianSummary'
                 element={
                     <>
-                        <PageTitle breadcrumbs={accountBreadCrumbs}>Fault By Custodian Summary</PageTitle>
-                        {/*<FaultByCustodianSummary/>*/}
-                        <ReportComponent
-                          reportName={"FaultByCustodianSummary"}
-                        />
+                        <PageTitle breadcrumbs={accountBreadCrumbs}>Fault By Custodian Summary </PageTitle>
+                        <Suspense fallback={<TopBarProgress/>}>
+                            <ErrorBoundary>
+                                {/*<FaultByCustodianSummary/>*/}
+                                <ReportComponent
+                                  reportName={"FaultByCustodianSummary"}
+                                />
+                            </ErrorBoundary>
+                        </Suspense>
                     </>
                 }
               />
@@ -712,11 +867,15 @@ const ProductionPage: React.FC = () => {
                 path='FaultByCustodianDetail'
                 element={
                     <>
-                        <PageTitle breadcrumbs={accountBreadCrumbs}>Fault By Custodian Detail</PageTitle>
-                        {/*<FaultByCustodianDetail/>*/}
-                        <ReportComponent
-                          reportName={"FaultByCustodianDetail"}
-                        />
+                        <PageTitle breadcrumbs={accountBreadCrumbs}>Fault By Custodian Detail </PageTitle>
+                        <Suspense fallback={<TopBarProgress/>}>
+                            <ErrorBoundary>
+                                {/*<FaultByCustodianDetail/>*/}
+                                <ReportComponent
+                                  reportName={"FaultByCustodianDetail"}
+                                />
+                            </ErrorBoundary>
+                        </Suspense>
                     </>
                 }
               />
@@ -724,11 +883,15 @@ const ProductionPage: React.FC = () => {
                 path='daily-hme-report'
                 element={
                     <>
-                        <PageTitle breadcrumbs={accountBreadCrumbs}>Daily HME Report</PageTitle>
-                        {/*<ReportNew/>*/}
-                        <ReportComponent
-                          reportName={"Daily_HME_KPIReport"}
-                        />
+                        <PageTitle breadcrumbs={accountBreadCrumbs}>Daily HME Report </PageTitle>
+                        <Suspense fallback={<TopBarProgress/>}>
+                            <ErrorBoundary>
+                                {/*<ReportNew/>*/}
+                                <ReportComponent
+                                  reportName={"Daily_HME_KPIReport"}
+                                />
+                            </ErrorBoundary>
+                        </Suspense>
                     </>
                 }
               />
@@ -736,11 +899,15 @@ const ProductionPage: React.FC = () => {
                 path='all-equip-summary'
                 element={
                     <>
-                        <PageTitle breadcrumbs={accountBreadCrumbs}>All Equipment Summary</PageTitle>
-                        {/*<AllEquipSummary/>*/}
-                        <ReportComponent
-                          reportName={"AllEquipmentSummary"}
-                        />
+                        <PageTitle breadcrumbs={accountBreadCrumbs}>All Equipment Summary </PageTitle>
+                        <Suspense fallback={<TopBarProgress/>}>
+                            <ErrorBoundary>
+                                {/*<AllEquipSummary/>*/}
+                                <ReportComponent
+                                  reportName={"AllEquipmentSummary"}
+                                />
+                            </ErrorBoundary>
+                        </Suspense>
                     </>
                 }
               />
@@ -748,10 +915,14 @@ const ProductionPage: React.FC = () => {
                 path='defect'
                 element={
                     <>
-                        <PageTitle breadcrumbs={accountBreadCrumbs}>All Defects</PageTitle>
-                        <ReportComponent
-                          reportName={"EquipmentDefect"}
-                        />
+                        <PageTitle breadcrumbs={accountBreadCrumbs}>All Defects </PageTitle>
+                        <Suspense fallback={<TopBarProgress/>}>
+                            <ErrorBoundary>
+                                <ReportComponent
+                                  reportName={"EquipmentDefect"}
+                                />
+                            </ErrorBoundary>
+                        </Suspense>
                     </>
                 }
               />
@@ -759,11 +930,15 @@ const ProductionPage: React.FC = () => {
                 path='sumBydownType'
                 element={
                     <>
-                        <PageTitle breadcrumbs={accountBreadCrumbs}>Summary By Down Type</PageTitle>
-                        {/*<FaultByDowntimeReport/>*/}
-                        <ReportComponent
-                          reportName={"FaultByDowntimeReport"}
-                        />
+                        <PageTitle breadcrumbs={accountBreadCrumbs}>Summary By Down Type </PageTitle>
+                        <Suspense fallback={<TopBarProgress/>}>
+                            <ErrorBoundary>
+                                {/*<FaultByDowntimeReport/>*/}
+                                <ReportComponent
+                                  reportName={"FaultByDowntimeReport"}
+                                />
+                            </ErrorBoundary>
+                        </Suspense>
                     </>
                 }
               />
@@ -771,11 +946,15 @@ const ProductionPage: React.FC = () => {
                 path='equipment-summary'
                 element={
                     <>
-                        <PageTitle breadcrumbs={accountBreadCrumbs}>List Equipment Summary</PageTitle>
-                        {/*<ListEquipmentSummary/>*/}
-                        <ReportComponent
-                          reportName={"ListEquipmentSummary"}
-                        />
+                        <PageTitle breadcrumbs={accountBreadCrumbs}>List Equipment Summary </PageTitle>
+                        <Suspense fallback={<TopBarProgress/>}>
+                            <ErrorBoundary>
+                                {/*<ListEquipmentSummary/>*/}
+                                <ReportComponent
+                                  reportName={"ListEquipmentSummary"}
+                                />
+                            </ErrorBoundary>
+                        </Suspense>
                     </>
                 }
               />
@@ -783,11 +962,15 @@ const ProductionPage: React.FC = () => {
                 path='faultByModelSummary'
                 element={
                     <>
-                        <PageTitle breadcrumbs={accountBreadCrumbs}>Fault By Model Summary</PageTitle>
-                        {/*<FaultByModelSummary/>*/}
-                        <ReportComponent
-                          reportName={"FaultByModelSummary"}
-                        />
+                        <PageTitle breadcrumbs={accountBreadCrumbs}>Fault By Model Summary </PageTitle>
+                        <Suspense fallback={<TopBarProgress/>}>
+                            <ErrorBoundary>
+                                {/*<FaultByModelSummary/>*/}
+                                <ReportComponent
+                                  reportName={"FaultByModelSummary"}
+                                />
+                            </ErrorBoundary>
+                        </Suspense>
                     </>
                 }
               />
@@ -796,11 +979,15 @@ const ProductionPage: React.FC = () => {
                 path='service-type'
                 element={
                     <>
-                        <PageTitle breadcrumbs={accountBreadCrumbs}>Service Type Report</PageTitle>
-                        {/*<ServiceTypeReport/>*/}
-                        <ReportComponent
-                          reportName={"ServiceTypeReport"}
-                        />
+                        <PageTitle breadcrumbs={accountBreadCrumbs}>Service Type Report </PageTitle>
+                        <Suspense fallback={<TopBarProgress/>}>
+                            <ErrorBoundary>
+                                {/*<ServiceTypeReport/>*/}
+                                <ReportComponent
+                                  reportName={"ServiceTypeReport"}
+                                />
+                            </ErrorBoundary>
+                        </Suspense>
                     </>
                 }
               />
@@ -808,11 +995,15 @@ const ProductionPage: React.FC = () => {
                 path='warranty-life'
                 element={
                     <>
-                        <PageTitle>Warranty End Of Life Report</PageTitle>
-                        {/*<WarrantyEndOfLifeReport/>*/}
-                        <ReportComponent
-                          reportName={"WarrantyEndOfLifeReport"}
-                        />
+                        <PageTitle>Warranty End Of Life Report </PageTitle>
+                        <Suspense fallback={<TopBarProgress/>}>
+                            <ErrorBoundary>
+                                {/*<WarrantyEndOfLifeReport/>*/}
+                                <ReportComponent
+                                  reportName={"WarrantyEndOfLifeReport"}
+                                />
+                            </ErrorBoundary>
+                        </Suspense>
                     </>
                 }
               />
@@ -820,8 +1011,12 @@ const ProductionPage: React.FC = () => {
                 path='CarperManufacturerReport'
                 element={
                     <>
-                        <PageTitle breadcrumbs={accountBreadCrumbs}>Number Of Equipment Per Manufacturer</PageTitle>
-                        <ReportComponent reportName={"NumberOfCarperManufacturerReport"}/>
+                        <PageTitle breadcrumbs={accountBreadCrumbs}>Number Of Equipment Per Manufacturer </PageTitle>
+                        <Suspense fallback={<TopBarProgress/>}>
+                            <ErrorBoundary>
+                                <ReportComponent reportName={"NumberOfCarperManufacturerReport"}/>
+                            </ErrorBoundary>
+                        </Suspense>
                     </>
                 }
               />
@@ -829,9 +1024,13 @@ const ProductionPage: React.FC = () => {
                 path='meteringbymodelClassSummary'
                 element={
                     <>
-                        <PageTitle breadcrumbs={accountBreadCrumbs}>Metering By Model Class Summary</PageTitle>
-                        {/*<MeteringByModelClassSummary/>*/}
-                        <ReportComponent reportName={"meteringbymodelclasssummary"}/>
+                        <PageTitle breadcrumbs={accountBreadCrumbs}>Metering By Model Class Summary </PageTitle>
+                        <Suspense fallback={<TopBarProgress/>}>
+                            <ErrorBoundary>
+                                {/*<MeteringByModelClassSummary/>*/}
+                                <ReportComponent reportName={"meteringbymodelclasssummary"}/>
+                            </ErrorBoundary>
+                        </Suspense>
                     </>
                 }
               />
@@ -840,11 +1039,15 @@ const ProductionPage: React.FC = () => {
                 path='hourly-report'
                 element={
                     <>
-                        <PageTitle breadcrumbs={accountBreadCrumbs}>Hourly Report</PageTitle>
-                        {/*<HourlyReport/>*/}
-                        <ReportComponent
-                          reportName={"HourlyReport"}
-                        />
+                        <PageTitle breadcrumbs={accountBreadCrumbs}>Hourly Report </PageTitle>
+                        <Suspense fallback={<TopBarProgress/>}>
+                            <ErrorBoundary>
+                                {/*<HourlyReport/>*/}
+                                <ReportComponent
+                                  reportName={"HourlyReport"}
+                                />
+                            </ErrorBoundary>
+                        </Suspense>
                     </>
                 }
               />
@@ -852,11 +1055,15 @@ const ProductionPage: React.FC = () => {
                 path='solved-report'
                 element={
                     <>
-                        <PageTitle breadcrumbs={accountBreadCrumbs}>Solved Fault Report</PageTitle>
-                        {/*<FaultEntrySolvedReport/>*/}
-                        <ReportComponent
-                          reportName={"FaultEntrySolvedReport"}
-                        />
+                        <PageTitle breadcrumbs={accountBreadCrumbs}>Solved Fault Report </PageTitle>
+                        <Suspense fallback={<TopBarProgress/>}>
+                            <ErrorBoundary>
+                                {/*<FaultEntrySolvedReport/>*/}
+                                <ReportComponent
+                                  reportName={"FaultEntrySolvedReport"}
+                                />
+                            </ErrorBoundary>
+                        </Suspense>
 
                     </>
                 }
@@ -865,8 +1072,12 @@ const ProductionPage: React.FC = () => {
                 path='pending-report'
                 element={
                     <>
-                        <PageTitle breadcrumbs={accountBreadCrumbs}>Pending Fault Report</PageTitle>
-                        <ReportComponent reportName={"FaultEntryPendingReport"}/>
+                        <PageTitle breadcrumbs={accountBreadCrumbs}>Pending Fault Report </PageTitle>
+                        <Suspense fallback={<TopBarProgress/>}>
+                            <ErrorBoundary>
+                                <ReportComponent reportName={"FaultEntryPendingReport"}/>
+                            </ErrorBoundary>
+                        </Suspense>
                     </>
                 }
               />
@@ -874,11 +1085,15 @@ const ProductionPage: React.FC = () => {
                 path='fleetschedule-report'
                 element={
                     <>
-                        <PageTitle breadcrumbs={accountBreadCrumbs}>Fleet Schedule Report</PageTitle>
-                        {/*<FleetScheduleReport/>*/}
-                        <ReportComponent
-                          reportName={"FleetScheduleReport"}
-                        />
+                        <PageTitle breadcrumbs={accountBreadCrumbs}>Fleet Schedule Report </PageTitle>
+                        <Suspense fallback={<TopBarProgress/>}>
+                            <ErrorBoundary>
+                                {/*<FleetScheduleReport/>*/}
+                                <ReportComponent
+                                  reportName={"FleetScheduleReport"}
+                                />
+                            </ErrorBoundary>
+                        </Suspense>
                     </>
                 }
               />
@@ -886,10 +1101,14 @@ const ProductionPage: React.FC = () => {
                 path='fleet-history-report'
                 element={
                     <>
-                        <PageTitle breadcrumbs={accountBreadCrumbs}>Equipment History Report</PageTitle>
-                        <ReportComponent
-                          reportName={"FaultEntryFleetHistoryReport"}
-                        />
+                        <PageTitle breadcrumbs={accountBreadCrumbs}>Equipment History Report </PageTitle>
+                        <Suspense fallback={<TopBarProgress/>}>
+                            <ErrorBoundary>
+                                <ReportComponent
+                                  reportName={"FaultEntryFleetHistoryReport"}
+                                />
+                            </ErrorBoundary>
+                        </Suspense>
                     </>
                 }
               />
@@ -897,43 +1116,23 @@ const ProductionPage: React.FC = () => {
           </Route>
 
 
-          <Route
-            path='/checkListForm/*'
-            element={
-                <>
-                    {/*<ProductionHeader />*/}
-                    <Outlet/>
-                </>
-            }
-          >
-              {/*<Route*/}
-              {/*  path='checkList'*/}
-              {/*  element={*/}
-              {/*    <>*/}
-              {/*      <PageTitle breadcrumbs={accountBreadCrumbs}>Check List</PageTitle>*/}
-              {/*      <CheckListForm3 />*/}
-              {/*    </>*/}
-              {/*  }*/}
-              {/*/>*/}
-              {/*<Route*/}
-              {/*  path='tabs'*/}
-              {/*  element={*/}
-              {/*      <>*/}
-              {/*          <PageTitle breadcrumbs={accountBreadCrumbs}>Tabs</PageTitle>*/}
-              {/*          <ErrorBoundary>*/}
-              {/*              <TabsTest/>*/}
-              {/*          </ErrorBoundary>*/}
-              {/*      </>*/}
-              {/*  }*/}
-              {/*/>*/}
+          {/*<Route*/}
+          {/*  path='/checkListForm/*'*/}
+          {/*  element={*/}
+          {/*      <>*/}
+          {/*          /!*<ProductionHeader />*!/*/}
+          {/*          <Outlet/>*/}
+          {/*      </>*/}
+          {/*  }*/}
+          {/*>*/}
 
-              <Route index element={<Navigate to='/dashboard'/>}/>
-          </Route>
+
+          {/*    <Route index element={<Navigate to='/dashboard'/>}/>*/}
+          {/*</Route>*/}
           <Route
             path='setup/*'
             element={
                 <>
-                    {/*<ProductionHeader />*/}
                     <Outlet/>
                 </>
             }
@@ -943,7 +1142,11 @@ const ProductionPage: React.FC = () => {
                 element={
                     <>
                         <PageTitle breadcrumbs={accountBreadCrumbs}>Services </PageTitle>
-                        <ServicesPage/>
+                        <Suspense fallback={<TopBarProgress/>}>
+                            <ErrorBoundary>
+                                <ServicesPage/>
+                            </ErrorBoundary>
+                        </Suspense>
                     </>
                 }
               />
@@ -952,7 +1155,11 @@ const ProductionPage: React.FC = () => {
                 element={
                     <>
                         <PageTitle breadcrumbs={accountBreadCrumbs}>Sections </PageTitle>
-                        <SectionsPage/>
+                        <Suspense fallback={<TopBarProgress/>}>
+                            <ErrorBoundary>
+                                <SectionsPage/>
+                            </ErrorBoundary>
+                        </Suspense>
                     </>
                 }
               />
@@ -961,7 +1168,11 @@ const ProductionPage: React.FC = () => {
                 element={
                     <>
                         <PageTitle breadcrumbs={accountBreadCrumbs}>Groups </PageTitle>
-                        <GroupsPage/>
+                        <Suspense fallback={<TopBarProgress/>}>
+                            <ErrorBoundary>
+                                <GroupsPage/>
+                            </ErrorBoundary>
+                        </Suspense>
                     </>
                 }
               />
@@ -970,7 +1181,11 @@ const ProductionPage: React.FC = () => {
                 element={
                     <>
                         <PageTitle breadcrumbs={accountBreadCrumbs}>Items </PageTitle>
-                        <ItemsPage/>
+                        <Suspense fallback={<TopBarProgress/>}>
+                            <ErrorBoundary>
+                                <ItemsPage/>
+                            </ErrorBoundary>
+                        </Suspense>
                     </>
                 }
               />
@@ -979,7 +1194,11 @@ const ProductionPage: React.FC = () => {
                 element={
                     <>
                         <PageTitle breadcrumbs={accountBreadCrumbs}>ItemValue </PageTitle>
-                        <ItemValuePage/>
+                        <Suspense fallback={<TopBarProgress/>}>
+                            <ErrorBoundary>
+                                <ItemValuePage/>
+                            </ErrorBoundary>
+                        </Suspense>
                     </>
                 }
               />

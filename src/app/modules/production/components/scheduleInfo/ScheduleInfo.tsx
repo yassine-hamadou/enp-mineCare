@@ -163,122 +163,196 @@ import {useNavigate} from "react-router-dom";
 import {useAuth} from "../../../auth";
 import {pendingSchedule} from "../entries/equipment/calendar/requests";
 
-export function ScheduleInfo() {
-  const {tenant} = useAuth()
-  const navigate = useNavigate()
-  const [scheduleToworkOn, setScheduleToWorkOn] = useState<any>([])
+export default function ScheduleInfo() {
+    const {tenant} = useAuth()
+    const navigate = useNavigate()
+    const [scheduleToworkOn, setScheduleToWorkOn] = useState<any>([])
 
 
-  const {data: loadSchedule, isLoading}: any = useQuery('loadSchedule', () => pendingSchedule(tenant))
+    const {data: loadSchedule, isLoading}: any = useQuery('loadSchedule', () => pendingSchedule(tenant))
 
-  const {data: serviceType}: any = useQuery('serviceType', () => fetchServices(tenant))
-  const queryClient: any = useQueryClient()
-  const onChecklist = (e: any) => {
+    const {data: serviceType}: any = useQuery('serviceType', () => fetchServices(tenant))
+    const queryClient: any = useQueryClient()
+    const onChecklist = (e: any) => {
 
-    const entryID = parseInt(e)
-    const schedule = loadSchedule?.data.find((s: any) => s.entryId === entryID)
-    console.log('scheduleSelect', schedule)
-    setScheduleToWorkOn(schedule)
-    if (schedule?.serviceTypeId === null || schedule?.serviceTypeId === undefined) {
-      navigate(`/entries/start-work`)
-    } else {
-      navigate(`/entries/start-work/${schedule?.serviceTypeId}/${schedule?.fleetId}`, {state: {schedule: schedule}})
+        const entryID = parseInt(e)
+        const schedule = loadSchedule?.data.find((s: any) => s.entryId === entryID)
+        console.log('scheduleSelect', schedule)
+        setScheduleToWorkOn(schedule)
+        if (schedule?.serviceTypeId === null || schedule?.serviceTypeId === undefined) {
+            navigate(`/entries/start-work`)
+        } else {
+            navigate(`/entries/start-work/${schedule?.serviceTypeId}/${schedule?.fleetId}`, {state: {schedule: schedule}})
+        }
     }
-  }
 
-  const {mutate: completeSchedule} = useMutation(
-    patchSchedule, {
-      onSuccess: () => {
-        queryClient.invalidateQueries('loadSchedule')
-        message.success('Schedule completed successfully')
-      },
-      onError: (error: any) => {
-        message.error(error)
+    const {mutate: completeSchedule} = useMutation(
+      patchSchedule, {
+          onSuccess: () => {
+              queryClient.invalidateQueries('loadSchedule')
+              message.success('Schedule completed successfully')
+          },
+          onError: (error: any) => {
+              message.error(error)
+          }
       }
-    }
-  )
+    )
 
-  const columns: any = [
-    {
-      title: 'Fleet ID',
-      dataIndex: 'fleetId',
-    },
-    {
-      title: 'Location',
-      dataIndex: 'locationId',
-    },
-    {
-      title: 'From',
-      dataIndex: 'timeStart',
-      render: (timeStart: any) => {
-        return new Date(timeStart).toUTCString()
-      }
-    },
-    {
-      title: 'To',
-      dataIndex: 'timeEnd',
-      render: (timeEnd: any) => {
-        return new Date(timeEnd).toUTCString()
-      }
-    },
-    {
-      title: 'Cusdian',
-      dataIndex: 'responsible',
-    },
-    {
-      title: 'Service Type',
-      dataIndex: 'serviceTypeId',
-      render: (serviceTypeId: any) => {
-        return serviceType?.data.find(
-          (service: any) => service.id === serviceTypeId
-        )?.name
-      }
-    },
-    {
-      title: 'Action',
-      dataIndex: 'entryId',
-      width: 350,
-      fixed: 'right',
-      render: (entryId: any, record: any) => {
-        return (
-          <Space size="middle">
-            <button type={'button'} className='btn btn-light-primary btn-sm' onClick={() => onChecklist(entryId)}>
-              Checklist
-            </button>
-            <Popconfirm title={'Are you sure this schedule is completed?'} onConfirm={() => {
-              completeSchedule(entryId)
-              console.log('record', entryId)
+    const columns: any = [
+        {
+            title: 'Fleet ID',
+            dataIndex: 'fleetId',
+            sorter: (a: any, b: any) => {
+                if (a.fleetId > b.fleetId) {
+                    return 1
+                }
+                if (b.fleetId > a.fleetId) {
+                    return -1
+                }
+                return 0
             }
-            }>
-              <button type={'button'} className='btn btn-light-success btn-sm'>
-                Complete
-              </button>
-            </Popconfirm>
-            <button type={'button'} className='btn btn-light-info btn-sm' onClick={
-              () => navigate(`/entries/backlog/${record.fleetId}`)
-            }>
-              View Backlogs
-            </button>
-          </Space>
-        )
-      }
-    }
-  ]
+        },
+        {
+            title: 'Location',
+            dataIndex: 'locationId',
+            sorter: (a: any, b: any) => {
+                if (a.locationId > b.locationId) {
+                    return 1
+                }
+                if (b.locationId > a.locationId) {
+                    return -1
+                }
+                return 0
+            }
+        },
+        {
+            title: 'From',
+            dataIndex: 'timeStart',
+            render: (timeStart: any) => {
+                return new Date(timeStart).toUTCString()
+            },
+            sorter: (a: any, b: any) => {
+                if (a.timeStart > b.timeStart) {
+                    return 1
+                }
+                if (b.timeStart > a.timeStart) {
+                    return -1
+                }
+                return 0
+            }
+        },
+        {
+            title: 'To',
+            dataIndex: 'timeEnd',
+            sorter: (a: any, b: any) => {
+                if (a.timeEnd > b.timeEnd) {
+                    return 1
+                }
+                if (b.timeEnd > a.timeEnd) {
+                    return -1
+                }
+                return 0
+            },
+            render: (timeEnd: any) => {
+                return new Date(timeEnd).toUTCString()
+            }
+        },
+        {
+            title: 'Custodian',
+            dataIndex: 'responsible',
+            sorter: (a: any, b: any) => {
+                if (a.responsible > b.responsible) {
+                    return 1
+                }
+                if (b.responsible > a.responsible) {
+                    return -1
+                }
+                return 0
+            }
+        },
+        {
+            title: 'Service Type',
+            dataIndex: 'serviceTypeId',
+            sorter: (a: any, b: any) => {
+                if (a.serviceTypeId > b.serviceTypeId) {
+                    return 1
+                }
+                if (b.serviceTypeId > a.serviceTypeId) {
+                    return -1
+                }
+                return 0
+            },
+            render: (serviceTypeId: any) => {
+                return serviceType?.data.find(
+                  (service: any) => service.id === serviceTypeId
+                )?.name
+            }
+        },
+        {
+            title: 'Action',
+            dataIndex: 'entryId',
+            width: 350,
+            fixed: 'right',
+            render: (entryId: any, record: any) => {
+                return (
+                  <Space size="middle">
+                      <button type={'button'} className='btn btn-light-primary btn-sm'
+                              onClick={() => onChecklist(entryId)}>
+                          Checklist
+                      </button>
+                      <Popconfirm title={'Are you sure this schedule is completed?'} onConfirm={() => {
+                          completeSchedule(entryId)
+                          console.log('record', entryId)
+                      }
+                      }>
+                          <button type={'button'} className='btn btn-light-success btn-sm'>
+                              Complete
+                          </button>
+                      </Popconfirm>
+                      <button type={'button'} className='btn btn-light-info btn-sm' onClick={
+                          () => navigate(`/entries/backlog/${record.fleetId}`)
+                      }>
+                          View Backlogs
+                      </button>
+                  </Space>
+                )
+            }
+        }
+    ]
 
-  return (
-    <>
-      <KTCard>
-        <KTCardBody>
-          <Table
-            columns={columns}
-            dataSource={loadSchedule?.data}
-            loading={isLoading}
-            rowKey={'entryId'}
-            bordered
-            scroll={{x: 1000}}
-          />
-        </KTCardBody>
-      </KTCard> {/*end::Card*/}
-    </>
-  )
+    return (
+      <>
+          <KTCard>
+              <KTCardBody>
+                  <div className='row mb-0'>
+                      {/*<div className='mb-3'>*/}
+                      {/*    <h3 className='mb-0'>*/}
+                      {/*        <span className='text-danger'> {dataFromManufacturer[0].name}</span>*/}
+                      {/*    </h3>*/}
+                      {/*</div>*/}
+                      <div>
+                          <button
+                            className='btn btn-outline btn-outline-dashed btn-outline-primary btn-active-light-primary mb-3'
+                            onClick={() => {
+                                navigate(-1)
+                            }}
+                          >
+                              <i className='la la-arrow-left'/>
+                              Back
+                          </button>
+
+                      </div>
+                  </div>
+                  <Table
+                    columns={columns}
+                    dataSource={loadSchedule?.data}
+                    loading={isLoading}
+                    rowKey={'entryId'}
+                    bordered
+                    scroll={{x: 1000}}
+                  />
+              </KTCardBody>
+          </KTCard> {/*end::Card*/}
+      </>
+    )
 }

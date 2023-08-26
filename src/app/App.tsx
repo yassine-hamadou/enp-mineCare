@@ -1,6 +1,4 @@
-import {Suspense} from 'react'
 import {Outlet} from 'react-router-dom'
-import {I18nProvider} from '../_metronic/i18n/i18nProvider'
 import {LayoutProvider, LayoutSplashScreen} from '../_metronic/layout/core'
 import {MasterInit} from '../_metronic/layout/MasterInit'
 import {AuthInit} from './modules/auth'
@@ -9,28 +7,33 @@ import {QueryClient, QueryClientProvider} from 'react-query'
 import {ConfigProvider} from "antd";
 import en_US from 'antd/lib/locale/en_US';
 import {ErrorBoundary} from '@ant-design/pro-components'
+import {IntlProvider} from "react-intl";
+import React, {Suspense} from 'react'
 
 const queryClient = new QueryClient()
 const App = () => {
-  return (
-    <ErrorBoundary>
-      <ConfigProvider locale={en_US}>
-        <QueryClientProvider client={queryClient}>
+    return (
+      <ErrorBoundary>
           <Suspense fallback={<LayoutSplashScreen/>}>
-            <I18nProvider>
-              <LayoutProvider>
-                <AuthInit>
-                  <Outlet/>
-                  <MasterInit/>
-                </AuthInit>
-              </LayoutProvider>
-            </I18nProvider>
+              <ConfigProvider locale={en_US}>
+                  <QueryClientProvider client={queryClient}>
+                      <IntlProvider locale={
+                          navigator.language === 'en-US' ? 'en' : 'fr'
+                      }>
+
+                          <LayoutProvider>
+                              <AuthInit>
+                                  <Outlet/>
+                                  <MasterInit/>
+                              </AuthInit>
+                          </LayoutProvider>
+                      </IntlProvider>
+                      <ReactQueryDevtools initialIsOpen={false}/>
+                  </QueryClientProvider>
+              </ConfigProvider>
           </Suspense>
-          <ReactQueryDevtools initialIsOpen={false}/>
-        </QueryClientProvider>
-      </ConfigProvider>
-    </ErrorBoundary>
-  )
+      </ErrorBoundary>
+    )
 }
 
 export {App}

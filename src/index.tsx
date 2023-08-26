@@ -6,7 +6,6 @@ import * as serviceWorkerRegistration from './serviceWorkerRegistration';
 import axios from 'axios'
 import {Chart, registerables} from 'chart.js'
 // Apps
-import {MetronicI18nProvider} from './_metronic/i18n/Metronici18n'
 /**
  * TIP: Replace this style import with rtl styles to enable rtl mode
  *
@@ -39,15 +38,13 @@ Chart.register(...registerables)
 const container = document.getElementById('root')
 const queryClient = new QueryClient()
 if (container) {
-  createRoot(container).render(
-    <MetronicI18nProvider>
+    createRoot(container).render(
       <QueryClientProvider client={queryClient}>
-        <AuthProvider>
-          <AppRoutes/>
-        </AuthProvider>
+          <AuthProvider>
+              <AppRoutes/>
+          </AuthProvider>
       </QueryClientProvider>
-    </MetronicI18nProvider>
-  )
+    )
 }
 
 // If you want your app to work offline and load faster, you can change
