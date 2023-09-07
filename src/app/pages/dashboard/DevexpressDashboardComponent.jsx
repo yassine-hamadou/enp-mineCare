@@ -5,6 +5,7 @@ import '@devexpress/analytics-core/dist/css/dx-querybuilder.css'
 import 'devexpress-dashboard/dist/css/dx-dashboard.light.css'
 import React, {lazy, Suspense} from 'react'
 import TopBarProgress from 'react-topbar-progress-indicator'
+import {SERVER} from "../../urls";
 
 const DashboardControl = lazy(() => import('devexpress-dashboard-react'))
 
@@ -14,7 +15,7 @@ const DevexpressDashboardComponent = (props) => {
             <DashboardControl
                 id='web-dashboard'
                 style={{height: '100%'}}
-                endpoint='http://208.117.44.15/dashboards/dashboardcontrol'
+                endpoint={`${SERVER}/dashboards/dashboardcontrol`}
                 // endpoint='https://app.sipconsult.net/dashboards/dashboardcontrol'
                 // endpoint='https://localhost:5001/dashboardcontrol'
                 //optional configuration with default values

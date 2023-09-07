@@ -46,7 +46,7 @@ const SectionsPage = () => {
         try {
             const response = await axios.delete(`${ENP_URL}/Sections/${element.id}`)
             // update the local state so that react can refecth and re-render the table with the new data
-            const newData = gridData.filter((item: any) => item.id !== element.id)
+            const newData = gridData?.filter((item: any) => item.id !== element.id)
             setGridData(newData)
             return response.status
         } catch (e) {
@@ -154,12 +154,12 @@ const SectionsPage = () => {
 
         (async () => {
             let res = await getItemName(params.id)
-            setItemName(res.name)
+            setItemName(res?.name)
         })();
 
         (async () => {
             let res = await getModel()
-            setModelName(res.model)
+            setModelName(res?.model)
         })();
 
 
@@ -212,6 +212,7 @@ const SectionsPage = () => {
 
                   <h3 style={{fontWeight: "bolder"}}>{modelName} <span
                     style={{color: "blue", fontSize: "22px", fontWeight: "normal"}}> &gt; </span> {itemName}</h3>
+
                   <br></br>
                   <button
                     className='mb-3 btn btn-outline btn-outline-dashed btn-outline-primary btn-active-light-primary'

@@ -7,7 +7,7 @@ import {useAuth} from "../../../../auth";
 
 const WorkTypePage = () => {
     const {tenant} = useAuth()
-    const {data: equipModels, isLoading: equipModelLoading} = useQuery('equipmodels',
+    const {data: equipModels, isLoading: equipModelLoading} = useQuery('models',
       () => getModels(tenant)
     )
     console.log(equipModels)
@@ -29,7 +29,6 @@ const WorkTypePage = () => {
                 return 0
             },
         },
-
         {
             title: 'Model',
             dataIndex: 'code',
@@ -44,12 +43,8 @@ const WorkTypePage = () => {
                 return 0
             },
         },
-
         {
             title: 'Action',
-
-            // dataIndex: 'faultDesc',
-            // sorter: (a: any, b: any) => a.faultDesc - b.faultDesc,
             fixed: 'right',
             width: 100,
             render: (_: any, record: any) => (
@@ -70,7 +65,7 @@ const WorkTypePage = () => {
                           txmodl: record.code,
                       }
                   }>
-                      <span className='btn btn-light-info btn-sm'>Service</span>
+                      <span className='btn btn-light-info btn-sm'>Services</span>
                   </Link>
                   <button className='btn btn-light-warning btn-sm '>
                       Update

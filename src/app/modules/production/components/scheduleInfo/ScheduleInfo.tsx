@@ -154,27 +154,29 @@
 // }
 
 
-import {message, Popconfirm, Space, Table} from 'antd'
+import {Button, DatePicker, Form, Input, InputNumber, message, Modal, Space, Table} from 'antd'
 import React, {useState} from 'react'
-import {fetchServices, patchSchedule} from '../../../../urls'
+import {addHours, fetchServices, getHours, patchSchedule} from '../../../../urls'
 import {KTCard, KTCardBody} from '../../../../../_metronic/helpers'
 import {useMutation, useQuery, useQueryClient} from 'react-query'
 import {useNavigate} from "react-router-dom";
 import {useAuth} from "../../../auth";
 import {pendingSchedule} from "../entries/equipment/calendar/requests";
+import dayjs from "dayjs";
 
 export default function ScheduleInfo() {
     const {tenant} = useAuth()
     const navigate = useNavigate()
     const [scheduleToworkOn, setScheduleToWorkOn] = useState<any>([])
-
+    const [isModalOpen, setIsModalOpen] = useState(false)
+    const [submitLoading, setSubmitLoading] = useState(false)
+    const [form] = Form.useForm()
 
     const {data: loadSchedule, isLoading}: any = useQuery('loadSchedule', () => pendingSchedule(tenant))
-
+    const {data: allHours}: any = useQuery('hours', () => getHours(tenant))
     const {data: serviceType}: any = useQuery('serviceType', () => fetchServices(tenant))
     const queryClient: any = useQueryClient()
     const onChecklist = (e: any) => {
-
         const entryID = parseInt(e)
         const schedule = loadSchedule?.data.find((s: any) => s.entryId === entryID)
         console.log('scheduleSelect', schedule)
@@ -186,17 +188,58 @@ export default function ScheduleInfo() {
         }
     }
 
+    const {mutate: mutateHours} = useMutation(addHours, {
+        onSuccess: () => {
+            setIsModalOpen(false)
+            form.resetFields()
+            message.success('Hours added successfully')
+            queryClient.invalidateQueries('hours')
+        },
+        onError: (error: any) => {
+            message.error(error.message)
+            throw error.ErrorBoundary
+        }
+    })
+
     const {mutate: completeSchedule} = useMutation(
       patchSchedule, {
           onSuccess: () => {
               queryClient.invalidateQueries('loadSchedule')
+              setIsModalOpen(false)
+              setSubmitLoading(false)
+              console.log('completed')
               message.success('Schedule completed successfully')
+              const equipmentHours = allHours?.data.filter((hour: any) => hour.fleetId === form.getFieldValue('fleetId'))
+              mutateHours({
+                  fleetId: form.getFieldValue('fleetId'),
+                  comment: form.getFieldValue('comment'),
+                  previousReading: equipmentHours?.length > 0 ? equipmentHours[equipmentHours.length - 1]?.currentReading : 0,
+                  currentReading: form.getFieldValue('currentReading') ? form.getFieldValue('currentReading') : equipmentHours[equipmentHours.length - 1]?.currentReading,
+                  tenantId: tenant,
+                  date: form.getFieldValue('completedDate') ? form.getFieldValue('completedDate') : new Date(),
+                  entrySource: 'PM Reading'
+              })
+              form.resetFields()
           },
           onError: (error: any) => {
               message.error(error)
           }
       }
     )
+
+
+    const handleCompleteBacklog = (entryId: any, fleetId: any) => {
+        setIsModalOpen(true)
+        console.log('allHours', allHours?.data?.filter((hour: any) => hour.fleetId?.trim() === fleetId?.trim()))
+        const latestReading = allHours?.data?.filter((hour: any) => hour.fleetId?.trim() === fleetId?.trim())[0]?.currentReading
+        console.log('latestReading', latestReading)
+        form.setFieldsValue({
+              entryId: entryId,
+              fleetId: fleetId,
+              latestReading: latestReading,
+          }
+        )
+    }
 
     const columns: any = [
         {
@@ -300,17 +343,13 @@ export default function ScheduleInfo() {
                               onClick={() => onChecklist(entryId)}>
                           Checklist
                       </button>
-                      <Popconfirm title={'Are you sure this schedule is completed?'} onConfirm={() => {
-                          completeSchedule(entryId)
-                          console.log('record', entryId)
-                      }
+                      <button type={'button'} className='btn btn-light-success btn-sm' onClick={
+                          () => handleCompleteBacklog(entryId, record?.fleetId)
                       }>
-                          <button type={'button'} className='btn btn-light-success btn-sm'>
-                              Complete
-                          </button>
-                      </Popconfirm>
+                          Complete
+                      </button>
                       <button type={'button'} className='btn btn-light-info btn-sm' onClick={
-                          () => navigate(`/entries/backlog/${record.fleetId}`)
+                          () => navigate(`/entries/backlog/${record?.fleetId}`)
                       }>
                           View Backlogs
                       </button>
@@ -320,16 +359,27 @@ export default function ScheduleInfo() {
         }
     ]
 
+    function onFinish() {
+        setSubmitLoading(true)
+        completeSchedule({
+            entryId: form?.getFieldValue('entryId'),
+            comment: form.getFieldValue('comment'),
+            completedDate: form.getFieldValue('completedDate')
+        })
+    }
+
+    function handleCancel() {
+        setIsModalOpen(false)
+        setSubmitLoading(false)
+        form.resetFields()
+    }
+
+
     return (
       <>
           <KTCard>
               <KTCardBody>
                   <div className='row mb-0'>
-                      {/*<div className='mb-3'>*/}
-                      {/*    <h3 className='mb-0'>*/}
-                      {/*        <span className='text-danger'> {dataFromManufacturer[0].name}</span>*/}
-                      {/*    </h3>*/}
-                      {/*</div>*/}
                       <div>
                           <button
                             className='btn btn-outline btn-outline-dashed btn-outline-primary btn-active-light-primary mb-3'
@@ -351,6 +401,121 @@ export default function ScheduleInfo() {
                     bordered
                     scroll={{x: 1000}}
                   />
+                  <Modal
+                    title={'Complete Backlog'}
+                    open={isModalOpen}
+                    onCancel={handleCancel}
+                    closable={true}
+                    footer={[
+                        <Button key='back' onClick={handleCancel}>
+                            Cancel
+                        </Button>,
+                        <Button
+                          key='submit'
+                          htmlType='submit'
+                          type='primary'
+                          loading={submitLoading}
+                          onClick={() => {
+                              form.submit()
+                          }}
+                        >
+                            Complete
+                        </Button>,
+                    ]}
+                  >
+                      <Form
+                        form={form}
+                        name='control-hooks'
+                        labelCol={{span: 8}}
+                        wrapperCol={{span: 14}}
+                        title={'Complete Backlog'}
+                        onFinish={onFinish}
+                        layout={'horizontal'}
+                      >
+                          <Form.Item
+                            name='entryId'
+                            label='Entry ID'
+                            hidden
+                            rules={[
+                                {
+                                    required: true,
+                                },
+                            ]}
+                          >
+                              <Input disabled/>
+                          </Form.Item>
+                          <Form.Item
+                            name='fleetId'
+                            label='Fleet ID'
+                            rules={[
+                                {
+                                    required: true,
+                                },
+                            ]}
+                          >
+                              <Input disabled/>
+                          </Form.Item>
+                          <Form.Item
+                            name='completedDate'
+                            label='Date'
+                            rules={[
+                                {
+                                    required: true,
+                                    validator: (rule, value, callback) => {
+                                        if (dayjs(value).format('YYYY-MM-DD') < dayjs().format('YYYY-MM-DD')) {
+                                            callback('Completed date cannot be less than today')
+                                        }
+                                        callback()
+                                    }
+                                },
+                            ]}
+                          >
+                              <DatePicker
+                              />
+                          </Form.Item>
+                          <Form.Item
+                            name='latestReading'
+                            label='Latest Reading'
+                            rules={[
+                                {
+                                    required: true,
+                                },
+                            ]}
+                          >
+                              <Input
+                                disabled
+                              />
+                          </Form.Item>
+                          <Form.Item
+                            name='currentReading'
+                            label='Current Reading'
+                            rules={[
+                                {
+
+                                    validator: (rule, value, callback) => {
+                                        if (value < form.getFieldValue('latestReading')) {
+                                            callback('Current reading cannot be less than latest reading')
+                                        }
+                                        callback()
+                                    }
+                                },
+                            ]}
+                          >
+                              <InputNumber min={0} max={999999}/>
+                          </Form.Item>
+                          <Form.Item
+                            name='comment'
+                            label='Comment'
+                            rules={[
+                                {
+                                    required: true,
+                                },
+                            ]}
+                          >
+                              <Input.TextArea/>
+                          </Form.Item>
+                      </Form>
+                  </Modal>
               </KTCardBody>
           </KTCard> {/*end::Card*/}
       </>

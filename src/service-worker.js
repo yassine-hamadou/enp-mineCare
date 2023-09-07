@@ -61,6 +61,19 @@ registerRoute(
     })
 );
 
+// Cache all main JavaScript (js) and CSS (css) files.
+// registerRoute(
+//     ({url}) =>
+//         url.origin === self.location.origin &&
+//         ((url.pathname.endsWith('.js') && url.pathname.includes('chunk')) || (url.pathname.endsWith('.css') && url.pathname.includes('chunk'))),
+//     new CacheFirst({
+//         cacheName: 'main-js-css-cache',
+//         plugins: [
+//             new ExpirationPlugin({maxEntries: 50}), // Customize expiration settings if needed.
+//         ],
+//     })
+// );
+
 // This allows the web app to trigger skipWaiting via
 // registration.waiting.postMessage({type: 'SKIP_WAITING'})
 self.addEventListener('message', (event) => {
@@ -70,3 +83,4 @@ self.addEventListener('message', (event) => {
 });
 
 // Any other custom service worker logic can go here.
+//precach

@@ -13,10 +13,11 @@ import '@syncfusion/ej2-popups/styles/material.css'
 import '@syncfusion/ej2-splitbuttons/styles/material.css'
 import '@syncfusion/ej2-react-schedule/styles/material.css'
 import '@syncfusion/ej2-buttons/styles/material.css'
-import {addSchedule, deleteSchedule, fetchCustodians, localData, pendingSchedule, updateSchedule,} from './requests'
+import {addSchedule, deleteSchedule, localData, pendingSchedule, updateSchedule,} from './requests'
 import {message, Space, Spin} from 'antd'
 import React from "react";
 import {useAuth} from "../../../../../auth";
+import {getCustodians, getLocations} from "../../../../../../urls";
 
 /**
  *  Schedule editor custom fields sample
@@ -53,19 +54,10 @@ const Calendar = ({chosenLocationIdFromDropdown}) => {
         staleTime: Infinity,
     })
     const serviceTypes = serviceQueryClient.getQueryData('serviceTypes')
-    const {data: custodiansData} = useQuery('custodians', fetchCustodians, {
+    const {data: custodiansData} = useQuery('custodians', () => getCustodians(tenant), {
         refetchOnWindowFocus: false,
         staleTime: Infinity,
     })
-    // const {data: serviceTypes, isLoading: servicesLoading} = useQuery('serviceTypes', () => fetchServiceTypes(tenant))
-
-    // const {data: equipmentData} = useQuery('equipment', getEquipment, {
-    //     refetchOnWindowFocus: false,
-    //     staleTime: Infinity,
-    // })
-
-
-    //Create
     const {mutate: addScheduleMutation} = useMutation(addSchedule, {
         onSuccess: () => {
             scheduleQueryClient.invalidateQueries('schedules')
@@ -99,7 +91,7 @@ const Calendar = ({chosenLocationIdFromDropdown}) => {
         },
     })
     //Access the same location query from cycle details component
-    const locationQuery = useQueryClient().getQueryData('Locations')
+    const {data: locationQuery} = useQuery('locations', () => getLocations(tenant))
     // const vmQuery = useQueryClient().getQueryData('vmequps')
     let dropDownListObject;
     console.log('Mao service', serviceTypes?.data?.map((service) => {
@@ -230,8 +222,8 @@ const Calendar = ({chosenLocationIdFromDropdown}) => {
                             style={{width: '100%'}}
                             dataSource={locationQuery?.data.map((location) => {
                                 return {
-                                    text: `${location.locationCode} - ${location.locationDesc}`,
-                                    value: `${location.locationCode}`,
+                                    text: `${location?.name}`,
+                                    value: `${location.id}`,
                                 }
                             })}
                             fields={{text: 'text', value: 'value'}}
@@ -251,8 +243,8 @@ const Calendar = ({chosenLocationIdFromDropdown}) => {
                             style={{width: '100%'}}
                             dataSource={custodiansData?.data.map((custodian) => {
                                 return {
-                                    text: `${custodian.emplCode} - ${custodian.emplName}`,
-                                    value: `${custodian.emplCode}`,
+                                    text: `${custodian.name}`,
+                                    value: `${custodian.id}`,
                                 }
                             })}
                             fields={{text: 'text', value: 'value'}}
@@ -404,13 +396,13 @@ const Calendar = ({chosenLocationIdFromDropdown}) => {
     //
     //             {props.elementType === "event" ?
     //                 <div className="cell-footer">
-    //                     <ButtonComponent id="more-details" cssClass='e-flat' content="More Details" />
-    //                     <ButtonComponent id="add" cssClass='e-flat' content="Add" isPrimary={true} />
+    //                     <ButtonComponent id="more-details" cssClass='e-flat' content="More Details"/>
+    //                     <ButtonComponent id="add" cssClass='e-flat' content="Add" isPrimary={true}/>
     //                 </div>
     //                 :
     //                 <div className="event-footer">
-    //                     <ButtonComponent id="delete" cssClass='e-flat' content="Delete" />
-    //                     <ButtonComponent id="more-details" cssClass='e-flat' content="More Details" isPrimary={true} />
+    //                     <ButtonComponent id="delete" cssClass='e-flat' content="Delete"/>
+    //                     <ButtonComponent id="more-details" cssClass='e-flat' content="More Details" isPrimary={true}/>
     //                 </div>
     //             }
     //         </div>
@@ -441,12 +433,6 @@ const Calendar = ({chosenLocationIdFromDropdown}) => {
                         eventRendered={onEventRendered}
                         editorTemplate={editorTemplate}
                         actionBegin={onActionBegin}
-                        // id='schedule'
-                        // quickInfoTemplates={{
-                        //     header: headerTemplate.bind(this),
-                        //     content: contentTemplate.bind(this),
-                        //     footer: footerTemplate.bind(this)
-                        // }}
                     >
                         <Inject services={[Day, Week, Month, Agenda]}/>
                     </ScheduleComponent>

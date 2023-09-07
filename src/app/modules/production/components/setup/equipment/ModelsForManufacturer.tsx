@@ -10,7 +10,7 @@ const ModelsForManufacturer = () => {
     const {tenant} = useAuth()
     const queryClient = useQueryClient()
     const navigate = useNavigate()
-    const {data: modelData, isLoading: isModelDataLoading} = useQuery('modelQuery',
+    const {data: modelData, isLoading: isModelDataLoading} = useQuery('models',
       () => getModels(tenant))
 
     const {data: modelClassData, isLoading: isModelClassLoading} = useQuery('modelClassQuery',
@@ -25,7 +25,7 @@ const ModelsForManufacturer = () => {
       (data: any) => postModel(data, tenant), {
           onSuccess: () => {
               message.success('Model Added Successfully')
-              queryClient.invalidateQueries('modelQuery')
+              queryClient.invalidateQueries('models')
               form.resetFields()
               setSubmitLoading(false)
               setIsModalOpen(false)

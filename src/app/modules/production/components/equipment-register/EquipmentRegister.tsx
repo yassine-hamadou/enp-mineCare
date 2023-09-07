@@ -224,7 +224,6 @@ const EquipmentRegister = () => {
     const globalSearch = (searchValue: string) => {
         //searchValue is the value of the search input
         const searchResult = beforeSearch?.filter((item: any) => {
-            console.log('item', item)
             return (
               Object.values(item).join('').toLowerCase().includes(searchValue?.toLowerCase())
             )
@@ -232,8 +231,6 @@ const EquipmentRegister = () => {
         setGridData(searchResult) //set the grid data to the search result
     }
     const handleInputChange = (e: any) => {
-
-        console.log('e.target.value', e.target.value)
         globalSearch(e.target.value)
         if (e.target.value === '') {
             setGridData(beforeSearch)

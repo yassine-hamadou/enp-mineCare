@@ -9,7 +9,7 @@ import {useLocation} from 'react-router'
 export function AsideMenuMain() {
     const {pathname} = useLocation()
     const isDashboardActive = checkIsActive(pathname, '/dashboard')
- 
+
     return (
       <>
           <div className='menu-item'>
@@ -32,11 +32,11 @@ export function AsideMenuMain() {
             icon='/media/icons/duotune/general/gen022.svg'
           >
               <AsideMenuItem to='entries/schedule' hasBullet={true} title='Equipment Schedule'/>
-              <AsideMenuItem to='entries/fault' hasBullet={true} title='Fault'/>
+              <AsideMenuItem to='entries/fault' hasBullet={true} title='Faults'/>
               <AsideMenuItem to='entries/hours' hasBullet={true} title='Hours'/>
               <AsideMenuItem to='entries/backlog' hasBullet={true} title='Backlog'/>
               <AsideMenuItemWithSub to='#' title={'Changeout'} hasBullet={true}>
-                  <AsideMenuItem to='/entries/changeout/lube' title='Lube' hasBullet={true}/>
+                  <AsideMenuItem to='/entries/changeout/lube' title='Scheduled Oil Sampling' hasBullet={true}/>
                   <AsideMenuItem to='/entries/changeout/ground-engaging-tools' title='GET' hasBullet={true}/>
               </AsideMenuItemWithSub>
           </AsideMenuItemWithSub>

@@ -170,7 +170,7 @@ const ProductionPage: React.FC = () => {
                     path='lube'
                     element={
                         <>
-                            <PageTitle breadcrumbs={accountBreadCrumbs}>Change Out</PageTitle>
+                            <PageTitle breadcrumbs={accountBreadCrumbs}>Scheduled Oil Sampling</PageTitle>
                             <Suspense fallback={<TopBarProgress/>}>
                                 <ErrorBoundary>
                                     <LubePage/>
@@ -1058,7 +1058,6 @@ const ProductionPage: React.FC = () => {
                         <PageTitle breadcrumbs={accountBreadCrumbs}>Solved Fault Report </PageTitle>
                         <Suspense fallback={<TopBarProgress/>}>
                             <ErrorBoundary>
-                                {/*<FaultEntrySolvedReport/>*/}
                                 <ReportComponent
                                   reportName={"FaultEntrySolvedReport"}
                                 />

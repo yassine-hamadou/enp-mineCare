@@ -1,21 +1,27 @@
 import axios from 'axios';
 
 
+//base url for the api
+export const SERVER = process.env.REACT_APP_BASE_URL;
+// export const SERVER = 'http://208.117.44.15'
+// export const SERVER = 'https://app.sipconsult.net'
+// export const SERVER = 'https://localhost:7144'
+
+
 /*
- Use this file to define your base URLs whether on localhost or on the ENP server
+ Use this file to define your base URLs whether on localhost or on the ENP server https://www.logoai.com/logo/1511251
  */
 // export const ENP_URL = 'http://localhost:3001'
 // export const ENP_URL = 'https://cors-anywhere.herokuapp.com/http://208.117.44.15/SmWebApi/api'
-export const USERS_ENDPOINTS = "http://208.117.44.15/userapi/api";
-export const USER_URL = "http://208.117.44.15/hrwebapi/api";
+export const USERS_ENDPOINTS = `${SERVER}/userapi/api`;
+export const USER_URL = `${SERVER}/hrwebapi/api`;
 export const ESMS_APP_ID = 3;
 // export const USERS_ENDPOINTS = "https://app.sipconsult.net/userapi/api";
 
 const tenant: string | null = localStorage.getItem('tenant');
-export const ENP_URL = 'http://208.117.44.15/esmsapi/api'
+export const ENP_URL = `${SERVER}/esmsapi/api`
 // export const ENP_URL = 'https://localhost:7144/api'
 // export const ENP_URL = 'https://app.sipconsult.net/smwebapi/api'
-// export const ENP_URL = 'http://208.117.44.15:5002/api'
 
 
 export const fetchEmployee = () => {
@@ -26,13 +32,6 @@ export const fetchUsers = () => {
     return axios.get(`${USERS_ENDPOINTS}/Users`)
 }
 
-export const fetchEquips = () => {
-    return axios.get(`${ENP_URL}/VmequpsApi`)
-}
-
-export const fetchModels = () => {
-    return axios.get(`${ENP_URL}/VmmodlsApi`)
-}
 
 export const fetchBrands = () => {
     return axios.get(`${ENP_URL}/LubeBrands`)
@@ -95,7 +94,97 @@ export function getEquipment(tenantId: any) {
 }
 
 export function postEquipment(data: any, tenantId: any) {
-    return axios.post(`${ENP_URL}/equipments`, data);
+    return axios.post(`${ENP_URL}/equipments`, {...data, tenantId});
+}
+
+export function patchEquipment(data: any) {
+    return axios.patch(`${ENP_URL}/equipments/${data?.id}`, [
+        {
+            "op": "replace",
+            "path": "/equipmentId",
+            "value": data?.equipmentId
+        },
+        {
+            "op": "replace",
+            "path": "/serialNumber",
+            "value": data?.serialNumber
+        },
+        {
+            "op": "replace",
+            "path": "/description",
+            "value": data?.description
+        },
+        {
+            "op": "replace",
+            "path": "/manufactureDate",
+            "value": data?.manufactureDate
+        },
+        {
+            "op": "replace",
+            "path": "/modelId",
+            "value": data?.modelId
+        },
+        {
+            "op": "replace",
+            "path": "/purchaseDate",
+            "value": data?.purchaseDate
+        },
+        {
+            "op": "replace",
+            "path": "/endOfLifeDate",
+            "value": data?.endOfLifeDate
+        },
+        {
+            "op": "replace",
+            "path": "/facode",
+            "value": data?.facode
+        }
+    ])
+}
+
+export function patchEquipmentGeneralInfo(data: any) {
+    return axios.patch(`${ENP_URL}/equipments/${data?.id}`, [
+          {
+              "op": "replace",
+              "path": "/adjustment",
+              "value": data?.adjustment
+          },
+          {
+              "op": "replace",
+              "path": "/meterType",
+              "value": data?.meterType
+          }, {
+              "op": "replace",
+              "path": "/note",
+              "value": data?.note
+          }, {
+              "op": "replace",
+              "path": "/warrantyStartDate",
+              "value": data?.warrantyStartDate
+          },
+          {
+              "op": "replace",
+              "path": "/warrantyEndDate",
+              "value": data?.warrantyEndDate
+          }, {
+              "op": "replace",
+              "path": "/meterType",
+              "value": data?.meterType
+          }, {
+              "op": "replace",
+              "path": "/universalCode",
+              "value": data?.universalCode
+          }, {
+              "op": "replace",
+              "path": "/meterType",
+              "value": data?.meterType
+          }, {
+              "op": "replace",
+              "path": "/meterType",
+              "value": data?.meterType
+          },
+      ]
+    )
 }
 
 export function getBacklogs(tenantId: any) {
@@ -164,6 +253,23 @@ export function addHours(data: any) {
     return axios.post(`${ENP_URL}/hoursentry`, data);
 }
 
+export function editHour(data: any) {
+    return axios.patch(`${ENP_URL}/hoursentry/${data.id}`, [
+        {
+            "op": "replace",
+            "path": "/currentReading",
+            "value": data.readingPatch
+        }
+    ]);
+}
+
+export function getEquipmentHoursEntry(tenant: any, equipmentId: any, readingSource: any) {
+    return axios.get(`${ENP_URL}/HoursEntry/${equipmentId}/tenant/${tenant}/${readingSource}`);
+}
+
+export function getAllEquipmentsHoursEntryPmReading(tenant: any) {
+    return axios.get(`${ENP_URL}/HoursEntry/tenant/${tenant}/allpmreadings`);
+}
 
 export function postScheduleTransactions(data: any) {
     return axios.post(`${ENP_URL}/ScheduleTransactions`, data);
@@ -255,13 +361,23 @@ export const concatToFaultDetails = (data: any) => {
       })
 }
 
-export const patchSchedule = (entryId: any) => {
-    return axios.patch(`${ENP_URL}/FleetSchedulesApi/${entryId}`,
+export const patchSchedule = (data: any) => {
+    return axios.patch(`${ENP_URL}/FleetSchedulesApi/${data?.entryId}`,
       [
           {
               "op": "replace",
               "path": "/status",
               "value": "Completed"
+          },
+          {
+              "op": "replace",
+              "path": "/completedDate",
+              "value": data?.completedDate
+          },
+          {
+              "op": "replace",
+              "path": "/comment",
+              "value": data?.comment
           }
       ]
       , {
@@ -272,8 +388,7 @@ export const patchSchedule = (entryId: any) => {
 }
 
 export const addComponentToEquipment = (data: any) => {
-    console.log('data in from' +
-      '', data)
+    console.log('data in from', data)
     return axios.post(`${ENP_URL}/Components`, data)
 }
 

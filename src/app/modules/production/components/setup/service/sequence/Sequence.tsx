@@ -60,7 +60,7 @@ const Sequence = () => {
             hours: service.intervalForPm,
         }
     })
-    console.log("sequencesfor model", sequences?.data)
+    console.log("sequences for model", sequences?.data)
 
     const showModal = () => {
         setIsModalOpen(true)
@@ -87,8 +87,6 @@ const Sequence = () => {
         console.log("sequence", sequence)
         addSequence(sequence)
     }
-
-
     const columns = [
         {
             title: 'Service Type',

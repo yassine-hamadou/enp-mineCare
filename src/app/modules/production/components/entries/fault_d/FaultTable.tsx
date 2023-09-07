@@ -22,8 +22,10 @@ import {
     concatToFaultDetails,
     ENP_URL,
     fetchFaults,
+    getCustodians,
     getDowntypes,
     getEquipment,
+    getLocations,
     getPriority,
     getSources,
     postBacklogs
@@ -61,8 +63,6 @@ const FaultTable = () => {
     const [isDefectModalOpen, setIsDefectModalOpen] = useState(false)
     const [dataSource, setDataSource] = useState([])
     const [faultType, setFaultType] = useState([])
-    const [location, setLocation] = useState([])
-    const [custodian, setCustodian] = useState([])
     const [form] = Form.useForm()
     const [formSolve] = Form.useForm()
     const [formDefect] = Form.useForm()
@@ -78,7 +78,11 @@ const FaultTable = () => {
     const {data: priorityData, isLoading: priorityIsLoading} = useQuery(
       'priority', () => getPriority(tenant))
     const {data: equipmentData, isLoading: equipmentIsLoading} = useQuery(
-      'equipment', () => getEquipment(tenant))
+      'equipments', () => getEquipment(tenant))
+    const {data: locationData, isLoading: locationIsLoading} = useQuery(
+      'location', () => getLocations(tenant))
+    const {data: custodianData, isLoading: custodianIsLoading} = useQuery(
+      'custodian', () => getCustodians(tenant))
     const {mutate: addBacklog} = useMutation('addBacklog',
       (data) => postBacklogs(data, tenant), {
           onSuccess: () => {
@@ -166,7 +170,7 @@ const FaultTable = () => {
       //   },
       // }
     )
-    const {data: allEquipment} = useQuery('equipment', () => getEquipment(tenant))
+    const {data: allEquipment} = useQuery('equipments', () => getEquipment(tenant))
 
     // const loadData = async () => {
     //   setLoading(true);
@@ -365,7 +369,7 @@ const FaultTable = () => {
             reportedDate: new Date(values.ReportedDate.$d).toISOString(),
         }
         console.log('Success:', data)
-        return
+        // return  data
         const dataWithId = {...data, entryId: uuidv4(), tenantId: tenant}
         try {
             const response = await axios.post(url, dataWithId)
@@ -572,18 +576,6 @@ const FaultTable = () => {
         }
     }
 
-    const loadLocation = async () => {
-        try {
-            const response = await axios.get(`${ENP_URL}/IclocsApi`)
-            setLocation(response.data)
-        } catch (error: any) {
-            return error.statusText
-        }
-    }
-    const loadCustodian = async () => {
-        const response = await axios.get(`${ENP_URL}/VmemplsApi`)
-        setCustodian(response.data)
-    }
 
     const globalSearch = (searchValue: string) => {
         //searchValue is the value of the search input
@@ -616,8 +608,6 @@ const FaultTable = () => {
         // loadData();
         loadEqupData()
         loadFaultType()
-        loadLocation()
-        loadCustodian()
     }, [])
 
     /*
@@ -709,8 +699,9 @@ const FaultTable = () => {
                     ),
                 },
                 {
-                    label: <Badge style={{backgroundColor: '#52c41a'}}
-                                  count={solvedFaults ? solvedFaults.length : 0}><span
+                    label: <Badge
+                      style={{backgroundColor: '#52c41a'}}
+                      count={solvedFaults ? solvedFaults.length : 0}><span
                       className='me-4'>Resolved Faults</span></Badge>,
                     key: '2',
                     children: (
@@ -842,27 +833,27 @@ const FaultTable = () => {
                       </Select>
                   </Form.Item>
                   <Form.Item label='Custodian' name='custodian' rules={[{required: true}]}>
-                      <Select showSearch={true}>
-                          {custodian.map((item: any) => (
+                      <Select showSearch={true} loading={custodianIsLoading}>
+                          {custodianData?.data?.map((item: any) => (
                             <Option
                               // @ts-ignore
-                              value={item.emplCode}
+                              value={item.id}
                               key={uuidv4()}
                             >
-                                {item.emplCode} - {item.emplName}
+                                {item.name}
                             </Option>
                           ))}
                       </Select>
                   </Form.Item>
                   <Form.Item label='Location' name='location' rules={[{required: true}]}>
-                      <Select showSearch={true}>
-                          {location.map((item: any) => (
+                      <Select showSearch={true} loading={locationIsLoading}>
+                          {locationData?.data?.map((item: any) => (
                             <Option
                               // @ts-ignore
-                              value={item.locationCode}
+                              value={item.id}
                               key={uuidv4()}
                             >
-                                {item.locationCode} - {item.locationDesc}
+                                {item?.name}
                             </Option>
                           ))}
                       </Select>
@@ -1080,6 +1071,7 @@ const FaultTable = () => {
                       <Select
                         showSearch
                         placeholder='Select an equipment'
+                        loading={equipmentIsLoading}
                       >
                           {
                               equipmentData?.data?.map((equipment: any) => (
@@ -1094,7 +1086,7 @@ const FaultTable = () => {
                   <Form.Item name='item' label='Item' rules={[{required: true}]}>
                       <Input/>
                   </Form.Item>
-                  <Form.Item name='note' label='Note' rules={[{required: true}]}>
+                  <Form.Item name='note' label='Defect Description' rules={[{required: true}]}>
                       <Input/>
                   </Form.Item>
                   <Form.Item name='referenceId' label='Reference No'>
@@ -1104,6 +1096,7 @@ const FaultTable = () => {
                       <Select
                         showSearch
                         placeholder='Select a priority'
+                        loading={priorityIsLoading}
                       >
                           {priorityData?.data?.map((priority: any) => (
                             <Option value={priority?.priorityId}>{priority.name}</Option>
@@ -1114,6 +1107,7 @@ const FaultTable = () => {
                       <Select
                         showSearch
                         placeholder='Select a source'
+                        loading={sourceIsLoading}
                       >
                           {sourceData?.data?.map((source: any) => (
                             <Option value={source?.id}>{source.name}</Option>

@@ -2,14 +2,16 @@ import {KTCard, KTCardBody, KTSVG} from '../../../../../../_metronic/helpers'
 import axios from 'axios'
 import {DropDownListComponent} from '@syncfusion/ej2-react-dropdowns'
 import {Calendar} from './calendar/Calendar'
-import {Button, Space, Table, Tabs} from 'antd'
+import {Badge, Button, Space, Table, Tabs} from 'antd'
 import {useNavigate} from 'react-router-dom'
-import {ENP_URL, fetchEmployee} from '../../../../../urls'
+import {ENP_URL, fetchEmployee, getModels} from '../../../../../urls'
 import {useQuery} from 'react-query'
 import React, {useState} from 'react'
 import {ErrorBoundary} from "@ant-design/pro-components";
 import {useAuth} from "../../../../auth";
 import {fetchSchedules, fetchServiceTypes} from "./calendar/requests";
+import EquipWithPendingSetup from './EquipWithPendingSetup'
+import Prediction from './Prediction'
 
 function EquipmentSchedule() {
     const {tenant} = useAuth()
@@ -38,11 +40,16 @@ function EquipmentSchedule() {
         staleTime: Infinity,
     })
     const {data: serviceTypes, isLoading: servicesLoading} = useQuery('serviceTypes', () => fetchServiceTypes(tenant))
-
+    const {data: modelsData, isLoading: modelsLoading} = useQuery('models', () => getModels(tenant))
+    const numberOfModelsPendingSetup = modelsData?.data?.filter((model: any) => {
+        console.log('model', model)
+        // @ts-ignore
+        return model?.services?.length === 0
+    })?.length
 
     const columns: any = [
         {
-            title: 'Fleet ID',
+            title: 'Equipment ID',
             dataIndex: 'fleetId',
         },
         {
@@ -121,77 +128,79 @@ function EquipmentSchedule() {
                     label: <span className='me-4'>Pending</span>,
                     key: '1',
                     children: (
-                      <KTCard>
-                          <KTCardBody className='py-5 px-2'>
-                              <div className='d-flex justify-content-between'>
-                                  <Space style={{marginBottom: 0}}>
-                                      <DropDownListComponent
-                                        id='dropdownlist'
-                                        placeholder='Filter By location'
-                                        onChange={(e: any) => setChosenLocationIdFromDropdown(e.value)}
-                                        ref={(scope) => {
-                                            dropDownListObj = scope
-                                        }}
-                                        dataSource={locations?.data?.map((location: any) => {
-                                            return {
-                                                text: `${location.locationCode}- ${location.locationDesc}`,
-                                                value: `${location.locationCode}`,
-                                            }
-                                        })}
-                                        fields={{text: 'text', value: 'value'}}
-                                      />
-                                      <Button
-                                        type='primary'
-                                        onClick={() => {
-                                            setChosenLocationIdFromDropdown(null)
-                                            dropDownListObj.value = null
-                                        }}
-                                      >
-                                          Reset
-                                      </Button>
-                                      <DropDownListComponent
-                                        id='dropdownlist'
-                                        placeholder='Filter By Custodian'
-                                        onChange={(e: any) => setChosenLocationIdFromDropdown(e.value)}
-                                        ref={(scope) => {
-                                            dropDownListObj = scope
-                                        }}
-                                        dataSource={custodians?.data?.map((custodians: any) => {
-                                            return {
-                                                text: `${custodians.emplCode}- ${custodians.emplName}`,
-                                                value: `${custodians.emplCode}`,
-                                            }
-                                        })}
-                                        fields={{text: 'text', value: 'value'}}
-                                      />
-                                      <Button
-                                        type='primary'
-                                        onClick={() => {
-                                            setChosenLocationIdFromDropdown(null)
+                      <ErrorBoundary>
+                          <KTCard>
+                              <KTCardBody className='py-5 px-2'>
+                                  <div className='d-flex justify-content-between'>
+                                      <Space style={{marginBottom: 0}}>
+                                          <DropDownListComponent
+                                            id='dropdownlist'
+                                            placeholder='Filter By location'
+                                            onChange={(e: any) => setChosenLocationIdFromDropdown(e.value)}
+                                            ref={(scope) => {
+                                                dropDownListObj = scope
+                                            }}
+                                            dataSource={locations?.data?.map((location: any) => {
+                                                return {
+                                                    text: `${location.locationCode}- ${location.locationDesc}`,
+                                                    value: `${location.locationCode}`,
+                                                }
+                                            })}
+                                            fields={{text: 'text', value: 'value'}}
+                                          />
+                                          <Button
+                                            type='primary'
+                                            onClick={() => {
+                                                setChosenLocationIdFromDropdown(null)
+                                                dropDownListObj.value = null
+                                            }}
+                                          >
+                                              Reset
+                                          </Button>
+                                          <DropDownListComponent
+                                            id='dropdownlist'
+                                            placeholder='Filter By Custodian'
+                                            onChange={(e: any) => setChosenLocationIdFromDropdown(e.value)}
+                                            ref={(scope) => {
+                                                dropDownListObj = scope
+                                            }}
+                                            dataSource={custodians?.data?.map((custodians: any) => {
+                                                return {
+                                                    text: `${custodians.emplCode}- ${custodians.emplName}`,
+                                                    value: `${custodians.emplCode}`,
+                                                }
+                                            })}
+                                            fields={{text: 'text', value: 'value'}}
+                                          />
+                                          <Button
+                                            type='primary'
+                                            onClick={() => {
+                                                setChosenLocationIdFromDropdown(null)
 
-                                            dropDownListObj.value = null
-                                        }}
-                                      >
-                                          Reset
-                                      </Button>
-                                  </Space>
-                                  <Space style={{marginBottom: 0}}>
-                                      <button
-                                        type='button'
-                                        className='btn btn-sm btn-primary me-3 mb-2'
-                                        onClick={() => {
-                                            navigate('/entries/start-work')
-                                        }}
-                                      >
-                                          <KTSVG path='/media/icons/duotune/technology/teh005.svg'
-                                                 className='svg-icon-2'/>
-                                          Open Schedules
-                                      </button>
-                                  </Space>
-                              </div>
-                              <Calendar chosenLocationIdFromDropdown={chosenLocationIdFromDropdown}/>
-                          </KTCardBody>
-                      </KTCard>
+                                                dropDownListObj.value = null
+                                            }}
+                                          >
+                                              Reset
+                                          </Button>
+                                      </Space>
+                                      <Space style={{marginBottom: 0}}>
+                                          <button
+                                            type='button'
+                                            className='btn btn-sm btn-primary me-3 mb-2'
+                                            onClick={() => {
+                                                navigate('/entries/start-work')
+                                            }}
+                                          >
+                                              <KTSVG path='/media/icons/duotune/technology/teh005.svg'
+                                                     className='svg-icon-2'/>
+                                              Open Schedules
+                                          </button>
+                                      </Space>
+                                  </div>
+                                  <Calendar chosenLocationIdFromDropdown={chosenLocationIdFromDropdown}/>
+                              </KTCardBody>
+                          </KTCard>
+                      </ErrorBoundary>
                     ),
                 },
                 {
@@ -216,6 +225,34 @@ function EquipmentSchedule() {
                       </ErrorBoundary>
                     ),
                 },
+                {
+                    label: <Badge count={numberOfModelsPendingSetup ? numberOfModelsPendingSetup : 0}><span
+                      className='me-4'>Schedule Parameters</span></Badge>,
+                    key: '3',
+                    children: (
+                      <ErrorBoundary>
+
+                          <KTCard>
+                              <KTCardBody className='py-5 px-2'>
+                                  <EquipWithPendingSetup/>
+                              </KTCardBody>
+                          </KTCard>
+                      </ErrorBoundary>
+                    )
+                },
+                {
+                    label: <span className='me-4'>PM Schedules</span>,
+                    key: '4',
+                    children: (
+                      <ErrorBoundary>
+                          <KTCard>
+                              <KTCardBody className='py-5 px-2'>
+                                  <Prediction/>
+                              </KTCardBody>
+                          </KTCard>
+                      </ErrorBoundary>
+                    )
+                }
             ]}
           />
       </div>
