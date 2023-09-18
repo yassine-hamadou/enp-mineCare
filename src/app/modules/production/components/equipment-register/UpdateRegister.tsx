@@ -1,4 +1,4 @@
-import {Link, useLocation} from "react-router-dom";
+import {Link, useLocation, useNavigate} from "react-router-dom";
 import {KTCard, KTCardBody} from "../../../../../_metronic/helpers";
 import {
     Button,
@@ -18,11 +18,22 @@ import React, {useState} from "react";
 import dayjs from 'dayjs';
 import axios from "axios";
 import {useMutation, useQuery, useQueryClient} from "react-query";
-import {addComponentToEquipment, ENP_URL, fetchFaults, getHours, getModels} from "../../../../urls";
+import {
+    addComponentToEquipment,
+    ENP_URL,
+    fetchFaults,
+    getEquipmentHoursEntry,
+    getModels,
+    patchEquipment,
+    patchEquipmentGeneralInfo
+} from "../../../../urls";
 import {useAuth} from "../../../auth";
 import {fetchSchedules} from "../entries/equipment/calendar/requests";
+import {calculateAverageDailyUsage} from "./calculateAverageDailyUsage";
+import {getPMObjects} from "../setup/service/sequence/getPM";
 
 const UpdateRegister = () => {
+    let navigate = useNavigate();
     const [gridData, setGridData] = useState([])
     const location = useLocation();
     let [showModal, setShowModal] = useState(false);
@@ -44,26 +55,54 @@ const UpdateRegister = () => {
             setComponentSubmitLoading(false);
         }
     })
+    const {mutate: updateEquipment, isLoading: updateInProgress} = useMutation((data: any) => patchEquipment(data), {
+        onSuccess: () => {
+            queryClient.removeQueries('equipments')
+            message.success('Equipment updated successfully');
+            navigate('/equipment-register');
+        },
+        onError: () => {
+            message.error('Error updating equipment');
+        }
+    })
+
+    const {
+        mutate: updateEquipmentGeneralInfo,
+        isLoading: updateEquipmentGeneralInfoLoading
+    } = useMutation((data: any) => patchEquipmentGeneralInfo(data), {
+        onSuccess: () => {
+            queryClient.removeQueries('equipments')
+            message.success('Equipment updated successfully');
+            navigate('/equipment-register');
+        },
+        onError: (error: any) => {
+            message.error('Error updating equipment')
+        }
+    })
 
     const {
         data: listOfAgreements,
         isLoading: isAgreementLoading
     } = useQuery('agreements', () => axios.get(`${ENP_URL}/agreements`));
 
-    const {data: listOfMeters, isLoading} = useQuery('meters', () => getHours(tenant));
+    const {
+        data: getEquipmentLatestHour,
+        isLoading: equipHourLoading
+    } = useQuery('getEquipmentLatestHour', () => getEquipmentHoursEntry(tenant, equipmentData?.equipmentId?.trim(), 'PM Reading'));
 
     const {
         data: listOfFaults,
         isLoading: isFaultLoading
     } = useQuery('faults', () => fetchFaults(tenant));
 
-    const {data: listOfModels} = useQuery('listOfModels', () => getModels(tenant))
+    const {data: listOfModels} = useQuery('models', () => getModels(tenant))
 
     const {
         data: listOfPlannedMaintenance,
         isLoading: isMaintenanceLoading
     } = useQuery('listOfPlannedMaintenance', () => fetchSchedules(tenant));
 
+    const {Option} = Select;
     console.log('list of models', listOfModels);
     const handleCancel = () => {
         setShowModal(false);
@@ -154,12 +193,12 @@ const UpdateRegister = () => {
         },
     ]
     const metersColumns: any = [
-        // {
-        //   title: 'Equipment ID',
-        //   dataIndex: 'fleetId'
-        // },
         {
-            title: 'Date',
+            title: 'ID',
+            dataIndex: 'id'
+        },
+        {
+            title: 'Latest Reading Date',
             dataIndex: 'date',
             render: (date: any) => new Date(date).toDateString(),
         },
@@ -239,6 +278,124 @@ const UpdateRegister = () => {
     ]
 
 
+    const pmIntervalColumns: any = [
+        {
+            title: 'Current Reading',
+            dataIndex: 'hoursEntries',
+            render: (hoursEntries: any) => hoursEntries[0]?.currentReading ?? 0
+        },
+        {
+            title: 'Hours Worked Since Last PM',
+            dataIndex: 'hoursEntries',
+            render: (hoursEntries: any) => {
+                const latestHourFromNormalReading = hoursEntries[0]?.currentReading ?? 0;
+                const latestHourFromPM = getEquipmentLatestHour?.data[0]?.currentReading
+                const hoursWorkedSinceLastPM = latestHourFromNormalReading - latestHourFromPM
+                if (isNaN(hoursWorkedSinceLastPM) || isNaN(latestHourFromPM)) {
+                    return <span className={'badge badge-danger'}>No PM Yet!</span> //No Initial Reading
+                }
+                return <span className={'badge badge-success'}>{hoursWorkedSinceLastPM}</span>
+            }
+        },
+        {
+            title: 'Average Daily Usage',
+            // dataIndex: 'equipmentId',
+            render: () => {
+                const latestHour = getEquipmentLatestHour?.data;
+                console.log('latest hour', latestHour);
+                const averageDailyUsage = calculateAverageDailyUsage(equipmentData, latestHour);
+                if (isNaN(averageDailyUsage)) {
+                    return <span className={'badge badge-danger'}>Invalid!</span>
+                } else if (averageDailyUsage < 0) {
+                    return <span className={'badge badge-danger'}>
+                        Latest Reading Not Updated!
+                    </span>
+                }
+                  //if average is infinity then hoursWorkedSinceLastPM / hoursSinceLastPM is a division by zero,
+                // so we wait till hoursSinceLastPM becomes more than zero meaning waiting 1hour later
+                else if (averageDailyUsage === Infinity) {
+                    return <span className={'badge badge-light-danger'}>
+                        Not available at the moment!
+                    </span>
+                }
+                return <span className={'badge badge-success'}>{averageDailyUsage.toFixed(2)}</span>
+            }
+        },
+        {
+            title: 'Estimated Maintenance Date',
+            render: () => {
+                const latestHour = getEquipmentLatestHour?.data;
+                console.log('latest hour', latestHour);
+                const averageDailyUsage = calculateAverageDailyUsage(equipmentData, latestHour);
+                if (isNaN(averageDailyUsage)) {
+                    return <span className={'badge badge-danger'}>Invalid!</span>
+                } else if (averageDailyUsage < 0) {
+                    return <span className={'badge badge-danger'}>
+                       Awaiting Latest Reading Update!
+                    </span>
+                }
+                const pmObjects = getPMObjects(equipmentData?.hoursEntries[0]?.currentReading, equipmentData?.model?.services?.map((service: any) => {
+                      return {
+                          name: service?.name,
+                          hours: service?.intervalForPm,
+                      }
+                  })
+                );
+                const serviceCycle = equipmentData?.model?.services?.map((service: any) => {
+                    return {
+                        name: service?.name,
+                        hours: service?.intervalForPm,
+                    }
+                })
+                const currentReading = equipmentData?.hoursEntries[0]?.currentReading;
+                let nextPMReading;
+
+                for (let i = currentReading; getPMObjects(i, serviceCycle)?.hours === pmObjects?.hours; i++) {
+                    nextPMReading = i;
+                }
+                console.log('pm objects', pmObjects);
+
+                //calculate number of days to reach to the nextPMReading based on the averageDailyUsage
+                const daysToNextPMReading = (nextPMReading - currentReading) / averageDailyUsage;
+                console.log('days to next pm reading', daysToNextPMReading);
+                const estimatedMaintenanceDate = dayjs().add(daysToNextPMReading, 'day');
+                return pmObjects?.predictedPm?.name ?
+                  <div>
+                      <span>{`${dayjs(estimatedMaintenanceDate)?.format(
+                        'DD/MM/YYYY'
+                      )}`}</span>&nbsp;
+                      <span className={'badge badge-success'}>{`at ${nextPMReading + 1}`}</span>
+                  </div> :
+                  <span className={'badge badge-danger'}>No Service Cycle Setup</span>;
+            }
+        },
+        {
+            title: 'Incoming Planned Maintenance',
+            dataIndex: 'hoursEntries',
+            render: (hoursEntries: any) => {
+                const latestHour = getEquipmentLatestHour?.data;
+                console.log('latest hour', latestHour);
+                const averageDailyUsage = calculateAverageDailyUsage(equipmentData, latestHour);
+                if (isNaN(averageDailyUsage)) {
+                    return <span className={'badge badge-danger'}>Invalid!</span>
+                }
+                console.log('curremt usage', equipmentData?.hoursEntries[0]?.currentReading)
+                const pmObjects = getPMObjects(equipmentData?.hoursEntries[0]?.currentReading, equipmentData?.model?.services?.map((service: any) => {
+                      return {
+                          name: service?.name,
+                          hours: service?.intervalForPm,
+                      }
+                  })
+                );
+                console.log('pm objects', pmObjects);
+
+                return pmObjects?.predictedPm?.name ?
+                  <span className={'badge badge-success'}>{pmObjects?.predictedPm?.name}</span> :
+                  <span className={'badge badge-danger'}>No Service Cycle Setup</span>;
+            }
+        }
+    ]
+
     const [updateDetailsForm] = Form.useForm();
     const [generalInfoUpdateForm] = Form.useForm();
     const [componentUpdateForm] = Form.useForm();
@@ -249,27 +406,36 @@ const UpdateRegister = () => {
     console.log('equipments', equipmentsQuery);
     const equipsData = equipmentsQuery?.data;
     console.log('equipment', equipsData);
+
     const equipmentData: any = location.state;
-    console.log('equipment data', equipmentData);
+    //put equimentData in an array  and pass it to the datasource
+    const equipmentDataArray = [equipmentData];
+    console.log('equipment data', equipmentDataArray);
     const componentEquipData = equipsData ? equipsData?.find((equip: any) => equip.equipmentId === equipmentData.equipmentId) : equipmentData;
     const [gridComponentsData, setComponentsGridData] = useState<any>(componentEquipData?.components);
 
 
     updateDetailsForm.setFieldsValue({
+        id: equipmentData?.id,
         equipmentId: equipmentData?.equipmentId?.trim(),
         serialNumber: equipmentData?.serialNumber?.trim(),
         description: equipmentData?.description?.trim(),
         manufactureDate: dayjs(equipmentData?.manufactureDate),
         purchaseDate: dayjs(equipmentData?.purchaseDate),
         endOfLifeDate: dayjs(equipmentData?.endOfLifeDate),
-        faCode: equipmentData?.fixedAssetsCode?.trim(),
+        modelId: equipmentData?.modelId,
+        facode: equipmentData?.facode?.trim(),
     })
     generalInfoUpdateForm.setFieldsValue({
+        id: equipmentData?.id,
         note: equipmentData?.note,
         warrantyStartDate: dayjs(equipmentData?.warrantyStartDate),
         warrantyEndDate: dayjs(equipmentData?.warrantyEndDate),
         universalCode: equipmentData?.universalCode,
         meterType: equipmentData?.meterType,
+        adjustment: equipmentData?.adjustment,
+
+        // initialReading: equipmentData?.initialReading,
     })
     componentUpdateForm.setFieldsValue({
         equipmentId: equipmentData?.equipmentId?.trim(),
@@ -281,6 +447,23 @@ const UpdateRegister = () => {
         equipmentId: equipmentData?.equipmentId?.trim(),
     })
 
+    function onUpdateDetailsFinish() {
+        console.log('update details form', updateDetailsForm.getFieldsValue());
+        const data = {
+            ...updateDetailsForm.getFieldsValue(),
+        }
+        updateEquipment(data)
+    }
+
+    function onUpdateGeneralInfoFinish() {
+        console.log('update general info form', generalInfoUpdateForm.getFieldsValue());
+        const data = {
+            ...generalInfoUpdateForm.getFieldsValue(),
+        }
+        updateEquipmentGeneralInfo(data)
+    }
+
+    // @ts-ignore
     return <>
         <KTCard>
             <KTCardBody>
@@ -313,11 +496,19 @@ const UpdateRegister = () => {
                                   name={'add-equip-register'}
                                   layout={'vertical'}
                                   form={updateDetailsForm}
-                                  // onFinish={onfinish}
+                                  onFinish={onUpdateDetailsFinish}
                                   labelCol={{span: 8}}
                                   wrapperCol={{span: 24}}
                                   title='Update Equipment'
                                 >
+                                    <Form.Item name='id' label='ID' hidden={true}
+                                               rules={[{required: true}]}>
+                                        <Input
+                                          type='text'
+                                          disabled
+                                          className='form-control form-control-solid'
+                                        />
+                                    </Form.Item>
                                     <div className='row mb-0'>
                                         <div className='col-4 mb-7'>
                                             <Form.Item name='equipmentId' label='Equipment ID'
@@ -325,12 +516,12 @@ const UpdateRegister = () => {
                                                 <Input
                                                   type='text'
                                                   className='form-control form-control-solid'
+                                                  disabled
                                                 />
                                             </Form.Item>
                                         </div>
                                         <div className='col-4 mb-7'>
-                                            <Form.Item name='serialNumber' label='Serial Number'
-                                                       rules={[{required: true}]}>
+                                            <Form.Item name='serialNumber' label='Serial Number'>
                                                 <Input
                                                   type='text'
                                                   className='form-control form-control-solid'
@@ -340,8 +531,7 @@ const UpdateRegister = () => {
                                     </div>
                                     <div className='row mb-0'>
                                         <div className='col-4 mb-7'>
-                                            <Form.Item name='fACode' label='Fixed Asset Code'
-                                                       rules={[{required: true}]}>
+                                            <Form.Item name='facode' label='Fixed Asset Code'>
                                                 <Input
                                                   type='text'
                                                   className='form-control form-control-solid'
@@ -349,17 +539,26 @@ const UpdateRegister = () => {
                                             </Form.Item>
                                         </div>
                                         <div className='col-4 mb-7'>
-                                            <Form.Item name='model' label='Model'
-                                                       rules={[{required: true}]}>
+                                            <Form.Item
+                                              name='modelId'
+                                              label='Model'>
                                                 <Select
                                                   placeholder='Select Model'
                                                   className='form-select form-select-solid py-1 px-0'
                                                   showSearch
-                                                  defaultValue={equipmentData.modelId}
+                                                  value={equipmentData?.modelId}
+                                                  defaultValue={equipmentData?.modelId}
                                                 >
                                                     {listOfModels?.data?.map((item: any) => (
-                                                        <Select.Option
-                                                          value={item.modelId}>{item.manufacturer?.name} - {item.name}</Select.Option>
+                                                        <Option
+                                                          key={item?.modelId}
+                                                          value={item?.modelId}
+                                                          defaultValue={item?.modelId}
+                                                          selected={item?.modelId === equipmentData?.modelId}
+                                                          defaultChecked={item?.modelId === equipmentData?.modelId}
+                                                        >
+                                                            {item?.manufacturer?.name} - {item?.name}
+                                                        </Option>
                                                       )
                                                     )}
                                                 </Select>
@@ -368,16 +567,14 @@ const UpdateRegister = () => {
                                     </div>
                                     <div className='row mb-0'>
                                         <div className='col-4 mb-7'>
-                                            <Form.Item name='manufactureDate' label='Manufacture Date'
-                                                       rules={[{required: true}]}>
+                                            <Form.Item name='manufactureDate' label='Manufacture Date'>
                                                 <DatePicker
                                                   className='form-control form-control-solid'
                                                 />
                                             </Form.Item>
                                         </div>
                                         <div className='col-4 mb-7'>
-                                            <Form.Item name='purchaseDate' label='Purchase Date'
-                                                       rules={[{required: true}]}>
+                                            <Form.Item name='purchaseDate' label='Purchase Date'>
                                                 <DatePicker
                                                   className='form-control form-control-solid'
                                                 />
@@ -388,8 +585,7 @@ const UpdateRegister = () => {
 
                                     <div className='row mb-0'>
                                         <div className='col-5 mb-7'>
-                                            <Form.Item name='description' label='Description'
-                                                       rules={[{required: true}]}>
+                                            <Form.Item name='description' label='Description'>
                                                 <Input.TextArea
                                                   placeholder='Enter Description'
                                                   className='form-control form-control-solid'
@@ -397,8 +593,7 @@ const UpdateRegister = () => {
                                             </Form.Item>
                                         </div>
                                         <div className='col-3 mb-7'>
-                                            <Form.Item name='endOfLifeDate' label='End Of Life Date'
-                                                       rules={[{required: true}]}>
+                                            <Form.Item name='endOfLifeDate' label='End Of Life Date'>
                                                 <DatePicker
                                                   className='form-control form-control-solid'
                                                 />
@@ -408,6 +603,7 @@ const UpdateRegister = () => {
                                     <Button
                                       type='primary'
                                       htmlType='submit'
+                                      loading={updateInProgress}
                                     >
                                         Submit
                                     </Button>
@@ -424,65 +620,85 @@ const UpdateRegister = () => {
                                   name={'general-info'}
                                   layout={'vertical'}
                                   form={generalInfoUpdateForm}
-                                  // onFinish={onfinish}
+                                  onFinish={onUpdateGeneralInfoFinish}
                                   labelCol={{span: 8}}
                                   wrapperCol={{span: 24}}
                                   title='Add General Info'
                                 >
+                                    <Form.Item
+                                      name='id'
+                                      label='ID'
+                                      hidden={true}
+                                      rules={[{required: true}]}
+                                    >
+                                        <Input
+                                          type='text'
+                                          disabled
+                                          className='form-control form-control-solid'
+                                        />
+                                    </Form.Item>
                                     <div className='row mb-0'>
                                         <div className='col-4 mb-7'>
-                                            <Form.Item name='universalCode' label='Universal Code'
-                                                       rules={[{required: true}]}>
+                                            <Form.Item
+                                              name='meterType'
+                                              label='Meter Type'
+                                              rules={[{required: true}]}
+                                            >
+                                                <Select
+                                                  className='form-select form-select-solid px-0'
+                                                  style={{width: '100%', padding: '0.4rem 0.75rem'}}
+                                                >
+                                                    <Select.Option value='HOUR'>HOUR</Select.Option>
+                                                    <Select.Option value='Km'>KiloMeter (Km)</Select.Option>
+                                                </Select>
+                                            </Form.Item>
+                                        </div>
+                                        <div className='col-4 mb-7'>
+                                            <Form.Item name='adjustment' label='Adjustment'>
+                                                <InputNumber
+                                                  className='form-control form-control-solid py-2'
+                                                  max={99999}
+                                                />
+                                            </Form.Item>
+                                        </div>
+                                    </div>
+                                    <div className='row mb-0'>
+                                        <div className='col-4 mb-7'>
+                                            <Form.Item name='warrantyEndDate' label='Warranty End Date'>
+                                                <DatePicker
+                                                  className='form-control form-control-solid'
+                                                />
+                                            </Form.Item>
+                                        </div>
+                                        <div className='col-4 mb-7'>
+                                            <Form.Item name='warrantyStartDate' label='Warranty Start Date'>
+                                                <DatePicker
+                                                  className='form-control form-control-solid'
+                                                />
+                                            </Form.Item>
+                                        </div>
+                                    </div>
+                                    <div className='row mb-0'>
+                                        <div className='col-4 mb-7'>
+                                            <Form.Item name='note' label='Note'>
+                                                <Input.TextArea
+                                                  className='form-control form-control-solid'
+                                                />
+                                            </Form.Item>
+                                        </div>
+                                        <div className='col-4 mb-7'>
+                                            <Form.Item name='universalCode' label='Universal Code'>
                                                 <Input
                                                   type='text'
                                                   className='form-control form-control-solid'
                                                 />
                                             </Form.Item>
                                         </div>
-                                        <div className='col-4 mb-7'>
-                                            <Form.Item name='meterType' label='Meter Type (Hours, Km)'
-                                                       rules={[{required: true}]}>
-                                                <Select
-                                                  className='form-select form-select-solid py-1 px-0'
-                                                  style={{width: '100%'}}
-                                                >
-                                                    <Select.Option value='HOUR'>HOUR</Select.Option>
-                                                    <Select.Option value='KILOMETER'>KiloMeter (Km)</Select.Option>
-                                                </Select>
-                                            </Form.Item>
-                                        </div>
                                     </div>
-                                    <div className='row mb-0'>
-                                        <div className='col-4 mb-7'>
-                                            <Form.Item name='warrantyEndDate' label='Warranty End Date'
-                                                       rules={[{required: true}]}>
-                                                <DatePicker
-                                                  className='form-control form-control-solid'
-                                                />
-                                            </Form.Item>
-                                        </div>
-                                        <div className='col-4 mb-7'>
-                                            <Form.Item name='warrantyStartDate' label='Warranty Start Date'
-                                                       rules={[{required: true}]}>
-                                                <DatePicker
-                                                  className='form-control form-control-solid'
-                                                />
-                                            </Form.Item>
-                                        </div>
-                                    </div>
-                                    <div className='row mb-0'>
-                                        <div className='col-4 mb-7'>
-                                            <Form.Item name='note' label='Note' rules={[{required: true}]}>
-                                                <Input.TextArea
-                                                  className='form-control form-control-solid'
-                                                />
-                                            </Form.Item>
-                                        </div>
-                                    </div>
-
                                     <Button
                                       type='primary'
                                       htmlType='submit'
+                                      loading={updateEquipmentGeneralInfoLoading}
                                     >
                                         Submit
                                     </Button>
@@ -610,20 +826,6 @@ const UpdateRegister = () => {
                           ),
                       },
                       {
-                          label: `Meters`,
-                          key: '4',
-                          children: (
-                            <>
-                                <Table
-                                  bordered
-                                  columns={metersColumns}
-                                  dataSource={listOfMeters?.data?.filter((item: any) => item.fleetId?.trim() === equipmentData?.equipmentId?.trim())}
-                                  loading={isLoading}
-                                />
-                            </>
-                          ),
-                      },
-                      {
                           label: `Faults`,
                           key: '5',
                           children: (
@@ -637,6 +839,35 @@ const UpdateRegister = () => {
                             </>
                           ),
                       },
+                      {
+                          label: `Meters`,
+                          key: '4',
+                          children: (
+                            <>
+                                <Table
+                                  bordered
+                                  columns={metersColumns}
+                                  // dataSource={listOfMeters?.data?.filter((item: any) => item.fleetId?.trim() === equipmentData?.equipmentId?.trim())}
+                                  dataSource={equipmentData?.hoursEntries?.length > 0 ? equipmentData?.hoursEntries : []}
+                                />
+                            </>
+                          ),
+                      },
+                      {
+                          label: `Planned Maintenance (PM)`,
+                          key: 'pm',
+                          children: (
+                            <>
+                                <Table
+                                  bordered
+                                  columns={pmIntervalColumns}
+                                  // convert equipmentData from an object to an array and pass it to datasource
+                                  dataSource={equipmentDataArray}
+                                />
+                            </>
+                          ),
+                      },
+
                       {
                           label: `Scheduled Maintenance`,
                           key: '6',

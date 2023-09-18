@@ -67,6 +67,9 @@ const ServicesPage = () => {
             queryClient.invalidateQueries('services').then(
               message.success('Service deleted successfully')
             )
+            queryClient.invalidateQueries('equipmodels').then(
+              message.success('Service deleted successfully')
+            )
         } catch (error) {
             message.error('Something went wrong').then(r => r)
             console.log(error)
@@ -99,7 +102,6 @@ const ServicesPage = () => {
             width: 100,
             render: (_: any, record: any) => (
               <Space size='middle'>
-
                   <Link to={`/setup/sections/${record.id}`}>
                       <span className='btn btn-light-info btn-sm'>Sections</span>
                   </Link>
@@ -203,6 +205,7 @@ const ServicesPage = () => {
                     footer={[
                         <Button key='back' onClick={handleCancel}>
                             Cancel
+
                         </Button>,
                         <Button
                           key='submit'

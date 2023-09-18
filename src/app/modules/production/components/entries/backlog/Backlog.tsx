@@ -128,6 +128,11 @@ const Backlog = () => {
                   <Popconfirm title='Sure to delete?' onConfirm={() => handleDelete(record)}>
                       <button className='btn btn-light-danger btn-sm'>Delete</button>
                   </Popconfirm>
+                  <button
+                    className='btn btn-light-warning btn-sm'
+                  >
+                      Work Order
+                  </button>
               </Space>
             ),
         }
@@ -297,7 +302,7 @@ const Backlog = () => {
     const [totalItems, setTotalItems] = useState(0);
 
     const {data: equipmentData, isLoading: equipmentIsLoading} = useQuery(
-      'equipment', () => getEquipment(tenant))
+      'equipments', () => getEquipment(tenant))
     const {data: priorityData, isLoading: priorityIsLoading} = useQuery(
       'priority', () => getPriority(tenant))
     const {data: sourceData, isLoading: sourceIsLoading} = useQuery(
@@ -512,6 +517,15 @@ const Backlog = () => {
                       </Form.Item>
                       <Form.Item name='bdate' label='Backlog Date'>
                           <DatePicker showTime/>
+                      </Form.Item>
+                      <Form.Item name='action' label='Action to be taken' rules={[{required: true}]}>
+                          <Select
+                            showSearch
+                            placeholder='Action to be taken'
+                          >
+                              <Option value={'changes'}>Changes</Option>
+                              <Option value={'repair'}>Repair</Option>
+                          </Select>
                       </Form.Item>
                       <Form.Item name='item' label='Item' rules={[{required: true}]}>
                           <Input/>

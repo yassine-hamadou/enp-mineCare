@@ -24,18 +24,22 @@ jobs:
           node-version: ${{ matrix.node-version }}
           cache: 'npm'
 
-
-      - name: Install Dependencies
-        run: |
-          npm install
-          npm install cross-env
+      - name: Run install
+        uses: borales/actions-yarn@v4
+        with:
+          cmd: install # will run `yarn install` command
+          
+     # - name: Install Dependencies
+      #  run: |
+       #   npm install --legacy-peer-deps
+        #  npm install cross-env
 
       - name: Heap size
         run: |
           set "NODE_OPTIONS=--max_old_space_size=4096" 
 
       - name: Build the project
-        run: npm run ciBuild
+        run: yarn run ciBuild
 
       # upload artifact
       - name: Upload artifact for deployment job
