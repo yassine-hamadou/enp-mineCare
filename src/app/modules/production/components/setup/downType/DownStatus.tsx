@@ -200,225 +200,215 @@
 // };
 // export {DownStatusPage};
 
-
-import {Button, Form, Input, message, Modal, Popconfirm, Space, Table} from "antd";
-import {KTCard, KTCardBody, KTSVG} from "../../../../../../_metronic/helpers";
-import React, {useState} from "react";
-import {useMutation, useQuery, useQueryClient} from "react-query";
-import {deleteDownStatus, getDownStatuses, postDownStatus, putDownStatus} from "../../../../../urls";
-import {useAuth} from "../../../../auth";
-
+import {Button, Form, Input, message, Modal, Popconfirm, Space, Table} from 'antd'
+import {KTCard, KTCardBody, KTSVG} from '../../../../../../_metronic/helpers'
+import React, {useState} from 'react'
+import {useMutation, useQuery, useQueryClient} from 'react-query'
+import {deleteDownStatus, getDownStatuses, postDownStatus, putDownStatus} from '../../../../../urls'
+import {useAuth} from '../../../../auth'
 
 const DownStatusPage = () => {
-    const {tenant} = useAuth()
-    const queryClient = useQueryClient()
-    const [isModalOpen, setIsModalOpen] = useState(false);
-    const [form] = Form.useForm();
-    const [submitLoading, setSubmitLoading] = useState(false)
-    const [isUpdating, setIsUpdating] = useState(false)
+  const {tenant} = useAuth()
+  const queryClient = useQueryClient()
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [form] = Form.useForm()
+  const [submitLoading, setSubmitLoading] = useState(false)
+  const [isUpdating, setIsUpdating] = useState(false)
 
+  const {data: downStatusData, isLoading: isDownStatusDataLoading} = useQuery(
+    'downStatusQuery',
+    () => getDownStatuses(tenant)
+  )
+  console.log('downStatusData', downStatusData)
+  const {mutate: addDownStatus} = useMutation((data) => postDownStatus(data, tenant), {
+    onSuccess: () => {
+      message.success('DownStatus Added Successfully')
+      queryClient.invalidateQueries('downStatusQuery')
+      form.resetFields()
+      setSubmitLoading(false)
+      setIsModalOpen(false)
+      setIsUpdating(false)
+      setSubmitLoading(false)
+    },
+    onError: () => {
+      message.error('Something went wrong')
+      setSubmitLoading(false)
+    },
+  })
+  const {mutate: updateDownStatus} = useMutation((data) => putDownStatus(data, tenant), {
+    onSuccess: () => {
+      message.success('DownStatus Updated Successfully')
+      queryClient.invalidateQueries('downStatusQuery')
+      form.resetFields()
+      setSubmitLoading(false)
+      setIsModalOpen(false)
+      setIsUpdating(false)
+      setSubmitLoading(false)
+    },
+    onError: () => {
+      message.error('Something went wrong')
+    },
+  })
+  const {mutate: removeDownStatus} = useMutation((id: any) => deleteDownStatus(id), {
+    onSuccess: () => {
+      message.success('DownStatus Deleted Successfully')
+      queryClient.invalidateQueries('downStatusQuery')
+    },
+    onError: () => {
+      message.error('Something went wrong')
+    },
+  })
+  console.log('downStatusData', downStatusData)
 
-    const {data: downStatusData, isLoading: isDownStatusDataLoading} = useQuery('downStatusQuery',
-      () => getDownStatuses(tenant))
-    console.log("downStatusData", downStatusData)
-    const {mutate: addDownStatus} = useMutation(
-      (data) => postDownStatus(data, tenant), {
-          onSuccess: () => {
-              message.success('DownStatus Added Successfully')
-              queryClient.invalidateQueries('downStatusQuery')
-              form.resetFields()
-              setSubmitLoading(false)
-              setIsModalOpen(false)
-              setIsUpdating(false)
-              setSubmitLoading(false)
-          },
-          onError: () => {
-              message.error('Something went wrong')
-              setSubmitLoading(false)
-          }
-      })
-    const {mutate: updateDownStatus} = useMutation(
-      (data) => putDownStatus(data, tenant), {
-          onSuccess: () => {
-              message.success('DownStatus Updated Successfully')
-              queryClient.invalidateQueries('downStatusQuery')
-              form.resetFields()
-              setSubmitLoading(false)
-              setIsModalOpen(false)
-              setIsUpdating(false)
-              setSubmitLoading(false)
-          },
-          onError: () => {
-              message.error('Something went wrong')
-          }
-      })
-    const {mutate: removeDownStatus} = useMutation((id: any) => deleteDownStatus(id), {
-        onSuccess: () => {
-            message.success('DownStatus Deleted Successfully')
-            queryClient.invalidateQueries('downStatusQuery')
-        },
-        onError: () => {
-            message.error('Something went wrong')
+  function handleDelete(record: any) {
+    // if (record?.models?.length > 0) {
+    //     message.error(' is in use')
+    //     return
+    // }
+    removeDownStatus(record?.id)
+    setIsUpdating(false)
+  }
+
+  const onFinish = async (values: any) => {
+    setSubmitLoading(true)
+    isUpdating ? updateDownStatus(values) : addDownStatus(values)
+    setIsUpdating(false)
+  }
+
+  function handleCancel() {
+    form.resetFields()
+    setIsModalOpen(false)
+    setIsUpdating(false)
+    setSubmitLoading(false)
+  }
+
+  const columns: any = [
+    {
+      title: 'Down Status ID',
+      dataIndex: 'id',
+      sorter: (a: any, b: any) => {
+        if (a.id > b.id) {
+          return 1
         }
-    })
-    console.log("downStatusData", downStatusData)
-
-
-    function handleDelete(record: any) {
-        // if (record?.models?.length > 0) {
-        //     message.error(' is in use')
-        //     return
-        // }
-        removeDownStatus(record?.id)
-        setIsUpdating(false)
-    }
-
-    const onFinish = async (values: any) => {
-        setSubmitLoading(true)
-        isUpdating ? updateDownStatus(values) : addDownStatus(values)
-        setIsUpdating(false)
-    }
-
-    function handleCancel() {
-        form.resetFields()
-        setIsModalOpen(false)
-        setIsUpdating(false)
-        setSubmitLoading(false)
-    }
-
-
-    const columns: any = [
-        {
-            title: 'Down Status ID',
-            dataIndex: 'id',
-            sorter: (a: any, b: any) => {
-                if (a.id > b.id) {
-                    return 1
-                }
-                if (b.id > a.id) {
-                    return -1
-                }
-                return 0
-            },
-            defaultSortOrder: 'descend'
-        },
-        {
-            title: 'Name',
-            dataIndex: 'name',
-            sorter: (a: any, b: any) => {
-                if (a.name > b.name) {
-                    return 1
-                }
-                if (b.name > a.name) {
-                    return -1
-                }
-                return 0
-            },
-        },
-        {
-            title: 'Action',
-            render: (_: any) => (
-              <Space size='middle'>
-                  <button className={'btn btn-light-primary'} onClick={() => {
-                      setIsUpdating(true)
-                      setIsModalOpen(true)
-                      form.setFieldsValue(_)
-                  }
-                  }>
-                      Edit
-                  </button>
-                  <Popconfirm title='Sure to delete?' onConfirm={() => handleDelete(_)}>
-                      <button className={'btn btn-light-danger'}>
-                          Delete
-                      </button>
-                  </Popconfirm>
-              </Space>
-            )
+        if (b.id > a.id) {
+          return -1
         }
-    ]
+        return 0
+      },
+      defaultSortOrder: 'descend',
+    },
+    {
+      title: 'Name',
+      dataIndex: 'name',
+      sorter: (a: any, b: any) => {
+        if (a.name > b.name) {
+          return 1
+        }
+        if (b.name > a.name) {
+          return -1
+        }
+        return 0
+      },
+    },
+    {
+      title: 'Action',
+      render: (_: any) => (
+        <Space size='middle'>
+          <button
+            className={'btn btn-light-primary'}
+            onClick={() => {
+              setIsUpdating(true)
+              setIsModalOpen(true)
+              form.setFieldsValue(_)
+            }}
+          >
+            Edit
+          </button>
+          <Popconfirm title='Sure to delete?' onConfirm={() => handleDelete(_)}>
+            <button className={'btn btn-light-danger'}>Delete</button>
+          </Popconfirm>
+        </Space>
+      ),
+    },
+  ]
 
-    return (
-      <KTCard>
-          <KTCardBody>
-              <div className='d-flex justify-content-between'>
-                  <Space style={{marginBottom: 16}}>
-                      <Input
-                        placeholder='Enter Search Text'
-                        type='text'
-                        allowClear
-                      />
-                  </Space>
-                  <Space style={{marginBottom: 16}}>
-                      <button type='button' className='btn btn-primary me-3' onClick={
-                          () => {
-                              form.resetFields()
-                              setIsModalOpen(true)
-                              setIsUpdating(false)
-                          }
-                      }>
-                          <KTSVG path='/media/icons/duotune/arrows/arr075.svg' className='svg-icon-2'/>
-                          Add
-                      </button>
-                  </Space>
-              </div>
-              <Table
-                columns={columns}
-                bordered
-                dataSource={downStatusData?.data}
-                loading={isDownStatusDataLoading}
-              />
-              <Modal
-                title={isUpdating ? 'Edit' : 'Add'}
-                open={isModalOpen}
-                onCancel={handleCancel}
-                closable={true}
-                footer={[
-                    <Button key='back' onClick={handleCancel}>
-                        Cancel
-                    </Button>,
-                    <Button
-                      key='submit'
-                      htmlType='submit'
-                      type='primary'
-                      loading={submitLoading}
-                      onClick={() => {
-                          form.submit()
-                      }}
-                    >
-                        Submit
-                    </Button>,
-                ]}
+  return (
+    <KTCard>
+      <KTCardBody>
+        <div className='d-flex justify-content-between'>
+          <Space style={{marginBottom: 16}}>
+            <Input placeholder='Enter Search Text' type='text' allowClear />
+          </Space>
+          <Space style={{marginBottom: 16}}>
+            <button
+              type='button'
+              className='btn btn-primary me-3'
+              onClick={() => {
+                form.resetFields()
+                setIsModalOpen(true)
+                setIsUpdating(false)
+              }}
+            >
+              <KTSVG path='/media/icons/duotune/arrows/arr075.svg' className='svg-icon-2' />
+              Add
+            </button>
+          </Space>
+        </div>
+        <Table
+          columns={columns}
+          bordered
+          dataSource={downStatusData?.data}
+          loading={isDownStatusDataLoading}
+        />
+        <Modal
+          title={isUpdating ? 'Edit' : 'Add'}
+          open={isModalOpen}
+          onCancel={handleCancel}
+          closable={true}
+          footer={[
+            <Button key='back' onClick={handleCancel}>
+              Cancel
+            </Button>,
+            <Button
+              key='submit'
+              htmlType='submit'
+              type='primary'
+              loading={submitLoading}
+              onClick={() => {
+                form.submit()
+              }}
+            >
+              Submit
+            </Button>,
+          ]}
+        >
+          <Form
+            form={form}
+            name='control-hooks'
+            labelCol={{span: 8}}
+            wrapperCol={{span: 14}}
+            title={isUpdating ? 'Update' : 'Add'}
+            onFinish={onFinish}
+            layout={'horizontal'}
+          >
+            {isUpdating && (
+              <Form.Item
+                name='id'
+                label='Down Status Id'
+                // rules={[{required: true}]}
+                hidden={true}
               >
-                  <Form
-                    form={form}
-                    name='control-hooks'
-                    labelCol={{span: 8}}
-                    wrapperCol={{span: 14}}
-                    title={isUpdating ? 'Update' : 'Add'}
-                    onFinish={onFinish}
-                    layout={'horizontal'}
-                  >
-                      {isUpdating &&
-                          <Form.Item
-                              name='id'
-                              label='Down Status Id'
-                            // rules={[{required: true}]}
-                              hidden={true}
-                          >
-                              <Input placeholder='Enter Down Status Id'/>
-                          </Form.Item>}
-                      <Form.Item
-                        name='name'
-                        label='Name'
-                        rules={[{required: true}]}
-                      >
-                          <Input placeholder='Enter Name'/>
-                      </Form.Item>
-                  </Form>
-              </Modal>
-          </KTCardBody>
-      </KTCard>
-    )
+                <Input placeholder='Enter Down Status Id' />
+              </Form.Item>
+            )}
+            <Form.Item name='name' label='Name' rules={[{required: true}]}>
+              <Input placeholder='Enter Name' />
+            </Form.Item>
+          </Form>
+        </Modal>
+      </KTCardBody>
+    </KTCard>
+  )
 }
 
 export default DownStatusPage

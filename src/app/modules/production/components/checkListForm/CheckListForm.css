@@ -1,5 +1,38 @@
+/*@media print {*/
+/*    .no-print, .no-print * {*/
+/*        display: none !important;*/
+/*    }*/
+/*    .print {*/
+/*        visibility: visible !important;*/
+/*        !*margin: 0 !important;*!*/
+/*        !*padding: 0 !important;*!*/
+/*        margin-left: 0 !important;*/
+/*        padding-left: 0 !important;*/
+/*        margin-right: 0 !important;*/
+/*        padding-right: 0 !important;*/
+/*        left: -100px !important;*/
+/*        top: -100px !important;*/
+
+/*    }*/
+/*}*/
+
+
+.text-black
+{
+    color: #000 !important;
+}
+
 @media print {
-    .no-print, .no-print * {
-        display: none !important;
+    body {
+        visibility: hidden !important;
     }
+    .kt_modal_add_plan_form {
+        visibility: visible;
+        position: absolute;
+        top: -100px;
+        left: -10px;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+
 }

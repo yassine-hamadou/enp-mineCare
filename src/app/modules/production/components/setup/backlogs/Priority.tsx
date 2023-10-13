@@ -1,25 +1,26 @@
-import {useMutation, useQuery, useQueryClient} from "react-query";
-import {Button, Form, Input, InputNumber, message, Modal, Popconfirm, Space, Table} from "antd";
-import {KTCard, KTCardBody, KTSVG} from "../../../../../../_metronic/helpers";
-import {addPriorities, deletePriority, getPriority, putPriority} from "../../../../../urls";
-import {useAuth} from "../../../../auth";
-import React, {useState} from "react";
+import {useMutation, useQuery, useQueryClient} from 'react-query'
+import {Button, Form, Input, InputNumber, message, Modal, Popconfirm, Space, Table} from 'antd'
+import {KTCard, KTCardBody, KTSVG} from '../../../../../../_metronic/helpers'
+import {addPriorities, deletePriority, getPriority, putPriority} from '../../../../../urls'
+import {useAuth} from '../../../../auth'
+import React, {useState} from 'react'
 
 const Priority = () => {
   const {tenant} = useAuth()
   const queryClient: any = useQueryClient()
   const {data: priorities, isLoading} = useQuery('priorities', () => getPriority(tenant))
-  console.log("priorities", priorities)
-  const {mutate: addPriority} = useMutation('addPriority', (data) => addPriorities(data, tenant), {
+  console.log('priorities', priorities)
+  const {mutate: addPriority} = useMutation((data) => addPriorities(data, tenant), {
     onSuccess: () => {
       message.success('Priority added successfully')
       queryClient.invalidateQueries('priorities')
       form.resetFields()
       setIsModalOpen(false)
+      setSubmitLoading(false)
     },
     onError: () => {
       message.error('Error adding priority, Please try again')
-    }
+    },
   })
   const {mutate: updatePriority} = useMutation('updatePriority', putPriority, {
     onSuccess: () => {
@@ -31,7 +32,7 @@ const Priority = () => {
     },
     onError: () => {
       message.error('Error updating priority, Please try again')
-    }
+    },
   })
   const {mutate: removePriority} = useMutation('deletePriority', deletePriority, {
     onSuccess: () => {
@@ -40,7 +41,7 @@ const Priority = () => {
     },
     onError: () => {
       message.error('Error deleting priority, Please try again')
-    }
+    },
   })
   const columns = [
     {
@@ -55,15 +56,17 @@ const Priority = () => {
       title: 'Action',
       render: (_: any, record: any) => (
         <Space size='middle'>
-          <Button type='primary' ghost onClick={
-            () => {
+          <Button
+            type='primary'
+            ghost
+            onClick={() => {
               setIsModalOpen(true)
               setIsUpdating(true)
               form.setFieldsValue({
-                ...record
+                ...record,
               })
-            }
-          }>
+            }}
+          >
             Edit
           </Button>
           <Popconfirm
@@ -72,35 +75,33 @@ const Priority = () => {
             ?`}
             onConfirm={() => {
               removePriority(record.priorityId)
-            }
-            }>
+            }}
+          >
             <Button type={'primary'} danger>
               Delete
             </Button>
           </Popconfirm>
         </Space>
-      )
-    }
+      ),
+    },
   ]
 
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isUpdating, setIsUpdating] = useState(false);
-  const [form] = Form.useForm();
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [isUpdating, setIsUpdating] = useState(false)
+  const [form] = Form.useForm()
   const [submitLoading, setSubmitLoading] = useState(false)
 
-
   function handleCancel() {
-    setIsModalOpen(false);
-    form.resetFields();
+    setIsModalOpen(false)
+    form.resetFields()
     setIsUpdating(false)
   }
 
   function handleModalSubmit() {
-    form.submit();
+    form.submit()
   }
 
   function onFinish(values: any) {
-
     setSubmitLoading(true)
     console.log(values)
     try {
@@ -126,25 +127,16 @@ const Priority = () => {
       <KTCardBody>
         <div className='d-flex justify-content-between'>
           <Space style={{marginBottom: 16}}>
-            <Input
-              placeholder='Enter Search Text'
-              type='text'
-              allowClear
-            />
+            <Input placeholder='Enter Search Text' type='text' allowClear />
           </Space>
           <Space style={{marginBottom: 16}}>
             <button type='button' className='btn btn-primary me-3' onClick={openAdd}>
-              <KTSVG path='/media/icons/duotune/arrows/arr075.svg' className='svg-icon-2'/>
+              <KTSVG path='/media/icons/duotune/arrows/arr075.svg' className='svg-icon-2' />
               Add
             </button>
           </Space>
         </div>
-        <Table
-          columns={columns}
-          bordered
-          dataSource={priorities?.data}
-          loading={isLoading}
-        />
+        <Table columns={columns} bordered dataSource={priorities?.data} loading={isLoading} />
         <Modal
           title={isUpdating ? 'Update Priority' : 'Add Priority'}
           open={isModalOpen}
@@ -154,8 +146,7 @@ const Priority = () => {
               <Button type='dashed' onClick={handleCancel}>
                 Cancel
               </Button>
-              <Button type='primary' loading={submitLoading}
-                      onClick={handleModalSubmit}>
+              <Button type='primary' loading={submitLoading} onClick={handleModalSubmit}>
                 Save
               </Button>
             </div>
@@ -170,34 +161,30 @@ const Priority = () => {
             title='Add'
             onFinish={onFinish}
           >
-            {isUpdating &&
-                <Form.Item label='Code' name='priorityId' hidden={true} required={true}>
-                    <InputNumber disabled={true}/>
-                </Form.Item>
-            }
+            {isUpdating && (
+              <Form.Item label='Code' name='priorityId' hidden={true} required={true}>
+                <InputNumber disabled={true} />
+              </Form.Item>
+            )}
             <Form.Item label='Name' name='name' rules={[{required: true}]}>
-              <Input
-                placeholder='Enter Name'
-                type='text'
-                allowClear
-              />
+              <Input placeholder='Enter Name' type='text' allowClear />
             </Form.Item>
-            {isUpdating &&
-                <Form.Item label='Tenant' name='tenantId' hidden required={true}>
-                    <Input
-                        placeholder='Enter Name'
-                        type='text'
-                        allowClear
-                        value={tenant}
-                        disabled={true}
-                    />
-                </Form.Item>
-            }
+            {isUpdating && (
+              <Form.Item label='Tenant' name='tenantId' hidden required={true}>
+                <Input
+                  placeholder='Enter Name'
+                  type='text'
+                  allowClear
+                  value={tenant}
+                  disabled={true}
+                />
+              </Form.Item>
+            )}
           </Form>
         </Modal>
       </KTCardBody>
     </KTCard>
   )
-};
+}
 
-export default Priority;
+export default Priority

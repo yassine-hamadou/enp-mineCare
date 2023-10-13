@@ -1,333 +1,316 @@
-import {Button, Form, Input, message, Modal, Popconfirm, Select, Space, Table} from "antd";
-import {KTCard, KTCardBody, KTSVG} from "../../../../../../_metronic/helpers";
-import React, {useState} from "react";
-import {useLocation, useNavigate} from "react-router-dom";
-import {useAuth} from "../../../../auth";
-import {useMutation, useQuery, useQueryClient} from "react-query";
-import {deleteModel, getManufacturers, getModelClasses, getModels, postModel, putModel} from "../../../../../urls";
+import {Button, Form, Input, message, Modal, Popconfirm, Select, Space, Table} from 'antd'
+import {KTCard, KTCardBody, KTSVG} from '../../../../../../_metronic/helpers'
+import React, {useState} from 'react'
+import {useLocation, useNavigate} from 'react-router-dom'
+import {useAuth} from '../../../../auth'
+import {useMutation, useQuery, useQueryClient} from 'react-query'
+import {
+  deleteModel,
+  getManufacturers,
+  getModelClasses,
+  getModels,
+  postModel,
+  putModel,
+} from '../../../../../urls'
 
 const ModelsForManufacturer = () => {
-    const {tenant} = useAuth()
-    const queryClient = useQueryClient()
-    const navigate = useNavigate()
-    const {data: modelData, isLoading: isModelDataLoading} = useQuery('models',
-      () => getModels(tenant))
+  const {tenant} = useAuth()
+  const queryClient = useQueryClient()
+  const navigate = useNavigate()
+  const {data: modelData, isLoading: isModelDataLoading} = useQuery('models', () =>
+    getModels(tenant)
+  )
 
-    const {data: modelClassData, isLoading: isModelClassLoading} = useQuery('modelClassQuery',
-      () => getModelClasses(tenant))
+  const {data: modelClassData, isLoading: isModelClassLoading} = useQuery('modelClassQuery', () =>
+    getModelClasses(tenant)
+  )
 
-    const {
-        data: manufacturers,
-        isLoading: isManuLoading
-    } = useQuery('manufacturersQuery', () => getManufacturers(tenant))
+  const {data: manufacturers, isLoading: isManuLoading} = useQuery('manufacturersQuery', () =>
+    getManufacturers(tenant)
+  )
 
-    const {mutate: addModel} = useMutation(
-      (data: any) => postModel(data, tenant), {
-          onSuccess: () => {
-              message.success('Model Added Successfully')
-              queryClient.invalidateQueries('models')
-              form.resetFields()
-              setSubmitLoading(false)
-              setIsModalOpen(false)
-              setIsUpdating(false)
-          },
-          onError: () => {
-              message.error('Something went wrong')
-              setSubmitLoading(false)
-          }
-      })
-    const {mutate: updateModel} = useMutation(
-      (data) => putModel(data, tenant), {
-          onSuccess: () => {
-              message.success('Model Updated Successfully')
-              queryClient.invalidateQueries('modelQuery')
-              form.resetFields()
-              setSubmitLoading(false)
-              setIsModalOpen(false)
-              setIsUpdating(false)
-          },
-          onError: () => {
-              message.error('Something went wrong')
-              setSubmitLoading(false)
-          }
-      })
-    const {mutate: removeModel} = useMutation((id: any) => deleteModel(id), {
-        onSuccess: () => {
-            message.success('Model Deleted Successfully')
-            queryClient.invalidateQueries('modelQuery')
-        },
-        onError: () => {
-            message.error('Something went wrong')
+  const {mutate: addModel} = useMutation((data: any) => postModel(data, tenant), {
+    onSuccess: () => {
+      message.success('Model Added Successfully')
+      queryClient.invalidateQueries('models')
+      form.resetFields()
+      setSubmitLoading(false)
+      setIsModalOpen(false)
+      setIsUpdating(false)
+    },
+    onError: () => {
+      message.error('Something went wrong')
+      setSubmitLoading(false)
+    },
+  })
+  const {mutate: updateModel} = useMutation((data) => putModel(data, tenant), {
+    onSuccess: () => {
+      message.success('Model Updated Successfully')
+      queryClient.invalidateQueries('modelQuery')
+      form.resetFields()
+      setSubmitLoading(false)
+      setIsModalOpen(false)
+      setIsUpdating(false)
+    },
+    onError: () => {
+      message.error('Something went wrong')
+      setSubmitLoading(false)
+    },
+  })
+  const {mutate: removeModel} = useMutation((id: any) => deleteModel(id), {
+    onSuccess: () => {
+      message.success('Model Deleted Successfully')
+      queryClient.invalidateQueries('modelQuery')
+    },
+    onError: () => {
+      message.error('Something went wrong')
+    },
+  })
+  const dataFromManufacturer: any = useLocation().state
+  // dataFromManufacturer is an array of models
+  // const models = dataFromManufacturer[0].models
+
+  const columns: any = [
+    {
+      title: 'Model ID',
+      dataIndex: 'modelId',
+      defaultSortOrder: 'descend',
+      sorter: (a: any, b: any) => {
+        if (a.modelId > b.modelId) {
+          return 1
         }
-    })
-    const dataFromManufacturer: any = useLocation().state
-    // dataFromManufacturer is an array of models
-    // const models = dataFromManufacturer[0].models
-
-    const columns: any = [
-        {
-            title: 'Model ID',
-            dataIndex: 'modelId',
-            defaultSortOrder: 'descend',
-            sorter: (a: any, b: any) => {
-                if (a.modelId > b.modelId) {
-                    return 1
-                }
-                if (b.modelId > a.modelId) {
-                    return -1
-                }
-                return 0
-            },
-        },
-        {
-            title: 'Code',
-            dataIndex: 'code',
-            sorter: (a: any, b: any) => {
-                if (a.code > b.code) {
-                    return 1
-                }
-                if (b.code > a.code) {
-                    return -1
-                }
-                return 0
-            }
-        },
-        {
-            title: 'Name',
-            dataIndex: 'name',
-            sorter: (a: any, b: any) => {
-                if (a.name > b.name) {
-                    return 1
-                }
-                if (b.name > a.name) {
-                    return -1
-                }
-                return 0
-            }
-        },
-        {
-            title: 'Model Class',
-            dataIndex: 'modelClass',
-            sorter: (a: any, b: any) => {
-                if (a.modelClass?.name > b.modelClass?.name) {
-                    return 1
-                }
-                if (b.modelClass?.name > a.modelClass?.name) {
-                    return -1
-                }
-                return 0
-            },
-            render: (modelClass: any) => {
-                console.log("modelClass", modelClass)
-                return (
-                  <span>
-                        {modelClass?.name}
-                    </span>
-                );
-            }
-        },
-        {
-            title: 'Action',
-            render: (_: any) => (
-              <Space size='middle'>
-                  <button className={'btn btn-light-primary'} onClick={() => {
-                      setIsUpdating(true)
-                      setIsModalOpen(true)
-                      console.log("model", _)
-                      form.setFieldsValue(_)
-                  }
-                  }>
-                      Edit
-                  </button>
-                  <Popconfirm title='Sure to delete?' onConfirm={() => handleDelete(_)}>
-                      <button className={'btn btn-light-danger'}>
-                          Delete
-                      </button>
-                  </Popconfirm>
-              </Space>
-            )
+        if (b.modelId > a.modelId) {
+          return -1
         }
-    ]
+        return 0
+      },
+    },
+    {
+      title: 'Code',
+      dataIndex: 'code',
+      sorter: (a: any, b: any) => {
+        if (a.code > b.code) {
+          return 1
+        }
+        if (b.code > a.code) {
+          return -1
+        }
+        return 0
+      },
+    },
+    {
+      title: 'Name',
+      dataIndex: 'name',
+      sorter: (a: any, b: any) => {
+        if (a.name > b.name) {
+          return 1
+        }
+        if (b.name > a.name) {
+          return -1
+        }
+        return 0
+      },
+    },
+    {
+      title: 'Model Class',
+      dataIndex: 'modelClass',
+      sorter: (a: any, b: any) => {
+        if (a.modelClass?.name > b.modelClass?.name) {
+          return 1
+        }
+        if (b.modelClass?.name > a.modelClass?.name) {
+          return -1
+        }
+        return 0
+      },
+      render: (modelClass: any) => {
+        console.log('modelClass', modelClass)
+        return <span>{modelClass?.name}</span>
+      },
+    },
+    {
+      title: 'Action',
+      render: (_: any) => (
+        <Space size='middle'>
+          <button
+            className={'btn btn-light-primary'}
+            onClick={() => {
+              setIsUpdating(true)
+              setIsModalOpen(true)
+              console.log('model', _)
+              form.setFieldsValue(_)
+            }}
+          >
+            Edit
+          </button>
+          <Popconfirm title='Sure to delete?' onConfirm={() => handleDelete(_)}>
+            <button className={'btn btn-light-danger'}>Delete</button>
+          </Popconfirm>
+        </Space>
+      ),
+    },
+  ]
 
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [form] = Form.useForm()
+  const [submitLoading, setSubmitLoading] = useState(false)
+  const [isUpdating, setIsUpdating] = useState(false)
 
-    const [isModalOpen, setIsModalOpen] = useState(false);
-    const [form] = Form.useForm();
-    const [submitLoading, setSubmitLoading] = useState(false)
-    const [isUpdating, setIsUpdating] = useState(false)
+  function handleDelete(record: any) {
+    removeModel(record?.modelId)
+    setIsUpdating(false)
+  }
 
+  const onFinish = async (values: any) => {
+    setSubmitLoading(true)
+    isUpdating
+      ? updateModel(values)
+      : addModel({...values, manufacturerId: dataFromManufacturer[0].manufacturerId})
+    setIsUpdating(false)
+  }
+  console.log('dataFromManufacturer', dataFromManufacturer)
 
-    function handleDelete(record: any) {
-        removeModel(record?.modelId)
-        setIsUpdating(false)
-    }
+  function handleCancel() {
+    form.resetFields()
+    setIsModalOpen(false)
+    setIsUpdating(false)
+  }
 
-    const onFinish = async (values: any) => {
-        setSubmitLoading(true)
-        isUpdating ? updateModel(values) : addModel({...values, manufacturerId: dataFromManufacturer[0].manufacturerId})
-        setIsUpdating(false)
-    }
-    console.log("dataFromManufacturer", dataFromManufacturer)
-
-    function handleCancel() {
-        form.resetFields()
-        setIsModalOpen(false)
-        setIsUpdating(false)
-    }
-
-    return (
-      <KTCard>
-          <KTCardBody>
-              <div className='row mb-0'>
-                  <div className='mb-3'>
-                      <h3 className='mb-0'>
-                          <span className='text-danger'> {dataFromManufacturer[0].name}</span>
-                      </h3>
-                  </div>
-                  <div>
-                      <button
-                        className='btn btn-outline btn-outline-dashed btn-outline-primary btn-active-light-primary'
-                        onClick={() => {
-                            navigate(-1)
-                        }}
-                      >
-                          <i className='la la-arrow-left'/>
-                          Back
-                      </button>
-
-                  </div>
-              </div>
-              <div className='d-flex justify-content-between'>
-                  <Space style={{marginBottom: 16}}>
-                      <Input
-                        placeholder='Enter Search Text'
-                        // onChange={handleInputChange}
-                        type='text'
-                        allowClear
-                      />
-                  </Space>
-                  <Space style={{marginBottom: 16}}>
-                      <button type='button' className='btn btn-primary me-3'
-
-                              onClick={
-                                  () => {
-                                      form.resetFields()
-                                      setIsModalOpen(true)
-                                      setIsUpdating(false)
-                                  }
-                              }>
-                          <KTSVG path='/media/icons/duotune/arrows/arr075.svg' className='svg-icon-2'/>
-                          Add
-                      </button>
-                  </Space>
-              </div>
-              <Table
-                columns={columns}
-                bordered
-                loading={isModelDataLoading}
-                dataSource={modelData?.data?.filter((model: any) => model.manufacturerId === dataFromManufacturer[0].manufacturerId)}
-              />
-              <Modal
-                title={isUpdating ? 'Edit' : 'Add'}
-                open={isModalOpen}
-                onCancel={handleCancel}
-                closable={true}
-                footer={[
-                    <Button key='back' onClick={handleCancel}>
-                        Cancel
-                    </Button>,
-                    <Button
-                      key='submit'
-                      htmlType='submit'
-                      type='primary'
-                      loading={submitLoading}
-                      onClick={() => {
-                          form.submit()
-                      }}
-                    >
-                        Submit
-                    </Button>,
-                ]}
+  return (
+    <KTCard>
+      <KTCardBody>
+        <div className='row mb-0'>
+          <div className='mb-3'>
+            <h3 className='mb-0'>
+              <span className='text-danger'> {dataFromManufacturer[0].name}</span>
+            </h3>
+          </div>
+          <div>
+            <button
+              className='btn btn-outline btn-outline-dashed btn-outline-primary btn-active-light-primary'
+              onClick={() => {
+                navigate(-1)
+              }}
+            >
+              <i className='la la-arrow-left' />
+              Back
+            </button>
+          </div>
+        </div>
+        <div className='d-flex justify-content-between'>
+          <Space style={{marginBottom: 16}}>
+            <Input
+              placeholder='Enter Search Text'
+              // onChange={handleInputChange}
+              type='text'
+              allowClear
+            />
+          </Space>
+          <Space style={{marginBottom: 16}}>
+            <button
+              type='button'
+              className='btn btn-primary me-3'
+              onClick={() => {
+                form.resetFields()
+                setIsModalOpen(true)
+                setIsUpdating(false)
+              }}
+            >
+              <KTSVG path='/media/icons/duotune/arrows/arr075.svg' className='svg-icon-2' />
+              Add
+            </button>
+          </Space>
+        </div>
+        <Table
+          columns={columns}
+          bordered
+          loading={isModelDataLoading}
+          dataSource={modelData?.data?.filter(
+            (model: any) => model.manufacturerId === dataFromManufacturer[0].manufacturerId
+          )}
+        />
+        <Modal
+          title={isUpdating ? 'Edit' : 'Add'}
+          open={isModalOpen}
+          onCancel={handleCancel}
+          closable={true}
+          footer={[
+            <Button key='back' onClick={handleCancel}>
+              Cancel
+            </Button>,
+            <Button
+              key='submit'
+              htmlType='submit'
+              type='primary'
+              loading={submitLoading}
+              onClick={() => {
+                form.submit()
+              }}
+            >
+              Submit
+            </Button>,
+          ]}
+        >
+          <Form
+            form={form}
+            name='control-hooks'
+            labelCol={{span: 8}}
+            wrapperCol={{span: 14}}
+            title={isUpdating ? 'Update' : 'Add'}
+            onFinish={onFinish}
+            layout={'horizontal'}
+          >
+            {isUpdating && (
+              <Form.Item
+                name='modelId'
+                label='model Id'
+                // rules={[{required: true}]}
+                hidden={true}
               >
-                  <Form
-                    form={form}
-                    name='control-hooks'
-                    labelCol={{span: 8}}
-                    wrapperCol={{span: 14}}
-                    title={isUpdating ? 'Update' : 'Add'}
-                    onFinish={onFinish}
-                    layout={'horizontal'}
-                  >
-                      {isUpdating &&
-                          <Form.Item
-                              name='modelId'
-                              label='model Id'
-                            // rules={[{required: true}]}
-                              hidden={true}
-                          >
-                              <Input placeholder='Enter model Id'/>
-                          </Form.Item>}
-                      <Form.Item
-                        name='code'
-                        label='Code'
-                        rules={[{required: true}]}
-                      >
-                          <Input placeholder='Enter Code'/>
-                      </Form.Item>
-                      <Form.Item
-                        name='name'
-                        label='Name'
-                        rules={[{required: true}]}
-                      >
-                          <Input placeholder='Enter Name'/>
-                      </Form.Item>
-                      <Form.Item
-                        name='modelClassId'
-                        label='Model Class'
-                        rules={[{required: true}]}
-                      >
-                          <Select
-                            placeholder='Select Model Class'
-                            allowClear
-                            loading={isModelClassLoading}
-                          >
-                              {modelClassData?.data?.map((modelClass: any) => (
-                                <Select.Option key={modelClass.modelClassId} value={modelClass.modelClassId}>
-                                    {modelClass.name}
-                                </Select.Option>
-                              ))}
-                          </Select>
-                      </Form.Item>
+                <Input placeholder='Enter model Id' />
+              </Form.Item>
+            )}
+            <Form.Item name='code' label='Code' rules={[{required: true}]}>
+              <Input placeholder='Enter Code' />
+            </Form.Item>
+            <Form.Item name='name' label='Name' rules={[{required: true}]}>
+              <Input placeholder='Enter Name' />
+            </Form.Item>
+            <Form.Item name='modelClassId' label='Model Class' rules={[{required: true}]}>
+              <Select placeholder='Select Model Class' allowClear loading={isModelClassLoading}>
+                {modelClassData?.data?.map((modelClass: any) => (
+                  <Select.Option key={modelClass.modelClassId} value={modelClass.modelClassId}>
+                    {modelClass.name}
+                  </Select.Option>
+                ))}
+              </Select>
+            </Form.Item>
 
-                      <Form.Item
-                        name='manufacturerId'
-                        label='Manufacturer'
-                        // rules={[{required: true}]}
-                        hidden={!isUpdating}
-                      >
-                          <Select
-                            placeholder='Change Manufacturer'
-                            allowClear
-                            loading={isManuLoading}
-                          >
-                              {manufacturers?.data?.map((manufacturer: any) => (
-                                <Select.Option
-                                  key={manufacturer.manufacturerId}
-                                  value={manufacturer.manufacturerId}
-                                >
-                                    {manufacturer.name}
-                                </Select.Option>
-                              ))}
-                          </Select>
-                      </Form.Item>
-                  </Form>
-              </Modal>
-          </KTCardBody>
-      </KTCard>
-    )
+            <Form.Item
+              name='manufacturerId'
+              label='Manufacturer'
+              // rules={[{required: true}]}
+              hidden={!isUpdating}
+            >
+              <Select placeholder='Change Manufacturer' allowClear loading={isManuLoading}>
+                {manufacturers?.data?.map((manufacturer: any) => (
+                  <Select.Option
+                    key={manufacturer.manufacturerId}
+                    value={manufacturer.manufacturerId}
+                  >
+                    {manufacturer.name}
+                  </Select.Option>
+                ))}
+              </Select>
+            </Form.Item>
+          </Form>
+        </Modal>
+      </KTCardBody>
+    </KTCard>
+  )
 }
 
 export default ModelsForManufacturer
-
 
 // import React, {useState} from 'react';
 // import Paper from '@mui/material/Paper';

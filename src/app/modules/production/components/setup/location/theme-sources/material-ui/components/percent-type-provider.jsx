@@ -1,36 +1,36 @@
-import * as React from 'react';
-import * as PropTypes from 'prop-types';
-import Input from '@mui/material/Input';
-import { styled } from '@mui/material/styles';
-import { DataTypeProvider } from '@devexpress/dx-react-grid';
+import * as React from 'react'
+import * as PropTypes from 'prop-types'
+import Input from '@mui/material/Input'
+import {styled} from '@mui/material/styles'
+import {DataTypeProvider} from '@devexpress/dx-react-grid'
 
-const PREFIX = 'Demo';
+const PREFIX = 'Demo'
 const classes = {
   numericInput: `${PREFIX}-numericInput`,
-};
+}
 const StyledInput = styled(Input)(() => ({
   [`& .${classes.numericInput}`]: {
     textAlign: 'right',
     width: '100%',
   },
-}));
+}))
 
-const getInputValue = value => (value === undefined ? '' : (value * 100).toFixed(1));
+const getInputValue = (value) => (value === undefined ? '' : (value * 100).toFixed(1))
 
-const Formatter = ({ value }) => `${getInputValue(value)}%`;
+const Formatter = ({value}) => `${getInputValue(value)}%`
 
-const Editor = ({ value, onValueChange }) => {
+const Editor = ({value, onValueChange}) => {
   const handleChange = (event) => {
-    const { value: targetValue } = event.target;
+    const {value: targetValue} = event.target
     if (targetValue === '') {
-      onValueChange();
-      return;
+      onValueChange()
+      return
     }
-    onValueChange(Math.min(Math.max(parseFloat(targetValue / 100), 0), 1));
-  };
+    onValueChange(Math.min(Math.max(parseFloat(targetValue / 100), 0), 1))
+  }
   return (
     <StyledInput
-      type="number"
+      type='number'
       classes={{
         input: classes.numericInput,
       }}
@@ -44,29 +44,32 @@ const Editor = ({ value, onValueChange }) => {
       }}
       onChange={handleChange}
     />
-  );
-};
+  )
+}
 
 Editor.propTypes = {
   value: PropTypes.number,
   onValueChange: PropTypes.func.isRequired,
-};
+}
 
 Editor.defaultProps = {
   value: undefined,
-};
+}
 
 const availableFilterOperations = [
-  'equal', 'notEqual',
-  'greaterThan', 'greaterThanOrEqual',
-  'lessThan', 'lessThanOrEqual',
-];
+  'equal',
+  'notEqual',
+  'greaterThan',
+  'greaterThanOrEqual',
+  'lessThan',
+  'lessThanOrEqual',
+]
 
-export const PercentTypeProvider = props => (
+export const PercentTypeProvider = (props) => (
   <DataTypeProvider
     formatterComponent={Formatter}
     editorComponent={Editor}
     availableFilterOperations={availableFilterOperations}
     {...props}
   />
-);
+)

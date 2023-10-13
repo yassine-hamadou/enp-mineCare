@@ -31,7 +31,7 @@ export function HeaderWrapper() {
               className='btn btn-icon btn-active-light-primary w-30px h-30px w-md-40px h-md-40px'
               id='kt_aside_mobile_toggle'
             >
-              <KTSVG path='/media/icons/duotune/abstract/abs015.svg' className='svg-icon-2x mt-1'/>
+              <KTSVG path='/media/icons/duotune/abstract/abs015.svg' className='svg-icon-2x mt-1' />
             </div>
           </div>
         )}
@@ -51,13 +51,9 @@ export function HeaderWrapper() {
         {/* end::Logo */}
 
         {aside.display && (
-          <div className='d-flex align-items-center flex-grow-1 flex-lg-grow-0'>
+          <div className='d-flex align-items-center flex-grow-1 flex-lg-grow-0 for_logo'>
             <Link to='/' className='d-lg-none'>
-              <img
-                alt='Logo'
-                src={toAbsoluteUrl('/media/logos/logo.png')}
-                className='h-40px'
-              />
+              <img alt='Logo' src={toAbsoluteUrl('/media/logos/logo.png')} className='h-40px' />
             </Link>
           </div>
         )}
@@ -67,18 +63,18 @@ export function HeaderWrapper() {
           {/* begin::Navbar */}
           {header.left === 'menu' && (
             <div className='d-flex align-items-stretch' id='kt_header_nav'>
-              <Header/>
+              <Header />
             </div>
           )}
 
           {header.left === 'page-title' && (
             <div className='d-flex align-items-center' id='kt_header_nav'>
-              <DefaultTitle/>
+              <DefaultTitle />
             </div>
           )}
 
           <div className='d-flex align-items-stretch flex-shrink-0'>
-            <Topbar/>
+            <Topbar />
           </div>
         </div>
         {/* end::Wrapper */}

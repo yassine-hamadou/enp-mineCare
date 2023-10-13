@@ -1,5 +1,5 @@
 import {AuthModel} from './_models'
-import {QueryClient} from "react-query";
+import {QueryClient} from 'react-query'
 
 const AUTH_LOCAL_STORAGE_KEY: string = 'token'
 const TENANT_KEY: string = 'tenant'
@@ -92,7 +92,7 @@ const removeAuth = () => {
 export function setupAxios(axios: any) {
   axios.defaults.headers.Accept = 'application/json'
   axios.interceptors.request.use(
-    (config: { headers: { Authorization: string } }) => {
+    (config: {headers: {Authorization: string}}) => {
       const auth = getAuth()
       if (auth && auth.jwtToken) {
         config.headers.Authorization = `${auth.jwtToken}`

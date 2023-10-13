@@ -1,20 +1,20 @@
-import {Button, Input, InputNumber, message, Select, Space, Tabs,} from 'antd'
+import {Button, Input, InputNumber, message, Select, Space, Tabs} from 'antd'
 import React, {useEffect, useState} from 'react'
 import {
-    addHours,
-    fetchBrands,
-    fetchCompartments,
-    fetchLubeGrade,
-    fetchRefillTypes,
-    getEquipment
+  addHours,
+  fetchBrands,
+  fetchCompartments,
+  fetchLubeGrade,
+  fetchRefillTypes,
+  getEquipment,
 } from '../../../../../urls'
 import {useMutation, useQuery, useQueryClient} from 'react-query'
-import {EditableProTable, ErrorBoundary, ProCard, ProColumns} from "@ant-design/pro-components";
-import {useAuth} from "../../../../auth";
-import {useNavigate} from "react-router-dom";
-import {throwError} from "@syncfusion/ej2-base";
-import dayjs from "dayjs";
-import DevexpressDashboardComponent from "../../../../../pages/dashboard/DevexpressDashboardComponent";
+import {EditableProTable, ErrorBoundary, ProCard, ProColumns} from '@ant-design/pro-components'
+import {useAuth} from '../../../../auth'
+import {useNavigate} from 'react-router-dom'
+import {throwError} from '@syncfusion/ej2-base'
+import dayjs from 'dayjs'
+import DevexpressDashboardComponent from '../../../../../pages/dashboard/DevexpressDashboardComponent'
 
 // const Lube = () => {
 //     const [gridData, setGridData] = useState([])
@@ -847,7 +847,6 @@ import DevexpressDashboardComponent from "../../../../../pages/dashboard/Devexpr
 //
 // export {Lube}
 
-
 // import {Input, Space, Table} from "antd";
 // import {KTCard, KTCardBody, KTSVG} from "../../../../../../_metronic/helpers";
 // import React from "react";
@@ -916,7 +915,6 @@ import DevexpressDashboardComponent from "../../../../../pages/dashboard/Devexpr
 // }
 //
 // export default HoursModelClass
-
 
 // import {Button, Input} from 'antd'
 // import {Space, Table, Form} from 'antd'
@@ -1169,12 +1167,10 @@ import DevexpressDashboardComponent from "../../../../../pages/dashboard/Devexpr
 //
 // export {HoursPage}
 
-
 //////////////////////////////////////////////
 //////////////////////////////////////////////
 /////////////////////////////////////////////
 ////////////////////////////////////////////
-
 
 // import React, {useContext, useEffect, useRef, useState} from 'react';
 // import type {InputRef} from 'antd';
@@ -1503,537 +1499,544 @@ import DevexpressDashboardComponent from "../../../../../pages/dashboard/Devexpr
 //
 // export {HoursPage};
 
-
 /////////////////////////////////////////////
 ////////////////////////////////////////////
 /////`HoursPage.tsx`////////////////////////
 
-
 const LubePage: any = () => {
-    const {tenant} = useAuth()
-    const {data: defaultData, isLoading} = useQuery('equipmentQuery', () => getEquipment(tenant), {
-        refetchOnWindowFocus: false
-    })
+  const {tenant} = useAuth()
+  const {data: defaultData, isLoading} = useQuery('equipments', () => getEquipment(tenant), {
+    refetchOnWindowFocus: false,
+  })
 
-    const queryClient = useQueryClient()
-    const navigate = useNavigate()
-    const {data: allEquipment} = useQuery('equipments', () => getEquipment(tenant))
+  const queryClient = useQueryClient()
+  const navigate = useNavigate()
+  const {data: allEquipment} = useQuery('equipments', () => getEquipment(tenant))
 
-    const {mutate: mutateHours, isLoading: isHoursMutationLoading} =
-      useMutation(addHours, {
-          onSuccess: () => {
-              navigate('/')
-              message.success('Hours Entries Saved successfully').then(r => r)
-              queryClient.invalidateQueries('equipmentQuery').then(r => r)
-          },
-          onError: (error: any) => {
-              message.error(error.message).then(r => r)
-              throwError(error.message)
-          }
-      })
+  const {mutate: mutateHours, isLoading: isHoursMutationLoading} = useMutation(addHours, {
+    onSuccess: () => {
+      navigate('/')
+      message.success('Hours Entries Saved successfully').then((r) => r)
+      queryClient.invalidateQueries('equipments').then((r) => r)
+    },
+    onError: (error: any) => {
+      message.error(error.message).then((r) => r)
+      throwError(error.message)
+    },
+  })
 
-    const [dataSource, setDataSource] =
-      useState(() => defaultData?.data);
+  const [dataSource, setDataSource] = useState(() => defaultData?.data)
 
-    const [record, setRecord] =
-      useState<any>(undefined);
-    const [allowSubmit, setAllowSubmit] = useState<boolean>(false)
+  const [record, setRecord] = useState<any>(undefined)
+  const [allowSubmit, setAllowSubmit] = useState<boolean>(false)
 
-    const [editableKeys, setEditableRowKeys] =
-      useState<React.Key[]>(() => defaultData?.data?.map((item: any) => item.id));
+  const [editableKeys, setEditableRowKeys] = useState<React.Key[]>(() =>
+    defaultData?.data?.map((item: any) => item.id)
+  )
 
-    const [rowValues, setRowValues] = useState<any>({});
-    const [allSubmi, setAllowsubmi] = useState<any>({});
-    const {data: compartmentData} = useQuery('compartmentData', () => fetchCompartments(tenant))
-    const {data: refilltypes, isLoading: refillTypesLoading} = useQuery('refillTypes', () => fetchRefillTypes(tenant))
-    const {data: brandsData, isLoading: brandsDataLoading} = useQuery('brandsData', fetchBrands)
-    const {data: gradesData, isLoading: gradesDataLoading} = useQuery('gradesData', fetchLubeGrade)
-    // console.log('dataSource', defaultData)
-    useEffect(() => {
-        setEditableRowKeys(() => defaultData?.data?.map((item: any) => item.id))
-        Object.values(allSubmi).every((item: any) => item === true) ? setAllowSubmit(true) : setAllowSubmit(false)
-    }, [defaultData?.data, record, allSubmi]);
+  const [rowValues, setRowValues] = useState<any>({})
+  const [allSubmi, setAllowsubmi] = useState<any>({})
+  const {data: compartmentData} = useQuery('compartmentData', () => fetchCompartments(tenant))
+  const {data: refilltypes, isLoading: refillTypesLoading} = useQuery('refillTypes', () =>
+    fetchRefillTypes(tenant)
+  )
+  const {data: brandsData, isLoading: brandsDataLoading} = useQuery('brandsData', fetchBrands)
+  const {data: gradesData, isLoading: gradesDataLoading} = useQuery('gradesData', fetchLubeGrade)
+  // console.log('dataSource', defaultData)
+  useEffect(() => {
+    setEditableRowKeys(() => defaultData?.data?.map((item: any) => item.id))
+    Object.values(allSubmi).every((item: any) => item === true)
+      ? setAllowSubmit(true)
+      : setAllowSubmit(false)
+  }, [defaultData?.data, record, allSubmi])
 
-    const columns: ProColumns[] = [
-        {
-            title: 'Equipment ID',
-            dataIndex: 'equipmentId',
-            editable: false,
-        },
-        {
-            title: 'Compartment',
-            dataIndex: 'compartmentId',
-            renderFormItem: (_, {type, defaultRender, recordKey, record, ...rest}, form) => {
-                return (
-                  <Select
-                    placeholder='Select Compartment'
-                    className={'w-100'}
-                    allowClear
-                    showSearch
-                    onSelect={
-                        (selected: any, b: any) => {
-                            const item = record?.model?.lubeConfigs?.find((lubeConfig: any) => lubeConfig.compartmentId === selected)
-                            const rowData: any = form.getFieldsValue();
-                            //@ts-ignore
-                            rowData[recordKey].capacity = item?.capacity;
-                            //@ts-ignore
-                            rowData[recordKey].changeOutInterval = item?.changeOutInterval;
-                            form.setFieldsValue({ // Set the value of the "previousHours" field
-                                ...rowData,
-                            });
-
-                        }
-                    }
-                    onClear={
-                        () => {
-                            const rowData: any = form.getFieldsValue();
-                            //@ts-ignore
-                            rowData[recordKey].capacity = undefined;
-                            //@ts-ignore
-                            rowData[recordKey].changeOutInterval = undefined;
-                            form.setFieldsValue({ // Set the value of the "previousHours" field
-                                ...rowData,
-                            });
-                        }
-                    }
-                    // onClick={checkCompartment}
-                    // onChange={(value) => {
-                    //     const rowData = form.getFieldsValue(); // Get the values of all form fields in the row
-                    //     console.log('rowData', rowData) //rowData is an object with key value pairs
-                    //
-                    //     // Object.values(rowData)[0].previousHours = 12; //set previous hours in this row
-                    //
-                    //     //set previous hours in this row
-                    //     const equipment = hoursData?.data?.find((equipment: any) => equipment?.fleetId === value);
-                    //     //@ts-ignore
-                    //     rowData[recordKey].previousHours = equipment?.previousReading ? equipment?.previousReading : 0; //set previous hours in this row
-                    //     console.log('equiData', value)
-                    //     console.log('hours', hoursData)
-                    //     console.log('equipment outseide', equipment)
-                    //     if (equipment) {
-                    //         form.setFieldsValue({ // Set the value of the "previousHours" field
-                    //             ...rowData,
-                    //         });
-                    //     }
-                    // }}
-                  >
-                      {record?.model?.lubeConfigs?.map((lubeConfig: any) => (
-                          <Select.Option key={lubeConfig.id} value={lubeConfig.compartmentId}>
-                              {compartmentData?.data?.find((compartment: any) => compartment.id === lubeConfig.compartmentId)?.name}
-                          </Select.Option>
-                        )
-                      )}
-                  </Select>
-                )
-            }
-        },
-        {
-            title: 'Change Out Interval',
-            dataIndex: 'changeOutInterval',
-            valueType: 'digit',
-            readonly: true,
-        },
-        {
-            title: 'Capacity',
-            dataIndex: 'capacity',
-            valueType: 'digit',
-            readonly: true,
-        },
-        {
-            title: 'Refill Type',
-            dataIndex: 'refillTypeId',
-            renderFormItem: (_, {type, defaultRender, recordKey, record, ...rest}, form) => {
-                return (
-                  <Select
-                    placeholder='Select Refill Type'
-                    className={'w-100'}
-                    allowClear
-                    showSearch
-                    loading={refillTypesLoading}
-                  >
-                      {refilltypes?.data?.map((refillType: any) => (
-                          <Select.Option key={refillType.id} value={refillType.id}>
-                              {refillType.name}
-                          </Select.Option>
-                        )
-                      )}
-                  </Select>
-                )
-            }
-        },
-        {
-            title: 'Brands',
-            dataIndex: 'brandId',
-            renderFormItem: (_, {type, defaultRender, recordKey, record, ...rest}, form) => {
-                return (
-                  <Select
-                    placeholder='Select Brand'
-                    className={'w-100'}
-                    allowClear
-                    showSearch
-                    loading={brandsDataLoading}
-                  >
-                      {brandsData?.data?.map((brand: any) => (
-                          <Select.Option key={brand.id} value={brand.id}>
-                              {brand.name}
-                          </Select.Option>
-                        )
-                      )}
-                  </Select>
-                )
-            }
-        },
-        {
-            title: 'Grade',
-            dataIndex: 'gradeId',
-            renderFormItem: (_, {type, defaultRender, recordKey, record, ...rest}, form) => {
-                return (
-                  <Select
-                    placeholder='Select Grade'
-                    className={'w-100'}
-                    allowClear
-                    showSearch
-                    loading={brandsDataLoading}
-                  >
-                      {gradesData?.data?.map((grade: any) => (
-                          <Select.Option key={grade.id} value={grade.id}>
-                              {grade.name}
-                          </Select.Option>
-                        )
-                      )}
-                  </Select>
-                )
-            }
-        },
-        {
-            title: 'Volume',
-            dataIndex: 'volume',
-            valueType: 'digit',
-            onCell: (record) => {
-                return {
-                    onFocus: () => {
-                        setRecord(record)
-                    },
-                }
-            },
-            fieldProps: {
-                min: 0,
-            },
-            formItemProps: {
-                rules: [
-                    {
-                        validator(rule, value): Promise<any> {
-                            if (!record?.capacity) {
-                                return Promise.reject('Please select a compartment')
-                            } else {
-                                if (!value) {
-                                    setAllowsubmi((allowSubmit: any) => {
-                                        return {
-                                            ...allowSubmit,
-                                            [record?.id]: false, // Assuming each row has a unique `id` field
-                                        };
-                                    })
-                                    return Promise.reject('Please enter a volume');
-                                } else if (value > record?.capacity) {
-                                    setAllowsubmi((allowSubmit: any) => {
-                                        return {
-                                            ...allowSubmit,
-                                            [record?.id]: false, // Assuming each row has a unique `id` field
-                                        };
-                                    })
-                                    return Promise.reject('Volume should be less than capacity');
-                                } else {
-                                    if (record?.equipmentId && record?.compartmentId &&
-                                      record?.refillTypeId && record?.brandId &&
-                                      record?.gradeId && record?.volume && record?.previousHour && record?.currentHour) {
-                                        setAllowsubmi((allowSubmit: any) => {
-                                            return {
-                                                ...allowSubmit,
-                                                [record?.id]: true, // Assuming each row has a unique `id` field
-                                            };
-                                        })
-                                        return Promise.resolve('Resolved');
-                                    }
-                                    return Promise.resolve('Resolved');
-                                }
-                            }
-                        }
-                    },
-                ],
-            }
-        },
-        {
-            title: 'Latest Reading',
-            dataIndex: 'previousHour',
-            readonly: true,
-            renderFormItem: (_, {type, defaultRender, recordKey, record, ...rest}, form) => {
-                return (
-                  <InputNumber
-                    className={'w-100'}
-                    disabled
-                    defaultValue={record?.hoursEntries[0]?.currentReading}
-                  />
-                )
-            }
-        },
-        // {
-        //     title: 'Current Reading',
-        //     dataIndex: 'currentHour',
-        //     valueType: 'digit',
-        //     onCell: (record) => {
-        //         return {
-        //             onFocus: () => {
-        //                 setRecord(record)
-        //             },
-        //
-        //         }
-        //     },
-        //     fieldProps: {
-        //         min: 0,
-        //     },
-        //     formItemProps: {
-        //         rules: [
-        //             {
-        //                 validator(rule, value): Promise<any> {
-        //                     if (!record?.hoursEntries[0]?.currentReading) {
-        //                         return Promise.reject('No previous reading found')
-        //                     } else {
-        //                         if (!value) {
-        //                             setAllowsubmi((allowSubmit: any) => {
-        //                                 return {
-        //                                     ...allowSubmit,
-        //                                     [record?.id]: false, // Assuming each row has a unique `id` field
-        //                                 };
-        //                             })
-        //                             return Promise.reject('Please enter current hours');
-        //                         } else if (value < record?.hoursEntries[0]?.currentReading) {
-        //                             setAllowsubmi((allowSubmit: any) => {
-        //                                 return {
-        //                                     ...allowSubmit,
-        //                                     [record?.id]: false, // Assuming each row has a unique `id` field
-        //                                 };
-        //                             })
-        //                             return Promise.reject('Current Reading should be greater than previous reading');
-        //                         } else {
-        //                             //check if there is not any field with false value
-        //                             if (record?.equipmentId && record?.compartmentId &&
-        //                               record?.refillTypeId && record?.brandId &&
-        //                               record?.gradeId && record?.volume && record?.currentHour) {
-        //                                 setAllowsubmi((allowSubmit: any) => {
-        //                                     return {
-        //                                         ...allowSubmit,
-        //                                         [record?.id]: true, // Assuming each row has a unique `id` field
-        //                                     };
-        //                                 })
-        //                                 return Promise.resolve('Resolved');
-        //                             }
-        //                             return Promise.resolve('Resolved');
-        //                         }
-        //                     }
-        //                 }
-        //             }
-        //         ]
-        //     }
-        // },
-        {
-            title: 'Refill Date',
-            valueType: 'date',
-            dataIndex: 'refillDate',
-            onCell: (record) => {
-                return {
-                    onFocus: () => {
-                        setRecord(record)
-                        console.log('record during date', record)
-                    },
-
-                }
-            },
-            formItemProps: {
-                rules: [
-                    {
-                        validator(rule, value) {
-                            console.log('rule', rule);
-                            console.log('value', value);
-                            if (!value) {
-                                return Promise.reject('Please select a date');
-                            } else if (dayjs(value).isAfter(dayjs())) {
-                                return Promise.reject('Date cannot be after today');
-                            } else {
-                                return Promise.resolve('Resolved');
-                            }
-                        } //end of validator
-                    }
-                ]
-            },
-            fieldProps: (form, {rowKey, rowIndex, entity}) => {
-                return {}
-            }
-        },
-        {
-            title: 'General Comment',
-            dataIndex: 'comment',
-            valueType: 'textarea',
-        }
-
-    ];
-    const saveAndContinue = async (rowsToBeSubmitted: any) => {
-        try {
-            // rowsToBeSubmitted?.map((item: any) => {
-            // if (item.zeroReading) {
-            //     mutateHours({
-            //         fleetId: item.fleetId,
-            //         previousReading: item.currentReading,
-            //         date: new Date(item.today),
-            //         currentReading: item.zeroReading,
-            //         tenantId: tenant,
-            //         adjustment: item.adjustment,
-            //         comment: item.comment
-            //     })
-            // }
-            //     return 0
+  const columns: ProColumns[] = [
+    {
+      title: 'Equipment ID',
+      dataIndex: 'equipmentId',
+      editable: false,
+    },
+    {
+      title: 'Compartment',
+      dataIndex: 'compartmentId',
+      renderFormItem: (_, {type, defaultRender, recordKey, record, ...rest}, form) => {
+        return (
+          <Select
+            placeholder='Select Compartment'
+            className={'w-100'}
+            allowClear
+            showSearch
+            onSelect={(selected: any, b: any) => {
+              const item = record?.model?.lubeConfigs?.find(
+                (lubeConfig: any) => lubeConfig.compartmentId === selected
+              )
+              const rowData: any = form.getFieldsValue()
+              //@ts-ignore
+              rowData[recordKey].capacity = item?.capacity
+              //@ts-ignore
+              rowData[recordKey].changeOutInterval = item?.changeOutInterval
+              form.setFieldsValue({
+                // Set the value of the "previousHours" field
+                ...rowData,
+              })
+            }}
+            onClear={() => {
+              const rowData: any = form.getFieldsValue()
+              //@ts-ignore
+              rowData[recordKey].capacity = undefined
+              //@ts-ignore
+              rowData[recordKey].changeOutInterval = undefined
+              form.setFieldsValue({
+                // Set the value of the "previousHours" field
+                ...rowData,
+              })
+            }}
+            // onClick={checkCompartment}
+            // onChange={(value) => {
+            //     const rowData = form.getFieldsValue(); // Get the values of all form fields in the row
+            //     console.log('rowData', rowData) //rowData is an object with key value pairs
             //
-            // })
-//timeouts and dsiplay of success message
-            setTimeout(() => {
-                message.success('Lube entry saved successfully').then(r => r)
-            }, 1000)
-            navigate('/')
-
-        } catch (error) {
-            // Handle form validation error
-            message.error('Kindly resolve all issues before submitting!').then(r => r)
+            //     // Object.values(rowData)[0].previousHours = 12; //set previous hours in this row
+            //
+            //     //set previous hours in this row
+            //     const equipment = hoursData?.data?.find((equipment: any) => equipment?.fleetId === value);
+            //     //@ts-ignore
+            //     rowData[recordKey].previousHours = equipment?.previousReading ? equipment?.previousReading : 0; //set previous hours in this row
+            //     console.log('equiData', value)
+            //     console.log('hours', hoursData)
+            //     console.log('equipment outseide', equipment)
+            //     if (equipment) {
+            //         form.setFieldsValue({ // Set the value of the "previousHours" field
+            //             ...rowData,
+            //         });
+            //     }
+            // }}
+          >
+            {record?.model?.lubeConfigs?.map((lubeConfig: any) => (
+              <Select.Option key={lubeConfig.id} value={lubeConfig.compartmentId}>
+                {
+                  compartmentData?.data?.find(
+                    (compartment: any) => compartment.id === lubeConfig.compartmentId
+                  )?.name
+                }
+              </Select.Option>
+            ))}
+          </Select>
+        )
+      },
+    },
+    {
+      title: 'Change Out Interval',
+      dataIndex: 'changeOutInterval',
+      valueType: 'digit',
+      readonly: true,
+    },
+    {
+      title: 'Capacity',
+      dataIndex: 'capacity',
+      valueType: 'digit',
+      readonly: true,
+    },
+    {
+      title: 'Refill Type',
+      dataIndex: 'refillTypeId',
+      renderFormItem: (_, {type, defaultRender, recordKey, record, ...rest}, form) => {
+        return (
+          <Select
+            placeholder='Select Refill Type'
+            className={'w-100'}
+            allowClear
+            showSearch
+            loading={refillTypesLoading}
+          >
+            {refilltypes?.data?.map((refillType: any) => (
+              <Select.Option key={refillType.id} value={refillType.id}>
+                {refillType.name}
+              </Select.Option>
+            ))}
+          </Select>
+        )
+      },
+    },
+    {
+      title: 'Brands',
+      dataIndex: 'brandId',
+      renderFormItem: (_, {type, defaultRender, recordKey, record, ...rest}, form) => {
+        return (
+          <Select
+            placeholder='Select Brand'
+            className={'w-100'}
+            allowClear
+            showSearch
+            loading={brandsDataLoading}
+          >
+            {brandsData?.data?.map((brand: any) => (
+              <Select.Option key={brand.id} value={brand.id}>
+                {brand.name}
+              </Select.Option>
+            ))}
+          </Select>
+        )
+      },
+    },
+    {
+      title: 'Grade',
+      dataIndex: 'gradeId',
+      renderFormItem: (_, {type, defaultRender, recordKey, record, ...rest}, form) => {
+        return (
+          <Select
+            placeholder='Select Grade'
+            className={'w-100'}
+            allowClear
+            showSearch
+            loading={brandsDataLoading}
+          >
+            {gradesData?.data?.map((grade: any) => (
+              <Select.Option key={grade.id} value={grade.id}>
+                {grade.name}
+              </Select.Option>
+            ))}
+          </Select>
+        )
+      },
+    },
+    {
+      title: 'Volume',
+      dataIndex: 'volume',
+      valueType: 'digit',
+      onCell: (record) => {
+        return {
+          onFocus: () => {
+            setRecord(record)
+          },
         }
-
+      },
+      fieldProps: {
+        min: 0,
+      },
+      formItemProps: {
+        rules: [
+          {
+            validator(rule, value): Promise<any> {
+              if (!record?.capacity) {
+                return Promise.reject('Please select a compartment')
+              } else {
+                if (!value) {
+                  setAllowsubmi((allowSubmit: any) => {
+                    return {
+                      ...allowSubmit,
+                      [record?.id]: false, // Assuming each row has a unique `id` field
+                    }
+                  })
+                  return Promise.reject('Please enter a volume')
+                } else if (value > record?.capacity) {
+                  setAllowsubmi((allowSubmit: any) => {
+                    return {
+                      ...allowSubmit,
+                      [record?.id]: false, // Assuming each row has a unique `id` field
+                    }
+                  })
+                  return Promise.reject('Volume should be less than capacity')
+                } else {
+                  if (
+                    record?.equipmentId &&
+                    record?.compartmentId &&
+                    record?.refillTypeId &&
+                    record?.brandId &&
+                    record?.gradeId &&
+                    record?.volume &&
+                    record?.previousHour &&
+                    record?.currentHour
+                  ) {
+                    setAllowsubmi((allowSubmit: any) => {
+                      return {
+                        ...allowSubmit,
+                        [record?.id]: true, // Assuming each row has a unique `id` field
+                      }
+                    })
+                    return Promise.resolve('Resolved')
+                  }
+                  return Promise.resolve('Resolved')
+                }
+              }
+            },
+          },
+        ],
+      },
+    },
+    {
+      title: 'Latest Reading',
+      dataIndex: 'previousHour',
+      readonly: true,
+      renderFormItem: (_, {type, defaultRender, recordKey, record, ...rest}, form) => {
+        return (
+          <InputNumber
+            className={'w-100'}
+            disabled
+            defaultValue={record?.hoursEntries[0]?.currentReading}
+          />
+        )
+      },
+    },
+    // {
+    //     title: 'Current Reading',
+    //     dataIndex: 'currentHour',
+    //     valueType: 'digit',
+    //     onCell: (record) => {
+    //         return {
+    //             onFocus: () => {
+    //                 setRecord(record)
+    //             },
+    //
+    //         }
+    //     },
+    //     fieldProps: {
+    //         min: 0,
+    //     },
+    //     formItemProps: {
+    //         rules: [
+    //             {
+    //                 validator(rule, value): Promise<any> {
+    //                     if (!record?.hoursEntries[0]?.currentReading) {
+    //                         return Promise.reject('No previous reading found')
+    //                     } else {
+    //                         if (!value) {
+    //                             setAllowsubmi((allowSubmit: any) => {
+    //                                 return {
+    //                                     ...allowSubmit,
+    //                                     [record?.id]: false, // Assuming each row has a unique `id` field
+    //                                 };
+    //                             })
+    //                             return Promise.reject('Please enter current hours');
+    //                         } else if (value < record?.hoursEntries[0]?.currentReading) {
+    //                             setAllowsubmi((allowSubmit: any) => {
+    //                                 return {
+    //                                     ...allowSubmit,
+    //                                     [record?.id]: false, // Assuming each row has a unique `id` field
+    //                                 };
+    //                             })
+    //                             return Promise.reject('Current Reading should be greater than previous reading');
+    //                         } else {
+    //                             //check if there is not any field with false value
+    //                             if (record?.equipmentId && record?.compartmentId &&
+    //                               record?.refillTypeId && record?.brandId &&
+    //                               record?.gradeId && record?.volume && record?.currentHour) {
+    //                                 setAllowsubmi((allowSubmit: any) => {
+    //                                     return {
+    //                                         ...allowSubmit,
+    //                                         [record?.id]: true, // Assuming each row has a unique `id` field
+    //                                     };
+    //                                 })
+    //                                 return Promise.resolve('Resolved');
+    //                             }
+    //                             return Promise.resolve('Resolved');
+    //                         }
+    //                     }
+    //                 }
+    //             }
+    //         ]
+    //     }
+    // },
+    {
+      title: 'Refill Date',
+      valueType: 'date',
+      dataIndex: 'refillDate',
+      onCell: (record) => {
+        return {
+          onFocus: () => {
+            setRecord(record)
+            console.log('record during date', record)
+          },
+        }
+      },
+      formItemProps: {
+        rules: [
+          {
+            validator(rule, value) {
+              console.log('rule', rule)
+              console.log('value', value)
+              if (!value) {
+                return Promise.reject('Please select a date')
+              } else if (dayjs(value).isAfter(dayjs())) {
+                return Promise.reject('Date cannot be after today')
+              } else {
+                return Promise.resolve('Resolved')
+              }
+            }, //end of validator
+          },
+        ],
+      },
+      fieldProps: (form, {rowKey, rowIndex, entity}) => {
+        return {}
+      },
+    },
+    {
+      title: 'General Comment',
+      dataIndex: 'comment',
+      valueType: 'textarea',
+    },
+  ]
+  const saveAndContinue = async (rowsToBeSubmitted: any) => {
+    try {
+      // rowsToBeSubmitted?.map((item: any) => {
+      // if (item.zeroReading) {
+      //     mutateHours({
+      //         fleetId: item.fleetId,
+      //         previousReading: item.currentReading,
+      //         date: new Date(item.today),
+      //         currentReading: item.zeroReading,
+      //         tenantId: tenant,
+      //         adjustment: item.adjustment,
+      //         comment: item.comment
+      //     })
+      // }
+      //     return 0
+      //
+      // })
+      //timeouts and dsiplay of success message
+      setTimeout(() => {
+        message.success('Lube entry saved successfully').then((r) => r)
+      }, 1000)
+      navigate('/')
+    } catch (error) {
+      // Handle form validation error
+      message.error('Kindly resolve all issues before submitting!').then((r) => r)
     }
+  }
 
-    const [searchText, setSearchText] = useState('');
+  const [searchText, setSearchText] = useState('')
 
-    const handleInputChange = (e: any) => {
-        setSearchText(e.target.value);
-    };
-    const filterData = (data: any) => {
-        if (!searchText) {
-            return data;
-        }
-        return data.filter((item: any) => {
-            return Object.values(item).join('').toLowerCase().includes(searchText?.toLowerCase())
-        });
-    };
+  const handleInputChange = (e: any) => {
+    setSearchText(e.target.value)
+  }
+  const filterData = (data: any) => {
+    if (!searchText) {
+      return data
+    }
+    return data.filter((item: any) => {
+      return Object.values(item).join('').toLowerCase().includes(searchText?.toLowerCase())
+    })
+  }
 
-    return (
-      <Tabs
-        defaultActiveKey='1'
-        items={[
-            {
-                label: <span className='me-4'>Lube Entry</span>,
-                key: '1',
-                children: (
-                  <ProCard>
-                      <div className='d-flex justify-content-between'>
-                          <Space
-                            key="search"
-                            style={{
-                                marginBottom: 16,
-                            }}
-                          >
-                              <Input
-                                placeholder='Enter Search Text'
-                                onChange={handleInputChange}
-                                type='text'
-                                allowClear
-                                value={searchText}
-                              />
-                              <Button type='primary'>Search</Button>
-                          </Space>
-                          <Space
-                            key="button"
-                            style={{
-                                marginBottom: 16,
-                            }}
-                          >
-                              <Button
-                                type="primary"
-                                size={'large'}
-                                key="save"
-                                onClick={record ? () => {
-                                      const rowsToBeSubmitted = dataSource?.filter((item: any) => item.allowRowSubmit === true)
-                                      // if (rowsToBeSubmitted?.length > 0) {
-                                      //     saveAndContinue(rowsToBeSubmitted)
-                                      // } else {
-                                      //     message.error('Kindly resolve all issues before submitting!').then(r => r)
-                                      // }
-                                      saveAndContinue(rowsToBeSubmitted)
-                                  }
-                                  : () => {
-                                      message.error('No Lube Entered').then(r => r)
-                                  }}
-                                // loading={}
-                              >
-                                  Save
-                              </Button>
-                          </Space>
-                      </div>
-                      <ErrorBoundary>
-                          <EditableProTable<any>
-                            // headerTitle="Batch Entries"
-                            columns={columns}
-                            loading={isLoading}
-                            cardBordered
-                            rowKey="id"
-                            scroll={{
-                                x: 1700,
-                            }}
-                            pagination={{
-                                pageSize: 10,
-                                showSizeChanger: true,
-                            }}
-                            value={filterData(defaultData?.data?.map(
-                              (item: any) => {
-                                  return {
-                                      ...item,
-                                      today: new Date(),
-                                      ...rowValues[item.id],
-                                      allowRowSubmit: false
-                                  }
-                              }
-                            ))}
-                            onChange={setDataSource}
-                            //do not show add button
-                            recordCreatorProps={false}
+  return (
+    <Tabs
+      defaultActiveKey='1'
+      items={[
+        {
+          label: <span className='me-4'>Lube Entry</span>,
+          key: '1',
+          children: (
+            <ProCard>
+              <div className='d-flex justify-content-between'>
+                <Space
+                  key='search'
+                  style={{
+                    marginBottom: 16,
+                  }}
+                >
+                  <Input
+                    placeholder='Enter Search Text'
+                    onChange={handleInputChange}
+                    type='text'
+                    allowClear
+                    value={searchText}
+                  />
+                  <Button type='primary'>Search</Button>
+                </Space>
+                <Space
+                  key='button'
+                  style={{
+                    marginBottom: 16,
+                  }}
+                >
+                  <Button
+                    type='primary'
+                    size={'large'}
+                    key='save'
+                    onClick={
+                      record
+                        ? () => {
+                            const rowsToBeSubmitted = dataSource?.filter(
+                              (item: any) => item.allowRowSubmit === true
+                            )
+                            // if (rowsToBeSubmitted?.length > 0) {
+                            //     saveAndContinue(rowsToBeSubmitted)
+                            // } else {
+                            //     message.error('Kindly resolve all issues before submitting!').then(r => r)
+                            // }
+                            saveAndContinue(rowsToBeSubmitted)
+                          }
+                        : () => {
+                            message.error('No Lube Entered').then((r) => r)
+                          }
+                    }
+                    // loading={}
+                  >
+                    Save
+                  </Button>
+                </Space>
+              </div>
+              <ErrorBoundary>
+                <EditableProTable<any>
+                  // headerTitle="Batch Entries"
+                  columns={columns}
+                  loading={isLoading}
+                  cardBordered
+                  rowKey='id'
+                  scroll={{
+                    x: 1700,
+                  }}
+                  pagination={{
+                    pageSize: 10,
+                    showSizeChanger: true,
+                  }}
+                  value={filterData(
+                    defaultData?.data?.map((item: any) => {
+                      return {
+                        ...item,
+                        today: new Date(),
+                        ...rowValues[item.id],
+                        allowRowSubmit: false,
+                      }
+                    })
+                  )}
+                  onChange={setDataSource}
+                  //do not show add button
+                  recordCreatorProps={false}
+                  editable={{
+                    type: 'multiple',
+                    editableKeys: editableKeys
+                      ? editableKeys
+                      : defaultData?.data?.map((item: any) => item.id),
+                    onValuesChange: (record, recordList) => {
+                      setRecord(record)
+                      setDataSource(recordList)
+                      setRowValues((prevRowValues: any) => {
+                        return {
+                          ...prevRowValues,
+                          [record.id]: record, // Assuming each row has a unique `id` field
+                        }
+                      })
+                    },
+                    onChange: setEditableRowKeys,
+                  }}
+                />
+              </ErrorBoundary>
+            </ProCard>
+          ),
+        },
+        {
+          label: <span className='me-4'>Analysis</span>,
+          key: '2',
+          children: (
+            <>
+              <DevexpressDashboardComponent dashboardId={'LubeAnalysis'} />
+            </>
+          ),
+        },
+      ]}
+    />
+  )
+}
 
-                            editable={{
-                                type: 'multiple',
-                                editableKeys: editableKeys ? editableKeys : defaultData?.data?.map((item: any) => item.id),
-                                onValuesChange: (record, recordList) => {
-                                    setRecord(record)
-                                    setDataSource(recordList)
-                                    setRowValues((prevRowValues: any) => {
-                                        return {
-                                            ...prevRowValues,
-                                            [record.id]: record, // Assuming each row has a unique `id` field
-                                        };
-                                    });
-                                },
-                                onChange: setEditableRowKeys,
-                            }}
-                          />
-                      </ErrorBoundary>
-                  </ProCard>
-                ),
-            },
-            {
-                label: <span className='me-4'>Analysis</span>,
-                key: '2',
-                children: (
-                  <>
-                      <DevexpressDashboardComponent dashboardId={'LubeAnalysis'}/>
-                  </>
-                ),
-            },
-        ]}
-      />
-    );
-};
-
-export default LubePage;
-
+export default LubePage

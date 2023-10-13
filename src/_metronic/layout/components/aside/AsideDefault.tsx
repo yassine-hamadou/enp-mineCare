@@ -37,11 +37,7 @@ const AsideDefault: FC = () => {
         {/* begin::Logo */}
         {aside.theme === 'dark' && (
           <Link to='/dashboard'>
-            <img
-              alt='Logo'
-              className='h-55px logo'
-              src={toAbsoluteUrl('/media/logos/img.png')}
-            />
+            <img alt='Logo' className='h-55px logo' src={toAbsoluteUrl('/media/logos/img.png')} />
           </Link>
         )}
         {aside.theme === 'light' && (
@@ -79,7 +75,7 @@ const AsideDefault: FC = () => {
 
       {/* begin::Aside menu */}
       <div className='aside-menu flex-column-fluid'>
-        <AsideMenu asideMenuCSSClasses={classes.asideMenu}/>
+        <AsideMenu asideMenuCSSClasses={classes.asideMenu} />
       </div>
       {/*</div>*/}
       {/*/!* end::Footer *!/*/}
