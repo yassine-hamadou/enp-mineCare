@@ -83,7 +83,7 @@ const EquipmentRegister = () => {
       },
     },
     {
-      title: 'Model Class',
+      title: 'Equipment Type',
       dataIndex: 'modelClassName',
       // dataIndex: 'modelClass',
       width: 200,
@@ -178,7 +178,7 @@ const EquipmentRegister = () => {
     },
     {
       title: 'Action',
-      width: 200,
+      width: 120,
       fixed: 'right',
       render: (_: any, record: any) => (
         <Space>
@@ -187,13 +187,11 @@ const EquipmentRegister = () => {
               ...record,
               fixedAssetsCode: record?.facode,
             }}
-            to={`edit/${record.equipmentId}`}
+            to={`edit/${record?.equipmentId}`}
           >
-            <Button type='primary' ghost>
-              Update
-            </Button>
+            <button className={'btn btn-light-primary'}>Update</button>
           </Link>
-          <Button type='primary'>Details</Button>
+          {/*<Button type='primary'>Details</Button>*/}
         </Space>
       ),
     },

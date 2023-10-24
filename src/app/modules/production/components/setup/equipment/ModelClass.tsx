@@ -16,10 +16,9 @@ const ModelClass = () => {
   const {data: modelClassData, isLoading: modelClassDataLoading} = useQuery('modelClassQuery', () =>
     getModelClasses(tenant)
   )
-  console.log('modelClassData', modelClassData)
   const {mutate: addModelClass} = useMutation((data) => postModelClass(data, tenant), {
     onSuccess: () => {
-      message.success('ModelClass Added Successfully')
+      message.success('Equipment Type Added Successfully')
       queryClient.invalidateQueries('modelClassQuery')
       form.resetFields()
       setSubmitLoading(false)
@@ -33,7 +32,7 @@ const ModelClass = () => {
   })
   const {mutate: updateModelClass} = useMutation((data) => putModelClass(data, tenant), {
     onSuccess: () => {
-      message.success('ModelClass Updated Successfully')
+      message.success('Equipment Type Updated Successfully')
       queryClient.invalidateQueries('modelClassQuery')
       form.resetFields()
       setSubmitLoading(false)
@@ -47,7 +46,7 @@ const ModelClass = () => {
   })
   const {mutate: removeModelClass} = useMutation((id: any) => deleteModelClass(id), {
     onSuccess: () => {
-      message.success('ModelClass Deleted Successfully')
+      message.success('Equipment Type Deleted Successfully')
       queryClient.invalidateQueries('modelClassQuery')
       setSubmitLoading(false)
     },
@@ -59,7 +58,7 @@ const ModelClass = () => {
 
   function handleDelete(record: any) {
     if (record?.models?.length > 0) {
-      message.error('Model Class is in use')
+      message.error('Equipment Type is in use')
       return
     }
     removeModelClass(record?.modelClassId)
@@ -83,6 +82,7 @@ const ModelClass = () => {
     {
       title: 'ModelClass ID',
       dataIndex: 'modelClassId',
+      visible: false,
       sorter: (a: any, b: any) => {
         if (a.modelClassId > b.modelClassId) {
           return 1
@@ -95,7 +95,7 @@ const ModelClass = () => {
       defaultSortOrder: 'descend',
     },
     {
-      title: 'Code',
+      title: 'Prefix',
       dataIndex: 'code',
       sorter: (a: any, b: any) => {
         if (a.code > b.code) {
@@ -165,7 +165,9 @@ const ModelClass = () => {
           </Space>
         </div>
         <Table
-          columns={columns}
+          columns={columns?.filter(
+            (column: any) => column?.visible !== false && column?.dataIndex !== 'modelClassId'
+          )}
           bordered
           dataSource={modelClassData?.data}
           loading={modelClassDataLoading}
@@ -211,8 +213,8 @@ const ModelClass = () => {
                 <Input placeholder='Enter model class Id' />
               </Form.Item>
             )}
-            <Form.Item name='code' label='Code' rules={[{required: true}]}>
-              <Input placeholder='Enter Code' />
+            <Form.Item name='code' label='Prefix' rules={[{required: true}]}>
+              <Input placeholder='Enter Prefix' />
             </Form.Item>
             <Form.Item name='name' label='Name' rules={[{required: true}]}>
               <Input placeholder='Enter Name' />

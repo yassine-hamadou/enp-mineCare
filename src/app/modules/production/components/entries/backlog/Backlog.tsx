@@ -283,6 +283,7 @@ const Backlog = () => {
     onSuccess: () => {
       message.success('Backlog completed successfully')
       queryClient.invalidateQueries('backlog')
+      queryClient.invalidateQueries('completedBacklogs')
       setIsCompleting(false)
       setIsModalOpen(false)
       setSubmitLoading(false)

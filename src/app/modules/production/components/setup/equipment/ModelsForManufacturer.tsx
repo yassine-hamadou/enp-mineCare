@@ -74,6 +74,7 @@ const ModelsForManufacturer = () => {
     {
       title: 'Model ID',
       dataIndex: 'modelId',
+      visible: false,
       defaultSortOrder: 'descend',
       sorter: (a: any, b: any) => {
         if (a.modelId > b.modelId) {
@@ -112,7 +113,7 @@ const ModelsForManufacturer = () => {
       },
     },
     {
-      title: 'Model Class',
+      title: 'Equipment Type',
       dataIndex: 'modelClass',
       sorter: (a: any, b: any) => {
         if (a.modelClass?.name > b.modelClass?.name) {
@@ -222,7 +223,7 @@ const ModelsForManufacturer = () => {
           </Space>
         </div>
         <Table
-          columns={columns}
+          columns={columns?.filter((column: any) => column.visible !== false)}
           bordered
           loading={isModelDataLoading}
           dataSource={modelData?.data?.filter(
@@ -276,8 +277,8 @@ const ModelsForManufacturer = () => {
             <Form.Item name='name' label='Name' rules={[{required: true}]}>
               <Input placeholder='Enter Name' />
             </Form.Item>
-            <Form.Item name='modelClassId' label='Model Class' rules={[{required: true}]}>
-              <Select placeholder='Select Model Class' allowClear loading={isModelClassLoading}>
+            <Form.Item name='modelClassId' label='Equipment Type' rules={[{required: true}]}>
+              <Select placeholder='Select Equipment Type' allowClear loading={isModelClassLoading}>
                 {modelClassData?.data?.map((modelClass: any) => (
                   <Select.Option key={modelClass.modelClassId} value={modelClass.modelClassId}>
                     {modelClass.name}

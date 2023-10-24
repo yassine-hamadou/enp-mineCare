@@ -273,7 +273,6 @@ const UpdateRegister = () => {
       title: 'Location',
     },
   ]
-
   const pmIntervalColumns: any = [
     {
       title: 'Current Reading',
@@ -548,7 +547,10 @@ const UpdateRegister = () => {
                                   selected={item?.modelId === equipmentData?.modelId}
                                   defaultChecked={item?.modelId === equipmentData?.modelId}
                                 >
-                                  {item?.manufacturer?.name} - {item?.name}
+                                  {item.name}{' '}
+                                  <span className='text-muted'>
+                                    ({item?.manufacturer?.name?.trim()})
+                                  </span>
                                 </Option>
                               ))}
                             </Select>
@@ -767,13 +769,7 @@ const UpdateRegister = () => {
                       </Form>
                     </Modal>
                     <div className='d-flex justify-content-between'>
-                      <Space style={{marginBottom: 16}}>
-                        {/*<Input.Search*/}
-                        {/*    placeholder='Search Component'*/}
-                        {/*    onSearch={value => console.log(value)}*/}
-                        {/*    // style={{ width: 200 }}*/}
-                        {/*/>*/}
-                      </Space>
+                      <Space style={{marginBottom: 16}}></Space>
                       <Space style={{marginBottom: 16}}>
                         <Button type={'primary'} onClick={() => setShowModal(true)}>
                           Add Component

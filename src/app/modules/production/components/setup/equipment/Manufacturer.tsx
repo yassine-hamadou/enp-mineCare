@@ -39,6 +39,7 @@ const Manufacturer = () => {
     {
       title: 'Manufacturer ID',
       dataIndex: 'manufacturerId',
+      visible: false,
       sorter: (a: any, b: any) => {
         if (a.manufacturerId > b.manufacturerId) {
           return 1
@@ -50,7 +51,7 @@ const Manufacturer = () => {
       },
     },
     {
-      title: 'Name',
+      title: 'Manufacturer Name',
       dataIndex: 'name',
       sorter: (a: any, b: any) => {
         if (a.name > b.name) {
@@ -153,7 +154,7 @@ const Manufacturer = () => {
           </Space>
         </div>
         <Table
-          columns={columns}
+          columns={columns?.filter((column: any) => column.visible !== false)}
           bordered
           rowKey={(record: any) => record.manufacturerId}
           dataSource={manufacturers?.data}

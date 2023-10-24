@@ -1,7 +1,7 @@
-import {Button, DatePicker, Form, Input, InputNumber, message, Select, Steps} from 'antd'
+import {Button, Cascader, DatePicker, Form, Input, InputNumber, message, Select, Steps} from 'antd'
 import React, {useState} from 'react'
 import {KTCard, KTCardBody} from '../../../../../_metronic/helpers'
-import {getModels, postEquipment} from '../../../../urls'
+import {getModelClasses, postEquipment} from '../../../../urls'
 import {useMutation, useQuery, useQueryClient} from 'react-query'
 import {Link} from 'react-router-dom'
 import {useAuth} from '../../../auth'
@@ -11,19 +11,22 @@ import {
   DoneAllOutlined,
   InfoRounded,
 } from '@mui/icons-material'
-
+interface Option {
+  value: string | number
+  label: string
+  children?: Option[]
+}
 const AddEquipRegister = () => {
   const {Step} = Steps
   let [form] = Form.useForm()
   let [generalInfo] = Form.useForm()
   const queryClient = useQueryClient()
   const {tenant} = useAuth()
-  const {data: listOfModels} = useQuery('models', () => getModels(tenant))
   const {mutate: addEquipment, isLoading: submitLoading} = useMutation(
     (data) => postEquipment(data, tenant),
     {
       onSuccess: () => {
-        queryClient.invalidateQueries('listOfEquipment')
+        queryClient.invalidateQueries('equipments')
         message.success('Equipment Added Successfully')
         form.resetFields()
         generalInfo.resetFields()
@@ -35,6 +38,10 @@ const AddEquipRegister = () => {
       },
     }
   )
+  const {data: listOfModelClass, isLoading: isModelClassloading} = useQuery('modelClassQuery', () =>
+    getModelClasses(tenant)
+  )
+  console.log('listOfModelClass', listOfModelClass)
 
   function onDetailsFinish(values: any) {
     setDetailsState(values)
@@ -51,6 +58,8 @@ const AddEquipRegister = () => {
       ...detailsState,
       ...generalInfoState,
     }
+    formData['modelId'] = formData['modelClass'][1]
+    formData['modelClass'] = undefined
     const formDataWithoutUndefined = Object.keys(formData).reduce((acc: any, key: any) => {
       if (formData[key] !== undefined) {
         acc[key] = formData[key]
@@ -59,7 +68,6 @@ const AddEquipRegister = () => {
     }, {})
     addEquipment(formDataWithoutUndefined)
   }
-
   const DetailsForm = ({onDetailsFinish}: any) => {
     return (
       <Form
@@ -74,30 +82,92 @@ const AddEquipRegister = () => {
         <div className='row mb-0'>
           <div className='col-4 mb-7'>
             <Form.Item
+              name='modelClass'
+              className='form-control form-control-solid'
+              label='Equip. Type / Model'
+              rules={[
+                {required: true},
+                // {
+                //   validator: async (_, value) => {
+                //     //allow selecting only if the equipment id field is not empty
+                //     if (form.getFieldValue('equipmentId') === undefined) {
+                //       return Promise.reject(new Error('Please enter Equipment ID first!'))
+                //     }
+                //     if (value === undefined) {
+                //       return Promise.reject(new Error('Please select Equipment Type!'))
+                //     }
+                //     return Promise.resolve()
+                //   },
+                // },
+              ]}
+            >
+              {/*<Select*/}
+              {/*  placeholder='Select Equipment Type'*/}
+              {/*  className='form-control form-control-solid py-1 px-0'*/}
+              {/*>*/}
+              {/*  {listOfModelClass?.data?.map((item: any) => (*/}
+              {/*    <Select.Option value={item?.modelClassId}>*/}
+              {/*      {item.name}*/}
+              {/*      /!*<span className='text-muted'>({item?.manufacturer?.name?.trim()})</span>*!/*/}
+              {/*    </Select.Option>*/}
+              {/*  ))}*/}
+              {/*</Select>*/}
+              <Cascader
+                options={options}
+                size={'large'}
+                placeholder='Please select'
+                loading={isModelClassloading}
+                autoClearSearchValue={true}
+              />
+            </Form.Item>
+          </div>
+
+          <div className='col-4 mb-7'>
+            <Form.Item
               name='equipmentId'
               label='Equipment ID'
               rules={[
                 {
                   required: true,
                   pattern: new RegExp(/^[a-zA-Z0-9]+$/),
-                  message: 'Equipment ID must be alphanumeric',
+                  message: 'Alphanumeric Equipment ID Required!',
+                },
+                {
+                  validator: async (_, value) => {
+                    //check if the equipment id first characters match with the model class code
+                    if (value === undefined) {
+                      return Promise.reject(new Error())
+                    }
+
+                    if (!form.getFieldValue('modelClass')) {
+                      return Promise.reject(new Error('Please Select Equipment Type First!'))
+                    }
+                    const modelClassSelected = listOfModelClass?.data?.find((modelClass: any) => {
+                      return modelClass?.modelClassId === form.getFieldValue('modelClass')[0]
+                    })
+                    if (listOfModelClass?.data) {
+                      if (
+                        !value
+                          ?.trim()
+                          ?.toLowerCase()
+                          ?.startsWith(modelClassSelected?.code?.trim()?.toLowerCase())
+                      ) {
+                        return Promise.reject(
+                          new Error(`Equipment ID should start with ${modelClassSelected?.code}!`)
+                        )
+                      }
+                    }
+                  },
                 },
               ]}
+              className='form-control form-control-solid'
             >
               <Input
                 placeholder='Enter Equipment ID'
+                // onChange={handleChange}
                 type='text'
-                className='form-control form-control-solid'
+                size={'large'}
                 style={{width: '100%'}}
-              />
-            </Form.Item>
-          </div>
-          <div className='col-4 mb-7'>
-            <Form.Item name='serialNumber' label='Serial Number'>
-              <Input
-                placeholder='Enter Serial Number'
-                type='text'
-                className='form-control form-control-solid'
               />
             </Form.Item>
           </div>
@@ -112,19 +182,38 @@ const AddEquipRegister = () => {
               />
             </Form.Item>
           </div>
+          {/*<div className='col-2 mb-7'>*/}
+          {/*  <Form.Item name='modelId' label='Model' rules={[{required: true}]}>*/}
+          {/*    <Select*/}
+          {/*      placeholder='Select Model'*/}
+          {/*      className='form-control form-control-solid py-1 px-0'*/}
+          {/*    >*/}
+          {/*      {modelsUnderSelectedClass?.data?.map((item: any) => (*/}
+          {/*        <Select.Option value={item?.modelId}>*/}
+          {/*          {item.name}{' '}*/}
+          {/*          <span className='text-muted'>({item?.manufacturer?.name?.trim()})</span>*/}
+          {/*        </Select.Option>*/}
+          {/*      ))}*/}
+          {/*    </Select>*/}
+          {/*  </Form.Item>*/}
+          {/*</div>*/}
           <div className='col-4 mb-7'>
-            <Form.Item name='modelId' label='Model' rules={[{required: true}]}>
-              <Select
-                showSearch={true}
-                placeholder='Select Model'
-                className='form-control form-control-solid py-1 px-0'
-              >
-                {listOfModels?.data?.map((item: any) => (
-                  <Select.Option value={item.modelId}>
-                    {item.manufacturer?.name} - {item.name}
-                  </Select.Option>
-                ))}
-              </Select>
+            <Form.Item
+              name='serialNumber'
+              label='Serial Number'
+              rules={[
+                {
+                  required: true,
+                  pattern: new RegExp(/^[a-zA-Z0-9]+$/),
+                  message: 'Alphanumeric Serial Number Required!',
+                },
+              ]}
+            >
+              <Input
+                placeholder='Enter Serial Number'
+                type='text'
+                className='form-control form-control-solid'
+              />
             </Form.Item>
           </div>
         </div>
@@ -191,6 +280,7 @@ const AddEquipRegister = () => {
             <Form.Item
               name='meterType'
               label='Meter Type'
+              className='form-control form-control-solid'
               rules={[
                 {
                   required: true,
@@ -200,10 +290,10 @@ const AddEquipRegister = () => {
               <Select
                 showSearch={true}
                 placeholder='Select Meter Type'
-                className='form-select form-select-solid px-0'
-                style={{
-                  padding: '0.4rem 0.75rem',
-                }}
+                size={'large'}
+                // style={{
+                //   padding: '0.4rem 0.75rem',
+                // }}
               >
                 <Select.Option value='HOUR'>Hours</Select.Option>
                 <Select.Option value='Km'>Km</Select.Option>
@@ -214,6 +304,7 @@ const AddEquipRegister = () => {
             <Form.Item
               name='initialReading'
               label='Initial Reading'
+              className='form-control form-control-solid '
               rules={[
                 {
                   required: true,
@@ -223,7 +314,8 @@ const AddEquipRegister = () => {
             >
               <InputNumber
                 placeholder='Enter Initial Reading Value'
-                className='form-control form-control-solid py-2 w-100'
+                size={'large'}
+                className='w-100 '
                 min={0}
                 max={999999}
               />
@@ -320,6 +412,29 @@ const AddEquipRegister = () => {
     <Step key={i} title={item.title} icon={item.icon} disabled={item.disabled} />
   ))
 
+  // const options: Option[] = listOfModelClass?.data
+  //   ?.filter((item: any) =>
+  //     item?.code?.toLowerCase()?.startsWith(form.getFieldValue('equipmentId')?.toLowerCase() ?? '')
+  //   )
+  //   ?.map((modelClass: any) => ({
+  //     value: modelClass?.modelClassId,
+  //     label: modelClass?.name,
+  //     children: listOfModels?.data
+  //       ?.filter((item: any) => item?.modelClassId === modelClass?.modelClassId)
+  //       .map((item: any) => ({
+  //         value: item?.modelId,
+  //         label: item?.name,
+  //       })),
+  //   }))
+
+  const options: Option[] = listOfModelClass?.data?.map((modelClass: any) => ({
+    value: modelClass?.modelClassId,
+    label: modelClass?.name,
+    children: modelClass?.models?.map((item: any) => ({
+      value: item?.modelId,
+      label: item?.name,
+    })),
+  }))
   // @ts-ignore
   return (
     <>

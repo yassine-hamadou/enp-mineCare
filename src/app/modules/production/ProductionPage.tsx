@@ -51,6 +51,7 @@ const DownStatusPage = lazy(() => import('./components/setup/downType/DownStatus
 const ModelsForManufacturer = lazy(
   () => import('./components/setup/equipment/ModelsForManufacturer')
 )
+
 const ModelClass = lazy(() => import('./components/setup/equipment/ModelClass'))
 
 const EquipmentRegister = lazy(() => import('./components/equipment-register/EquipmentRegister'))
@@ -383,10 +384,10 @@ const ProductionPage: React.FC = () => {
           />
         </Route>
         <Route
-          path='equipment/model-class'
+          path='equipment/equipment-type'
           element={
             <>
-              <PageTitle breadcrumbs={accountBreadCrumbs}>All Model Class </PageTitle>
+              <PageTitle breadcrumbs={accountBreadCrumbs}>All Equipment Types </PageTitle>
               <Suspense fallback={<TopBarProgress />}>
                 <ErrorBoundary>
                   <ModelClass />
@@ -1113,7 +1114,7 @@ const ProductionPage: React.FC = () => {
           element={
             <>
               <PageTitle breadcrumbs={accountBreadCrumbs}>
-                Metering By Model Class Summary{' '}
+                Metering By Equip. Type Summary
               </PageTitle>
               <Suspense fallback={<TopBarProgress />}>
                 <ErrorBoundary>

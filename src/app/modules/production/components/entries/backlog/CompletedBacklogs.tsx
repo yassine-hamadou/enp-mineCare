@@ -93,9 +93,12 @@ const CompletedBacklogs = () => {
     {
       title: 'Days',
       render: (text: any, record: any) => {
-        return Math.round(
-          parseFloat(dayjs(record?.cdate).diff(dayjs(record?.bdate), 'day', true).toFixed(2))
-        )
+        if (record?.cdate >= record?.bdate) {
+          return Math.round(
+            parseFloat(dayjs(record?.cdate).diff(dayjs(record?.bdate), 'day', true).toFixed(2))
+          )
+        }
+        return 'N/A'
       },
     },
     {

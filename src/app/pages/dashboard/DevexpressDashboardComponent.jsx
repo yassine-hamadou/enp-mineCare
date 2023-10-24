@@ -7,12 +7,25 @@ import React, {lazy, Suspense} from 'react'
 import TopBarProgress from 'react-topbar-progress-indicator'
 import {SERVER} from '../../urls'
 import {useAuth} from '../../modules/auth'
-import 'devexpress-dashboard/model/parameters/parameter'
-import {Parameter} from 'devexpress-dashboard/model'
+
 const DashboardControl = lazy(() => import('devexpress-dashboard-react'))
 
 const DevexpressDashboardComponent = (props) => {
   const {tenant} = useAuth()
+  function onBeforeRender(e) {
+    const dashboardControl = e.component
+    dashboardControl.setDashboardState({
+      Parameters: {
+        TenantId: [tenant],
+      },
+    })
+    //hide the parameter panel if there is only one parameter
+    var parameterExtension = dashboardControl.findExtension('dashboard-parameter-dialog')
+    if (parameterExtension) {
+      parameterExtension.showDialogButton(false)
+    }
+  }
+
   return (
     <Suspense fallback={<TopBarProgress />}>
       <div style={{width: '100%', height: '80vh'}}>
@@ -20,34 +33,9 @@ const DevexpressDashboardComponent = (props) => {
           id='web-dashboard'
           style={{height: '100%'}}
           endpoint={`${SERVER}/dashboards/dashboardcontrol`}
-          //optional configuration with default values
           workingMode={props.workingMode ? props.workingMode : 'ViewerOnly'}
-          dashboardId={props.dashboardId} // or a path to a dashboard file
-          // onDashboardInitializing={(e) => {
-          //   const parameters = e.dashboard.parameters
-          //   let p = new Parameter()
-          //   p.name('TenantId')
-          //   p.defaultValue('tarkwa')
-          //   p.allowMultiselect(true)
-          //   p.allowNull(true)
-          //   p.description('Company')
-          //   p.visible = true
-          //   parameters.removeAll()
-          //   parameters.push(p)
-          // }}
-          // onDashboardInitialized={(e) => {
-          //   let p = new Parameter()
-          //   const parameters = e.dashboard.parameters
-          //   p.name('TenantId')
-          //   p.defaultValue('tarkwa')
-          //   p.description('Company')
-          //   p.visible = true
-          //   parameters.removeAll()
-          //   parameters.push(p)
-          // }}
-          // onBeforeRender={(e) => {
-          //   const parameters = e.component.
-          //   }}
+          dashboardId={props.dashboardId}
+          onDashboardInitialized={onBeforeRender}
         ></DashboardControl>
       </div>
     </Suspense>

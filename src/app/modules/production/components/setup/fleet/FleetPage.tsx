@@ -37,7 +37,7 @@ const FleetPage = () => {
       sorter: (a: any, b: any) => a.modlName - b.modlName,
     },
     {
-      title: 'Model Class',
+      title: 'Equipment Type',
       dataIndex: 'modlClass',
       sorter: (a: any, b: any) => a.modlClass - b.modlClass,
     },

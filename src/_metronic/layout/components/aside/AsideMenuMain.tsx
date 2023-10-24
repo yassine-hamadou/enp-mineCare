@@ -72,7 +72,11 @@ export function AsideMenuMain() {
         icon='/media/icons/duotune/coding/cod009.svg'
       >
         <AsideMenuItemWithSub to='#' title='Equipment' hasBullet={true}>
-          <AsideMenuItem to='/setup/equipment/model-class' title='Model Class' hasBullet={true} />
+          <AsideMenuItem
+            to='/setup/equipment/equipment-type'
+            title='Equipment Type'
+            hasBullet={true}
+          />
           <AsideMenuItem to='/setup/equipment/manufacturer' title='Manufacturer' hasBullet={true} />
           <AsideMenuItem to='/setup/category' title='Category' hasBullet={true} />
         </AsideMenuItemWithSub>
